@@ -1,5 +1,6 @@
 ﻿using AtkTennis.Models;
 using AtkTennis.Security;
+using AtkTennis.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,7 @@ namespace AtkTennis.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(Register register)
+        public IActionResult Register(RegisterViewModel register)
         {
 
             if (ModelState.IsValid)
@@ -77,24 +78,25 @@ namespace AtkTennis.Controllers
 
                 var role = new AppIdentityRole();
 
-                if (!roleManager.RoleExistsAsync(register.Role).Result)
+                if (!roleManager.RoleExistsAsync(register.Registers.Role).Result)
                 {
                     
-                    role.Name = register.Role;
+                    role.Name = register.Registers.Role;
                     role.Description = "Can Perform Crud Operations";
                     var roleResult = roleManager.CreateAsync(role).Result;
                 }
 
                 var user = new AppIdentityUser();
-                
 
-                user.UserName = register.UserName;
-                user.Email = register.Email;
-                user.FullName = register.FullName;
-                user.BirthDate = register.BirthDate;
-                role.Name = register.Role;
 
-                var result = userManager.CreateAsync(user, register.Password).Result;
+                user.UserName = register.Registers.UserName;
+                user.Email = register.Registers.Email;
+                user.FullName = register.Registers.FullName;
+                user.BirthDate = register.Registers.BirthDate;
+
+                user.PhoneNumber = register.AppIdentityUsers.PhoneNumber;
+
+                var result = userManager.CreateAsync(user, register.Registers.Password).Result;
 
                 if (result.Succeeded)
                 {
@@ -116,9 +118,10 @@ namespace AtkTennis.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult RegisterMember(Register register)
+        [ValidateAntiForgeryToken]       
+        public IActionResult RegisterMember(RegisterViewModel register)
         {
+
 
             if (ModelState.IsValid)
             {
@@ -131,13 +134,15 @@ namespace AtkTennis.Controllers
                 }
 
                 var user = new AppIdentityUser();
-                user.UserName = register.UserName;
-                user.Email = register.Email;
-                user.FullName = register.FullName;
-                user.BirthDate = register.BirthDate;
+                user.UserName = register.Registers.UserName;
+                user.Email = register.Registers.Email;
+                user.FullName = register.Registers.FullName;
+                user.BirthDate = register.Registers.BirthDate;
+
+                user.PhoneNumber = register.AppIdentityUsers.PhoneNumber;
 
 
-                var result = userManager.CreateAsync(user, register.Password).Result;
+                var result = userManager.CreateAsync(user, register.Registers.Password).Result;
 
                 if (result.Succeeded)
                 {

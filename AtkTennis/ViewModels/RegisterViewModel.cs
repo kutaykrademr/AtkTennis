@@ -10,7 +10,7 @@ namespace AtkTennis.ViewModels
     public class RegisterViewModel
     {
         public Register Registers { get; set; } = new Register();
-        public List<AppIdentityRole> AppIdentityRoles { get; set; } = new List<AppIdentityRole>();
+        public AppIdentityUser AppIdentityUsers { get; set; } = new AppIdentityUser();
 
     }
 }

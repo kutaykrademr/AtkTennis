@@ -5,7 +5,7 @@
 }
 
 
-@model Register
+@model AtkTennis.ViewModels.RegisterViewModel
 
 
 
@@ -41,13 +41,13 @@
                                     <div class="coll-2">
                                         <div class="input--group">
                                             <label class="label">Ad-Soyad</label>
-                                            <input asp-for="FullName" type="text" id="name" placeholder="Full-Name" class="input--style-4">
+                                            <input asp-for="Registers.FullName" type="text" id="name" placeholder="Full-Name" class="input--style-4" autocomplete="new-password">
                                         </div>
                                     </div>
                                     <div class="coll-2">
                                         <div class="input--group">
                                             <label class="label">Giriş Yapacağı Kullanıcı Adı</label>
-                                            <input asp-for="UserName" type="text" id="name" placeholder="UserName" class="input--style-4">
+                                            <input asp-for="Registers.UserName" type="text" id="name" placeholder="UserName" class="input--style-4" autocomplete="new-password">
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                         <div class="input--group">
                                             <label class="label">Birthday</label>
                                             <div class="input--group-icon">
-                                                <input asp-for="BirthDate" type="date" id="birth-date" placeholder="BirthDate (exp: gg.aa.yyyy)" class="input--style-4 js-datepicker">
+                                                <input asp-for="Registers.BirthDate" type="date" id="birth-date" placeholder="BirthDate (exp: gg.aa.yyyy)" class="input--style-4 js-datepicker" autocomplete="new-password">
                                                 <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                             </div>
                                         </div>
@@ -83,13 +83,13 @@
                                     <div class="coll-2">
                                         <div class="input--group">
                                             <label class="label">Email</label>
-                                            <input asp-for="Email" type="email" id="email" placeholder="Email" class="input--style-4">
+                                            <input asp-for="Registers.Email" type="email" id="email" placeholder="Email" class="input--style-4" autocomplete="new-password">
                                         </div>
                                     </div>
                                     <div class="coll-2">
                                         <div class="input--group">
                                             <label class="label">Phone Number</label>
-                                            <input class="input--style-4" type="text" id="phone" placeholder="Phone">
+                                            <input asp-for="AppIdentityUsers.PhoneNumber" type="text" class="input--style-4"  id="phone" placeholder="Phone" autocomplete="new-password">
                                         </div>
                                     </div>
                                 </div>
@@ -97,13 +97,13 @@
                                     <div class="coll-2">
                                         <div class="input--group">
                                             <label class="label">Password</label>
-                                            <input asp-for="Password" type="password" id="password" placeholder="Password" class="input--style-4">
+                                            <input asp-for="Registers.Password" type="password" id="password" placeholder="Password" class="input--style-4" autocomplete="new-password">
                                         </div>
                                     </div>
                                     <div class="coll-2">
                                         <div class="input--group">
                                             <label class="label">Confirm Password</label>
-                                            <input asp-for="ConfirmPassword" type="password" id="confirm-password" placeholder="Confirm-Password" class="input--style-4">
+                                            <input asp-for="Registers.ConfirmPassword" type="password" id="confirm-password" placeholder="Confirm-Password" class="input--style-4" autocomplete="new-password">
                                         </div>
                                     </div>
 
@@ -113,7 +113,7 @@
                                 <div class="input--group">
                                     <label class="label">Role</label>
                                     <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="Role" asp-for="Role" id="Role">
+                                        <select name="Role" asp-for="Registers.Role" id="Role">
                                             <option disabled="disabled" selected="selected">Choose option</option>
 
                                           

@@ -34,7 +34,7 @@ namespace AtkTennis.Models
         [Display(Name = "Birth Date")]
         public DateTime BirthDate { get; set; }
 
-        [Required]
+        
         [Display(Name = "Role")]
         public string Role { get; set; }
 

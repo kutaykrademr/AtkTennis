@@ -11,6 +11,6 @@ namespace AtkTennis.ViewModels
     {
         public List<AppIdentityUser> AppIdentityUsers { get; set; } = new List<AppIdentityUser>();
         public List<AppIdentityRole> AppIdentityRoles { get; set; } = new List<AppIdentityRole>();
-        public List<Register> Registers { get; set; } = new List<Register>();
+
     }
 }

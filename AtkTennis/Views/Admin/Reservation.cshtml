@@ -31,11 +31,35 @@
                         <th style="font-size:20px; text-align:center" id="h_@item.ResTimeId">@item.ResTimes</th>
                         @foreach (var item2 in Model.Courts)
                         {
-                            <td>
-                                <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
-                                    @item2.CourtName
-                                </button>
-                            </td>
+
+                            if(item2.reservations != null )
+                            {
+                                if(item2.reservations.Where(x => x.ResStartTime == item.ResTimes).Count() > 0)
+                                {
+                                    <td>
+                                        <button type="button" class="btn btn-danger  courtbutton" >
+                                            Dolu
+                                        </button>
+                                    </td>
+                                }
+                                else { 
+                                    <td>
+                                        <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
+                                            @item2.CourtName
+                                        </button>
+                                    </td>
+                                }
+
+                            }
+                            else
+                            {
+                                <td>
+                                    <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
+                                        @item2.CourtName
+                                    </button>
+                                </td>
+                            }
+
                         }
                     </tr>
                 }
@@ -150,8 +174,7 @@
                 dataType: "json",
                 async: true,
                 success: function (res) {
-
-                    debugger;
+                   
                     if (res == "true") {
                         alert("BAŞARILI");
                     }

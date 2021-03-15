@@ -5,22 +5,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using AtkTennis.Models;
 using Microsoft.AspNetCore.Authorization;
-
-
-
+using AtkTennis.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using AtkTennis.Security;
 
 [Authorize]
 public class AdminController : Controller
 {
+
+    private readonly UserManager<AppIdentityUser> userManager;
+    private readonly RoleManager<AppIdentityRole> roleManager;
+    private readonly SignInManager<AppIdentityUser> signInManager;
+
+    public AdminController(UserManager<AppIdentityUser> userManager,
+        RoleManager<AppIdentityRole> roleManager,
+        SignInManager<AppIdentityUser> signInManager)
+    {
+        this.userManager = userManager;
+        this.roleManager = roleManager;
+        this.signInManager = signInManager;
+    }
+
+
     Context db = new Context();
 
     public IActionResult AdminHome()
     {
-        var model = new AtkTennis.ViewModels.AdminViewModel();
-
-        model.Res = db.reservations.ToList();
-        model.Courts = db.courts.ToList();
-        model.Times = db.resTimes.ToList();
+        var model = new AdminHomeModel();
+        model.TotalUserCount = userManager.Users.Count();
 
         return View(model);
     }
@@ -29,7 +41,7 @@ public class AdminController : Controller
 
     public IActionResult Reservation()
     {
-        var model = new AtkTennis.ViewModels.AdminViewModel();
+        var model = new AdminViewModel();
 
         model.Res = db.reservations.ToList();
         model.Courts = db.courts.ToList();
@@ -44,7 +56,7 @@ public class AdminController : Controller
     
     public IActionResult Main()
     {
-        var model = new AtkTennis.ViewModels.AdminViewModel();
+        var model = new AdminViewModel();
 
         model.Res = db.reservations.ToList();
         model.Courts = db.courts.ToList();
@@ -55,11 +67,8 @@ public class AdminController : Controller
 
 
     [HttpPost]
-   
-
     public JsonResult NewReservation(Reservation res , int CId)
     {
-
 
         var model = new Reservation();
 
