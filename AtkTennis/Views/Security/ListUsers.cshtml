@@ -1,0 +1,63 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+@model AtkTennis.ViewModels.IdentityPartialClass;
+
+<!DOCTYPE html>
+<link href="~/css/list.css" rel="stylesheet" />
+
+<section class="content">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h1 class="m-0">Reservation</h1>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ad-Soyad</th>
+                    <th scope="col">Kullanıcı Adı</th>
+                    <th scope="col">E-Mail</th>
+                    <th scope="col">Doğum Tarihi</th>
+                    <th scope="col">Detaylar</th>
+                    <th scope="col">Güncelle</th>
+                    <th scope="col">Sil</th>
+                </tr>
+            </thead>
+            @{ int i = 1;
+            }
+            <tbody>
+
+                @foreach (var item in Model.AppIdentityUsers)
+                {
+                    <tr>
+                        <td data-label="Id">@i</td>
+                        <td data-label="Ad-Soyad">@item.FullName</td>
+                        <td data-label="Kullanıcı Adı">@item.UserName</td>
+                        <td data-label="E-Mail">@item.Email</td>
+                        <td data-label="Doğum Tarihi">@item.BirthDate</td>
+
+                        <form method="post">
+
+                            <td><a href="#" class="btn btn-default" style="background-color:#dee61d">Detaylar</a></td>
+                            <td><button class="btn btn-success updatebutton">Güncelle</button></td>
+                            <td><button asp-action="DeleteUsers" asp-controller="Security" asp-route-id="@item.Id" type="submit" class="btn btn-danger ">Sil</button></td>
+
+                        </form>
+                    </tr>
+                    i++;
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</section>
+
+

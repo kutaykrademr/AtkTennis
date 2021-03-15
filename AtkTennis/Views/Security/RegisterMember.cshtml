@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model Register
+@*<section class="content">
+        <div class="content-wrapper" style="background-color:darkgray">
+            <div class="row justify-content-center ">
+                <div class="col-md-5">
+                    <div class="card">
+                        <h2 class="card-title text-center">Yeni Kayıt Oluştur</h2>
+                        <div class="card-body py-md-4">
+                            <form asp-controller="Security" asp-action="Register" method="post" _lpchecked="1">
+                                <div class="form-group">
+                                    <input asp-for="FullName" type="text" class="form-control" id="name" placeholder="Full-Name">
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="UserName" type="text" class="form-control" id="name" placeholder="UserName">
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Email">
+                                </div>
+
+                                <div class="form-group">
+                                    <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control" id="confirm-password" placeholder="Confirm-Password">
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="BirthDate" type="date" class="form-control" id="birth-date" placeholder="BirthDate (exp: 12.02.1998)">
+                                </div>
+                                <div class="d-flex flex-row align-items-center justify-content-between">
+                                    <button class="btn btn-primary">Kaydet</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>*@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+
+    <!-- Icons font CSS-->
+    <link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    @*<link href="~/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">*@
+    <!-- Font special for pages-->
+    @*<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">*@
+    <!-- Vendor CSS-->
+    <link href="~/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="~/vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="~/rcss/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <section class="content">
+        <div class="content-wrapper">
+            <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+                <div class="wrapper wrapper--w680">
+                    <div class="card card-4">
+                        <div class="card-body">
+                            <h2 class="title">Üye Kayıt</h2>
+                            <form asp-controller="Security" asp-action="RegisterMember" method="post">
+                                <div class="roww roww-space">
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Ad-Soyad</label>
+                                            <input  asp-for="FullName" type="text" id="name" placeholder="Full-Name" class="input--style-4">
+                                        </div>
+                                    </div>
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Giriş Yapacağı Kullanıcı Adı</label>
+                                            <input asp-for="UserName" type="text"  id="name" placeholder="UserName" class="input--style-4" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roww roww-space">
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Birthday</label>
+                                            <div class="input--group-icon">
+                                                <input asp-for="BirthDate" type="date" id="birth-date" placeholder="BirthDate (exp: 12.02.1998)" class="input--style-4 js-datepicker" >
+                                                <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Gender</label>
+                                            <div class="p-t-10">
+                                                <label class="radio-container m-r-45">
+                                                    Male
+                                                    <input type="radio" checked="checked" name="gender">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                <label class="radio-container">
+                                                    Female
+                                                    <input type="radio" name="gender">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roww roww-space">
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Email</label>
+                                            <input asp-for="Email" type="email"  id="email" placeholder="Email" class="input--style-4">
+                                        </div>
+                                    </div>
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Phone Number</label>
+                                            <input class="input--style-4" type="text" id="phone" placeholder="Phone">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roww roww-space">
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Password</label>
+                                            <input asp-for="Password" type="password" id="password" placeholder="Password" class="input--style-4">
+                                        </div>
+                                    </div>
+                                    <div class="coll-2">
+                                        <div class="input--group">
+                                            <label class="label">Confirm Password</label>
+                                            <input asp-for="ConfirmPassword" type="password" id="confirm-password" placeholder="Confirm-Password" class="input--style-4">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input--group">
+                                    <label class="label">Subject</label>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="subject">
+                                            <option  selected="selected">Choose option</option>
+                                            <option>Subject 1</option>
+                                            <option>Subject 2</option>
+                                            <option>Subject 3</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                                <div class="p-t-15">
+                                    <button class="btnn btn--radius-2 btn--blue" type="submit">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jquery JS-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Vendor JS-->
+    <script src="~/vendor/select2/select2.min.js"></script>
+    <script src="~/vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+    <!-- Main JS-->
+    <script src="~/rjs/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->
