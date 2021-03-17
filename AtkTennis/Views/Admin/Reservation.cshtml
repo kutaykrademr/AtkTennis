@@ -1,12 +1,23 @@
-﻿
+﻿@using System.Security.Claims;
+
 @{
     ViewData["Title"] = "Reservation";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
     @model AtkTennis.ViewModels.AdminViewModel
+
 }
 
 <link href="~/css/popup.css" rel="stylesheet" />
+@*<label style="visibility:hidden" val="@User.FindFirst(ClaimTypes.NameIdentifier).Value;" id="user_id">
+
+    </label>*@
+
+
+
+@{
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+}
 
 <section class="content">
     <div class="content-wrapper">
@@ -16,58 +27,80 @@
         @{
             <table class="table table-bordered ">
                 <tr>
-                    <th></th>
+                    <th>
 
-                    @foreach (var item3 in Model.Courts)
-                    {
+                        @foreach (var item3 in Model.Courts)
+                        {
                         <th style="text-align:center;">@item3.CourtName.ToUpper()</th>
                     }
-                </tr>
+                    </tr>
 
 
-                @foreach (var item in Model.Times)
-                {
-                    <tr>
-                        <th style="font-size:20px; text-align:center" id="h_@item.ResTimeId">@item.ResTimes</th>
-                        @foreach (var item2 in Model.Courts)
-                        {
+                    @foreach (var item in Model.Times)
+                    {
+                        <tr>
+                            <th style="font-size:20px; text-align:center" id="h_@item.ResTimeId">@item.ResTimes</th>
 
-                            if(item2.reservations != null )
+                            @foreach (var item2 in Model.Courts)
                             {
-                                if(item2.reservations.Where(x => x.ResStartTime == item.ResTimes).Count() > 0)
+
+
+                                if (item2.reservations != null)
                                 {
-                                    <td>
-                                        <button type="button" class="btn btn-danger  courtbutton" >
-                                            Dolu
-                                        </button>
-                                    </td>
+
+                                    if (item2.reservations.Where(x => x.ResStartTime == item.ResTimes && x.userId == userId).Count() > 0)
+                                    {
+
+
+                                        <td>
+                                            <button type="button" class="btn btn-warning  ">
+                                                Düzenle
+                                            </button>
+                                        </td>
+                                    }
+
+
+                                    else if (item2.reservations.Where(x => x.ResStartTime == item.ResTimes).Count() > 0)
+                                    {
+
+
+                                        <td>
+                                            <button type="button" class="btn btn-danger  ">
+                                                Rezerve
+                                            </button>
+                                        </td>
+                                    }
+
+                                    else
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" userid="@userId" data-target="#exampleModalLong">
+                                                @item2.CourtName
+                                            </button>
+                                        </td>
+                                    }
+
                                 }
-                                else { 
+
+                                else
+
+                                {
                                     <td>
                                         <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
                                             @item2.CourtName
                                         </button>
                                     </td>
                                 }
-
-                            }
-                            else
-                            {
-                                <td>
-                                    <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
-                                        @item2.CourtName
-                                    </button>
-                                </td>
                             }
 
-                        }
-                    </tr>
-                }
-            </table>
+                        </tr>
+                    }
+                </table>
         }
-      
+
     </div>
 </section>
+
 
 
 @*Modal*@
@@ -101,13 +134,19 @@
                         <label style="color:black" id="FinishTime"> </label>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Seçtiğiniz Event : </label>
-                        <textbox style="color:black" id="event">event-2</textbox>
+                        <label for="exampleFormControlInput1"></label>
+                        <textbox style="color:black" id="event">event-1</textbox>
                     </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1"></label>
+                        <textbox style="color:black; " id="userId"></textbox>
+                    </div>
+
                 </form>
             </div>
             <div id="submitButtons" class="modal-footer">
-                <button  type="button" class="btn btn-secondary" data-dismiss="modal">İPTAL</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İPTAL</button>
                 <button onclick="Approve(this.id)" type="button" id="approve" class="btn btn-primary">ONAYLA</button>
             </div>
         </div>
@@ -119,22 +158,30 @@
 
 <script>
     $(document).ready(function () {
-        var courtid, hour;
+        var courtid, hour, courtname, userIdd;
+
+
 
         $('.courtbutton').click((e) => {
 
-            var courtname = $(e.target).attr('cname');
+            courtname = $(e.target).attr('cname');
             courtid = e.target.id.replace("cb_", "");
             hour = $(e.target).attr('hour');
+            userIdd = $(e.target).attr('userId');
             console.log($('#h_' + courtid).val());
 
 
+            console.log(userId);
+
+            var userIdtext = userIdd;
             var courttext = courtname;
             var starttimetext = hour;
             var finishtimetext = (parseInt(hour.split(':')[0]) + 1) + ': 00';
 
-            console.log(finishtimetext);
 
+            console.log(userIdtext);
+
+            $('#userId').text(userIdtext);
             $('#CourtName').text(courttext);
             $('#StartTime').text(starttimetext);
             $('#FinishTime').text(finishtimetext);
@@ -146,8 +193,11 @@
 </script>
 
 <script>
+
     function Approve(id) {
-        debugger;
+
+
+
         $("cb_").hide();
 
         var resobject = {
@@ -156,13 +206,19 @@
             ResStartTime: '',
             ResFinishTime: '',
             ResEvent: '',
+            userId: '',
             CId: null,
+
+
         }
+
+        debugger;
 
         resobject.ResDate = $("#resDate").val();
         resobject.ResStartTime = $("#StartTime").text();
         resobject.ResFinishTime = $("#FinishTime").text();
-        resobject.ResEvent = $("#event").text();
+        //resobject.ResEvent = $("#event").text();
+        resobject.userId = $("#userId").text();
         resobject.CId = parseInt(id);
 
         try {
@@ -174,7 +230,7 @@
                 dataType: "json",
                 async: true,
                 success: function (res) {
-                   
+
                     if (res == "true") {
                         alert("BAŞARILI");
                     }

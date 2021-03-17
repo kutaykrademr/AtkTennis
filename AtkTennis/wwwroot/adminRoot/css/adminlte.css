@@ -2646,8 +2646,8 @@ fieldset:disabled a.btn {
 
 .btn-success {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #728446;
+  border-color: #728446;
   box-shadow: none;
 }
 
@@ -2721,10 +2721,10 @@ fieldset:disabled a.btn {
 }
 
 .btn-warning {
-  color: #1f2d3d;
-  background-color: #ffc107;
-  border-color: #ffc107;
-  box-shadow: none;
+    color: #1f2d3d;
+    background-color: #f4900c;
+    border-color: #f4900c;
+    box-shadow: none;
 }
 
 .btn-warning:hover {
@@ -2760,8 +2760,8 @@ fieldset:disabled a.btn {
 
 .btn-danger {
   color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background-color: #a32523;
+  border-color: #a32523;
   box-shadow: none;
 }
 

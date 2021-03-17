@@ -32,7 +32,10 @@ public class AdminController : Controller
     public IActionResult AdminHome()
     {
         var model = new AdminHomeModel();
+
         model.TotalUserCount = userManager.Users.Count();
+        model.TotalRoleCount = roleManager.Roles.Count();
+       
 
         return View(model);
     }
@@ -46,9 +49,7 @@ public class AdminController : Controller
         model.Res = db.reservations.ToList();
         model.Courts = db.courts.ToList();
         model.Times = db.resTimes.ToList();
-
-     
-
+        model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
 
         return View(model);
       

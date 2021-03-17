@@ -21,6 +21,7 @@ namespace AtkTennis.Models
         [Display(Name = "ConfirmPassword")]
         public string ConfirmPassword { get; set; }
 
+
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]

@@ -8,5 +8,9 @@ namespace AtkTennis.ViewModels
     public class AdminHomeModel
     {
         public int TotalUserCount { get; set; }
+        public int TotalRoleCount { get; set; }
+        
+
+
     }
 }

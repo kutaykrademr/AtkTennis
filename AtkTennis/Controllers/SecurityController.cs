@@ -93,8 +93,10 @@ namespace AtkTennis.Controllers
                 user.Email = register.Registers.Email;
                 user.FullName = register.Registers.FullName;
                 user.BirthDate = register.Registers.BirthDate;
-
                 user.PhoneNumber = register.AppIdentityUsers.PhoneNumber;
+                role.Name = register.Registers.Role;
+
+              
 
                 var result = userManager.CreateAsync(user, register.Registers.Password).Result;
 
@@ -191,7 +193,7 @@ namespace AtkTennis.Controllers
         }
 
 
-
+        
         [Authorize]
         public IActionResult ListUsers(Register register )
         {

@@ -11,6 +11,7 @@ namespace AtkTennis.ViewModels
     {
         public Register Registers { get; set; } = new Register();
         public AppIdentityUser AppIdentityUsers { get; set; } = new AppIdentityUser();
+        
 
     }
 }

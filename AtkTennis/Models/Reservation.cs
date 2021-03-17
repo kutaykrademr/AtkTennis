@@ -16,6 +16,9 @@ namespace AtkTennis.Models
         public string ResStartTime { get; set; }
         public string ResFinishTime { get; set; }
         public string ResEvent { get; set; }
+        public string userId { get ; set;} 
+
+        
 
 
         public Court courts { get; set; }

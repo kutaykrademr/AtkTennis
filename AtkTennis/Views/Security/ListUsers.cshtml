@@ -15,6 +15,8 @@
         <div class="content-header">
             <h1 class="m-0">Reservation</h1>
         </div>
+        
+        
 
         <table>
 
@@ -37,6 +39,9 @@
 
                 @foreach (var item in Model.AppIdentityUsers)
                 {
+
+                    
+                    
                     <tr>
                         <td data-label="Id">@i</td>
                         <td data-label="Ad-Soyad">@item.FullName</td>
@@ -48,7 +53,7 @@
 
                         <form method="post">
 
-                            <td><a href="#" class="btn btn-default" style="background-color:#dee61d">Detaylar</a></td>
+                            <td><a href="#" class="btn btn-warning">Detaylar</a></td>
                             <td><button class="btn btn-success updatebutton">Güncelle</button></td>
                             <td><button asp-action="DeleteUsers" asp-controller="Security" asp-route-id="@item.Id" type="submit" class="btn btn-danger ">Sil</button></td>
 
