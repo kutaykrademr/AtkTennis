@@ -66,6 +66,18 @@ public class AdminController : Controller
         return View(model);
     }
 
+    public IActionResult ReservationTable()
+    {
+        var model = new AdminViewModel();
+
+        model.Res = db.reservations.ToList();
+        model.Courts = db.courts.ToList();
+        model.Times = db.resTimes.ToList();
+
+        return View(model);
+    }
+
+
 
     [HttpPost]
     public JsonResult NewReservation(Reservation res , int CId)

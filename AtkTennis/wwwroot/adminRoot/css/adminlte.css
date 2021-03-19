@@ -2569,10 +2569,10 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-  box-shadow: none;
+    color: #fff;
+    background-color: #221E37;
+    border-color: #221E37;
+    box-shadow: none;
 }
 
 .btn-primary:hover {
@@ -22099,7 +22099,10 @@ body.iframe-mode .main-footer {
   display: none;
 }
 
-body.iframe-mode-fullscreen {
+body.iframe-mode-
+
+
+{
   overflow: hidden;
 }
 

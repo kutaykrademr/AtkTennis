@@ -9,10 +9,6 @@
 }
 
 <link href="~/css/popup.css" rel="stylesheet" />
-@*<label style="visibility:hidden" val="@User.FindFirst(ClaimTypes.NameIdentifier).Value;" id="user_id">
-
-    </label>*@
-
 
 
 @{
@@ -217,7 +213,7 @@
         resobject.ResDate = $("#resDate").val();
         resobject.ResStartTime = $("#StartTime").text();
         resobject.ResFinishTime = $("#FinishTime").text();
-        //resobject.ResEvent = $("#event").text();
+        resobject.ResEvent = $("#event").text();
         resobject.userId = $("#userId").text();
         resobject.CId = parseInt(id);
 

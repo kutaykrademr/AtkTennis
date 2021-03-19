@@ -190,11 +190,11 @@ svg {
     --max-width-sm: 48rem;
     --max-width-md: 64rem;
     --max-width-lg: 80rem;
-    --max-width-xl: 90rem;
+    --max-width-xl: 100rem;
     --max-width-xxl: 120rem;
 }
 .container {
-/*    width: calc(100% - 1.25em);
+ /*   width: calc(100% - 1.25em);
     width: calc(100% - 2 * var(--component-padding));*/
     margin-left: auto;
     margin-right: auto;
@@ -982,14 +982,14 @@ svg {
     --body-line-height: 1.4;
     --heading-line-height: 1.2;
 }
-body {
-    font-size: 1em;
-    font-size: var(--text-base-size, 1em);
-    font-family: "Source Sans Pro", sans-serif;
-    font-family: var(--font-primary, sans-serif);
+/*body {*/
+   /* font-size: 1em;*/
+   /* font-size: var(--text-base-size, 1em);*/
+    /*font-family: "Source Sans Pro", sans-serif;*/
+    /*font-family: var(--font-primary, sans-serif);
     color: hsl(240, 4%, 20%);
     color: var(--color-contrast-high, #313135);
-}
+}*/
 h1,
 h2,
 h3,
@@ -1036,7 +1036,7 @@ a,
 .link {
     color: hsl(220, 90%, 56%);
     color: var(--color-primary, #2a6df4);
-    text-decoration: underline;
+/*    text-decoration: underline;*/
 }
 strong,
 .text-bold {
@@ -3107,8 +3107,7 @@ mark {
     --cd-color-event-1-h: 199;
     --cd-color-event-1-s: 25%;
     --cd-color-event-1-l: 46%;
-    --cd-color-
-        : hsl(271, 23%, 26%);
+    --cd-color-event-2: hsl(271, 23%, 26%);
     --cd-color-event-2-h: 271;
     --cd-color-event-2-s: 23%;
     --cd-color-event-2-l: 26%;
@@ -3120,7 +3119,7 @@ mark {
     --cd-color-event-4-h: 31;
     --cd-color-event-4-s: 89%;
     --cd-color-event-4-l: 68%;
-    --cd-color-event-5: hsl(128 , 96%, 19%);
+    --cd-color-event-5: hsl(128, 96%, 19%);
     --cd-color-event-5-h: 31;
     --cd-color-event-5-s: 89%;
     --cd-color-event-5-l: 68%;

@@ -12,11 +12,63 @@
 
 <section class="content">
     <div class="content-wrapper">
-        <div class="content-header">
-            <h1 class="m-0">Reservation</h1>
+        <div class="row">
+
+            <div class="content-header col-md-2 ">
+                <h1 @*class="m-0"*@ style="margin-top:15px">Tüm Kullanıcılar</h1>
+            </div>
+
+
+
+            <div class="input-group rounded col-md-6" style="margin-top:25px">
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+
+            </div>
+
+
+
+            <div style=" text-align:left; margin-left:60px; padding-top:10px; padding-bottom:10px" class="col-md-2">
+
+                <div>
+                    <label class="form-switch ">
+                        <input type="checkbox">
+                        <i></i>
+                        Üyeler
+                    </label>
+
+                    <label class="form-switch" style=" margin-left:12px">
+                        <input type="checkbox">
+                        <i></i>
+                        Personel
+                    </label>
+
+
+                </div>
+
+                <div>
+
+                    <label class="form-switch ">
+                        <input type="checkbox">
+                        <i></i>
+                        Eğitmen
+                    </label>
+
+                    <label class="form-switch ">
+                        <input type="checkbox">
+                        <i></i>
+                        Öğrenciler
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <button style="margin-top:25px" class="btn btn-primary">Getir</button>
+            </div>
+
         </div>
-        
-        
+
+
+
 
         <table>
 
@@ -26,10 +78,11 @@
                     <th scope="col">Ad-Soyad</th>
                     <th scope="col">Kullanıcı Adı</th>
                     <th scope="col">E-Mail</th>
-                    <th scope="col">Doğum Tarihi</th>
+                    @*<th scope="col">Doğum Tarihi</th>*@
                     <th scope="col">Telefon</th>
-                    <th scope="col">Detaylar</th>
+
                     <th scope="col">Güncelle</th>
+                    <th scope="col">Detaylar</th>
                     <th scope="col">Sil</th>
                 </tr>
             </thead>
@@ -40,23 +93,21 @@
                 @foreach (var item in Model.AppIdentityUsers)
                 {
 
-                    
-                    
+
+
                     <tr>
                         <td data-label="Id">@i</td>
                         <td data-label="Ad-Soyad">@item.FullName</td>
                         <td data-label="Kullanıcı Adı">@item.UserName</td>
                         <td data-label="E-Mail">@item.Email</td>
-                        <td data-label="Doğum Tarihi">@item.BirthDate</td>
+                        @*<td data-label="Doğum Tarihi">@item.BirthDate</td>*@
                         <td data-label="Telefon">@item.PhoneNumber</td>
 
+                        <td><button data-toggle="modal" data-target="#exampleModalLong" class="btn btn-success">Güncelle</button></td>
 
                         <form method="post">
-
                             <td><a href="#" class="btn btn-warning">Detaylar</a></td>
-                            <td><button class="btn btn-success updatebutton">Güncelle</button></td>
                             <td><button asp-action="DeleteUsers" asp-controller="Security" asp-route-id="@item.Id" type="submit" class="btn btn-danger ">Sil</button></td>
-
                         </form>
                     </tr>
                     i++;
@@ -65,6 +116,26 @@
 
             </tbody>
         </table>
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Henüz Yapım Aşamasında
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
