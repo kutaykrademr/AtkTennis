@@ -78,42 +78,30 @@
                     <th scope="col">Ad-Soyad</th>
                     <th scope="col">Kullanıcı Adı</th>
                     <th scope="col">E-Mail</th>
-                    @*<th scope="col">Doğum Tarihi</th>*@
                     <th scope="col">Telefon</th>
-
                     <th scope="col">Güncelle</th>
                     <th scope="col">Detaylar</th>
                     <th scope="col">Sil</th>
                 </tr>
             </thead>
-            @{ int i = 1;
-            }
+
             <tbody>
 
-                @foreach (var item in Model.AppIdentityUsers)
+                @for (int i = 0; i < Model.AppIdentityUsers.Count(); i++)
                 {
-
-
-
                     <tr>
-                        <td data-label="Id">@i</td>
-                        <td data-label="Ad-Soyad">@item.FullName</td>
-                        <td data-label="Kullanıcı Adı">@item.UserName</td>
-                        <td data-label="E-Mail">@item.Email</td>
+                        <td data-label="Id">@Convert.ToInt16(i + 1)</td>
+                        <td data-label="Ad-Soyad">@Model.AppIdentityUsers[i].FullName</td>
+                        <td data-label="Kullanıcı Adı">@Model.AppIdentityUsers[i].UserName</td>
+                        <td data-label="E-Mail">@Model.AppIdentityUsers[i].Email</td>
                         @*<td data-label="Doğum Tarihi">@item.BirthDate</td>*@
-                        <td data-label="Telefon">@item.PhoneNumber</td>
-
+                        <td data-label="Telefon">@Model.AppIdentityUsers[i].PhoneNumber</td>
                         <td><button data-toggle="modal" data-target="#exampleModalLong" class="btn btn-success">Güncelle</button></td>
+                        <td><a href="#" class="btn btn-warning">Detaylar</a></td>
+                        <td><button data-toggle="modal" data-target="#deleteModalLong" class="btn btn-danger">Sil</button></td>
 
-                        <form method="post">
-                            <td><a href="#" class="btn btn-warning">Detaylar</a></td>
-                            <td><button asp-action="DeleteUsers" asp-controller="Security" asp-route-id="@item.Id" type="submit" class="btn btn-danger ">Sil</button></td>
-                        </form>
                     </tr>
-                    i++;
-
                 }
-
             </tbody>
         </table>
         <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -136,6 +124,27 @@
             </div>
         </div>
 
+        <div class="modal fade" id="deleteModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Henüz Yapım Aşamasında
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form method="post">                     
+                           @*<button asp-action="DeleteUsers" asp-controller="Security" asp-route-id="@item.Id" type="submit" class="btn btn-danger ">Sil</button>*@
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 

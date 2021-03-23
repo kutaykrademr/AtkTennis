@@ -9,6 +9,10 @@ namespace AtkTennis.Models
     {
         public int CourtId { get; set; }
         public string CourtName { get; set; }
+        public string CourtType { get; set; }
+        public string CourtConditions { get; set; }
+        public string CourtWebConditions { get; set; }
+
 
 
         public List<Reservation> reservations { get; set; }

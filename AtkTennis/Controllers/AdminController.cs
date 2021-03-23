@@ -40,6 +40,16 @@ public class AdminController : Controller
         return View(model);
     }
 
+    public IActionResult CourtSettings()
+    {
+        var model = new CourtSettingsViewModel();
+
+        model.courtPriceLists = db.courtPriceLists.ToList();
+        model.Courts = db.courts.ToList();
+
+        return View(model);
+    }
+
    
 
     public IActionResult Reservation()
@@ -117,6 +127,8 @@ public class AdminController : Controller
         else
             return Json("false");
     }
+
+
 
 
 }

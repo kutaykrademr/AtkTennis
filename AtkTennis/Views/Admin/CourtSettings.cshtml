@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model AtkTennis.ViewModels.CourtSettingsViewModel
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+
+
+
+<link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+
+
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kort Ayarları</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kort İşlemleri</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Türü</th>
+                                        <th>Durumu</th>
+                                        <th>Web Durumu</th>
+                                        <th>Güncelle</th>
+                                        <th>Sil</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Courts)
+                                    {
+                                        <tr style="text-align:center">
+                                            <td>@item.CourtName</td>
+                                            <td>@item.CourtType</td>
+                                            <td>@item.CourtConditions</td>
+                                            <td>@item.CourtWebConditions</td>
+
+                                            <td><button class="btn btn-warning">Güncelle</button></td>
+                                            <td><button class="btn btn-danger">Sil</button></td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                                @*<tfoot>
+                                        <tr>
+                                            <th>Adı </th>
+                                            <th>Türü</th>
+                                            <th>Durumu</th>
+                                            <th>Web Durumu</th>
+                                            <th>Güncelle</th>
+                                        </tr>
+                                    </tfoot>*@
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kort Ücret Tarifesi</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example3" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Fiyatı</th>
+                                        <th>Ücret Tipi</th>
+                                        <th>Tarife Tipi</th>
+                                        <th>Durumu</th>
+                                        <th>Güncelle</th>
+                                        <th>Sil</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.courtPriceLists)
+                                    {
+                                        <tr style="text-align:center">
+                                            <td>@item.Name</td>
+                                            <td>@item.CourtPrice</td>
+                                            <td>@item.PriceType</td>
+                                            <td>@item.RecipeType</td>
+                                            <td>@item.Condition</td>
+                                            <td><button class="btn btn-warning">Güncelle</button></td>
+                                            <td><button class="btn btn-danger">Sil</button></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                    <!-- /.card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">DataTable with default features</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Rendering engine</th>
+                                        <th>Browser</th>
+                                        <th>Platform(s)</th>
+                                        <th>Engine version</th>
+                                        <th>CSS grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Trident</td>
+                                        <td>
+                                            Internet
+                                            Explorer 4.0
+                                        </td>
+                                        <td>Win 95+</td>
+                                        <td> 4</td>
+                                        <td>X</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trident</td>
+                                        <td>
+                                            Internet
+                                            Explorer 5.0
+                                        </td>
+                                        <td>Win 95+</td>
+                                        <td>5</td>
+                                        <td>C</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trident</td>
+                                        <td>
+                                            Internet
+                                            Explorer 5.5
+                                        </td>
+                                        <td>Win 95+</td>
+                                        <td>5.5</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trident</td>
+                                        <td>
+                                            Internet
+                                            Explorer 6
+                                        </td>
+                                        <td>Win 98+</td>
+                                        <td>6</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trident</td>
+                                        <td>Internet Explorer 7</td>
+                                        <td>Win XP SP2+</td>
+                                        <td>7</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trident</td>
+                                        <td>AOL browser (AOL desktop)</td>
+                                        <td>Win XP</td>
+                                        <td>6</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gecko</td>
+                                        <td>Firefox 1.0</td>
+                                        <td>Win 98+ / OSX.2+</td>
+                                        <td>1.7</td>
+                                        <td>A</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Rendering engine</th>
+                                        <th>Browser</th>
+                                        <th>Platform(s)</th>
+                                        <th>Engine version</th>
+                                        <th>CSS grade</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            @*/.row*@
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+   
+    });
+</script>
+
