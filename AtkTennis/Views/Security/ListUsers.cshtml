@@ -85,7 +85,7 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="UserTable">
 
                 @for (int i = 0; i < Model.AppIdentityUsers.Count(); i++)
                 {
@@ -94,17 +94,18 @@
                         <td data-label="Ad-Soyad">@Model.AppIdentityUsers[i].FullName</td>
                         <td data-label="Kullanıcı Adı">@Model.AppIdentityUsers[i].UserName</td>
                         <td data-label="E-Mail">@Model.AppIdentityUsers[i].Email</td>
-                        @*<td data-label="Doğum Tarihi">@item.BirthDate</td>*@
                         <td data-label="Telefon">@Model.AppIdentityUsers[i].PhoneNumber</td>
-                        <td><button data-toggle="modal" data-target="#exampleModalLong" class="btn btn-success">Güncelle</button></td>
-                        <td><a href="#" class="btn btn-warning">Detaylar</a></td>
-                        <td><button data-toggle="modal" data-target="#deleteModalLong" class="btn btn-danger">Sil</button></td>
 
+
+                        <td><a href="#" class="btn btn-warning">Detaylar</a></td>
+                        <td><button class="btn btn-success" id="upd_@Model.AppIdentityUsers[i].Id" onclick="openUpdateModel(this.id)">Güncelle</button></td>
+                        <td><button class="btn btn-danger" id="@Model.AppIdentityUsers[i].Id" onclick="openDeleteModel(this.id)">Sil</button></td>
                     </tr>
                 }
             </tbody>
         </table>
-        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+
+        <div class="modal fade" id="updateModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -114,11 +115,38 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Henüz Yapım Aşamasında
+                        <div class="roww roww-space">
+                            <div class="coll-2">
+                                <div class="input--group">
+                                    <label class="label">Name</label>
+                                    <input type="email" id="fullName" class="input--style-4">
+                                </div>
+                            </div>
+                            <div class="coll-2">
+                                <div class="input--group">
+                                    <label class="label">Email</label>
+                                    <input type="text" id="email" class="input--style-4">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="roww roww-space">
+                            <div class="coll-2">
+                                <div class="input--group">
+                                    <label class="label">Kullanıcı Adı</label>
+                                    <input type="email" id="userName" class="input--style-4">
+                                </div>
+                            </div>
+                            <div class="coll-2">
+                                <div class="input--group">
+                                    <label class="label">Phone Number</label>
+                                    <input type="text" id="phone" class="input--style-4">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer" id="updateModel">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary" onclick="updateUser(this.id)">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -134,12 +162,12 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Henüz Yapım Aşamasında
+                        Silmek İstediğinize Emin Misiniz ?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <form method="post">                     
-                           @*<button asp-action="DeleteUsers" asp-controller="Security" asp-route-id="@item.Id" type="submit" class="btn btn-danger ">Sil</button>*@
+                        <form method="post" id="deleteForm">
+                            <button asp-action="DeleteUsers" asp-controller="Security" type="submit" class="btn btn-danger ">Sil</button>
                         </form>
                     </div>
                 </div>
@@ -147,5 +175,137 @@
         </div>
     </div>
 </section>
+
+<script>
+
+    function openDeleteModel(id) {
+        var formAction = $("#deleteForm button").attr("formaction");
+        $("#deleteForm button").attr("formaction", formAction + "?id=" + id);
+        $('#deleteModalLong').modal('toggle');
+    }
+
+
+
+
+
+    function openUpdateModel(id) {
+
+        ID = id.split("_")[1];
+
+        try {
+            $.ajax({
+                type: "GET",
+                url: '../Security/GetUser',
+                cache: false,
+                data: { "id": ID },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res != null) {
+
+                        $("#userName").val(res.userName);
+                        $("#fullName").val(res.fullName);
+                        $("#phone").val(res.phoneNumber);
+                        $("#email").val(res.email);
+                        $("#updateModel button:nth-of-type(2)").attr("id", ID);
+
+                        $('#updateModalLong').modal('toggle');
+                    } else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kullanıcı Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        } catch (e) {
+            console.log(e.message);
+        }
+
+    }
+
+
+
+
+
+
+    function updateUser(id) {
+        $('#updateModalLong').modal('toggle');
+        try {
+
+           
+            $.ajax({
+                type: "POST",
+                url: '../Security/UpdateUser',
+                cache: false,
+                data: { "id": id, "userName": $("#userName").val(), "fullName": $("#fullName").val(), "phoneNumber": $("#phone").val(), "email": $("#email").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                 
+                    if (res.appIdentityUsers.length != 0) {
+
+                        $("#UserTable").empty();
+                        $.each(res.appIdentityUsers, function (key, val) {
+
+                            var NewRow = '<tr><td data-label="Id">' + parseInt(key + 1) + '</td><td data-label="Ad-Soyad">';
+                            NewRow += (val.fullName != null) ? val.fullName : '';
+                            NewRow += '</td><td data-label="Kullanıcı Adı">';
+                            NewRow += (val.userName != null) ? val.userName : '';
+                            NewRow += '</td><td data-label="E-Mail">';
+                            NewRow += (val.email != null) ? val.email : '';
+                            NewRow += '</td><td data-label="Telefon">';
+                            NewRow += (val.phoneNumber != null) ? val.phoneNumber : '';
+                            NewRow += '</td><td><button class="btn btn-success" id="upd_' + val.id + '" onclick="openUpdateModel(this.id)">Güncelle</button></td>';
+                            NewRow += '<td><a href="#" class="btn btn-warning">Detaylar</a></td>'
+                            NewRow += '<td><button class="btn btn-danger" id="' + val.id + '" onclick="openDeleteModel(this.id)">Sil</button></td></tr>';
+
+                            $("#UserTable").append(NewRow);
+                        })
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Kullanıcı başarıyla güncellendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        } catch (e) {
+            console.log(e.message);
+        }
+
+    }
+</script>
 
 

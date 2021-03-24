@@ -9,144 +9,119 @@
 
 
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
 
 
-    <!-- Icons font CSS-->
-    <link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
-    @*<link href="~/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">*@
-    <!-- Font special for pages-->
-    @*<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">*@
-    <!-- Vendor CSS-->
-    <link href="~/vendor/select2/select2.min.css" rel="stylesheet" media="all">
-    <link href="~/vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
 
-    <!-- Main CSS-->
-    <link href="~/rcss/main.css" rel="stylesheet" media="all">
-</head>
 
-<body>
-    <section class="content">
-        <div class="content-wrapper">
-            <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
-                <div class="wrapper wrapper--w680">
-                    <div class="card card-4">
-                        <div class="card-body">
-                            <h2 class="title">Personel Kayıt</h2>
-                            <form asp-controller="Security" asp-action="Register" method="post">
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Ad-Soyad</label>
-                                            <input asp-for="Registers.FullName" type="text" id="name" placeholder="Full-Name" class="input--style-4" autocomplete="new-password">
-                                        </div>
+<section class="content">
+    <div class="content-wrapper">
+        <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+            <div class="wrapper wrapper--w680">
+                <div class="card card-4">
+                    <div class="card-body">
+                        <h2 class="title">Personel Kayıt</h2>
+                        <form asp-controller="Security" asp-action="Register" method="post">
+                            <div class="roww roww-space">
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Ad-Soyad</label>
+                                        <input asp-for="Registers.FullName" type="text" id="name" placeholder="Full-Name" class="input--style-4" autocomplete="new-password">
                                     </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Giriş Yapacağı Kullanıcı Adı</label>
-                                            <input asp-for="Registers.UserName" type="text" id="name" placeholder="UserName" class="input--style-4" autocomplete="new-password">
+                                </div>
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Giriş Yapacağı Kullanıcı Adı</label>
+                                        <input asp-for="Registers.UserName" type="text" id="name" placeholder="UserName" class="input--style-4" autocomplete="new-password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="roww roww-space">
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Birthday</label>
+                                        <div class="input--group-icon">
+                                            <input asp-for="Registers.BirthDate" type="date" id="birth-date" placeholder="BirthDate (exp: gg.aa.yyyy)" class="input--style-4 js-datepicker" autocomplete="new-password">
+                                            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Birthday</label>
-                                            <div class="input--group-icon">
-                                                <input asp-for="Registers.BirthDate" type="date" id="birth-date" placeholder="BirthDate (exp: gg.aa.yyyy)" class="input--style-4 js-datepicker" autocomplete="new-password">
-                                                <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Gender</label>
-                                            <div class="p-t-10">
-                                                <label class="radio-container m-r-45">
-                                                    Male
-                                                    <input type="radio" checked="checked" name="gender">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                                <label class="radio-container">
-                                                    Female
-                                                    <input type="radio" name="gender">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                            </div>
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Gender</label>
+                                        <div class="p-t-10">
+                                            <label class="radio-container m-r-45">
+                                                Male
+                                                <input type="radio" checked="checked" name="gender">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label class="radio-container">
+                                                Female
+                                                <input type="radio" name="gender">
+                                                <span class="checkmark"></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Email</label>
-                                            <input asp-for="Registers.Email" type="email" id="email" placeholder="Email" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Phone Number</label>
-                                            <input asp-for="AppIdentityUsers.PhoneNumber" type="text" class="input--style-4" id="phone" placeholder="Phone" autocomplete="new-password">
-                                        </div>
+                            </div>
+                            <div class="roww roww-space">
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Email</label>
+                                        <input asp-for="Registers.Email" type="email" id="email" placeholder="Email" class="input--style-4" autocomplete="new-password">
                                     </div>
                                 </div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Password</label>
-                                            <input asp-for="Registers.Password" type="password" id="password" placeholder="Password" class="input--style-4" autocomplete="new-password">
-                                        </div>
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Phone Number</label>
+                                        <input asp-for="AppIdentityUsers.PhoneNumber" type="text" class="input--style-4" id="phone" placeholder="Phone" autocomplete="new-password">
                                     </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Confirm Password</label>
-                                            <input asp-for="Registers.ConfirmPassword" type="password" id="confirm-password" placeholder="Confirm-Password" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-
-
                                 </div>
-                               
-                                <div class="input--group">
-                                    <label class="label">Role</label>
-                                    <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="Registers.Role" asp-for="Registers.Role" id="Registers.Role">
-                                            <option disabled="disabled" selected="selected">Choose option</option>
-
-                                            <option>Manager</option>
-                                            <option>Trainer</option>
-                                            <option>Student</option>
-
-                                        </select>
-                                        <div class="select-dropdown"></div>
+                            </div>
+                            <div class="roww roww-space">
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Password</label>
+                                        <input asp-for="Registers.Password" type="password" id="password" placeholder="Password" class="input--style-4" autocomplete="new-password">
+                                    </div>
+                                </div>
+                                <div class="coll-2">
+                                    <div class="input--group">
+                                        <label class="label">Confirm Password</label>
+                                        <input asp-for="Registers.ConfirmPassword" type="password" id="confirm-password" placeholder="Confirm-Password" class="input--style-4" autocomplete="new-password">
                                     </div>
                                 </div>
 
-                                <div class="p-t-15">
-                                    <button class="btnn btn--radius-2 btn--blue" type="submit">Submit</button>
+
+                            </div>
+
+                            <div class="input--group">
+                                <label class="label">Role</label>
+                                <div class="rs-select2 js-select-simple select--no-search">
+                                    <select name="Registers.Role" asp-for="Registers.Role" id="Registers.Role">
+                                        <option disabled="disabled" selected="selected">Choose option</option>
+
+                                        <option>Manager</option>
+                                        <option>Trainer</option>
+                                        <option>Student</option>
+
+                                    </select>
+                                    <div class="select-dropdown"></div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+
+                            <div class="p-t-15">
+                                <button class="btnn btn--radius-2 btn--blue" type="submit">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Jquery JS-->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-    <!-- Vendor JS-->
-    <script src="~/vendor/select2/select2.min.js"></script>
-    <script src="~/vendor/datepicker/moment.min.js"></script>
-    <script src="vendor/datepicker/daterangepicker.js"></script>
-    <!-- Main JS-->
-    <script src="~/rjs/global.js"></script>
 
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
-</html>
-<!-- end document-->
+
+

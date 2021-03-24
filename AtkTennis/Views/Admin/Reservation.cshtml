@@ -154,10 +154,7 @@
 
 <script>
     $(document).ready(function () {
-        var courtid, hour, courtname, userIdd;
-
-
-
+        
         $('.courtbutton').click((e) => {
 
             courtname = $(e.target).attr('cname');
@@ -191,9 +188,6 @@
 <script>
 
     function Approve(id) {
-
-
-
         $("cb_").hide();
 
         var resobject = {
@@ -207,8 +201,6 @@
 
 
         }
-
-        debugger;
 
         resobject.ResDate = $("#resDate").val();
         resobject.ResStartTime = $("#StartTime").text();

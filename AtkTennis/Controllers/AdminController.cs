@@ -87,7 +87,7 @@ public class AdminController : Controller
         return View(model);
     }
 
-
+   
 
     [HttpPost]
     public JsonResult NewReservation(Reservation res , int CId)
@@ -98,7 +98,6 @@ public class AdminController : Controller
         try
         {
             res.courts = db.courts.Where(x => x.CourtId == CId).SingleOrDefault();
-
             model = db.reservations.Where(x => x.ResStartTime == res.ResStartTime && x.ResFinishTime == res.ResFinishTime && x.courts.CourtId == CId).FirstOrDefault();
         }
 
@@ -126,9 +125,49 @@ public class AdminController : Controller
         }
         else
             return Json("false");
+
+
+
+        
+    }
+
+    [HttpGet]
+    public JsonResult GetCourtInf(int ID)
+    {
+
+
+        Court model = new Court();
+
+        model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();
+
+
+
+        return Json(model);
     }
 
 
+
+    [HttpPost]
+    public async Task<JsonResult> UpdateCourtInfAsync(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
+    {
+
+
+        Court model = new Court();
+
+        model = db.courts.Where(x => x.CourtId == id).SingleOrDefault();
+
+        model.CourtName = courtName;
+        model.CourtType = courtType;
+        model.CourtConditions = courtConditions;
+        model.CourtWebConditions = courtWebConditions;
+
+        db.courts.Update(model);
+        db.SaveChanges();
+
+       
+
+        return Json(model);
+    }
 
 
 }

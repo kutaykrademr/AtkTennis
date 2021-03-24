@@ -32,6 +32,9 @@ namespace AtkTennis.Controllers
 
 
 
+        Context db = new Context();
+
+
         #region
 
         [Authorize]
@@ -41,6 +44,7 @@ namespace AtkTennis.Controllers
 
             return View();
         }
+    
 
         [Authorize]
         [HttpGet]
@@ -233,6 +237,61 @@ namespace AtkTennis.Controllers
             }
             return View();
         }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateUser(string id, string userName, string fullName, string phoneNumber, string email)
+        {
+            AppIdentityUser model = new AppIdentityUser();
+
+            try
+            {
+                model = userManager.Users.SingleOrDefault(x => x.Id == id);
+
+                model.UserName = userName;
+                model.FullName = fullName;
+                model.PhoneNumber = phoneNumber;
+                model.Email = email;
+
+                var result = await userManager.UpdateAsync(model);
+            }
+            catch (Exception)
+            {
+                
+            }
+
+            var model2 = new AtkTennis.ViewModels.IdentityPartialClass();
+
+            try
+            {
+                model2.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
+            }
+            catch (Exception)
+            {
+            }
+            return Json(model2);
+        }
+
+
+        [HttpGet]
+        public JsonResult GetUser(string ID)
+        {
+            AppIdentityUser model = new AppIdentityUser();
+
+            try
+            {
+                model = userManager.Users.SingleOrDefault(x => x.Id == ID);
+            }
+            catch (Exception)
+            {
+                return Json(model);
+            }
+            
+            return Json(model);
+        }
+
+
+    
+
 
     }
 }
