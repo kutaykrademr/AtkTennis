@@ -72,7 +72,7 @@
                                             <td>@item.CourtWebConditions</td>
 
                                             <td><button class="btn btn-warning" id="@item.CourtId" onclick="openUpdateCourtModel(this.id)">Güncelle</button></td>
-                                            <td><button class="btn btn-danger">Sil</button></td>
+                                            <td><button class="btn btn-danger" id="@item.CourtId" onclick="openDeleteCourtModel(this.id) ">Sil</button></td>
 
                                         </tr>
                                     }
@@ -233,6 +233,8 @@
     </section>
     <!-- /.content -->
 </div>
+
+
 <!-- /.content-wrapper -->
 <!-- Modal -->
 <div class="modal fade" id="updateCourtModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -311,10 +313,77 @@
 </div>
 
 
+<div class="modal fade" id="deleteCourtModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Kullanıcıyı Silmek İstediğinizden Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id=" deleteModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="deleteCourt">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteCourtModel(ID) {
+
+        $.ajax({
+            type: "GET",
+            url: '../Admin/CourtDelete',
+            cache: false,
+            data: { "id": ID },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res != null) {
+                    $.confirm({
+                        title: "Bilgilendirme ",
+                        content: "Kullanıcı Başarılı Şekilde Silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                   
+                    
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Bir Hata Meydana Geldi !!!",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+</script>
 
 <script>
     function openUpdateCourtModel(ID) {
-
         $.ajax({
             type: "GET",
             url: '../Admin/GetCourtInf',
@@ -328,15 +397,11 @@
 
                 if (res != null) {
 
-                    
-
                     $("#name").val(res.courtName);
                     $("#type").val(res.courtType);
                     $("#condition").val(res.courtConditions);
                     $("#webcondition").val(res.courtWebConditions);
-
                     $("#updateModel button:nth-of-type(2)").attr("id", ID);
-
                     $('#updateCourtModalLong').modal('toggle');
                 }
 
@@ -361,6 +426,8 @@
     }
 </script>
 
+
+ 
 <script>
     function updateCourtInf(id) {
 
@@ -409,8 +476,6 @@
                 console.log(textStatus);
             }
         });
-
-
     }
 </script>
 

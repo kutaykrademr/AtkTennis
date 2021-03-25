@@ -50,8 +50,6 @@ public class AdminController : Controller
         return View(model);
     }
 
-   
-
     public IActionResult Reservation()
     {
         var model = new AdminViewModel();
@@ -86,8 +84,6 @@ public class AdminController : Controller
 
         return View(model);
     }
-
-   
 
     [HttpPost]
     public JsonResult NewReservation(Reservation res , int CId)
@@ -145,10 +141,8 @@ public class AdminController : Controller
         return Json(model);
     }
 
-
-
     [HttpPost]
-    public async Task<JsonResult> UpdateCourtInfAsync(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
+    public async Task<JsonResult>UpdateCourtInfAsync(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
     {
 
 
@@ -170,6 +164,19 @@ public class AdminController : Controller
     }
 
 
+    public JsonResult CourtDelete(int ID)
+
+    {
+        Court model = new Court();
+
+
+        model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();
+
+        db.courts.Remove(model);
+        db.SaveChanges();
+
+        return Json(model);
+    }
 }
 
 
