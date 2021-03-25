@@ -11,14 +11,6 @@
 
 
 
-<link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-<link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
-
-
-
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -43,10 +35,14 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Kort İşlemleri</h3>
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kort İşlemleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                            </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -57,35 +53,29 @@
                                         <th>Türü</th>
                                         <th>Durumu</th>
                                         <th>Web Durumu</th>
-                                        <th>Güncelle</th>
-                                        <th>Sil</th>
+                                        <th>İşlemler</th>
+                                        
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.Courts)
                                     {
-                                        <tr style="text-align:center">
+                                        <tr style="text-align:center" id="court_@item.CourtId">
                                             <td>@item.CourtName</td>
                                             <td>@item.CourtType</td>
                                             <td>@item.CourtConditions</td>
                                             <td>@item.CourtWebConditions</td>
 
-                                            <td><button class="btn btn-warning" id="@item.CourtId" onclick="openUpdateCourtModel(this.id)">Güncelle</button></td>
-                                            <td><button class="btn btn-danger" id="@item.CourtId" onclick="openDeleteCourtModel(this.id) ">Sil</button></td>
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModel(this.id)">Güncelle</button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="openDeleteCourtModel(this.id) ">Sil</button>
+                                            </td>
+                                            
 
                                         </tr>
                                     }
-                                </tbody>
-                                @*<tfoot>
-                                        <tr>
-                                            <th>Adı </th>
-                                            <th>Türü</th>
-                                            <th>Durumu</th>
-                                            <th>Web Durumu</th>
-                                            <th>Güncelle</th>
-                                        </tr>
-                                    </tfoot>*@
+                                </tbody>                       
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -107,8 +97,8 @@
                                         <th>Ücret Tipi</th>
                                         <th>Tarife Tipi</th>
                                         <th>Durumu</th>
-                                        <th>Güncelle</th>
-                                        <th>Sil</th>
+                                        <th>İşlemler</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,8 +110,11 @@
                                             <td>@item.PriceType</td>
                                             <td>@item.RecipeType</td>
                                             <td>@item.Condition</td>
-                                            <td><button class="btn btn-warning">Güncelle</button></td>
-                                            <td><button class="btn btn-danger">Sil</button></td>
+                                            <td>
+                                                <button class="btn btn-outline-success">Güncelle</button>
+                                                <button class="btn btn-outline-danger">Sil</button>
+                                            </td>
+                                            
                                         </tr>
                                     }
                                 </tbody>
@@ -271,7 +264,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="modal-body">
+           
                     <div class="roww roww-space">
 
                         <div class="coll-2">
@@ -302,7 +295,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+         
             </div>
             <div class="modal-footer" id="updateModel">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -325,17 +318,94 @@
             <div class="modal-body">
                 Kullanıcıyı Silmek İstediğinizden Emin Misiniz ?
             </div>
-            <div class="modal-footer" id=" deleteModel">
+            <div class="modal-footer" id="deleteModel">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-primary" id="deleteCourt">Sil</button>
+                <button type="button" class="btn btn-primary" onclick="deleteCourtModal(this.id)" >Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Kort Ekle Modal-->
+<div class="modal fade" id="addCourt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kort Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="roww roww-space">
+
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Kort Adı</label>
+                            <input type="text" id="court_name" class="input--style-4">
+                        </div>
+                    </div>
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Kort Türü</label>
+                            <input type="text" id="court_type" class="input--style-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roww roww-space">
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Kort Durumu</label>
+                            <input type="text" id="court_condition" class="input--style-4">
+                        </div>
+                    </div>
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Web Durumu</label>
+                            <input type="text" id="court_webcondition" class="input--style-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addCourt()">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
     function openDeleteCourtModel(ID) {
 
+        $("#deleteModel button:nth-of-type(2)").attr("id", ID);
+        $("#deleteCourtModal").modal("toggle");
+
+    }
+
+    function deleteCourtModal(ID) {
         $.ajax({
             type: "GET",
             url: '../Admin/CourtDelete',
@@ -344,10 +414,7 @@
             dataType: "json",
             async: true,
             success: function (res) {
-
-                debugger;
-
-                if (res != null) {
+                if (res == "true") {
                     $.confirm({
                         title: "Bilgilendirme ",
                         content: "Kullanıcı Başarılı Şekilde Silindi.",
@@ -357,16 +424,20 @@
                             }
                         }
                     });
-                   
-                    
-                }
 
+                    $("#court_" + ID).empty();
+
+                }
                 else {
+                    $("#deleteCourtModal").modal("toggle");
                     $.confirm({
                         title: "Uyarı",
-                        content: "Bir Hata Meydana Geldi !!!",
+                        content: "Kortta kayıtlı rezervasyonlar mevcut. Yine de silmek istiyor musunuz?",
                         buttons: {
-                            TAMAM: function () {
+                            SİL: function () {
+                                forceDelete(ID);
+                            },
+                            İPTAL: function () {
 
                             }
                         }
@@ -380,9 +451,52 @@
             }
         });
     }
-</script>
 
-<script>
+    function forceDelete(ID) {
+        $.ajax({
+            type: "GET",
+            url: '../Admin/CourtForceDelete',
+            cache: false,
+            data: { "id": ID },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res == "true") {
+                    $.confirm({
+                        title: "Bilgilendirme ",
+                        content: "Kullanıcı Başarılı Şekilde Silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+
+                    $("#court_" + ID).empty();
+
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "İşlem sırasında hata oluştu. Lütfen daha sonra tekrar deneyiniz.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
     function openUpdateCourtModel(ID) {
         $.ajax({
             type: "GET",
@@ -424,11 +538,7 @@
             }
         });
     }
-</script>
 
-
- 
-<script>
     function updateCourtInf(id) {
 
         $.ajax({
@@ -439,8 +549,6 @@
             dataType: "json",
             async: true,
             success: function (res) {
-
-             
 
                 if (res !=null) {
 
@@ -477,28 +585,65 @@
             }
         });
     }
-</script>
 
 
+    function addCourt() {
+        if ($("#court_name").val() == "" || $("#court_type").val() == "" || $("#court_condition").val() == "" || $("#court_webcondition").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Kort Bilgilerini Eksizsiz Doldurunuz.",
+                buttons: {
+                    TAMAM: function () {
 
-<script>
-    $(document).ready(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                    }
+                }
+            });
+        } else {
+            $("#addCourt").modal("toggle");
+            $.ajax({
+                type: "POST",
+                url: '../Admin/addCourt',
+                cache: false,
+                data: { "courtName": $("#court_name").val(), "courtType": $("#court_type").val(), "courtConditions": $("#court_condition").val(), "courtWebConditions": $("#court_webcondition").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
 
-        $('#example2 , #example3 , #example4').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
+                    if (res == "true") {
 
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Kort başarıyla eklendi.",
+                            buttons: {
+                                TAMAM: function () {
 
-    });
+                                }
+                            }
+                        });
+
+                        window.location.href = "CourtSettings"
+
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu.Lütfen daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
 </script>
 

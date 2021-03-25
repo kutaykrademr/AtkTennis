@@ -35,7 +35,7 @@ public class AdminController : Controller
 
         model.TotalUserCount = userManager.Users.Count();
         model.TotalRoleCount = roleManager.Roles.Count();
-       
+
 
         return View(model);
     }
@@ -60,18 +60,7 @@ public class AdminController : Controller
         model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
 
         return View(model);
-      
-    }
-    
-    public IActionResult Main()
-    {
-        var model = new AdminViewModel();
 
-        model.Res = db.reservations.ToList();
-        model.Courts = db.courts.ToList();
-        model.Times = db.resTimes.ToList();
-
-        return View(model);
     }
 
     public IActionResult ReservationTable()
@@ -86,7 +75,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public JsonResult NewReservation(Reservation res , int CId)
+    public JsonResult NewReservation(Reservation res, int CId)
     {
 
         var model = new Reservation();
@@ -102,7 +91,7 @@ public class AdminController : Controller
             return Json("false");
 
         }
-      
+
 
         if (model == null)
         {
@@ -116,7 +105,7 @@ public class AdminController : Controller
                 return Json("false");
 
             }
-           
+
             return Json("true");
         }
         else
@@ -124,7 +113,7 @@ public class AdminController : Controller
 
 
 
-        
+
     }
 
     [HttpGet]
@@ -142,40 +131,112 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult>UpdateCourtInfAsync(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
+    public async Task<JsonResult> UpdateCourtInfAsync(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
     {
 
 
         Court model = new Court();
+        try
+        {
+            model = db.courts.Where(x => x.CourtId == id).SingleOrDefault();
 
-        model = db.courts.Where(x => x.CourtId == id).SingleOrDefault();
+            model.CourtName = courtName;
+            model.CourtType = courtType;
+            model.CourtConditions = courtConditions;
+            model.CourtWebConditions = courtWebConditions;
 
-        model.CourtName = courtName;
-        model.CourtType = courtType;
-        model.CourtConditions = courtConditions;
-        model.CourtWebConditions = courtWebConditions;
+            db.courts.Update(model);
+            db.SaveChanges();
+        }
+        catch (Exception)
+        {
 
-        db.courts.Update(model);
-        db.SaveChanges();
 
-       
+        }
+
+
+
 
         return Json(model);
     }
 
+    [HttpPost]
+    public async Task<JsonResult> addCourt( string courtName, string courtType, string courtConditions, string courtWebConditions)
+    {
+        Court model = new Court();
+        try
+        {
+            model.CourtName = courtName;
+            model.CourtType = courtType;
+            model.CourtConditions = courtConditions;
+            model.CourtWebConditions = courtWebConditions;
+
+            db.courts.Add(model);
+            db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            return Json("false");
+        }
+        return Json("true");
+    }
 
     public JsonResult CourtDelete(int ID)
 
     {
         Court model = new Court();
+        List<Reservation> model2 = new List<Reservation>();
+
+        try
+        {
+            model2 = db.reservations.Where(x => x.courts.CourtId == ID).ToList();
+
+            if (model2.Count == 0)
+            {
+                model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();
+
+                db.courts.Remove(model);
+                db.SaveChanges();
+            }
+            else
+            {
+                return Json("false");
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+
+        return Json("true");
+    }
 
 
-        model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();
+    [HttpGet]
+    public JsonResult CourtForceDelete(int ID)
 
-        db.courts.Remove(model);
-        db.SaveChanges();
+    {
+        Court model = new Court();
+        List<Reservation> model2 = new List<Reservation>();
 
-        return Json(model);
+        try
+        {
+            model2 = db.reservations.Where(x => x.courts.CourtId == ID).ToList();
+
+            db.reservations.RemoveRange(model2);
+            db.SaveChanges();
+
+            model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();
+
+            db.courts.Remove(model);
+            db.SaveChanges();
+
+        }
+        catch (Exception ex)
+        {
+            return Json("false");
+        }
+
+        return Json("true");
     }
 }
 

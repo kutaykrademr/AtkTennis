@@ -2570,8 +2570,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
     color: #fff;
-    background-color: #221E37;
-    border-color: #221E37;
+    background-color: #007bff;
+    border-color: #007bff;
     box-shadow: none;
 }
 
@@ -2646,8 +2646,8 @@ fieldset:disabled a.btn {
 
 .btn-success {
     color: #fff;
-    background-color: #4169e1e8;
-    border-color: #4169e1e8;
+    background-color: #28a745;
+    border-color: #28a745;
     box-shadow: none;
 }
 
@@ -19123,7 +19123,7 @@ html.maximized-card {
 .card-footer::after {
   display: block;
   clear: both;
-  content: "";
+  /*content: "";*/
 }
 
 .card-header {

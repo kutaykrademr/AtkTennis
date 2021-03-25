@@ -8,102 +8,75 @@
 @model AtkTennis.ViewModels.IdentityPartialClass;
 
 <!DOCTYPE html>
-<link href="~/css/list.css" rel="stylesheet" />
+
 
 <section class="content">
     <div class="content-wrapper">
-        <div class="row">
+        <div>
 
-            <div class="content-header col-md-2 ">
-                <h1 @*class="m-0"*@ style="margin-top:15px">Tüm Kullanıcılar</h1>
-            </div>
-
-
-
-            <div class="input-group rounded col-md-6" style="margin-top:25px">
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-
-            </div>
-
-
-
-            <div style=" text-align:left; margin-left:60px; padding-top:10px; padding-bottom:10px" class="col-md-2">
-
-                <div>
-                    <label class="form-switch ">
-                        <input type="checkbox">
-                        <i></i>
-                        Üyeler
-                    </label>
-
-                    <label class="form-switch" style=" margin-left:12px">
-                        <input type="checkbox">
-                        <i></i>
-                        Personel
-                    </label>
-
-
-                </div>
-
-                <div>
-
-                    <label class="form-switch ">
-                        <input type="checkbox">
-                        <i></i>
-                        Eğitmen
-                    </label>
-
-                    <label class="form-switch ">
-                        <input type="checkbox">
-                        <i></i>
-                        Öğrenciler
-                    </label>
-                </div>
-            </div>
-
-            <div class="col-md-1">
-                <button style="margin-top:25px" class="btn btn-primary">Getir</button>
+            <div class="content-header  ">
+                <h1 class="m-0" style="margin-top:15px">Tüm Kullanıcılar</h1>
             </div>
 
         </div>
 
 
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Kullanıcı Listeleri</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body " >
+                <table id="example2" class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ad-Soyad</th>
+                            <th scope="col">Kullanıcı Adı</th>
+                            <th scope="col">E-Mail</th>
+                            <th scope="col">Telefon</th>
+                            <th scope="col">İşlemler</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody class="text-center" id="UserTable">
+
+                        @for (int i = 0; i < Model.AppIdentityUsers.Count(); i++)
+                        {
+                            <tr>
+                                <td data-label="Id">@Convert.ToInt16(i + 1)</td>
+                                <td data-label="Ad-Soyad">@Model.AppIdentityUsers[i].FullName</td>
+                                <td data-label="Kullanıcı Adı">@Model.AppIdentityUsers[i].UserName</td>
+                                <td data-label="E-Mail">@Model.AppIdentityUsers[i].Email</td>
+                                <td data-label="Telefon">@Model.AppIdentityUsers[i].PhoneNumber</td>
 
 
-        <table>
-
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Ad-Soyad</th>
-                    <th scope="col">Kullanıcı Adı</th>
-                    <th scope="col">E-Mail</th>
-                    <th scope="col">Telefon</th>
-                    <th scope="col">Güncelle</th>
-                    <th scope="col">Detaylar</th>
-                    <th scope="col">Sil</th>
-                </tr>
-            </thead>
-
-            <tbody id="UserTable">
-
-                @for (int i = 0; i < Model.AppIdentityUsers.Count(); i++)
-                {
-                    <tr>
-                        <td data-label="Id">@Convert.ToInt16(i + 1)</td>
-                        <td data-label="Ad-Soyad">@Model.AppIdentityUsers[i].FullName</td>
-                        <td data-label="Kullanıcı Adı">@Model.AppIdentityUsers[i].UserName</td>
-                        <td data-label="E-Mail">@Model.AppIdentityUsers[i].Email</td>
-                        <td data-label="Telefon">@Model.AppIdentityUsers[i].PhoneNumber</td>
+                                <td>
+                                    <a href="#" class="btn btn-warning">Detaylar</a>
+                                    <button class="btn btn-success" id="upd_@Model.AppIdentityUsers[i].Id" onclick="openUpdateModel(this.id)">Güncelle</button>
+                                    <button class="btn btn-danger" id="@Model.AppIdentityUsers[i].Id" onclick="openDeleteModel(this.id)">Sil</button>
+                                </td>
+                               
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
 
 
-                        <td><a href="#" class="btn btn-warning">Detaylar</a></td>
-                        <td><button class="btn btn-success" id="upd_@Model.AppIdentityUsers[i].Id" onclick="openUpdateModel(this.id)">Güncelle</button></td>
-                        <td><button class="btn btn-danger" id="@Model.AppIdentityUsers[i].Id" onclick="openDeleteModel(this.id)">Sil</button></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="modal fade" id="updateModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -178,6 +151,22 @@
 
 <script>
 
+    $(document).ready(function () {
+     
+
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
     function openDeleteModel(id) {
         var formAction = $("#deleteForm button").attr("formaction");
         $("#deleteForm button").attr("formaction", formAction + "?id=" + id);
@@ -244,7 +233,7 @@
         $('#updateModalLong').modal('toggle');
         try {
 
-           
+
             $.ajax({
                 type: "POST",
                 url: '../Security/UpdateUser',
@@ -254,7 +243,7 @@
                 async: true,
                 success: function (res) {
 
-                 
+
                     if (res.appIdentityUsers.length != 0) {
 
                         $("#UserTable").empty();

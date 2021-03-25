@@ -8,94 +8,122 @@
 
 }
 
-<link href="~/css/popup.css" rel="stylesheet" />
-
+<style>
+    .btn {
+        width: -moz-available;
+    }
+</style>
 
 @{
     var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 }
 
-<section class="content">
-    <div class="content-wrapper">
-        <div class="content-header">
-            <h1 class="m-0">Reservation</h1>
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Rezervasyon</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Rezervasyon Yap</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example3" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center;">Saatler</th>
+
+                                        @foreach (var item3 in Model.Courts)
+                                        {
+                                            <th style="text-align:center;">@item3.CourtName.ToUpper()</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Times)
+                                    {
+                                        <tr>
+                                            <th style="font-size:20px; text-align:center" id="h_@item.ResTimeId">@item.ResTimes</th>
+
+                                            @foreach (var item2 in Model.Courts)
+                                            {
+
+
+                                                if (item2.reservations != null)
+                                                {
+
+                                                    if (item2.reservations.Where(x => x.ResStartTime == item.ResTimes && x.userId == userId).Count() > 0)
+                                                    {
+
+
+                                                        <td>
+                                                            <button type="button" class="btn btn-warning  ">
+                                                                Düzenle
+                                                            </button>
+                                                        </td>
+                                                    }
+                                                    else if (item2.reservations.Where(x => x.ResStartTime == item.ResTimes).Count() > 0)
+                                                    {
+
+
+                                                        <td>
+                                                            <button type="button" class="btn btn-info  ">
+                                                                Rezerve
+                                                            </button>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <button type="button" class="btn btn-outline-primary  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" userid="@userId" data-target="#exampleModalLong">
+                                                                @item2.CourtName
+                                                            </button>
+                                                        </td>
+                                                    }
+
+                                                }
+
+                                                else
+
+                                                {
+                                                    <td>
+                                                        <button type="button" class="btn btn-outline-primary  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
+                                                            @item2.CourtName
+                                                        </button>
+                                                    </td>
+                                                }
+                                            }
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
         </div>
-        @{
-            <table class="table table-bordered ">
-                <tr>
-                    <th>
-
-                        @foreach (var item3 in Model.Courts)
-                        {
-                        <th style="text-align:center;">@item3.CourtName.ToUpper()</th>
-                    }
-                    </tr>
+    </section>
+</div>
 
 
-                    @foreach (var item in Model.Times)
-                    {
-                        <tr>
-                            <th style="font-size:20px; text-align:center" id="h_@item.ResTimeId">@item.ResTimes</th>
-
-                            @foreach (var item2 in Model.Courts)
-                            {
-
-
-                                if (item2.reservations != null)
-                                {
-
-                                    if (item2.reservations.Where(x => x.ResStartTime == item.ResTimes && x.userId == userId).Count() > 0)
-                                    {
-
-
-                                        <td>
-                                            <button type="button" class="btn btn-warning  ">
-                                                Düzenle
-                                            </button>
-                                        </td>
-                                    }
-
-
-                                    else if (item2.reservations.Where(x => x.ResStartTime == item.ResTimes).Count() > 0)
-                                    {
-
-
-                                        <td>
-                                            <button type="button" class="btn btn-danger  ">
-                                                Rezerve
-                                            </button>
-                                        </td>
-                                    }
-
-                                    else
-                                    {
-                                        <td>
-                                            <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" userid="@userId" data-target="#exampleModalLong">
-                                                @item2.CourtName
-                                            </button>
-                                        </td>
-                                    }
-
-                                }
-
-                                else
-
-                                {
-                                    <td>
-                                        <button type="button" class="btn btn-success  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" data-target="#exampleModalLong">
-                                            @item2.CourtName
-                                        </button>
-                                    </td>
-                                }
-                            }
-
-                        </tr>
-                    }
-                </table>
-        }
-
-    </div>
-</section>
 
 
 
@@ -150,42 +178,48 @@
 </div>
 
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
 
 <script>
     $(document).ready(function () {
-        
-        $('.courtbutton').click((e) => {
 
-            courtname = $(e.target).attr('cname');
-            courtid = e.target.id.replace("cb_", "");
-            hour = $(e.target).attr('hour');
-            userIdd = $(e.target).attr('userId');
-            console.log($('#h_' + courtid).val());
-
-
-            console.log(userId);
-
-            var userIdtext = userIdd;
-            var courttext = courtname;
-            var starttimetext = hour;
-            var finishtimetext = (parseInt(hour.split(':')[0]) + 1) + ': 00';
-
-
-            console.log(userIdtext);
-
-            $('#userId').text(userIdtext);
-            $('#CourtName').text(courttext);
-            $('#StartTime').text(starttimetext);
-            $('#FinishTime').text(finishtimetext);
-            $('#submitButtons button:nth-of-type(2)').attr("id", courtid);
-
+        $('#example3').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
         });
+
     });
 
-</script>
+    $('.courtbutton').click((e) => {
 
-<script>
+        courtname = $(e.target).attr('cname');
+        courtid = e.target.id.replace("cb_", "");
+        hour = $(e.target).attr('hour');
+        userIdd = $(e.target).attr('userId');
+        console.log($('#h_' + courtid).val());
+
+
+        console.log(userId);
+
+        var userIdtext = userIdd;
+        var courttext = courtname;
+        var starttimetext = hour;
+        var finishtimetext = (parseInt(hour.split(':')[0]) + 1) + ': 00';
+
+
+        console.log(userIdtext);
+
+        $('#userId').text(userIdtext);
+        $('#CourtName').text(courttext);
+        $('#StartTime').text(starttimetext);
+        $('#FinishTime').text(finishtimetext);
+        $('#submitButtons button:nth-of-type(2)').attr("id", courtid);
+
+    });
 
     function Approve(id) {
         $("cb_").hide();
