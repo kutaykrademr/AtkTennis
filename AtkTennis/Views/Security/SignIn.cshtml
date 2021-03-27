@@ -8,30 +8,23 @@
 @model SignIn
 
 
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login V1</title>
+
+
+    <title>Atk Giriş Ekranı</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--===============================================================================================-->
+
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
     <link href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
     <link href="~/login/animate.css" rel="stylesheet" />
-    <!--===============================================================================================-->
     <link href="~/login/hamburgers.min.css" rel="stylesheet" />
     <link href="~/login/select2.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
     <link href="~/login/main.css" rel="stylesheet" />
     <link href="~/login/util.css" rel="stylesheet" />
-    <!--===============================================================================================-->
     <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
-</head>
-<body>
+
 
     <div class="limiter">
         <div class="container-login100">
@@ -82,26 +75,21 @@
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <!--===============================================================================================-->
-    <!--===============================================================================================-->
     <script src="~/lib/bootstrap/dist/js/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
     <script src="~/login/select2.min.js"></script>
-    <!--===============================================================================================-->
-
-
+    <script src="~/js/main.js"></script>
+    <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
     <script src="~/login/tilt.jquery.min.js"></script>
+
     <script>
         $('.js-tilt').tilt({
             scale: 1.1
         })
     </script>
-    <!--===============================================================================================-->
-    <script src="~/js/main.js"></script>
-    <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
-</body>
-</html>
+
+
+
 
 @{ if (Model != null)
     {
@@ -123,3 +111,4 @@
     }
 
 }
+

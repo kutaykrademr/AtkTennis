@@ -131,7 +131,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> UpdateCourtInfAsync(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
+    public JsonResult UpdateCourtInf(int id, string courtName, string courtType, string courtConditions, string courtWebConditions)
     {
 
 
@@ -153,15 +153,11 @@ public class AdminController : Controller
 
 
         }
-
-
-
-
         return Json(model);
     }
 
     [HttpPost]
-    public async Task<JsonResult> addCourt( string courtName, string courtType, string courtConditions, string courtWebConditions)
+    public JsonResult addCourt(string courtName, string courtType, string courtConditions, string courtWebConditions)
     {
         Court model = new Court();
         try
@@ -237,6 +233,76 @@ public class AdminController : Controller
         }
 
         return Json("true");
+
+
+    }
+
+    [HttpGet]
+    public JsonResult GetCourtOperations(int ID)
+    {
+
+
+        CourtPriceList model = new CourtPriceList();
+
+        model = db.courtPriceLists.Where(x => x.CourtPriceListId == ID).SingleOrDefault();
+
+
+
+        return Json(model);
+
+    }
+
+    [HttpPost]
+    public JsonResult PostCourtOperations(int ID, string name, int courtPrice, string priceType, string recipeType, string condition)
+    {
+
+
+        CourtPriceList model = new CourtPriceList();
+
+        model = db.courtPriceLists.Where(x => x.CourtPriceListId == ID).SingleOrDefault();
+
+        model.Name = name;
+        model.CourtPrice = courtPrice;
+        model.PriceType = priceType;
+        model.RecipeType = recipeType;
+        model.Condition = condition;
+
+        db.courtPriceLists.Update(model);
+        db.SaveChanges();
+
+        return Json(model);
+
+    }
+
+    public JsonResult CourtOperationsDelete(int ID)
+
+    {
+        CourtPriceList model = new CourtPriceList();
+
+        try
+        {
+            if (model != null)
+            {
+                model = db.courtPriceLists.Where(x => x.CourtPriceListId == ID).SingleOrDefault();
+
+                db.courtPriceLists.Remove(model);
+                db.SaveChanges();
+
+            }
+
+            else
+            {
+                return Json("false");
+            }
+
+        }
+
+        catch (Exception Ex)
+        {
+
+        }
+        return Json("true");
+
     }
 }
 
