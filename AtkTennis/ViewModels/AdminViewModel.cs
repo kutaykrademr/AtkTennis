@@ -14,9 +14,5 @@ namespace AtkTennis.ViewModels
         public List<ResTime> Times { get; set; } = new List<ResTime>();
         public List<AppIdentityUser> AppIdentityUsers { get; set; } = new List<AppIdentityUser>();
 
-
-
-
-
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AtkTennis
@@ -18,6 +19,23 @@ namespace AtkTennis
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            try
+            {
+                Mutuals.AdminUrl = Configuration.GetValue<string>("AdminURL");
+
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); 
+                IPAddress ipAddress = ipHostInfo.AddressList[1];
+                Mutuals.MyIp =  ipAddress.ToString();
+
+                Worker.SettingsWorker.getSettings();
+                Worker.SettingsWorker.StartTimers();
+            }
+            catch (Exception)
+            {
+
+                
+            }
         }
 
         public IConfiguration Configuration { get; }

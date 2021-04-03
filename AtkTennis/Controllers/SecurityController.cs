@@ -35,7 +35,7 @@ namespace AtkTennis.Controllers
         Context db = new Context();
 
 
-        #region
+        #region Views
 
         [Authorize]
         [HttpGet]
@@ -119,11 +119,6 @@ namespace AtkTennis.Controllers
             return View(register);
         }
 
-
-
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]       
         public IActionResult RegisterMember(RegisterViewModel register)
@@ -165,9 +160,6 @@ namespace AtkTennis.Controllers
             return View(register);
         }
 
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SignIn(SignIn signIn)
@@ -185,8 +177,6 @@ namespace AtkTennis.Controllers
             return View(signIn);
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -197,8 +187,6 @@ namespace AtkTennis.Controllers
             return RedirectToAction("SignIn", "Security");
         }
 
-
-        
         [Authorize]
         public IActionResult ListUsers(Register register )
         {
@@ -211,8 +199,6 @@ namespace AtkTennis.Controllers
 
             return View(model);
         }
-
-
 
         [HttpPost]
         public async Task< IActionResult> DeleteUsers(string id)
@@ -237,7 +223,6 @@ namespace AtkTennis.Controllers
             }
             return View();
         }
-
 
         [HttpPost]
         public async Task<JsonResult> UpdateUser(string id, string userName, string fullName, string phoneNumber, string email)
@@ -271,7 +256,6 @@ namespace AtkTennis.Controllers
             }
             return Json(model2);
         }
-
 
         [HttpGet]
         public JsonResult GetUser(string ID)

@@ -63,6 +63,7 @@ public class AdminController : Controller
 
     }
 
+    
     public IActionResult ReservationTable()
     {
         var model = new AdminViewModel();
@@ -206,7 +207,6 @@ public class AdminController : Controller
         return Json("true");
     }
 
-
     [HttpGet]
     public JsonResult CourtForceDelete(int ID)
 
@@ -255,7 +255,6 @@ public class AdminController : Controller
     [HttpPost]
     public JsonResult PostCourtOperations(int ID, string name, int courtPrice, string priceType, string recipeType, string condition)
     {
-
 
         CourtPriceList model = new CourtPriceList();
 
