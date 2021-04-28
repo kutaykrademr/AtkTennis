@@ -188,7 +188,7 @@ namespace AtkTennis.Controllers
         }
 
         [Authorize]
-        public IActionResult ListUsers(Register register )
+        public IActionResult ListUsers()
         {
 
 

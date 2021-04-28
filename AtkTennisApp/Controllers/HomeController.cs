@@ -1,6 +1,7 @@
 ﻿using AtkTennisApp.Security;
 using AtkTennisApp.ViewModels;
 using Helpers.Dto.ViewDtos;
+using Helpers.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,9 +31,10 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelDto GetHome()
         {
+           
             HomeModelDto model = new HomeModelDto();
             try
-            {
+            {   
                 model.TotalUserCount = userManager.Users.Count();
                 model.TotalRoleCount = roleManager.Roles.Count();
             }
@@ -45,6 +47,28 @@ namespace AtkTennisApp.Controllers
 
             return model;
         }
+
+
+        [HttpGet("GetRole", Name = "GetRole")]
+        public List<AppIdentityRole> GetRole()
+
+        {
+
+            List<AppIdentityRole> model = new List<AppIdentityRole>();
+
+            try
+            {
+                model = (List<AppIdentityRole>)roleManager.Roles.ToList();
+            }
+            catch (Exception ex)
+            {
+                model = new List<AppIdentityRole>();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
 
         [HttpGet("NewRegister", Name = "NewRegister")]
         public AppIdentityUser NewRegister(string name, string username, string phone, string password, string birthdate, string gender, string email, string role)
@@ -90,5 +114,8 @@ namespace AtkTennisApp.Controllers
 
             return user;
         }
+
+
     }
+
 }

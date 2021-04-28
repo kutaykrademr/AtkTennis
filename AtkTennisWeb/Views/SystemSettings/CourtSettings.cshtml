@@ -1,0 +1,735 @@
+﻿
+
+@model Helpers.Dto.ViewDtos.CourtSettingsViewDto;
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kort Ayarları</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kort İşlemleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Türü</th>
+                                        <th>Durumu</th>
+                                        <th>Web Durumu</th>
+                                        <th>İşlemler</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.Courts)
+                                    {
+                                        <tr style="text-align:center" id="">
+                                            <td>@item.CourtName</td>
+                                            <td>@item.CourtType</td>
+                                            <td>@item.CourtConditions</td>
+                                            <td>@item.CourtWebConditions</td>
+
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)">Güncelle</button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteCourt(this.id) ">Sil</button>
+                                            </td>
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kort Ücret Tarifesi</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice">Tarife Ekle</button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example3" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Fiyatı</th>
+                                        <th>Ücret Tipi</th>
+                                        <th>Tarife Tipi</th>
+                                        <th>Durumu</th>
+                                        <th>İşlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item2 in Model.courtPriceLists)
+                                    {
+
+                                        <tr style="text-align:center">
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice</td>
+                                            <td>@item2.PriceType</td>
+                                            <td>@item2.RecipeType</td>
+                                            <td>@item2.Condition</td>
+
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)">Güncelle</button>
+                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteCourtPrice(this.id)">Sil</button>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="addCourt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kort Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Kort Adı:</label>
+                        <input type="text" class="form-control" id="courtName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Kort Türü:</label>
+                        <input type="text" class="form-control" id="courtType">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Kort Durumu:</label>
+                        <input type="text" class="form-control" id="courtCondition">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Kort Web Durumu:</label>
+                        <input type="text" class="form-control" id="courtWebCondition">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddCourt()">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateCourtModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="roww roww-space">
+
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Adı</label>
+                            <input type="text" id="name" class="input--style-4">
+                        </div>
+                    </div>
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Türü</label>
+                            <input type="text" id="type" class="input--style-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roww roww-space">
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Durumu</label>
+                            <input type="text" id="condition" class="input--style-4">
+                        </div>
+                    </div>
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Web Durumu</label>
+                            <input type="text" id="webcondition" class="input--style-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" id="updateModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateCourt(this.id)">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updatePriceModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="roww roww-space">
+
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Adı</label>
+                            <input type="text" id="courtPriceName" class="input--style-4">
+                        </div>
+                    </div>
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Fiyatı</label>
+                            <input type="text" id="price" class="input--style-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roww roww-space">
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Ücret Tipi</label>
+                            <input type="text" id="priceType" class="input--style-4">
+                        </div>
+                    </div>
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Tarife Tipi</label>
+                            <input type="text" id="recipeType" class="input--style-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roww roww-space">
+                    <div class="coll-2">
+                        <div class="input--group">
+                            <label class="label">Durumu</label>
+                            <input type="text" id="conditions" class="input--style-4">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer" id="updateCourtPriceModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateCourtPriceList(this.id)">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCourtPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kort Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tarife Adı:</label>
+                        <input type="text" class="form-control" id="recipeName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tarife Fiyatı:</label>
+                        <input type="text" class="form-control" id="recipePrice">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Ücret Tipi:</label>
+                        <input type="text" class="form-control" id="recipePriceType">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tarife Tipi:</label>
+                        <input type="text" class="form-control" id="courtRecipeType">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Durumu:</label>
+                        <input type="text" class="form-control" id="recipeCondition">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddCourtPrice()">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
+
+    function saveAddCourt() {
+        if ($("#courtName").val() == "" || $("#courtType").val() == "" || $("#courtCondition").val() == "" || $("#courtWebCondition").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Kort Bilgilerini Eksizsiz Doldurunuz.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        } else {
+            $("#addCourt").modal("toggle");
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddNewCourt',
+                cache: false,
+                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType").val(), "courtCondition": $("#courtCondition").val(), "courtWebCondition": $("#courtWebCondition").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Kort başarıyla eklendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "CourtSettings"
+                                }
+                            }
+                        });
+
+
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
+
+    function openUpdateCourtModal(ID) {
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetCourtInf',
+            cache: false,
+            data: { "id": ID },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res != null) {
+
+                    $("#name").val(res.courtName);
+                    $("#type").val(res.courtType);
+                    $("#condition").val(res.courtConditions);
+                    $("#webcondition").val(res.courtWebConditions);
+                    $("#updateModel button:nth-of-type(2)").attr("id", ID);
+                    $('#updateCourtModalLong').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kort Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateCourt(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/UpdateCourt',
+            cache: false,
+            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type").val(), "courtCondition": $("#condition").val(), "courtWebCondition": $("#webcondition").val() },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Kort başarıyla güncellendi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "CourtSettings"
+                            }
+                        }
+                    });
+
+
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kort Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function deleteCourt(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/DeleteCourt',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Kort başarıyla silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "CourtSettings"
+                            }
+                        }
+                    });
+
+
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kullanıcı Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
+
+    function openUpdateCourtPriceModal(ID) {
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetCourtPriceInf',
+            cache: false,
+            data: { "id": ID },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                if (res != null) {
+
+                    $("#courtPriceName").val(res.name);
+                    $("#price").val(res.courtPrice);
+                    $("#priceType").val(res.priceType);
+                    $("#recipeType").val(res.recipeType);
+                    $("#conditions").val(res.condition);
+                    $("#updateCourtPriceModel button:nth-of-type(2)").attr("id", ID);
+                    $('#updatePriceModalLong').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kort Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateCourtPriceList(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/UpdateCourtPriceList',
+            cache: false,
+            data: { "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), "priceType": $("#priceType").val(), "recipeType": $("#recipeType").val(), "condition": $("#conditions").val() },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res != null) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Tarife başarıyla güncellendi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "CourtSettings"
+                            }
+                        }
+                    });
+
+
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Tarife Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function deleteCourtPrice(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/DeleteCourtPrice',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Tarife başarıyla silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "CourtSettings"
+                            }
+                        }
+                    });
+
+
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kullanıcı Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function saveAddCourtPrice() {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/AddNewCourtPriceList',
+            cache: false,
+            data: { "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType").val(), "courtRecipeType": $("#courtRecipeType").val(), "recipeCondition": $("#recipeCondition").val() },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                if (res == true) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Tarife başarıyla eklendi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "CourtSettings"
+                            }
+                        }
+                    });
+
+
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
+
+
+</script>
+

@@ -212,9 +212,9 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
-                            <a href="~/Admin/AdminHome" class="nav-link active">
+                            <a href="~/Home/Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Ana Menü
@@ -222,15 +222,7 @@
                                 </p>
                             </a>
                         </li>
-                        @*<li class="nav-item">
-                                <a href="" class="nav-link">
-                                    <i class="nav-icon fas fa-th"></i>
-                                    <p>
-                                        Yeni Kayıt
-                                        <span class="right badge badge-danger">New</span>
-                                    </p>
-                                </a>
-                            </li>*@
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -247,8 +239,8 @@
                                         <p>Yeni Kayıt</p>
                                     </a>
                                 </li>
-                                
-                                </li>
+
+
                                 <li class="nav-item">
                                     <a href="~/Security/ListUsers" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -298,13 +290,59 @@
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <a href="~/Admin/CourtSettings" class="nav-link">
+                                    <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
                                         <i class="fas fa-circle nav-icon"></i>
-                                        <p>Kort Ayarları</p>
+                                        <p>Rol ve Yetkilendirme </p>
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/CourtSettings" class="nav-link">
+                                        <i class="fas fa-circle nav-icon"></i>
+                                        <p>Kort Ayarları </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Eğitim Ayarları
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Okul</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Performans</p>
+                                            </a>
+                                        </li>
+
+
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Özel Ders</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
                             </ul>
                         </li>
+                      
+
+
+
 
 
 

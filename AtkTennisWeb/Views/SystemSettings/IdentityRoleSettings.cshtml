@@ -1,0 +1,508 @@
+﻿@model Helpers.Dto.ViewDtos.IdentityRoleSettingsViewDto;
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Rol ve Yetkilendirme Ayarları</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Rol Düzenle</h3>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addRole">Rol Ekle</button>
+
+
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Roller </th>
+                                        <th>Güncelle/Sil</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @for (int i = 0; i < Model.appIdentityRoles.Count; i++)
+                                    {
+                                        <tr style="text-align:center" id="">
+                                            <td>@Model.appIdentityRoles[i].NormalizedName</td>
+                                            <td>
+                                                <button class="btn btn-warning" id="@Model.appIdentityRoles[i].Id" onclick="openUpdateRoleModal(this.id)">Güncelle</button>
+                                                <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteRole(this.id)">Sil</button>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Yetki Düzenle</h3>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary"  onclick="changeAuthority()">Kaydet</button>
+
+
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="authorityTable" class="table table-bordered table-hover">
+                                <thead>
+
+                                    <tr style="text-align:center">
+                                        <th>Yetki Alanları </th>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            <th>@Model.userSettings[i].RoleName</th>
+                                        }
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <tr style="text-align:center">
+                                        <td>Danışma</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].Advisory == true)
+                                            {
+                                                <td><input id="Advisory_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+                                            else
+                                            {
+                                                <td><input id="Advisory_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+
+                                        }
+                                    </tr>
+
+
+                                    <tr style="text-align:center">
+                                        <td>Ödeme ve Borç</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].DebtandPayment == true)
+                                            {
+                                                <td><input id="DebtandPayment_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+                                            else
+                                            {
+                                                <td><input id="DebtandPayment_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+
+                                        }
+                                    </tr>
+
+                                    <tr style="text-align:center">
+                                        <td>Rezervasyon</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].Reservations == true)
+                                            {
+                                                <td><input id="Reservations_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+                                            else
+                                            {
+                                                <td><input id="Reservations_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+
+                                        }
+                                    </tr>
+
+                                    <tr style="text-align:center">
+                                        <td>Sistem</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].System == true)
+                                            {
+                                                <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+                                            else
+                                            {
+                                                <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+
+                                        }
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<div class="modal fade" id="addRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rol Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="roleName" placeholder="Rol Adı Giriniz">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddRole()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rol Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="modal-footer" id="updateModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateRole(this.id)">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+        })
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
+
+    function openUpdateRoleModal(ID) {
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetRoleInf',
+            cache: false,
+            data: { "id": ID },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res != null) {
+
+                    $("#name").val(res.normalizedName);
+                    $("#updateModel button:nth-of-type(2)").attr("id", ID);
+                    $('#updateRoleModal').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Rol Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateRole(id) {
+        if ($("#name").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Rol Adı Giriniz.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/UpdateRole',
+                cache: false,
+                data: { "id": id, "roleName": $("#name").val(), },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res != null) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Rol başarıyla güncellendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "IdentityRoleSettings"
+                                }
+                            }
+                        });
+
+
+
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Rol Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+    }
+
+    function deleteRole(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/DeleteRole',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                if (res == true) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Rol başarıyla silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "IdentityRoleSettings"
+                            }
+                        }
+                    });
+
+
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Silme işlemi sırasında bir hata oluştu.  Lütfen sonra tekrar deneyiniz.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function saveAddRole() {
+        if ($("#roleName").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Yeni Rol Adı Giriniz.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        } else {
+            $("#addRole").modal("toggle");
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddNewRole',
+                cache: false,
+                data: { "roleName": $("#roleName").val(), },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    debugger;
+
+
+                    if (res == true) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Rol başarıyla eklendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "IdentityRoleSettings"
+                                }
+                            }
+                        });
+
+
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Rol Önceden Eklenmiş Olabilir. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
+
+    function changeAuthority() {
+
+        var trueList = [];
+        $("#authorityTable tr td input[type=checkbox]").each( function() {
+            if ($(this).prop('checked')) 
+                trueList.push($(this).attr("id"));
+        })
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/changeAuthority',
+            cache: false,
+            data: { "trueList": trueList, },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Roller başarıyla güncellendi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "IdentityRoleSettings"
+                            }
+                        }
+                    });
+
+
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kayıt sırasında bir hata oluştu. Rol Önceden Eklenmiş Olabilir. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
+
+</script>
+

@@ -1,0 +1,178 @@
+﻿@model Helpers.Dto.ViewDtos.EducationSettingsViewDto;
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Okul Ayarları</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Okul Türleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Okul Kodu</th>
+                                        <th>Okul Türü</th>
+                                        <th>İşlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.schoolTypes)
+                                    {
+                                        <tr style="text-align:center" id="">
+
+                                            <td>@item.Code</td>
+                                            <td>@item.Types</td>
+
+                                            <td>
+                                                <button class="btn btn-outline-success">Güncelle</button>
+                                                <button class="btn btn-outline-danger">Sil</button>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Okul Seviyeleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Seviye Adı</th>
+                                        <th>Kota Bilgisi</th>
+                                        <th>İşlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.schoolLevels)
+                                    {
+                                        <tr style="text-align:center" id="">
+
+                                            <td>@item.Types</td>
+                                            <td>@item.QuotaInf</td>
+
+                                            <td>
+                                                <button class="btn btn-outline-success">Güncelle</button>
+                                                <button class="btn btn-outline-danger">Sil</button>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Okul Ücretleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Türü</th>
+                                        <th>Durumu</th>
+                                        <th>Web Durumu</th>
+                                        <th>İşlemler</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr style="text-align:center" id="">
+                                        <td>asd</td>
+                                        <td>asd</td>
+                                        <td>asd</td>
+                                        <td>asd</td>
+
+
+                                        <td>
+                                            <button class="btn btn-outline-success">Güncelle</button>
+                                            <button class="btn btn-outline-danger">Sil</button>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
+</script>

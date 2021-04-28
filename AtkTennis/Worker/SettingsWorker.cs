@@ -30,7 +30,7 @@ namespace AtkTennis.Worker
                 {
                     MySettings appLogList = new MySettings();
 
-                    appLogList = Serializers.DeserializeJson<MySettings>(Request.Get(Mutuals.AdminUrl + "Product/GetMySettings?MyIp=" + Mutuals.MyIp));
+                    appLogList = Serializers.DeserializeJson<MySettings>(Request.Get(Mutuals.AdminUrl + "Product/GetMySettings?MyIp=" + "192.168.250.10"));
 
                     Mutuals.CompName = appLogList.CompanyName;
 

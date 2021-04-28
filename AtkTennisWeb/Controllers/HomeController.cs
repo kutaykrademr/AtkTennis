@@ -32,9 +32,26 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+
+
         public IActionResult NewRegister()
         {
-            return View();
+
+            List<AppIdentityRoleDto> model = new List<AppIdentityRoleDto>();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<AppIdentityRoleDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetRole"));
+
+                if (model == null)
+
+                    model = new List<AppIdentityRoleDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<AppIdentityRoleDto>();
+            }
+            return View(model);
         }
 
 
@@ -54,10 +71,7 @@ namespace AtkTennisWeb.Controllers
                 return Json(new AppIdentityUserDto());
             }
 
-
             return Json(model);
         }
-
-
     }
 }

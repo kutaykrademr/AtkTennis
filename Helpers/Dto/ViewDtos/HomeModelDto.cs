@@ -8,5 +8,7 @@ namespace Helpers.Dto.ViewDtos
     {
         public int? TotalUserCount { get; set; }
         public int? TotalRoleCount { get; set; }
+       
+        
     }
 }

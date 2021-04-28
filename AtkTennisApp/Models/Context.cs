@@ -24,6 +24,11 @@ namespace AtkTennis.Models
         public DbSet<ApplicationLog> applicationLogs { get; set; }
         public DbSet<QueryLog> queryLogs { get; set; }
         public DbSet<UserLog> userLogs { get; set; }
+        public DbSet<UserSettings> userSettings { get; set; }
+        public DbSet<SchoolType> schoolTypes { get; set; }
+        public DbSet<SchoolLevel> schoolLevels { get; set; }
+
+
 
     }
 }

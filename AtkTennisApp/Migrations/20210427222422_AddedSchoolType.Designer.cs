@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210427222422_AddedSchoolType")]
+    partial class AddedSchoolType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,24 +219,6 @@ namespace AtkTennisApp.Migrations
                     b.HasIndex("CourtsCourtId");
 
                     b.ToTable("reservations");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.SchoolLevel", b =>
-                {
-                    b.Property<int>("SchoolLevelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("QuotaInf")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Types")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SchoolLevelId");
-
-                    b.ToTable("schoolLevels");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.SchoolType", b =>

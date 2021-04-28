@@ -85,6 +85,7 @@ public class AdminController : Controller
         {
             res.courts = db.courts.Where(x => x.CourtId == CId).SingleOrDefault();
             model = db.reservations.Where(x => x.ResStartTime == res.ResStartTime && x.ResFinishTime == res.ResFinishTime && x.courts.CourtId == CId).FirstOrDefault();
+            
         }
 
         catch (Exception e)

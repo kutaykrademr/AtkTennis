@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-#nullable disable
-
-namespace AtkTennisApp.Models
+namespace Helpers.Dto.ViewDtos
 {
-    public partial class Court
+    public class CourtDto
     {
-        public Court()
-        {
-            Reservations = new HashSet<Reservation>();
-        }
 
         public int CourtId { get; set; }
         public string CourtName { get; set; }
@@ -18,6 +13,5 @@ namespace AtkTennisApp.Models
         public string CourtConditions { get; set; }
         public string CourtWebConditions { get; set; }
 
-        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

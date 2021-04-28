@@ -32,7 +32,7 @@ namespace AtkTennisApp.Worker
                 {
                     MutualsConstantsDto appLogList = new MutualsConstantsDto();
 
-                    appLogList = Serializers.DeserializeJson<MutualsConstantsDto>(Request.Get(Mutuals.AdminUrl + "Product/GetMySettings?MyIp=" + Mutuals.MyIp));
+                    appLogList = Serializers.DeserializeJson<MutualsConstantsDto>(Request.Get(Mutuals.AdminUrl + "Product/GetMySettings?MyIp=" + "192.168.250.10"));
 
                     if(appLogList != null)
                         MutualConstants.CompanyName = appLogList.CompanyName;

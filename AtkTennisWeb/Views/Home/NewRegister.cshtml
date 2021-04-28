@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Helpers.Dto.AppIdentityRoleDto>
 
 <section class="content">
     <div class="content-wrapper">
@@ -84,9 +84,11 @@
                                 <div class="rs-select2 js-select-simple select--no-search">
                                     <select id="RegistersRole">
                                         <option disabled="disabled" selected="selected">Choose option</option>
-                                        <option>Manager</option>
-                                        <option>Trainer</option>
-                                        <option>Student</option>
+
+                                        @for (int i = 0; i < Model.Count(); i++)
+                                        {
+                                            <option>@Model[i].NormalizedName</option>
+                                        }
 
                                     </select>
                                     <div class="select-dropdown"></div>
@@ -115,7 +117,7 @@
         birthdate: null,
         gender: null,
         email: null,
-        role:null
+        role: null
     };
 
     function register() {
@@ -166,4 +168,4 @@
         }
 
     }
-</script>
+</script>   
