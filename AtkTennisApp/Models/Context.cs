@@ -27,6 +27,10 @@ namespace AtkTennis.Models
         public DbSet<UserSettings> userSettings { get; set; }
         public DbSet<SchoolType> schoolTypes { get; set; }
         public DbSet<SchoolLevel> schoolLevels { get; set; }
+        public DbSet<PerformanceType> performanceTypes { get; set; }
+        public DbSet<PerformanceLevel> performanceLevels { get; set; }
+        public DbSet<PrivateLesson> privateLessons { get; set; }
+        public DbSet<ReservationSettings> reservationSettings { get; set; }
 
 
 

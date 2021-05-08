@@ -17,8 +17,6 @@ namespace AtkTennisApp.Controllers
     [ApiController]
     public class SystemSettingsController : Controller
     {
-
-
         private readonly UserManager<AppIdentityUser> userManager;
         private readonly RoleManager<AppIdentityRole> roleManager;
         private readonly SignInManager<AppIdentityUser> signInManager;
@@ -507,7 +505,7 @@ namespace AtkTennisApp.Controllers
 
         #endregion
 
-        #region SchoolSettings
+        #region EducationSettings
 
         [HttpGet("GetSchoolSettings", Name = "GetSchoolSettings")]
         public EducationSettingsViewModel GetSchoolSettings()
@@ -531,6 +529,717 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+
+
+        [HttpGet("NewSchoolType", Name = "NewSchoolType")]
+        public SchoolType NewSchoolType(string schoolType, string schoolCode)
+        {
+
+            SchoolType model = new SchoolType();
+
+            try
+            {
+                if (schoolCode != null || schoolType != null )
+                {
+                    model.Code = schoolCode;
+                    model.Types = schoolType;
+
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeleteSchoolType", Name = "DeleteSchoolType")]
+        public SchoolType DeleteSchoolType(int id)
+        {
+
+            SchoolType model = new SchoolType();
+
+            try
+            {
+                model = db.schoolTypes.Where(x => x.SchoolTypesId == id).SingleOrDefault();
+
+                if (model != null )
+                {                                     
+
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("GetSchoolTypeInf", Name = "GetSchoolTypeInf")]
+        public JsonResult GetSchoolTypeInf(int id)
+        {
+
+
+            SchoolType model = new SchoolType();
+
+            try
+            {
+                model = db.schoolTypes.Where(x => x.SchoolTypesId == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("UpdateUpdateSchoolType", Name = "UpdateUpdateSchoolType")]
+        public JsonResult UpdateUpdateSchoolType(int id, string code, string type)
+        {
+            SchoolType model = new SchoolType();
+
+            try
+            {
+
+                model = db.schoolTypes.Where(x => x.SchoolTypesId == id).SingleOrDefault();
+
+                model.Code = code;
+                model.Types = type;
+             
+
+                db.Update(model);
+                db.SaveChanges();
+
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+
+
+        [HttpGet("NewSchoolLevel", Name = "NewSchoolLevel")]
+        public SchoolLevel NewSchoolLevel(string levelName, int levelQuota)
+        {
+
+            SchoolLevel model = new SchoolLevel();
+
+            try
+            {
+                if (levelName != null )
+                {
+                    model.QuotaInf = levelQuota;
+                    model.Types = levelName;
+
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeleteSchoolLevel", Name = "DeleteSchoolLevel")]
+        public SchoolLevel DeleteSchoolLevel(int id)
+        {
+
+            SchoolLevel model = new SchoolLevel();
+
+            try
+            {
+                model = db.schoolLevels.Where(x => x.SchoolLevelId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("GetSchoolLevelInf", Name = "GetSchoolLevelInf")]
+        public JsonResult GetSchoolLevelInf(int id)
+        {
+
+
+            SchoolLevel model = new SchoolLevel();
+
+            try
+            {
+                model = db.schoolLevels.Where(x => x.SchoolLevelId == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("UpdateUpdateSchoolLevel", Name = "UpdateUpdateSchoolLevel")]
+        public JsonResult UpdateUpdateSchoolLevel(int id, string levelName, int quota)
+        {
+            SchoolLevel model = new SchoolLevel();
+
+            try
+            {
+
+                model = db.schoolLevels.Where(x => x.SchoolLevelId == id).SingleOrDefault();
+
+                model.QuotaInf = quota;
+                model.Types = levelName;
+
+
+                db.Update(model);
+                db.SaveChanges();
+
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+
+
+
+        [HttpGet("GetPerformanceSettings", Name = "GetPerformanceSettings")]
+        public EducationSettingsViewModel GetPerformanceSettings()
+
+        {
+
+            EducationSettingsViewModel model = new EducationSettingsViewModel();
+
+            try
+            {
+                model.performanceTypes = db.performanceTypes.ToList();
+                model.performanceLevels = db.performanceLevels.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new EducationSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+
+
+        [HttpGet("NewPerformanceType", Name = "NewPerformanceType")]
+        public PerformanceType NewPerformanceType(string code, string type)
+        {
+
+            PerformanceType model = new PerformanceType();
+
+            try
+            {
+                if (code != null && type != null)
+                {
+                    model.PerformanceTypes = type;
+                    model.PerformanceCode = code;
+
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeletePerformanceType", Name = "DeletePerformanceType")]
+        public PerformanceType DeletePerformanceType(int id)
+        {
+
+            PerformanceType model = new PerformanceType();
+
+            try
+            {
+                model = db.performanceTypes.Where(x => x.PerformanceTypesId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("GetPerformanceTypeInf", Name = "GetPerformanceTypeInf")]
+        public JsonResult GetPerformanceTypeInf(int id)
+        {
+
+
+            PerformanceType model = new PerformanceType();
+
+            try
+            {
+                model = db.performanceTypes.Where(x => x.PerformanceTypesId == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("UpdatePerfType", Name = "UpdatePerfType")]
+        public JsonResult UpdatePerfType(int id, string code, string type)
+        {
+            PerformanceType model = new PerformanceType();
+
+            try
+            {
+
+                model = db.performanceTypes.Where(x => x.PerformanceTypesId == id).SingleOrDefault();
+
+                model.PerformanceCode = code;
+                model.PerformanceTypes = type;
+
+
+                db.Update(model);
+                db.SaveChanges();
+
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+
+
+
+        [HttpGet("NewPerformanceLevel", Name = "NewPerformanceLevel")]
+        public PerformanceLevel NewPerformanceLevel(string level, int? quota)
+        {
+
+            PerformanceLevel model = new PerformanceLevel();
+
+            try
+            {
+                if (level != null && quota != null)
+                {
+                    model.PerLevel = level;
+                    model.PerQuotaInf = quota;
+
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeletePerformanceLevel", Name = "DeletePerformanceLevel")]
+        public PerformanceLevel DeletePerformanceLevel(int id)
+        {
+
+            PerformanceLevel model = new PerformanceLevel();
+
+            try
+            {
+                model = db.performanceLevels.Where(x => x.PerLevelId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("GetPerformanceLevelInf", Name = "GetPerformanceLevelInf")]
+        public JsonResult GetPerformanceLevelInf(int id)
+        {
+
+
+            PerformanceLevel model = new PerformanceLevel();
+
+            try
+            {
+                model = db.performanceLevels.Where(x => x.PerLevelId == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("UpdatePerfLevel", Name = "UpdatePerfLevel")]
+        public JsonResult UpdatePerfLevel(int id, string level, int quota)
+        {
+            PerformanceLevel model = new PerformanceLevel();
+
+            try
+            {
+
+                model = db.performanceLevels.Where(x => x.PerLevelId == id).SingleOrDefault();
+
+                if (model.PerLevel != null && model.PerQuotaInf != null)
+                {
+                    model.PerLevel = level;
+                    model.PerQuotaInf = quota;
+                }
+
+
+                db.Update(model);
+                db.SaveChanges();
+
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+
+
+        [HttpGet("GetPrivLessonSettings", Name = "GetPrivLessonSettings")]
+        public EducationSettingsViewModel GetPrivLessonSettings()
+
+        {
+
+            EducationSettingsViewModel model = new EducationSettingsViewModel();
+
+            try
+            {
+                model.privateLessons = db.privateLessons.ToList();
+              
+            }
+            catch (Exception ex)
+            {
+                model = new EducationSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+
+
+        [HttpGet("NewPrivLesson", Name = "NewPrivLesson")]
+        public PrivateLesson NewPrivLesson(string inf, string type , int? price , int? teacherprice)
+        {
+
+            PrivateLesson model = new PrivateLesson();
+
+            try
+            {
+                if (inf != null && type != null && type != null && type != null)
+                {
+                    model.TariffeInf = inf;
+                    model.PrivateLessonType = type;
+                    model.PrivateLessonPrice = price;
+                    model.TeacherPrice = teacherprice;
+
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeletePrivateLesson", Name = "DeletePrivateLesson")]
+        public PrivateLesson DeletePrivateLesson(int id)
+        {
+
+            PrivateLesson model = new PrivateLesson();
+
+            try
+            {
+                model = db.privateLessons.Where(x => x.PrivateLessonId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("GetPrivLessonInf", Name = "GetPrivLessonInf")]
+        public JsonResult GetPrivLessonInf(int id)
+        {
+
+            PrivateLesson model = new PrivateLesson();
+
+            try
+            {
+                model = db.privateLessons.Where(x => x.PrivateLessonId == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("UpdatePrivLesson", Name = "UpdatePrivLesson")]
+        public JsonResult UpdatePrivLesson(int id, string tariffeInf, string privLesType , int? privLesPrice , int? teacherPrice)
+        {
+            PrivateLesson model = new PrivateLesson();
+            try
+            {
+                model = db.privateLessons.Where(x => x.PrivateLessonId == id).SingleOrDefault();
+                if (model != null)
+                {
+                    model.TariffeInf = tariffeInf;
+                    model.PrivateLessonType = privLesType;
+                    model.PrivateLessonPrice = privLesPrice;
+                    model.TeacherPrice = teacherPrice;
+                }
+                db.Update(model);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+                return Json(new PrivateLesson());
+            }
+
+            return Json(model);
+        }
+
+
         #endregion
+
+        #region ReservationSettings
+
+        [HttpGet("GetReservationSettings", Name = "GetReservationnSettings")]
+        public ReservationSettingsViewModel GetReservationSettings()
+
+        {
+
+            ReservationSettingsViewModel model = new ReservationSettingsViewModel();
+
+            try
+            {
+                model.reservationSettings = db.reservationSettings.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+    
+
+        [HttpGet("NewResSet", Name = "NewResSet")]
+        public ReservationSettings NewResSet(string setInf, int? setVal)
+        {
+
+            ReservationSettings model = new ReservationSettings();
+
+            try
+            {
+                if (setInf != null || setVal != null )
+                {
+                    model.ReservationSettingsInf = setInf;
+                    model.ReservationValue = setVal;
+
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeleteResSet", Name = "DeleteResSet")]
+        public ReservationSettings DeleteResSet(int id)
+        {
+
+            ReservationSettings model = new ReservationSettings();
+
+            try
+            {
+                model = db.reservationSettings.Where(x => x.ReservationSettingsId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("UpdateResSet", Name = "UpdateResSet")]
+        public ReservationSettings UpdateResSet(string updStr)
+        {
+
+            ReservationSettings model = new ReservationSettings();
+
+            string[] updList = updStr.Split("-");
+
+            try
+            {
+                foreach (var item in updList)
+                {
+                    var id = item.Split("_")[0];
+                    var value = item.Split("_")[1];
+                    model = db.reservationSettings.Where(x => x.ReservationSettingsId == Convert.ToInt32(id)).SingleOrDefault();
+
+                    if (model != null)
+                    {
+                        model.ReservationValue = Convert.ToInt32(value);
+                        db.Update(model);
+                        db.SaveChanges();
+
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+
+                return new ReservationSettings();
+
+            }
+
+            return model;
+        }
+
+        #endregion
+
     }
 }

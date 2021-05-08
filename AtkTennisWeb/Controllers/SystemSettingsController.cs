@@ -1,4 +1,5 @@
 ﻿using Helpers.Dto;
+using Helpers.Dto.PartialViewDtos;
 using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ namespace AtkTennisWeb.Controllers
     public class SystemSettingsController : Controller
     {
         #region IdentityRoleSettings
+
 
         public IActionResult IdentityRoleSettings()
         {
@@ -144,6 +146,7 @@ namespace AtkTennisWeb.Controllers
 
         #region CourtSettings
 
+        
         public IActionResult CourtSettings()
         {
             CourtSettingsViewDto model = new CourtSettingsViewDto();
@@ -170,6 +173,7 @@ namespace AtkTennisWeb.Controllers
 
 
 
+        //Kort Ayarları
         public JsonResult AddNewCourt(string courtName , string courtType , string courtCondition , string courtWebCondition)
         {
             CourtDto model = new CourtDto();
@@ -253,7 +257,7 @@ namespace AtkTennisWeb.Controllers
 
 
 
-
+        //Kort Ücret Ayarları
         public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType , string recipeCondition)
         {
             CourtPriceListDto model = new CourtPriceListDto();
@@ -339,6 +343,8 @@ namespace AtkTennisWeb.Controllers
 
         #region EducationSettings
 
+
+        //Okul Türü Ayarları
         public IActionResult EducationSchoolSettings()
         {
 
@@ -357,6 +363,548 @@ namespace AtkTennisWeb.Controllers
                 model = new EducationSettingsViewDto();
             }
             return View(model);
+        }
+
+
+
+        public JsonResult AddNewSchoolType(string schoolType, string schoolCode)
+        {
+            SchoolTypeDto model = new SchoolTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewSchoolType?schoolType=" + schoolType + "&schoolCode=" + schoolCode ));
+
+                if (model.Code == null && model.Types == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeleteSchoolType(int id)
+        {
+            SchoolTypeDto model = new SchoolTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteSchoolType?id=" + id));
+
+                if (model.Code == null && model.Types == null && model.SchoolTypesId == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult GetSchoolTypeInf(string id)
+        {
+            SchoolTypeDto model = new SchoolTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetSchoolTypeInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new SchoolTypeDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult UpdateSchoolType(int id, string code, string type)
+        {
+            SchoolTypeDto model = new SchoolTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateUpdateSchoolType?code=" + code + "&type=" + type + "&id=" + id));
+
+                if (model.SchoolTypesId == null && model.Code == null && model.Types == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+
+        }
+
+
+
+        //Okul Seviyesi Ayarları
+        public JsonResult AddNewSchoolLevel(string levelName, int levelQuota)
+        {
+            SchoolLevelDto model = new SchoolLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewSchoolLevel?levelName=" + levelName + "&levelQuota=" + levelQuota));
+
+                if (model.QuotaInf == null && model.Types == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeleteSchoolLevel(int id)
+        {
+            SchoolLevelDto model = new SchoolLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteSchoolLevel?id=" + id));
+
+                if (model.Types == null )
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult GetSchoolLevelInf(string id)
+        {
+            SchoolLevelDto model = new SchoolLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetSchoolLevelInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new SchoolTypeDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult UpdateSchoolLevel(int id, string levelName, int levelquota)
+        {
+            SchoolLevelDto model = new SchoolLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateUpdateSchoolLevel?levelName=" + levelName + "&quota=" + levelquota + "&id=" + id));
+
+                if (model.Types == null )
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+
+        }
+
+
+
+
+
+
+        //Performans Türü Ayarları
+        public IActionResult EducationPerformanceSettings()
+        {
+
+            EducationSettingsViewDto model = new EducationSettingsViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<EducationSettingsViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetPerformanceSettings"));
+
+                if (model == null)
+
+                    model = new EducationSettingsViewDto();
+            }
+            catch (Exception)
+            {
+                model = new EducationSettingsViewDto();
+            }
+            return View(model);
+        }
+
+
+
+        public JsonResult AddNewPerformanceType(string code, string type)
+        {
+            PerformanceTypeDto model = new PerformanceTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewPerformanceType?code=" + code + "&type=" + type));
+
+                if (model.PerformanceTypes == null && model.PerformanceCode == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeletePerformanceType(int id)
+        {
+            PerformanceTypeDto model = new PerformanceTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeletePerformanceType?id=" + id));
+
+                if (model.PerformanceCode == null && model.PerformanceCode == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PerformanceTypeDto());
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult GetPerformanceTypeInf(string id)
+        {
+            PerformanceTypeDto model = new PerformanceTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetPerformanceTypeInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new SchoolTypeDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult UpdatePerformanceType(int id, string code, string type)
+        {
+            PerformanceTypeDto model = new PerformanceTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdatePerfType?code=" + code + "&type=" + type + "&id=" + id));
+
+                if (model.PerformanceTypes == null && model.PerformanceCode == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PerformanceTypeDto());
+            }
+
+            return Json(true);
+
+        }
+
+
+        //Performans Seviyesi Ayarları
+
+        public JsonResult AddNewPerformanceLevel(string level, int? quota)
+        {
+            PerformanceLevelDto model = new PerformanceLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewPerformanceLevel?level=" + level + "&quota=" + quota));
+
+                if (model.PerLevel == null && model.PerQuotaInf == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PerformanceLevelDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeletePerformanceLevel(int id)
+        {
+            PerformanceLevelDto model = new PerformanceLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeletePerformanceLevel?id=" + id));
+
+                if (model.PerLevel == null && model.PerQuotaInf == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PerformanceTypeDto());
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult GetPerformanceLevelInf(string id)
+        {
+            PerformanceLevelDto model = new PerformanceLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetPerformanceLevelInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PerformanceLevelDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult UpdatePerformanceLevel(int id, string level, int? quota)
+        {
+            PerformanceLevelDto model = new PerformanceLevelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdatePerfLevel?level=" + level + "&quota=" + quota + "&id=" + id));
+
+                if (model.PerLevel == null && model.PerQuotaInf == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PerformanceLevelDto());
+            }
+
+            return Json(true);
+
+        }
+
+
+        //ÖzelDers Ayarları
+
+        public IActionResult EducationPrivateLessonSettings()
+        {
+
+            EducationSettingsViewDto model = new EducationSettingsViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<EducationSettingsViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetPrivLessonSettings"));
+
+                if (model == null)
+
+                    model = new EducationSettingsViewDto();
+            }
+            catch (Exception)
+            {
+                model = new EducationSettingsViewDto();
+            }
+            return View(model);
+        }
+
+
+        public JsonResult AddPrivLesson(string inf, string type , int? price , int? teacherprice)
+        {
+            PrivateLessonDto model = new PrivateLessonDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PrivateLessonDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewPrivLesson?inf=" + inf + "&type=" + type + "&price=" + price + "&teacherprice=" + teacherprice));
+
+                if (model.PrivateLessonPrice == null && model.PrivateLessonType == null && model.TeacherPrice == null && model.TariffeInf == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PrivateLessonDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeletePrivLesson(int id)
+        {
+            PrivateLessonDto model = new PrivateLessonDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PrivateLessonDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeletePrivateLesson?id=" + id));
+
+                if (model.TariffeInf == null && model.PrivateLessonPrice == null && model.PrivateLessonType == null && model.TeacherPrice == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PrivateLessonDto());
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult GetPrivLessonInf(string id)
+        {
+            PrivateLessonDto model = new PrivateLessonDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PrivateLessonDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetPrivLessonInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new PrivateLessonDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult UpdatePrivLesson(int id, string privLesType, string tariffeInf , int? privLesPrice , int? teacherPrice)
+        {
+            PrivateLessonDto model = new PrivateLessonDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<PrivateLessonDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdatePrivLesson?tariffeInf=" + tariffeInf + "&privLesType=" + privLesType + "&id=" + id + "&privLesPrice=" + privLesPrice + "&teacherPrice=" + teacherPrice));
+
+                if (model.TariffeInf == null && model.PrivateLessonType == null && model.PrivateLessonPrice == null && model.TeacherPrice == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(false);
+            }
+
+            return Json(true);
+
+        }
+
+        #endregion
+
+        #region ReservationSettings
+
+        public IActionResult ReservationSettings()
+        {
+
+            ReservationSettingsViewDto model = new ReservationSettingsViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationSettingsViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetReservationSettings"));
+
+                if (model == null)
+
+                    model = new ReservationSettingsViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationSettingsViewDto();
+            }
+            return View(model);
+        }
+
+
+        public JsonResult AddResSet(string setInf, int? setVal)
+        {
+            ReservationSettingsDto model = new ReservationSettingsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationSettingsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewResSet?setInf=" + setInf + "&setVal=" + setVal));
+
+                if (model.ReservationSettingsInf == null && model.ReservationValue == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationSettingsDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeleteResSet(int id)
+        {
+            ReservationSettingsDto model = new ReservationSettingsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationSettingsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteResSet?id=" + id));
+
+                if (model.ReservationSettingsInf == null && model.ReservationValue == null )
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationSettingsDto());
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult UpdateResSet(string updStr)
+        {
+            ReservationSettingsDto model = new ReservationSettingsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationSettingsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateResSet?updStr=" + updStr));
+
+                if (model.ReservationSettingsInf == null && model.ReservationValue == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationSettingsDto());
+            }
+
+            return Json(true);
         }
 
         #endregion

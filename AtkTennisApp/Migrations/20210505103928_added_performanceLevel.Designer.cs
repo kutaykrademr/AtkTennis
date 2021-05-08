@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210505103928_added_performanceLevel")]
+    partial class added_performanceLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,7 +154,7 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("PerLevel")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PerQuotaInf")
+                    b.Property<int>("PerQuotaInf")
                         .HasColumnType("int");
 
                     b.HasKey("PerLevelId");
@@ -176,30 +178,6 @@ namespace AtkTennisApp.Migrations
                     b.HasKey("PerformanceTypesId");
 
                     b.ToTable("performanceTypes");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.PrivateLesson", b =>
-                {
-                    b.Property<int>("PrivateLessonId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("PrivateLessonPrice")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PrivateLessonType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TariffeInf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TeacherPrice")
-                        .HasColumnType("int");
-
-                    b.HasKey("PrivateLessonId");
-
-                    b.ToTable("privateLessons");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.QueryLog", b =>
@@ -277,24 +255,6 @@ namespace AtkTennisApp.Migrations
                     b.HasIndex("CourtsCourtId");
 
                     b.ToTable("reservations");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.ReservationSettings", b =>
-                {
-                    b.Property<int?>("ReservationSettingsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ReservationSettingsInf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ReservationValue")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReservationSettingsId");
-
-                    b.ToTable("reservationSettings");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.SchoolLevel", b =>

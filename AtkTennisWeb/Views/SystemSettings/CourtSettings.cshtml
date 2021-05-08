@@ -1,6 +1,6 @@
 ﻿
 
-@model Helpers.Dto.ViewDtos.CourtSettingsViewDto;
+@model Helpers.Dto.PartialViewDtos.CourtSettingsViewDto;
 
 <div class="content-wrapper">
 
@@ -59,7 +59,7 @@
 
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteCourt(this.id) ">Sil</button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteOpenCourtModal(this.id) ">Sil</button>
                                             </td>
 
                                         </tr>
@@ -109,7 +109,7 @@
 
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteCourtPrice(this.id)">Sil</button>
+                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)">Sil</button>
                                             </td>
 
                                         </tr>
@@ -316,6 +316,46 @@
     </div>
 </div>
 
+<div class="modal fade" id="openDeleteCourtPriceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deleteCourtPrice(this.id)">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="openDeleteCourtModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deleteCourt(this.id)">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
 
@@ -409,7 +449,7 @@
             async: true,
             success: function (res) {
 
-                debugger;
+              
 
                 if (res != null) {
 
@@ -520,7 +560,7 @@
                 else {
                     $.confirm({
                         title: "Uyarı",
-                        content: "Kullanıcı Bulunamadı.",
+                        content: "Bir Hata Oluştu.",
                         buttons: {
                             TAMAM: function () {
 
@@ -535,6 +575,13 @@
                 console.log(textStatus);
             }
         });
+    }
+
+    function deleteOpenCourtModal(id) {
+
+        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#openDeleteCourtModal").modal("toggle");
+
     }
 
 
@@ -593,7 +640,7 @@
             async: true,
             success: function (res) {
 
-                debugger;
+               
 
                 if (res != null) {
 
@@ -728,7 +775,12 @@
         });
     }
 
+    function deleteOpenCourtPriceModal(id) {
 
+        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#openDeleteCourtPriceModal").modal("toggle");
+
+    }
 
 
 </script>

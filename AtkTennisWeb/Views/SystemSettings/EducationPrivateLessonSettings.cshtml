@@ -1,0 +1,442 @@
+﻿@model Helpers.Dto.PartialViewDtos.EducationSettingsViewDto;
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Özel Ders Ayarları</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Özel Ders Türleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPrivLesson">Özel Ders Tarife Ekle</button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Tarife Bilgisi</th>
+                                        <th>Özel Ders Türü</th>
+                                        <th>Ücret</th>
+                                        <th>Hoca Payı</th>
+                                        <th>İşlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.privateLessons)
+
+                                    {
+                                        <tr style="text-align:center" id="">
+
+                                            <td>@item.TariffeInf</td>
+                                            <td>@item.PrivateLessonType</td>
+                                            <td>@item.PrivateLessonPrice</td>
+                                            <td>@item.TeacherPrice</td>
+
+
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item.PrivateLessonId" onclick="openUpdatePrivLessonModal(this.id)">Güncelle</button>
+                                                <button class="btn btn-outline-danger" id="@item.PrivateLessonId" onclick="deletePrivLessonOpenModal(this.id)">Sil</button>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="addPrivLesson" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Özel Ders Tarife</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tarife Bilgisi:</label>
+                        <input type="text" class="form-control" id="QuotaInf">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Türü:</label>
+                        <input type="text" class="form-control" id="LesType">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Ücret:</label>
+                        <input type="number" class="form-control" id="LesPrice">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Hoca Payı:</label>
+                        <input type="number" class="form-control" id="TeacherPrice">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddPrivLessonType()">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="openDeletePrivLessonsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationPrivLessonModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deletePrivLesson(this.id)">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="updateType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Okul Türü Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Okul Kodu:</label>
+                        <input type="text" class="form-control" id="schoolCodes">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Okul Türü:</label>
+                        <input type="text" class="form-control" id="schoolTypes">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="updateOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateschoolType(this.id)">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="openDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deleteSchoolType(this.id)">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updatePrivLesson" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Performans Seviyesi Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tarife Bilgisi:</label>
+                        <input type="text" class="form-control" id="tariffeInf">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Özel Ders Türü:</label>
+                        <input type="text" class="form-control" id="privLesType">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Ücret:</label>
+                        <input type="number" class="form-control" id="privLesPrice">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Hoca Payı:</label>
+                        <input type="number" class="form-control" id="teacherPrice">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="updateOperationPrivLesModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updatePrivateLesson(this.id)">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+        });
+    });
+
+
+    function saveAddPrivLessonType() {
+        if ($("#QuotaInf").val() == "" || $("#LesType").val() == "" || $("#LesPrice").val() == "" || $("#TeacherPrice").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        } else {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddPrivLesson',
+                cache: false,
+                data: { "inf": $("#QuotaInf").val(), "type": $("#LesType").val(), "price": $("#LesPrice").val(), "teacherprice": $("#TeacherPrice").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Özel Ders Türü başarıyla eklendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "EducationPrivateLessonSettings"
+                                }
+                            }
+                        });
+
+
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
+
+
+    function deletePrivLessonOpenModal(id) {
+
+        $("#deleteOperationPrivLessonModel button:nth-of-type(2)").attr("id", id);
+        $("#openDeletePrivLessonsModal").modal("toggle");
+
+    }
+
+    function deletePrivLesson(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/DeletePrivLesson',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Özel Ders Türü Başarıyla silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "EducationPrivateLessonSettings"
+                            }
+                        }
+                    });
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Bir Hata Oluştu.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updatePrivateLesson(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/UpdatePrivLesson',
+            cache: false,
+            data: { "id": id, "tariffeInf": $("#tariffeInf").val(), "privLesType": $("#privLesType").val(), "privLesPrice": $("#privLesPrice").val(), "teacherPrice": $("#teacherPrice").val() },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+                if (res != false) {
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Özel Ders Türü Başarıyla güncellendi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "EducationPrivateLessonSettings"
+                            }
+                        }
+                    });
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Hata Oluştu.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function openUpdatePrivLessonModal(id) {
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetPrivLessonInf',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                if (res != null) {
+
+                    $("#tariffeInf").val(res.tariffeInf);
+                    $("#privLesType").val(res.privateLessonType);
+                    $("#privLesPrice").val(res.privateLessonPrice);
+                    $("#teacherPrice").val(res.teacherPrice);
+
+                    $("#updateOperationPrivLesModel button:nth-of-type(2)").attr("id", id);
+                    $('#updatePrivLesson').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Özel Ders Türü Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+</script>

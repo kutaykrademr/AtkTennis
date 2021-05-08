@@ -1,4 +1,4 @@
-﻿@model Helpers.Dto.ViewDtos.IdentityRoleSettingsViewDto;
+﻿@model Helpers.Dto.PartialViewDtos.IdentityRoleSettingsViewDto;
 
 
 <div class="content-wrapper">
@@ -51,7 +51,7 @@
                                             <td>@Model.appIdentityRoles[i].NormalizedName</td>
                                             <td>
                                                 <button class="btn btn-warning" id="@Model.appIdentityRoles[i].Id" onclick="openUpdateRoleModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteRole(this.id)">Sil</button>
+                                                <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteOpenModal(this.id)">Sil</button>
                                             </td>
 
                                         </tr>
@@ -76,7 +76,7 @@
                                 <h3>Yetki Düzenle</h3>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-outline-primary"  onclick="changeAuthority()">Kaydet</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="changeAuthority()">Kaydet</button>
 
 
                             </div>
@@ -215,6 +215,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="openDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deleteRole(this.id)">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
@@ -252,7 +273,6 @@
             async: true,
             success: function (res) {
 
-                debugger;
 
                 if (res != null) {
 
@@ -410,8 +430,7 @@
                 async: true,
                 success: function (res) {
 
-                    debugger;
-
+              
 
                     if (res == true) {
 
@@ -453,8 +472,8 @@
     function changeAuthority() {
 
         var trueList = [];
-        $("#authorityTable tr td input[type=checkbox]").each( function() {
-            if ($(this).prop('checked')) 
+        $("#authorityTable tr td input[type=checkbox]").each(function () {
+            if ($(this).prop('checked'))
                 trueList.push($(this).attr("id"));
         })
 
@@ -501,6 +520,14 @@
             }
         });
     }
+
+    function deleteOpenModal(id) {
+
+        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#openDeleteModal").modal("toggle");
+
+    }
+
 
 
 

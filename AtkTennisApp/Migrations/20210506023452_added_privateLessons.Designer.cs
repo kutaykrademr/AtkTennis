@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210506023452_added_privateLessons")]
+    partial class added_privateLessons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,24 +279,6 @@ namespace AtkTennisApp.Migrations
                     b.HasIndex("CourtsCourtId");
 
                     b.ToTable("reservations");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.ReservationSettings", b =>
-                {
-                    b.Property<int?>("ReservationSettingsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ReservationSettingsInf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ReservationValue")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReservationSettingsId");
-
-                    b.ToTable("reservationSettings");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.SchoolLevel", b =>
