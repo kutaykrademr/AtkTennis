@@ -9,9 +9,10 @@ namespace AtkTennisApp.Models
     public class SchoolType
     {
         [Key]
-        public int SchoolTypesId { get; set; }
+        public int SchoolTypesId { get; set; } 
         public string Code { get; set; }
         public string Types { get; set; }
+
         
     }
 }

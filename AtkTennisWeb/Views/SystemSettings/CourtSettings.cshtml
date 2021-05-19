@@ -30,7 +30,7 @@
                                 <h3>Kort İşlemleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>                 
                             </div>
                         </div>
 
@@ -78,7 +78,7 @@
                                 <h3>Kort Ücret Tarifesi</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice">Tarife Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice">Tarife Ekle</button>                              
                             </div>
                         </div>
 
@@ -125,6 +125,10 @@
 </div>
 
 
+
+
+
+
 <div class="modal fade" id="addCourt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -144,10 +148,12 @@
                         <label for="recipient-name" class="col-form-label">Kort Türü:</label>
                         <input type="text" class="form-control" id="courtType">
                     </div>
+
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Kort Durumu:</label>
                         <input type="text" class="form-control" id="courtCondition">
                     </div>
+
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Kort Web Durumu:</label>
                         <input type="text" class="form-control" id="courtWebCondition">
@@ -161,6 +167,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="modal fade" id="updateCourtModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -449,7 +457,7 @@
             async: true,
             success: function (res) {
 
-              
+
 
                 if (res != null) {
 
@@ -640,7 +648,7 @@
             async: true,
             success: function (res) {
 
-               
+
 
                 if (res != null) {
 
@@ -781,6 +789,7 @@
         $("#openDeleteCourtPriceModal").modal("toggle");
 
     }
+
 
 
 </script>

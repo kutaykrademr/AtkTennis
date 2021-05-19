@@ -7,7 +7,8 @@ namespace Helpers.Dto.ViewDtos
     public class SchoolLevelDto
     {
         public int SchoolLevelId { get; set; }
-        public string Types { get; set; }
-        public int QuotaInf { get; set; }
+        public string Levels { get; set; }
+
+        
     }
 }

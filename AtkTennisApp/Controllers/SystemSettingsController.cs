@@ -516,9 +516,10 @@ namespace AtkTennisApp.Controllers
 
             try
             {
+                model.schoolPriceTypes = db.schoolPriceTypes.ToList();
+                model.schoolPrices = db.schoolPrices.ToList(); 
                 model.schoolTypes = db.schoolTypes.ToList();
-                model.schoolLevels = db.schoolLevels.ToList();
-                
+                model.schoolLevels = db.schoolLevels.ToList();       
             }
             catch (Exception ex)
             {
@@ -608,6 +609,26 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
+        [HttpGet("GetPriceInf", Name = "GetPriceInf")]
+        public JsonResult GetPriceInf(int id)
+        {
+
+
+            SchoolPrice model = new SchoolPrice();
+
+            try
+            {
+                model = db.schoolPrices.Where(x => x.Id == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
         [HttpGet("UpdateUpdateSchoolType", Name = "UpdateUpdateSchoolType")]
         public JsonResult UpdateUpdateSchoolType(int id, string code, string type)
         {
@@ -648,8 +669,8 @@ namespace AtkTennisApp.Controllers
             {
                 if (levelName != null )
                 {
-                    model.QuotaInf = levelQuota;
-                    model.Types = levelName;
+                    
+                    model.Levels = levelName;
 
 
                     db.Add(model);
@@ -716,7 +737,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateUpdateSchoolLevel", Name = "UpdateUpdateSchoolLevel")]
-        public JsonResult UpdateUpdateSchoolLevel(int id, string levelName, int quota)
+        public JsonResult UpdateUpdateSchoolLevel(int id, string levelName)
         {
             SchoolLevel model = new SchoolLevel();
 
@@ -725,8 +746,8 @@ namespace AtkTennisApp.Controllers
 
                 model = db.schoolLevels.Where(x => x.SchoolLevelId == id).SingleOrDefault();
 
-                model.QuotaInf = quota;
-                model.Types = levelName;
+               
+                model.Levels = levelName;
 
 
                 db.Update(model);
@@ -1201,12 +1222,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateResSet", Name = "UpdateResSet")]
-        public ReservationSettings UpdateResSet(string updStr)
+        public ReservationSettings UpdateResSet(string updStr )
         {
 
             ReservationSettings model = new ReservationSettings();
 
             string[] updList = updStr.Split("-");
+            
 
             try
             {
@@ -1214,6 +1236,7 @@ namespace AtkTennisApp.Controllers
                 {
                     var id = item.Split("_")[0];
                     var value = item.Split("_")[1];
+
                     model = db.reservationSettings.Where(x => x.ReservationSettingsId == Convert.ToInt32(id)).SingleOrDefault();
 
                     if (model != null)
@@ -1224,9 +1247,8 @@ namespace AtkTennisApp.Controllers
 
                     }
                 }
-
-
             }
+
             catch (Exception ex)
             {
 
@@ -1240,6 +1262,8 @@ namespace AtkTennisApp.Controllers
         }
 
         #endregion
+
+
 
     }
 }

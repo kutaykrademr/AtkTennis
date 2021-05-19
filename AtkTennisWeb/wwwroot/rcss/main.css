@@ -62,11 +62,11 @@ html {
   margin: 0;
 }
 
-*, *:before, *:after {
+/**, *:before, *:after {
   -webkit-box-sizing: inherit;
   -moz-box-sizing: inherit;
   box-sizing: inherit;
-}
+}*/
 
 /* ==========================================================================
    #RESET
@@ -183,7 +183,6 @@ h6 {
   background: -moz-linear-gradient(bottom left, #fc2c77 0%, #6c4079 100%);
   background: -o-linear-gradient(bottom left, #fc2c77 0%, #6c4079 100%);
   background: linear-gradient(to top right, #fc2c77 0%, #6c4079 100%);*/
-  background-image:url('../images/atkimg/renith-r-A9VpotrPr1k-unsplash.jpg');
   background-size:cover;
 
 }

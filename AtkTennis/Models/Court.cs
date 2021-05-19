@@ -7,6 +7,7 @@ namespace AtkTennis.Models
 {
     public class Court
     {
+
         public int CourtId { get; set; }
         public string CourtName { get; set; }
         public string CourtType { get; set; }

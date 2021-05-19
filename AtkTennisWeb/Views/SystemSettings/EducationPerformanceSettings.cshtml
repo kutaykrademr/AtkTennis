@@ -105,6 +105,59 @@
                             </table>
                         </div>
                     </div>
+
+                    <button class="tablink" onclick="openPage('Home', this, 'gray')" id="defaultOpen">Home</button>
+                    <button class="tablink" onclick="openPage('News', this, 'gray')" >News</button>
+                    <button class="tablink" onclick="openPage('Contact', this, 'gray')">Contact</button>
+
+
+                    <div id="Home" class="tabcontent">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Performans Seviyeleri</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel">Performans Seviyesi Ekle</button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Performans Seviyesi</th>
+                                            <th>Kota</th>
+                                            <th>İşlemler</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.performanceLevels)
+                                        {
+                                            <tr style="text-align:center" id="">
+
+                                                <td>@item.PerLevel</td>
+                                                <td>@item.PerQuotaInf</td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)">Güncelle</button>
+                                                    <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)">Sil</button>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="News" class="tabcontent">
+                        <h3>News</h3>
+                        <p>Some news this fine day!</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -414,7 +467,7 @@
             async: true,
             success: function (res) {
 
-              
+
 
                 if (res != null) {
 
@@ -463,7 +516,7 @@
             async: true,
             success: function (res) {
 
-            
+
 
                 if (res != null) {
 
@@ -670,7 +723,7 @@
             async: true,
             success: function (res) {
 
-        
+
                 if (res != null) {
 
                     $("#perLevels").val(res.perLevel);
@@ -700,5 +753,30 @@
         });
     }
 
+
+
+    function openPage(pageName, elmnt, color) {
+        // Hide all elements with class="tabcontent" by default */
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the background color of all tablinks/buttons
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+
+        // Show the specific tab content
+        document.getElementById(pageName).style.display = "block";
+
+        // Add the specific color to the button used to open the tab content
+        elmnt.style.backgroundColor = color;
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click(); 
 
 </script>

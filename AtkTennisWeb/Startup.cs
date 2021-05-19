@@ -20,7 +20,7 @@ namespace AtkTennisWeb
             {
                 Mutuals.AppUrl = Configuration.GetValue<string>("AppUrl");
                 Worker.SettingsWorker.getSettings();
-                Worker.SettingsWorker.StartTimers();
+                //Worker.SettingsWorker.StartTimers();
             }
             catch (Exception)
             {

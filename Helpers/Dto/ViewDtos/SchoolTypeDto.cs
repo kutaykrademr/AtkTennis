@@ -10,5 +10,6 @@ namespace Helpers.Dto.ViewDtos
         public string Code { get; set; }
         public string Types { get; set; }
 
+        
     }
 }

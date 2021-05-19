@@ -28,7 +28,7 @@ namespace Helpers
             }
             catch (Exception ex)
             {
-               
+                string err = ex.Message;
             }
 
             return result;

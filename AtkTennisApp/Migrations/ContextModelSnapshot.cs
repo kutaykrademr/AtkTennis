@@ -304,15 +304,57 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("QuotaInf")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Types")
+                    b.Property<string>("Levels")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SchoolLevelId");
 
                     b.ToTable("schoolLevels");
+                });
+
+            modelBuilder.Entity("AtkTennisApp.Models.SchoolPrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("SchoolLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SchoolTypesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("price")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("schoolPriceTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SchoolLevelId");
+
+                    b.HasIndex("SchoolTypesId");
+
+                    b.HasIndex("schoolPriceTypeId");
+
+                    b.ToTable("schoolPrices");
+                });
+
+            modelBuilder.Entity("AtkTennisApp.Models.SchoolPriceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("PriceTypeDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("schoolPriceTypes");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.SchoolType", b =>
@@ -403,6 +445,27 @@ namespace AtkTennisApp.Migrations
                         .HasForeignKey("CourtsCourtId");
 
                     b.Navigation("CourtsCourt");
+                });
+
+            modelBuilder.Entity("AtkTennisApp.Models.SchoolPrice", b =>
+                {
+                    b.HasOne("AtkTennisApp.Models.SchoolLevel", "schoolLevel")
+                        .WithMany()
+                        .HasForeignKey("SchoolLevelId");
+
+                    b.HasOne("AtkTennisApp.Models.SchoolType", "schoolType")
+                        .WithMany()
+                        .HasForeignKey("SchoolTypesId");
+
+                    b.HasOne("AtkTennisApp.Models.SchoolPriceType", "schoolPriceType")
+                        .WithMany()
+                        .HasForeignKey("schoolPriceTypeId");
+
+                    b.Navigation("schoolLevel");
+
+                    b.Navigation("schoolPriceType");
+
+                    b.Navigation("schoolType");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.Court", b =>

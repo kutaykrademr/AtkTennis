@@ -9,8 +9,16 @@ namespace Helpers.Dto.PartialViewDtos
     {
         public List<SchoolLevelDto> schoolLevels { get; set; } = new List<SchoolLevelDto>();
         public List<SchoolTypeDto> schoolTypes { get; set; } = new List<SchoolTypeDto>();
+        public List<SchoolPriceDto> schoolPrices { get; set; } = new List<SchoolPriceDto>();
+
+        public List<SchoolPriceTypeDto> schoolPriceTypes { get; set; } = new List<SchoolPriceTypeDto>();
+
+      
+
         public List<PerformanceLevelDto> performanceLevels { get; set; } = new List<PerformanceLevelDto>();
         public List<PerformanceTypeDto> performanceTypes { get; set; } = new List<PerformanceTypeDto>();
+
         public List<PrivateLessonDto> privateLessons { get; set; } = new List<PrivateLessonDto>();
+        
     }
 }
