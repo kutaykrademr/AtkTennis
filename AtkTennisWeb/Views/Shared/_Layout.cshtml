@@ -19,7 +19,7 @@
     <link href="~/adminRoot/plugins/daterangepicker.css" rel="stylesheet" />
     <link href="~/adminRoot/plugins/summernote-bs4.min.css" rel="stylesheet" />
     <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
-
+    <link href="~/adminRoot/css/calender.css" rel="stylesheet" />
 
 
     <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -176,275 +176,276 @@
                     {@Html.Raw("---------------")}
                 else
                 { @Mutuals.CompName}
-            </span>
-        </a>
+                </span>
+            </a>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <!-- Sidebar user panel (optional) -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img src="~/adminRoot/images/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
-                </div>
-                <div class="info">
-                    <a href="#" class="d-block">Kutay Karademir</a>
-                </div>
-            </div>
-
-            <!-- SidebarSearch Form -->
-            <div class="form-inline">
-                <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-sidebar">
-                            <i class="fas fa-search fa-fw"></i>
-                        </button>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/adminRoot/images/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">Kutay Karademir</a>
                     </div>
                 </div>
+
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+                        <li class="nav-item menu-open">
+                            <a href="~/Home/Index" class="nav-link active">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Ana Menü
+                                    <i class="right fas fa-table"></i>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-circle"></i>
+                                <p>
+                                    Danışma
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="~/Home/NewRegister" class="nav-link">
+                                        <i class="fas fa-th nav-icon"></i>
+                                        <p>Yeni Kayıt</p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="~/Security/ListUsers" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Kullanıcı Listeleri</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-bell"></i>
+                                <p>
+                                    Rezervasyonlar
+                                    <i class="fas fa-angle-left right"></i>
+
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-table nav-icon"></i>
+                                        <p>Rezervasyon Tablosu</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="~/Public/Reservation" class="nav-link">
+                                        <i class="fas fa-calendar-check nav-icon"></i>
+                                        <p>Rezervasyon Yap</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>
+                                    Sistem Ayarları
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
+                                        <i class="fas fa-id-card nav-icon"></i>
+                                        <p>Rol ve Yetkilendirme </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/CourtSettings" class="nav-link">
+                                        <i class="fas fa-flag nav-icon"></i>
+                                        <p>Kort Ayarları </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-table-tennis"></i>
+                                        <p>
+                                            Eğitim Ayarları
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Okul</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Performans</p>
+                                            </a>
+                                        </li>
+
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Özel Ders</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                        <p>
+                                            Öğr. Gel. ve Tak. Ayar.
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Antreman Havuzu</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Fiziksel Çalışmalar</p>
+                                            </a>
+                                        </li>
+
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Oyunlar</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Gelişim Formları</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>İçerik İşlemleri</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/ReservationSettings" class="nav-link">
+                                        <i class="fas fa-bell nav-icon"></i>
+                                        <p>Reservasyon Ayarları </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
             </div>
+            <!-- /.sidebar -->
+        </aside>
 
-            <!-- Sidebar Menu -->
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
-                    <li class="nav-item menu-open">
-                        <a href="~/Home/Index" class="nav-link active">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Ana Menü
-                                <i class="right fas fa-table"></i>
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-user-circle"></i>
-                            <p>
-                                Danışma
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="~/Home/NewRegister" class="nav-link">
-                                    <i class="fas fa-th nav-icon"></i>
-                                    <p>Yeni Kayıt</p>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item">
-                                <a href="~/Security/ListUsers" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Kullanıcı Listeleri</p>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-bell"></i>
-                            <p>
-                                Rezervasyonlar
-                                <i class="fas fa-angle-left right"></i>
-
-                            </p>
-                        </a>
-
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="~/Admin/ReservationTable" class="nav-link">
-                                    <i class="fas fa-table nav-icon"></i>
-                                    <p>Rezervasyon Tablosu</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="~/Admin/Reservation" class="nav-link">
-                                    <i class="fas fa-calendar-check nav-icon"></i>
-                                    <p>Rezervasyon Yap</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-cog"></i>
-                            <p>
-                                Sistem Ayarları
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-
-                        <ul class="nav nav-treeview">
-
-                            <li class="nav-item">
-                                <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
-                                    <i class="fas fa-id-card nav-icon"></i>
-                                    <p>Rol ve Yetkilendirme </p>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="~/SystemSettings/CourtSettings" class="nav-link">
-                                    <i class="fas fa-flag nav-icon"></i>
-                                    <p>Kort Ayarları </p>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-table-tennis"></i>
-                                    <p>
-                                        Eğitim Ayarları
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Okul</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Performans</p>
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Özel Ders</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                    <p>
-                                        Öğr. Gel. ve Tak. Ayar.
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Antreman Havuzu</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Fiziksel Çalışmalar</p>
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Oyunlar</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Gelişim Formları</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>İçerik İşlemleri</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="~/SystemSettings/ReservationSettings" class="nav-link">
-                                    <i class="fas fa-bell nav-icon"></i>
-                                    <p>Reservasyon Ayarları </p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-            <!-- /.sidebar-menu -->
+        <div class="section">
+            @*<main role="main" class="pb-3">*@
+            @RenderBody()
+            @*</main>*@
         </div>
-        <!-- /.sidebar -->
-    </aside>
 
-    <div class="section">
-        @*<main role="main" class="pb-3">*@
-        @RenderBody()
-        @*</main>*@
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
     </div>
+    <!-- ./wrapper -->
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
 
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-<!-- jQuery UI 1.11.4 -->
-<script src="~/lib/jquery/dist/jquery-ui.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button)
-</script>
+    <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
 
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/adminRoot/js/Chart.min.js"></script>
+    <script src="~/adminRoot/js/sparkline.js"></script>
+    <script src="~/adminRoot/js/jquery.knob.min.js"></script>
+    <script src="~/adminRoot/js/moment.min.js"></script>
+    <script src="~/adminRoot/js/daterangepicker.js"></script>
+    <script src="~/adminRoot/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/adminRoot/js/summernote-bs4.min.js"></script>
+    <script src="~/adminRoot/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/adminRoot/js/adminlte.js"></script>
+    <script src="~/adminRoot/js/demo.js"></script>
+    <script src="~/adminRoot/js/dashboard.js"></script>
+    <script src="~/adminRoot/js/calender.js"></script>
 
-<script src="~/lib/jquery/dist/jquery-confirm.js"></script>
+    <script src="~/plugins/jszip/jszip.min.js"></script>
+    <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
 
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/adminRoot/js/Chart.min.js"></script>
-<script src="~/adminRoot/js/sparkline.js"></script>
-<script src="~/adminRoot/js/jquery.knob.min.js"></script>
-<script src="~/adminRoot/js/moment.min.js"></script>
-<script src="~/adminRoot/js/daterangepicker.js"></script>
-<script src="~/adminRoot/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="~/adminRoot/js/summernote-bs4.min.js"></script>
-<script src="~/adminRoot/js/jquery.overlayScrollbars.min.js"></script>
-<script src="~/adminRoot/js/adminlte.js"></script>
-<script src="~/adminRoot/js/demo.js"></script>
-<script src="~/adminRoot/js/dashboard.js"></script>
+    <script src="~/vendor/select2/select2.min.js"></script>
+    <script src="~/rjs/global.js"></script>
 
-<script src="~/plugins/jszip/jszip.min.js"></script>
-<script src="~/plugins/pdfmake/pdfmake.min.js"></script>
-<script src="~/plugins/pdfmake/vfs_fonts.js"></script>
-
-<script src="~/vendor/select2/select2.min.js"></script>
-<script src="~/rjs/global.js"></script>
-
-@*dataTable*@
-<script src="~/plugins/datatables/jquery.dataTables.js"></script>
-<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
-<script src="~/plugins/datatables-responsive/js/dataTables.responsive.js"></script>
-<script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.js"></script>
-<script src="~/plugins/datatables-buttons/js/dataTables.buttons.js"></script>
-<script src="~/plugins/datatables-buttons/js/buttons.bootstrap4.js"></script>
-<script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    @*dataTable*@
+    <script src="~/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.js"></script>
+    <script src="~/plugins/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.bootstrap4.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 </body>
 </html>

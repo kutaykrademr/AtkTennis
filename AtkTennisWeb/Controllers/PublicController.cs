@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Helpers.Dto.PartialViewDtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,9 @@ namespace AtkTennisWeb.Controllers
                         return Json("false");
                     else
                         HttpContext.Session.SetString("UserId", model.UserName);
+
+                     
+                        
                 }
                 else
                 {
@@ -44,6 +48,27 @@ namespace AtkTennisWeb.Controllers
 
 
 
+        }
+
+        public IActionResult Reservation()
+        {
+            ReservationViewDto model = new ReservationViewDto();
+
+            try
+            {
+                var getResult = Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes");
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(getResult);
+
+                if (model == null)
+
+                    model = new ReservationViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationViewDto();
+            }
+
+            return View(model);
         }
     }
 }

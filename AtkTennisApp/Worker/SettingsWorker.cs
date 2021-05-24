@@ -17,9 +17,9 @@ namespace AtkTennisApp.Worker
 
         public static void StartTimers()
         {
-            //getSettingsTimer.Elapsed += new ElapsedEventHandler(getMySettings);
-            //getSettingsTimer.Interval = 1000000;
-            //getSettingsTimer.Enabled = true;
+            getSettingsTimer.Elapsed += new ElapsedEventHandler(getMySettings);
+            getSettingsTimer.Interval = 10000;
+            getSettingsTimer.Enabled = true;
         }
 
         private static void getMySettings(object source, ElapsedEventArgs e)

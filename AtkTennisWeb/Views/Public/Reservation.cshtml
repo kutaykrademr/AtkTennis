@@ -1,0 +1,120 @@
+﻿@model Helpers.Dto.PartialViewDtos.ReservationViewDto;
+
+@using System.Security.Claims;
+
+
+
+<script>
+    document.getElementsByTagName("html")[0].className += " js";
+</script>
+
+
+<link href="~/workSch/style.css" rel="stylesheet" />
+
+
+<section class="content">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h1 class="m-0">Reservation</h1>
+        </div>
+        <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
+            <!-- .cd-schedule__timeline -->
+
+
+            <div class="cd-schedule__timeline">
+                <ul>
+                    @for (int i = 0; i < Model.resTimes.Count; i++)
+                    {
+                        <li><span>@Model.resTimes[i].ResTimes</span></li>
+                    }
+
+
+                </ul>
+            </div>
+
+           
+
+            <div class="cd-schedule__events">
+                <ul>
+
+                    @foreach (var item in Model.courts)
+                    {
+                        <li class="cd-schedule__group">
+                            <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
+                            <ul>
+                                @foreach (var item2 in Model.reservations)
+                                {
+                                    if (item.CourtId == item2.Court.CourtId)
+                                    {
+                                        <li class="cd-schedule__event ">
+
+                                            <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-content="event-abs-circuit" data-event="@item2.ResEvent" href="#0">
+                                                <em class="cd-schedule__name">Abs </em>
+                                            </a>
+
+                                        </li>
+                                    }
+                                }
+
+
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+
+
+            <div class="cd-schedule-modal">
+                <header class="cd-schedule-modal__header">
+                    <div class="cd-schedule-modal__content">
+                        <span class="cd-schedule-modal__date"></span>
+                        <h3 class="cd-schedule-modal__name"></h3>
+                    </div>
+
+                    <div class="cd-schedule-modal__header-bg"></div>
+                </header>
+
+                <div class="cd-schedule-modal__body">
+                    <div class="cd-schedule-modal__event-info"></div>
+                    <div class="cd-schedule-modal__body-bg"></div>
+                </div>
+
+                <a href="#0" class="cd-schedule-modal__close text-replace">Close</a>
+            </div>
+
+            <div class="cd-schedule__cover-layer"></div>
+        </div>
+    </div>
+</section>
+
+<script src="~/workSch/util.js"></script>
+<script src="~/workSch/main.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

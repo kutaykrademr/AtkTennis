@@ -8,6 +8,9 @@ using AtkTennisApp.Models;
 using AtkTennisApp.Security;
 using Microsoft.AspNetCore.Identity;
 using AtkTennis.Models;
+using AtkTennisApp.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace AtkTennisApp.Controllers
 {
@@ -18,6 +21,8 @@ namespace AtkTennisApp.Controllers
         private readonly UserManager<AppIdentityUser> userManager;
         private readonly RoleManager<AppIdentityRole> roleManager;
         private readonly SignInManager<AppIdentityUser> signInManager;
+     
+       
 
         public PublicController(UserManager<AppIdentityUser> userManager,
             RoleManager<AppIdentityRole> roleManager,
@@ -25,7 +30,7 @@ namespace AtkTennisApp.Controllers
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-            this.signInManager = signInManager;
+            this.signInManager = signInManager;            
         }
 
 
@@ -49,6 +54,7 @@ namespace AtkTennisApp.Controllers
 
             return model;
         }
+
 
         [HttpGet("SignIn", Name = "SignIn")]
         public SignIn SignIn(string UserName, string Password)
@@ -83,6 +89,32 @@ namespace AtkTennisApp.Controllers
             }
 
             return model;
+        }
+
+        [HttpGet("GetRes", Name = "GetRes")]
+        public ReservationViewModel GetRes()
+
+        {
+            ReservationViewModel model = new ReservationViewModel();
+            
+
+
+            try
+            {
+                model.resTimes = db.resTimes.ToList();
+                model.courts = db.courts.ToList();
+                model.reservations = db.reservations.ToList();
+                model.appIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+
         }
     }
 }
