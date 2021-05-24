@@ -29,10 +29,15 @@ namespace AtkTennisWeb.Controllers
                     if (model.UserName == null || model.Password == null)
                         return Json("false");
                     else
-                        HttpContext.Session.SetString("UserId", model.UserName);
+                    {
+                        HttpContext.Session.SetString("UserName", model.UserName);
+                        HttpContext.Session.SetString("UserId", model.custom_userid);
 
-                     
-                        
+                        var name = HttpContext.Session.GetString("UserName");
+                        var id = HttpContext.Session.GetString("UserId");
+
+                    }
+                         
                 }
                 else
                 {

@@ -11,6 +11,7 @@ using AtkTennis.Models;
 using AtkTennisApp.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AtkTennisApp.Controllers
 {
@@ -30,9 +31,11 @@ namespace AtkTennisApp.Controllers
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-            this.signInManager = signInManager;            
+            this.signInManager = signInManager;
+
         }
 
+        
 
         Context db = new Context();
 
@@ -55,6 +58,8 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+       
+
 
         [HttpGet("SignIn", Name = "SignIn")]
         public SignIn SignIn(string UserName, string Password)
@@ -72,10 +77,10 @@ namespace AtkTennisApp.Controllers
                 try
                 {
                     var result = signInManager.PasswordSignInAsync(Model2.UserName, Model2.Password, Model2.RememberMe, false).Result;
-
-                    if(!result.Succeeded)
+                    
+                    if (!result.Succeeded)
                         return new SignIn();
-
+                    
                 }
                 catch (Exception ex )
                 {
@@ -86,6 +91,7 @@ namespace AtkTennisApp.Controllers
 
                 model.UserName = Model2.UserName;
                 model.Password = Model2.Password;
+                model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;
             }
 
             return model;

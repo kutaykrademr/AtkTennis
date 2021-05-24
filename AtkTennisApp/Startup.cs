@@ -1,6 +1,7 @@
 using AtkTennisApp.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,7 @@ namespace AtkTennisApp
             services.AddIdentity<AppIdentityUser, AppIdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddControllers();
         }
