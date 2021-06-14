@@ -9,6 +9,6 @@ namespace Helpers.Dto.ViewDtos
         
         public int? ReservationSettingsId { get; set; }
         public string ReservationSettingsInf { get; set; }
-        public int? ReservationValue { get; set; }
+        public string ReservationValue { get; set; }
     }
 }

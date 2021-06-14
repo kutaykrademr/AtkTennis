@@ -80,7 +80,7 @@ namespace AtkTennisApp.Controllers
         {
 
             var role = await roleManager.FindByIdAsync(id);
-            var Role2 = new UserSettings();
+            UserSettings Role2 = new UserSettings();
             try
             {
                 if (role == null)
@@ -284,7 +284,7 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("NewCourt", Name = "NewCourt")]
-        public Court NewCourt(string courtName, string courtType, string courtCondition, string courtWebCondition)
+        public Court NewCourt(string courtName, string courtType, int courtCondition, int courtWebCondition)
         {
 
             var Court = new Court();
@@ -336,7 +336,7 @@ namespace AtkTennisApp.Controllers
 
         //kontrol eksiği var
         [HttpGet("UpdateCourt", Name = "UpdateCourt")]
-        public JsonResult UpdateCourt(int id , string courtName, string courtType, string courtCondition, string courtWebCondition)
+        public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition)
         {
             Court model = new Court();
 
@@ -1165,7 +1165,7 @@ namespace AtkTennisApp.Controllers
     
 
         [HttpGet("NewResSet", Name = "NewResSet")]
-        public ReservationSettings NewResSet(string setInf, int? setVal)
+        public ReservationSettings NewResSet(string setInf, string setVal)
         {
 
             ReservationSettings model = new ReservationSettings();
@@ -1241,7 +1241,7 @@ namespace AtkTennisApp.Controllers
 
                     if (model != null)
                     {
-                        model.ReservationValue = Convert.ToInt32(value);
+                        model.ReservationValue = value;
                         db.Update(model);
                         db.SaveChanges();
 

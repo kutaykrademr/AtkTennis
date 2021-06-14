@@ -92,7 +92,7 @@
                                                     else
                                                     {
                                                         <td>
-                                                            <button type="button" class="btn btn-outline-primary  courtbutton" data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" userid="@userId" data-target="#exampleModalLong">
+                                                            <button type="button" class="btn btn-outline-primary"  data-toggle="modal" id="cb_@item2.CourtId" hour="@item.ResTimes" cname="@item2.CourtName" userid="@userId" data-target="#exampleModalLong">
                                                                 @item2.CourtName
                                                             </button>
                                                         </td>
@@ -196,7 +196,7 @@
     });
 
     $('.courtbutton').click((e) => {
-
+        
         courtname = $(e.target).attr('cname');
         courtid = e.target.id.replace("cb_", "");
         hour = $(e.target).attr('hour');
@@ -205,6 +205,7 @@
 
 
         console.log(userId);
+
 
         var userIdtext = userIdd;
         var courttext = courtname;

@@ -174,12 +174,12 @@ namespace AtkTennisWeb.Controllers
 
 
         //Kort Ayarları
-        public JsonResult AddNewCourt(string courtName , string courtType , string courtCondition , string courtWebCondition)
+        public JsonResult AddNewCourt(string courtName , string courtType , int AddcourtCondition, int AddcourtWebCondition)
         {
             CourtDto model = new CourtDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + courtCondition + "&courtWebCondition=" + courtWebCondition));
+                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + AddcourtCondition + "&courtWebCondition=" + AddcourtWebCondition));
 
                 if (model.CourtName == null)
 
@@ -215,7 +215,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdateCourt(int id , string courtName, string courtType, string courtCondition, string courtWebCondition)
+        public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition)
         {
             CourtDto model = new CourtDto();
             try

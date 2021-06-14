@@ -9,11 +9,7 @@ namespace AtkTennisApp.Security
     public class AppIdentityUser:IdentityUser
     {
         public string FullName { get; set; }
-        public DateTime BirthDate { get; set; }
-
-
-      
-
+        public string BirthDate { get; set; }
 
     }
 }

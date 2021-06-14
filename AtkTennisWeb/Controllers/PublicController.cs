@@ -1,4 +1,6 @@
-﻿using Helpers.Dto.PartialViewDtos;
+﻿using Helpers.Dto;
+using Helpers.Dto.PartialViewDtos;
+using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,32 +14,46 @@ namespace AtkTennisWeb.Controllers
     {
         public IActionResult SignIn()
         {
+
+
             return View();
         }
+
+
+
+        public static string uid = "";
+        public static string ufullname = "";
 
         [HttpGet]
         public JsonResult SignInReq(string UserName, string Password)
         {
-            
+
             try
             {
                 var url = Mutuals.AppUrl + "Public/SignIn?Username=" + UserName + "&Password=" + Password;
+
                 var model = Helpers.Serializers.DeserializeJson<Helpers.Dto.SignInDto>(Helpers.Request.Get(url));
 
-                if(model != null)
+                if (model != null)
                 {
                     if (model.UserName == null || model.Password == null)
+
                         return Json("false");
+
                     else
                     {
                         HttpContext.Session.SetString("UserName", model.UserName);
                         HttpContext.Session.SetString("UserId", model.custom_userid);
+                        HttpContext.Session.SetString("FullName", model.custom_name);
 
                         var name = HttpContext.Session.GetString("UserName");
                         var id = HttpContext.Session.GetString("UserId");
+                        var fullname = HttpContext.Session.GetString("FullName");
+
+                        uid = id;
+                        ufullname = fullname;
 
                     }
-                         
                 }
                 else
                 {
@@ -48,10 +64,8 @@ namespace AtkTennisWeb.Controllers
             {
                 return Json("false");
             }
-                            
+
             return Json("true");
-
-
 
         }
 
@@ -63,6 +77,8 @@ namespace AtkTennisWeb.Controllers
             {
                 var getResult = Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes");
                 model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(getResult);
+                model.u_id = uid;
+                model.u_fullname = ufullname;
 
                 if (model == null)
 
@@ -74,6 +90,69 @@ namespace AtkTennisWeb.Controllers
             }
 
             return View(model);
+        }
+
+        public JsonResult GetResTime(string courtInf, string dateInf, int timeMin)
+        {
+            List<court_reserved> model = new List<court_reserved>();
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<List<court_reserved>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResTime?courtInf=" + courtInf + "&dateInf=" + dateInf + "&timeMin=" + timeMin));
+
+                if (model == null)
+
+
+                {
+                    return Json(false);
+                }
+
+
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            return Json(model);
+
+
+        }
+
+        public JsonResult NewReservation(ReservationDto res)
+        {
+            var model = new ReservationViewDto();
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent));
+
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            if (model == null)
+            {
+                return Json(false);
+            }
+
+            return Json(true);
+
+        }
+
+
+
+
+
+
+
+        public class court_reserved
+        {
+            public int timeId { get; set; }
+            public string start { get; set; }
+            public bool isTaken { get; set; }
         }
     }
 }

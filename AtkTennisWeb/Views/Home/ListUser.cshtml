@@ -1,0 +1,179 @@
+﻿@model Helpers.Dto.PartialViewDtos.IdentityPartialViewDto;
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kullanıcılar</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kullanıcı Listeleri </h3>
+                            </div>                         
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Kullanıcı Adı </th>
+                                        <th>E-Mail</th>
+                                        <th>Telefon Numarası</th>
+                                        <th>Doğum Tarihi</th>
+                                        <th>Id</th>
+                                   
+
+                                        <th>İşlemler</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.AppIdentityUsers)
+                                    {
+                                        <tr style="text-align:center" id="">
+                                            <td>@item.FullName</td>       
+                                            <td>@item.UserName</td>
+                                            <td>@item.Email</td>
+                                            <td>@item.PhoneNumber</td>
+                                            <td>@item.BirthDate</td>
+                                            <td>@item.Id</td>
+                                            
+                                           
+               
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item.Id" onclick="">Güncelle</button>
+                                                <button class="btn btn-outline-danger" id="@item.Id" onclick="openDeleteUserModal(this.id) ">Sil</button>
+                                            </td>
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="openDeleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deleteUser(this.id)">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": [/*"copy", "csv", "excel",*/ "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
+    function openDeleteUserModal(id) {
+
+        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#openDeleteUserModal").modal("toggle");
+
+    }
+
+    function deleteUser(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../Home/DeleteUser',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+
+                    $("#openDeleteUserModal").modal("toggle");
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Kullanıcı başarıyla silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "ListUser"
+                            }
+                        }
+                    });
+
+
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Bir Hata Oluştu.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+</script>

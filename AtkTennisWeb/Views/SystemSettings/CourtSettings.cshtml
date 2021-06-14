@@ -30,7 +30,7 @@
                                 <h3>Kort İşlemleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>                 
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
                             </div>
                         </div>
 
@@ -54,8 +54,22 @@
                                         <tr style="text-align:center" id="">
                                             <td>@item.CourtName</td>
                                             <td>@item.CourtType</td>
-                                            <td>@item.CourtConditions</td>
-                                            <td>@item.CourtWebConditions</td>
+                                            @if (item.CourtWebConditions == 1)
+                                            {
+                                                <td>Web Aktif  </td>
+                                            }
+                                            else
+                                            {
+                                                <td>Web Pasif  </td>
+                                            }
+                                            @if (item.CourtConditions == 1)
+                                            {
+                                                <td>Aktif  </td>
+                                            }
+                                            else
+                                            {
+                                                <td>Web Pasif  </td>
+                                            }
 
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)">Güncelle</button>
@@ -78,7 +92,7 @@
                                 <h3>Kort Ücret Tarifesi</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice">Tarife Ekle</button>                              
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice">Tarife Ekle</button>
                             </div>
                         </div>
 
@@ -151,12 +165,28 @@
 
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Kort Durumu:</label>
-                        <input type="text" class="form-control" id="courtCondition">
+                        <div class="input-group">
+                            <select id="AddcourtCondition" class="form-control">
+                                <option disabled="disabled" selected="selected">Durumu</option>
+
+                                <option value="1"> Aktif</option>
+                                <option value="0"> Pasif</option>
+
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Kort Web Durumu:</label>
-                        <input type="text" class="form-control" id="courtWebCondition">
+                        <div class="input-group">
+                            <select id="AddcourtWebCondition" class="form-control">
+                                <option disabled="disabled" selected="selected">Durumu</option>
+
+                                <option value="1"> Web Aktif</option>
+                                <option value="0"> Web Pasif</option>
+
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -197,19 +227,42 @@
                     </div>
                 </div>
 
-                <div class="roww roww-space">
-                    <div class="coll-2">
-                        <div class="input--group">
+                <div class="row roww-space">
+
+                    <div class="col-md-6">
+                        <div class="input-group">
                             <label class="label">Durumu</label>
-                            <input type="text" id="condition" class="input--style-4">
+
+                            <div class="input-group">
+                                <select id="courtCondition" class="form-control">
+                                    <option disabled="disabled" selected="selected">Durumu</option>
+
+                                    <option value="1"> Aktif</option>
+                                    <option value="0"> Pasif</option>
+
+                                </select>
+                            </div>
+
                         </div>
                     </div>
-                    <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Web Durumu</label>
-                            <input type="text" id="webcondition" class="input--style-4">
+
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <label class="label">Durumu</label>
+
+                            <div class="input-group">
+                                <select id="courtWebCondition" class="form-control">
+                                    <option disabled="disabled" selected="selected">Durumu</option>
+
+                                    <option value="1">Web Aktif</option>
+                                    <option value="0">Web Pasif</option>
+
+                                </select>
+                            </div>
+
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -388,7 +441,10 @@
 
 
     function saveAddCourt() {
-        if ($("#courtName").val() == "" || $("#courtType").val() == "" || $("#courtCondition").val() == "" || $("#courtWebCondition").val() == "") {
+
+
+
+        if ($("#courtName").val() == "" || $("#courtType").val() == "" || $("#AddcourtCondition option:selected").val() == "" || $("#AddcourtWebCondition option:selected").val() == "") {
             $.confirm({
                 title: "Bilgilendirme",
                 content: "Lütfen Kort Bilgilerini Eksizsiz Doldurunuz.",
@@ -399,16 +455,22 @@
                 }
             });
         } else {
+
             $("#addCourt").modal("toggle");
+
+            var AddcourtCondition = $("#AddcourtCondition option:selected").val();
+            var AddcourtWebCondition = $("#AddcourtWebCondition option:selected").val();
+
             $.ajax({
                 type: "POST",
                 url: '../SystemSettings/AddNewCourt',
                 cache: false,
-                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType").val(), "courtCondition": $("#courtCondition").val(), "courtWebCondition": $("#courtWebCondition").val() },
+                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType").val(), AddcourtCondition, AddcourtWebCondition },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
+                    debugger;
 
                     if (res == true) {
 
@@ -463,8 +525,8 @@
 
                     $("#name").val(res.courtName);
                     $("#type").val(res.courtType);
-                    $("#condition").val(res.courtConditions);
-                    $("#webcondition").val(res.courtWebConditions);
+                    $("#courtCondition option:selected").text(res.courtConditions);
+                    $("#courtWebCondition option:selected").text(res.courtWebConditions);
                     $("#updateModel button:nth-of-type(2)").attr("id", ID);
                     $('#updateCourtModalLong').modal('toggle');
                 }
@@ -491,11 +553,14 @@
 
     function updateCourt(id) {
 
+        var courtCondition = $("#courtCondition option:selected").val();
+        var courtWebCondition = $("#courtWebCondition option:selected").val();
+
         $.ajax({
             type: "POST",
             url: '../SystemSettings/UpdateCourt',
             cache: false,
-            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type").val(), "courtCondition": $("#condition").val(), "courtWebCondition": $("#webcondition").val() },
+            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type").val(), courtCondition, courtWebCondition },
             dataType: "json",
             async: true,
             success: function (res) {

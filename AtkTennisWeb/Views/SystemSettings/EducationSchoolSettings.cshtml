@@ -92,6 +92,7 @@
 
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.SchoolLevelId" onclick="openUpdateschoolLevel(this.id)">Güncelle</button>
+                                                @*<button class="btn btn-outline-danger" id="@item.SchoolLevelId" onclick="deleteOpenModalLevel(this.id)">Sil</button>*@
                                             </td>
                                         </tr>
                                     }
@@ -596,7 +597,6 @@
             async: true,
             success: function (res) {
 
-                debugger;
 
                 if (res != null) {
 

@@ -1,6 +1,7 @@
 ﻿using AtkTennisWeb.Models;
 using AtkTennisWeb.Providers;
 using Helpers.Dto;
+using Helpers.Dto.PartialViewDtos;
 using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,8 +33,6 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
-
-
         public IActionResult NewRegister()
         {
 
@@ -54,8 +53,6 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
-
-
         public JsonResult Register(string name,string username, string phone, string password, string birthdate, string gender, string email, string role)
         {
             AppIdentityUserDto model = new AppIdentityUserDto();
@@ -72,6 +69,48 @@ namespace AtkTennisWeb.Controllers
             }
 
             return Json(model);
+
+
+        }
+
+        public IActionResult ListUser()
+        {
+
+            IdentityPartialViewDto model = new IdentityPartialViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetUser"));
+
+                if (model == null)
+
+                    model = new IdentityPartialViewDto();
+            }
+            catch (Exception)
+            {
+                model = new IdentityPartialViewDto();
+            }
+            return View(model);
+        }
+
+        public JsonResult DeleteUser(string id)
+        {
+            AppIdentityUserDto model = new AppIdentityUserDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/DeleteUser?id=" + id));
+
+                if (model != null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new AppIdentityUserDto());
+            }
+
+            return Json(true);
+
         }
     }
 }

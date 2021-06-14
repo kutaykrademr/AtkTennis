@@ -89,8 +89,9 @@ namespace AtkTennisApp.Controllers
                 user.UserName = username;
                 user.Email = email;
                 user.FullName = name;
-                user.BirthDate = Convert.ToDateTime(birthdate);
+                user.BirthDate = birthdate;
                 user.PhoneNumber = phone;
+                
                 Role.Name = role;
 
                 var result = userManager.CreateAsync(user, password).Result;
@@ -116,6 +117,63 @@ namespace AtkTennisApp.Controllers
         }
 
 
+        [HttpGet("GetUser", Name = "GetUser")]
+        public IdentityPartialClass GetUser()
+
+        {
+            IdentityPartialClass model = new IdentityPartialClass();
+
+            try
+            {
+                model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
+                model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
+            }
+            catch (Exception ex)
+            {
+                model.AppIdentityRoles = new List<AppIdentityRole>();
+                model.AppIdentityUsers = new List<AppIdentityUser>();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("DeleteUser", Name = "DeleteUser")]
+        public async  Task<IActionResult> DeleteUser(string id)
+        {
+            AppIdentityUser model = new AppIdentityUser();
+
+            var user = await userManager.FindByIdAsync(id);
+
+            try
+            {
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                    return View("Not Found");
+                }
+                else
+                {
+
+                    var result = await userManager.DeleteAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ListUsers");
+                    }
+                }
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return View(user);
+        }
     }
 
 }

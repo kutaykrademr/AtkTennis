@@ -14,9 +14,12 @@ namespace AtkTennisApp.Models
         public string ResStartTime { get; set; }
         public string ResFinishTime { get; set; }
         public string ResEvent { get; set; }
+        public string ResTime { get; set; }
         public string UserId { get; set; }
- 
+        
+
         public Court Court { get; set; }
         
+
     }
 }

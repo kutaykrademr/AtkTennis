@@ -20,5 +20,6 @@ namespace AtkTennisApp.Models
         public bool RememberMe { get; set; }
 
         public string custom_userid { get; set; }
+        public string custom_name { get; set; }
     }
 }

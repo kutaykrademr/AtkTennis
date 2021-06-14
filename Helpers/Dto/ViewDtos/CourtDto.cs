@@ -10,8 +10,8 @@ namespace Helpers.Dto.ViewDtos
         public int CourtId { get; set; }
         public string CourtName { get; set; }
         public string CourtType { get; set; }
-        public string CourtConditions { get; set; }
-        public string CourtWebConditions { get; set; }
+        public int CourtConditions { get; set; }
+        public int CourtWebConditions { get; set; }
 
     }
 }
