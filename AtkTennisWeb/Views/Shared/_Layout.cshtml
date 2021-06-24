@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +36,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 
-
+@{
+    var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -188,7 +192,7 @@
                         <img src="~/adminRoot/images/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block"></a>
+                        <a id="@userId" onclick="changeCurrentPassModal(this.id)" href="#" class="d-block">@fullname <i style="margin-left:30px" class="fas fa-user-cog"></i></a>
                     </div>
                 </div>
 
@@ -210,7 +214,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
-                            <a href="~/Home/Index" class="nav-link active">
+                            <a style="background-color:#dc3545" href="~/Home/Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Ana Menü
@@ -219,7 +223,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item menu-is-opening menu-open">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-user-circle"></i>
                                 <p>
@@ -244,7 +248,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="~/Home/NewRegister" class="nav-link">
+                                    <a href="" class="nav-link">
                                         <i class="fas fa-th nav-icon"></i>
                                         <p>Yeni Öğrenci Kayıt</p>
                                     </a>
@@ -252,7 +256,7 @@
 
 
                                 <li class="nav-item">
-                                    <a href="~/Home/ListUser" class="nav-link">
+                                    <a href="" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Öğrenci Listeleri</p>
                                     </a>
@@ -261,7 +265,7 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item  menu-is-opening menu-open">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-bell"></i>
                                 <p>
@@ -272,26 +276,45 @@
                             </a>
 
                             <ul class="nav nav-treeview">
-                                @*<li class="nav-item">
-                                        <a href="~/Admin/ReservationTable" class="nav-link">
-                                            <i class="fas fa-table nav-icon"></i>
-                                            <p>Rezervasyon Tablosu</p>
-                                        </a>
-                                    </li>*@
+
                                 <li class="nav-item">
                                     <a href="~/Public/Reservation" class="nav-link">
                                         <i class="fas fa-calendar-check nav-icon"></i>
                                         <p>Rezervasyon Yap</p>
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-table nav-icon"></i>
+                                        <p>Rezervasyon Listem</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-table nav-icon"></i>
+                                        <p>Rezervasyon İptali</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-table nav-icon"></i>
+                                        <p>Üyelik Aidatlarım</p>
+                                    </a>
+                                </li>
+
+
+
                             </ul>
                         </li>
-                        
-                    
 
-                        @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings )
+
+
+                        @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
                         {
-                            <li class="nav-item">
+                            <li class="nav-item ">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-cog"></i>
                                     <p>
@@ -420,6 +443,61 @@
             @*</main>*@
         </div>
 
+        <div class="modal fade" id="updatesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body register-card-body">
+                                <p class="login-box-msg">Şifre Güncelle </p>
+
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control" id="currentPassword" placeholder="Mevcut Şifre" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control" id="newPassword" placeholder="Yeni Şifre" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control" id="checkPassword" placeholder="Yeni Şifre Tekrarı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer" id="updateModels">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                        <button type="button" class="btn btn-primary" onclick="updateCurrentUserPass(this.id)">Güncelle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -434,17 +512,93 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button)
 
-        function logout() {
 
 
+        
+        function changeCurrentPassModal(id) {
+
+            $("#updateModels button:nth-of-type(2)").attr("id", id);
+            $('#updatesModal').modal('toggle');
+           
+        } 
+
+        function updateCurrentUserPass(id) {
+
+            var currentPass = $("#currentPassword").val();
+            var newPass = $("#newPassword").val();
+            var newPassCheck = $("#checkPassword").val();
+
+            debugger;
+
+            if (newPass == newPassCheck)
+            {
+
+                try {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '../Public/ChangeCurrentUserPass',
+                        cache: false,
+                        data: { "id": id, "currentPass": currentPass, "newPass": newPass, "newPassCheck": newPassCheck },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+                            debugger;
+
+                            if (res == true) {
+
+                                $.confirm({
+                                    title: "Bilgilendirme",
+                                    content: "Başarıyla Güncellendi.",
+                                    buttons: {
+                                        TAMAM: function () {
 
 
-            window.location.href = "../Home/Index";
+                                        }
+                                    }
+                                });
+                            }
+
+                            else {
+                                $.confirm({
+                                    title: "Uyarı",
+                                    content: "Şifre Kuralları",
+                                    buttons: {
+                                        TAMAM: function () {
 
 
+                                        }
+                                    }
+                                });
+                            }
+
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                } catch (e) {
+                    console.log(e.message);
+                }
+            }
+
+            else {
+                $.confirm({
+                    title: "Uyarı",
+                    content: "Şifreler Uyumsuz",
+                    buttons: {
+                        TAMAM: function () {
 
 
-        }
+                        }
+                    }
+                });
+            }
+        } 
+        
+            
     </script>
 
 

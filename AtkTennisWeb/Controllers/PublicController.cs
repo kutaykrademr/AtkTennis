@@ -130,7 +130,26 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult ChangeCurrentUserPass(string id , string currentPass , string newPass )
+        {
+            MemberListDto model = new MemberListDto();
 
+            try
+
+            {
+               model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass ));
+
+                
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            return Json(true);
+
+
+        }
 
 
 

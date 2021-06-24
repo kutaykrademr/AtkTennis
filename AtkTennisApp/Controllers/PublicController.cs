@@ -328,6 +328,41 @@ namespace AtkTennisApp.Controllers
 
                 return Json("false");
         }
+
+        [HttpGet("ChangeCurrentUserPass", Name = "ChangeCurrentUserPass")]
+        public async Task<JsonResult> ChangeCurrentUserPass(string id, string currentPass, string newPass)
+
+        {
+            AppIdentityUser model2 = new AppIdentityUser();
+            MemberList model = new MemberList();
+
+            try
+            {
+                model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
+                var user = await userManager.FindByIdAsync(id);
+                var res = await userManager.ChangePasswordAsync(user, currentPass, newPass);
+                if (res.Succeeded == false)
+                {
+                    return Json(false);
+                }
+                else
+                {
+                    model.Password = newPass;
+                    db.Update(model);
+                    db.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new MemberList();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(true);
+
+        }
     }
 
     public class court_reserve
