@@ -22,6 +22,9 @@ namespace AtkTennisApp.Mapping
             CreateMap<UserLog, UserLogsDto>();
             CreateMap<UserLogsDto, UserLog>();
 
+            CreateMap<UserSettings, Helpers.Dto.ViewDtos.UserSettingsDto>();
+            CreateMap<Helpers.Dto.ViewDtos.UserSettingsDto, UserSettings>();
+
         }
     }
 }

@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AtkTennisApp.Models;
+using AtkTennis.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace AtkTennisApp.Controllers
 {
@@ -27,6 +30,8 @@ namespace AtkTennisApp.Controllers
             this.roleManager = roleManager;
             this.signInManager = signInManager;
         }
+
+        Context db = new Context();
 
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelDto GetHome()
@@ -71,8 +76,9 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string name, string username, string phone, string password, string birthdate, string gender, string email, string role)
+        public AppIdentityUser NewRegister(string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
         {
+            MemberList model2 = new MemberList();
 
             var Role = new AppIdentityRole();
             var user = new AppIdentityUser();
@@ -91,15 +97,45 @@ namespace AtkTennisApp.Controllers
                 user.FullName = name;
                 user.BirthDate = birthdate;
                 user.PhoneNumber = phone;
-                
                 Role.Name = role;
 
                 var result = userManager.CreateAsync(user, password).Result;
+               
+                var id = user.Id;
+
+                model2.UserId = id;
+                model2.FullName = name;
+                model2.Gender = gender;
+                model2.UserName = username;
+                model2.StartDate = startDate;
+                model2.FinishDate = finishDate;
+                model2.Role = role;
+                model2.Condition = condition;
+                model2.IdentityNumber = identificationNumber;
+                model2.WebReservation = webReservation;
+                model2.Phone = phone;
+                model2.PhoneExp = phoneExp;
+                model2.Phone2 = phone2;
+                model2.Phone2Exp = phone2Exp;
+                model2.Email = email;
+                model2.EmailExp = emailExp;
+                model2.BirthDate = birthdate;
+                model2.BirthPlace = birthPlace;
+                model2.MotherName = motherName;
+                model2.FatherName = fatherName;
+                model2.City = city;
+                model2.District = district;
+                model2.Job = job;
+                model2.Note = note;
+                model2.Password = password;
+
+                db.Add(model2);
+                db.SaveChanges();
+                
 
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, role).Wait();
-
                 }
                 else
                 {
@@ -116,7 +152,6 @@ namespace AtkTennisApp.Controllers
             return user;
         }
 
-
         [HttpGet("GetUser", Name = "GetUser")]
         public IdentityPartialClass GetUser()
 
@@ -127,6 +162,8 @@ namespace AtkTennisApp.Controllers
             {
                 model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
                 model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
+                model.memberLists = db.memberLists.ToList();
+
             }
             catch (Exception ex)
             {
@@ -139,6 +176,110 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
+        public async Task<JsonResult> UpdateMemberList(string id,  string checkpass ,string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        {
+            AppIdentityUser model = new AppIdentityUser();
+            MemberList model2 = new MemberList();
+
+
+            try
+            {
+               
+
+                model = await userManager.FindByIdAsync(id);
+
+                model2 = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
+                
+
+                if (model != null)
+                {
+                    model.UserName = username;
+                    model.Email = email;
+                    model.FullName = name;
+                    model.BirthDate = birthdate;
+                    model.PhoneNumber = phone;
+                    
+                }
+
+                
+                model2.BirthDate = birthdate;
+                model2.BirthPlace = birthPlace;
+                model2.City = city;
+                model2.Condition = condition;
+                model2.District = district;
+                model2.Email = email;
+                model2.EmailExp = emailExp;
+                model2.FatherName = fatherName;
+                model2.FinishDate = finishDate;
+                model2.FullName = name;
+                model2.Gender = gender;
+                model2.IdentityNumber = identificationNumber;
+                model2.Job = job;
+                model2.MotherName = motherName;
+                model2.Note = note;
+                model2.Password = password;
+                model2.Phone = phone;
+                model2.Phone2 = phone2;
+                model2.Phone2Exp = phone2Exp;
+                model2.PhoneExp = phoneExp;
+                model2.StartDate = startDate;
+                model2.UserName = username;
+                model2.WebReservation = webReservation;
+                model2.Role = role;
+                
+
+
+                var user = await userManager.FindByIdAsync(id);      
+                var role_to_remove = await userManager.GetRolesAsync(user);
+                var result = await userManager.RemoveFromRoleAsync(user, role_to_remove[0]);
+
+                var newRole = await userManager.AddToRoleAsync(user, role);
+
+                if (model2.Password != checkpass)
+                {
+                    var res = await userManager.ChangePasswordAsync(user, checkpass, password);
+                    if (res.Succeeded == false)
+                    {
+                        return Json(false);
+                    }
+                    await signInManager.RefreshSignInAsync(user);
+                }
+
+                var result2 = userManager.UpdateAsync(model).Result;
+                db.Update(model2);
+                db.SaveChanges();
+
+              
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("GetMemberListInf", Name = "GetMemberListInf")]
+        public async Task<JsonResult> GetMemberListInf(string id)
+
+        {
+            MemberList model = new MemberList();
+
+            try
+            {
+                model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                model = new MemberList();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
+        
         [HttpGet("DeleteUser", Name = "DeleteUser")]
         public async  Task<IActionResult> DeleteUser(string id)
         {

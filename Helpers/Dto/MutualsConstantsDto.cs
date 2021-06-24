@@ -18,5 +18,6 @@ namespace Helpers.Dto
         public string PhotoUrl { get; set; }
         public string CompanyName { get; set; }
         public DateTime ExpirationDate { get; set; }
+        public List<Dto.ViewDtos.UserSettingsDto> UserSettingsList { get; set; }
     }
 }

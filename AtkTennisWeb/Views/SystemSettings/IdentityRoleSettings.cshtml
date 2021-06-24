@@ -40,7 +40,7 @@
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Roller </th>
-                                        <th>Güncelle/Sil</th>
+                                        <th>Güncelle</th>
                                     </tr>
                                 </thead>
 
@@ -48,7 +48,7 @@
                                     @for (int i = 0; i < Model.appIdentityRoles.Count; i++)
                                     {
                                         <tr style="text-align:center" id="">
-                                            <td>@Model.appIdentityRoles[i].NormalizedName</td>
+                                            <td>@Model.appIdentityRoles[i].Name</td>
                                             <td>
                                                 <button class="btn btn-warning" id="@Model.appIdentityRoles[i].Id" onclick="openUpdateRoleModal(this.id)">Güncelle</button>
                                                 <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteOpenModal(this.id)">Sil</button>
@@ -151,7 +151,7 @@
                                         <td>Sistem</td>
                                         @for (int i = 0; i < Model.userSettings.Count; i++)
                                         {
-                                            if (Model.userSettings[i].System == true)
+                                            if (Model.userSettings[i].SystemSettings == true)
                                             {
                                                 <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
                                             }
@@ -430,7 +430,7 @@
                 async: true,
                 success: function (res) {
 
-              
+
 
                     if (res == true) {
 

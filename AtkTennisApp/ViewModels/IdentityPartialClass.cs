@@ -1,4 +1,5 @@
 ﻿
+using AtkTennisApp.Models;
 using AtkTennisApp.Security;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace AtkTennisApp.ViewModels
     {
         public List<AppIdentityUser> AppIdentityUsers { get; set; } = new List<AppIdentityUser>();
         public List<AppIdentityRole> AppIdentityRoles { get; set; } = new List<AppIdentityRole>();
+        public List<MemberList> memberLists { get; set; } = new List<MemberList>();
 
     }
 }

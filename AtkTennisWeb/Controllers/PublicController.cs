@@ -19,11 +19,6 @@ namespace AtkTennisWeb.Controllers
             return View();
         }
 
-
-
-        public static string uid = "";
-        public static string ufullname = "";
-
         [HttpGet]
         public JsonResult SignInReq(string UserName, string Password)
         {
@@ -45,14 +40,9 @@ namespace AtkTennisWeb.Controllers
                         HttpContext.Session.SetString("UserName", model.UserName);
                         HttpContext.Session.SetString("UserId", model.custom_userid);
                         HttpContext.Session.SetString("FullName", model.custom_name);
-
-                        var name = HttpContext.Session.GetString("UserName");
-                        var id = HttpContext.Session.GetString("UserId");
-                        var fullname = HttpContext.Session.GetString("FullName");
-
-                        uid = id;
-                        ufullname = fullname;
-
+                        HttpContext.Session.SetString("Role", model.custom_role);
+                        HttpContext.Session.SetString("RoleId", model.custom_roleId);
+          
                     }
                 }
                 else
@@ -77,8 +67,6 @@ namespace AtkTennisWeb.Controllers
             {
                 var getResult = Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes");
                 model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(getResult);
-                model.u_id = uid;
-                model.u_fullname = ufullname;
 
                 if (model == null)
 

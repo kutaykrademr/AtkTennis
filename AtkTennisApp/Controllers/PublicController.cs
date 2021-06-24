@@ -55,11 +55,14 @@ namespace AtkTennisApp.Controllers
             model.CompanyName = MutualConstants.CompanyName;
             model.ExpirationDate = MutualConstants.ExpirationDate;
 
+
+            model.UserSettingsList = Mapping.AutoMapperBase._mapper.Map<List<Helpers.Dto.ViewDtos.UserSettingsDto>>(db.userSettings.ToList());
+
             return model;
         }
 
         [HttpGet("SignIn", Name = "SignIn")]
-        public SignIn SignIn(string UserName, string Password)
+        public async Task<SignIn>  SignIn(string UserName, string Password)
         {
 
             SignIn Model2 = new SignIn();
@@ -86,11 +89,20 @@ namespace AtkTennisApp.Controllers
                     return new SignIn();
                 }
 
+               
+
                 model.UserName = Model2.UserName;
                 model.Password = Model2.Password;
-
-                model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;
+                model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;         
                 model.custom_name = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).FullName;
+                
+
+                var user =  await userManager.FindByIdAsync(model.custom_userid);
+                var roles = await userManager.GetRolesAsync(user);
+                var roleID = await roleManager.FindByNameAsync(roles[0]);
+                model.custom_role = roles[0];
+                model.custom_roleId = roleID.Id;
+
             }
 
             return model;
@@ -106,8 +118,10 @@ namespace AtkTennisApp.Controllers
             {
                 model.resTimes = db.resTimes.ToList();
                 model.courts = db.courts.ToList();
+                model.courtPriceLists = db.courtPriceLists.ToList();
                 model.reservations = db.reservations.ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
+                model.memberLists = db.memberLists.ToList();
                       
             }
             catch (Exception ex)
@@ -124,11 +138,19 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetResTime", Name = "GetResTime")]
         public JsonResult GetResTime(string courtInf, string dateInf , int timeMin)
         {
+            if (courtInf == "Kort Seçiniz")
+            {
+                return Json("false");
+            }
+
             if (timeMin == 30)
             {
                 var court = db.courts.Where(x => x.CourtName == courtInf).FirstOrDefault();
+
                 var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf).ToList();
                 var day_routine = db.resTimes.Where(x => x.ResTimes30 == timeMin).ToList();
+
+
 
                 List<court_reserve> daily_reservations = new List<court_reserve>();
 
@@ -245,8 +267,7 @@ namespace AtkTennisApp.Controllers
 
                 return Json(daily_reservations);
             }
-
-           
+      
         }
 
         [HttpGet("NewReservation", Name = "NewReservation")]

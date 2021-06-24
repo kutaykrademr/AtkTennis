@@ -1,10 +1,7 @@
 ﻿@model Helpers.Dto.PartialViewDtos.ReservationViewDto;
 
-
-
-
-
-
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 <script>
     document.getElementsByTagName("html")[0].className += " js";
@@ -14,103 +11,141 @@
 <link href="~/workSch/style.css" rel="stylesheet" />
 
 @{
-    var userId = Model.u_id;
+    var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
-<section class="content">
-    <div class="content-wrapper">
-        <div class="content-header">
-            <h1 class="m-0">Reservation</h1>
-        </div>
-        <div>
-            <button type="button" class="btn btn-primary courtbutton" onclick="openResModal()">
-                Yeni Rezervasyon
-            </button>
-        </div>
 
-        <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
-            <!-- .cd-schedule__timeline -->
+<div class="content-wrapper">
 
-
-
-            <div class="cd-schedule__timeline">
-                <ul>
-                    @for (int i = 0; i < Model.resTimes.Count; i += 4)
-                    {
-                        <li><span>@Model.resTimes[i].ResTimes</span></li>
-
-
-                    }
-
-
-                </ul>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Rezervasyon Genel Durum</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <div class="card-header d-flex justify-content-between">
+                            @{
+                                var a = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault().WebReservation;
+                            }
+                            @if (a == "1")
+                            {
+                                <div class="card-title">
+                                    <button type="button" class="btn btn-primary courtbutton" onclick="openResModal()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card-title">
+                                    <button type="button" class="btn btn-primary courtbutton" onclick="WebReservation()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
+                                </div>
+                            }
 
 
 
-            <div class="cd-schedule__events">
-                <ul>
+                            <div>
+                                <nav aria-label="Page navigation example">
+                                    <ul id="getResTable" class="pagination">
+                                        <li class="page-item"><a style="color:black" href="" class="page-link" onclick="getRes()" value="@DateTime.Now">Bugün</a></li>
+                                        <li class="page-item"><a style="color:black" href="" class="page-link" onclick="getRes()" value="@DateTime.Now.AddDays(1)">Yarın</a></li>
+                                        <li class="page-item"><input class="form-control" type="date" value="@DateTime.Now" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
+                                        <li class="page-item"><a style="color:black; background-color:#f9f9f9" href="" class="page-link"><i class="fas fa-chevron-left"></i></a></li>
+                                        <li class="page-item"><a style="color:black; background-color:#f9f9f9" href="" class="page-link"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
 
-                    @foreach (var item in Model.courts)
-                    {
-                        <li class="cd-schedule__group">
-                            <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
+                        <div class="card-body">
+                            <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule" style="width: calc(100% * var(--component-padding));">
 
-                            <ul>
-                                @*@foreach (var item2 in Model.reservations)
-                                    {*@
-
-                                @{
-                                    var a = Model.reservations.Where(x => x.ResDate == "2021-06-13").ToList();
-
-                                    foreach (var item2 in a)
-                                    {
-                                        if (item.CourtId == item2.Court.CourtId)
+                                <div class="cd-schedule__timeline">
+                                    <ul>
+                                        @for (int i = 0; i < Model.resTimes.Count; i += 4)
                                         {
-                                            <li class="cd-schedule__event ">
+                                            <li><span>@Model.resTimes[i].ResTimes</span></li>
 
-                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-content="event-abs-circuit" data-event="@item2.ResEvent" href="#0">
-                                                    <em class="cd-schedule__name">KK </em>
-                                                </a>
+                                        }
 
+                                    </ul>
+                                </div>
+
+
+
+
+                                <div class="cd-schedule__events">
+                                    <ul>
+                                        @foreach (var item in Model.courts)
+                                        {
+                                            <li class="cd-schedule__group">
+                                                <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
+
+                                                <ul>
+                                                    @foreach (var item2 in Model.reservations)
+                                                    {
+                                                        if (item.CourtId == item2.Court.CourtId)
+                                                        {
+                                                            <li class="cd-schedule__event ">
+
+                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-content="event-abs-circuit" data-event="@item2.ResEvent" href="#0">
+                                                                    <em class="cd-schedule__name">KK </em>
+                                                                </a>
+
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                </ul>
                                             </li>
                                         }
-                                    }
-                                }
+                                    </ul>
+                                </div>
 
+                                <div class="cd-schedule-modal">
 
-                                @*}*@
+                                    <header class="cd-schedule-modal__header">
+                                        <div class="cd-schedule-modal__content">
+                                            <span class="cd-schedule-modal__date"></span>
+                                            <h3 class="cd-schedule-modal__name"></h3>
+                                        </div>
 
-                            </ul>
-                        </li>
-                    }
-                </ul>
-            </div>
+                                        <div class="cd-schedule-modal__header-bg"></div>
+                                    </header>
 
+                                    <div class="cd-schedule-modal__body">
+                                        <div class="cd-schedule-modal__event-info"></div>
+                                        <div class="cd-schedule-modal__body-bg"></div>
+                                    </div>
 
+                                    <a href="#0" class="cd-schedule-modal__close text-replace">Close</a>
+                                </div>
 
-            <div class="cd-schedule-modal">
-                <header class="cd-schedule-modal__header">
-                    <div class="cd-schedule-modal__content">
-                        <span class="cd-schedule-modal__date"></span>
-                        <h3 class="cd-schedule-modal__name"></h3>
+                                <div class="cd-schedule__cover-layer"></div>
+
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="cd-schedule-modal__header-bg"></div>
-                </header>
-
-                <div class="cd-schedule-modal__body">
-                    <div class="cd-schedule-modal__event-info"></div>
-                    <div class="cd-schedule-modal__body-bg"></div>
                 </div>
-
-                <a href="#0" class="cd-schedule-modal__close text-replace">Close</a>
             </div>
-
-            <div class="cd-schedule__cover-layer"></div>
         </div>
-    </div>
-</section>
-
+    </section>
+</div>
 
 
 <!-- Button trigger modal -->
@@ -118,23 +153,25 @@
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-
-                Rezervasyon Yap
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header" style="background-color: #004e6c;">
+                <h4 style="margin:auto; color:white">Rezervasyon Bilgileri</h4>
             </div>
+
+
+
+
             <div class="modal-header">
-                Sn.@Model.u_fullname
+                <div class="col-sm-4">
+                    <h4>Sayın , @fullname</h4>
+                </div>
             </div>
+
             <div class="modal-header">
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <div class="form-group">
 
                         <select id="selectCourt" class="form-control">
-                            <option disabled="disabled" selected="selected" id="courtInf">Kort Seçiniz</option>
+                            <option disabled="disabled" selected="selected">Kort Seçiniz</option>
 
                             @foreach (var item in Model.courts)
                             {
@@ -149,7 +186,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <input class="form-control" type="date" value="@DateTime.Now" id="dateInf">
                 </div>
 
@@ -157,12 +194,12 @@
                     var resTimeMin = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Minimum Zaman Dilimi (Dakika)(15,30,60)").FirstOrDefault();
                 }
 
-                <div class="col-sm-2">
-                    <button type="button" class="btn btn-primary" id="resTimeMin" value="@resTimeMin.ReservationValue" onclick="getCourtTime()">Saat Ara</button>
+                <div>
+                    <button type="button" class="btn btn-primary" style="visibility:hidden" id="resTimeMin" value="@resTimeMin.ReservationValue" onclick="getCourtTime()">Saat Ara</button>
                 </div>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-header">
                 <div class="row" id="court_select">
                     <div id="ResModal" style="display: contents;">
 
@@ -170,8 +207,64 @@
                 </div>
             </div>
 
+
+            <div id="CourtandTime">
+
+            </div>
+
+
+
+            <div class="modal-header">
+                <div class="col-sm-6">
+                    <div class="form-group" style="text-align:center">
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Adı</th>
+                                    <th scope="col">Fiyatı</th>
+                                    <th scope="col">Seç</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item2 in Model.courtPriceLists)
+                                {
+                                    if (item2.Condition == "1")
+                                    {
+                                        <tr>
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice</td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    @{ if (item2.PriceType == "1")
+                                                        {
+                                                            <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="@item2.CourtPriceListId" checked="" disabled="">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input class="custom-control-input custom-control-input-danger" type="checkbox" id="@item2.CourtPriceListId">
+                                                        }
+                                                    }
+                                                    <label for="@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" value="" id="">
+                </div>
+
+            </div>
+
+
+
             <div style="visibility:hidden" class="modal-footer">
-                <textbox style="color:black; " id="userId">@Model.u_id</textbox>
+                <textbox style="color:black; " id="userId">@userId</textbox>
             </div>
 
             @{
@@ -179,6 +272,7 @@
                 var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
                 var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
                 var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
+
                 var startTime = start.ReservationValue;
                 var finishTime = finish.ReservationValue;
                 var resSetTime = resSettingsTime.ReservationValue;
@@ -201,16 +295,28 @@
 
     $(document).ready(function () {
 
-
         var now = new Date();
         var month = (now.getMonth() + 1);
         var day = now.getDate();
+
         if (month < 10)
             month = "0" + month;
         if (day < 10)
             day = "0" + day;
         var today = now.getFullYear() + '-' + month + '-' + day;
+
+
+        $('#dateInf').change(function () {
+            getCourtTime();
+        });
+
+        $('#selectCourt').change(function () {
+            getCourtTime();
+        });
+
         $('#dateInf').val(today);
+
+        $('#timeNow').val(today);
 
 
 
@@ -229,16 +335,73 @@
             "responsive": true,
         });
 
-
     });
 
+    function getRes() {
+
+
+    }
+
+
+    function openResModal() {
+
+        var resStartTime = $('#doRes').attr('start');
+        var resFinishTime = $('#doRes').attr('finish');
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
 
 
 
+        //if (resStartTime < time && resFinishTime > time) {
+
+        //    $('#rsvModal').modal('toggle');
+        //}
+
+        //else {
+
+        //    $.confirm({
+        //        title: "Uyarı",
+        //        content: "Rezervasyon Saatleri Dışındasınız. Rezervasyon Saatleri:" + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.",
+        //        buttons: {
+        //            TAMAM: function () {
+        //                window.location.href = "Reservation"
+        //            }
+        //        }
+        //    });
+        //}
+
+        $('#rsvModal').modal('toggle');
+    }
 
     function getCourtTime() {
 
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        var getday = dt.getDay();
+
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+
+        if ($("#dateInf").val() < today) {
+
+            $.confirm({
+                title: "Uyarı",
+                content: "Önceki Günlere Rezervasyon Yapamazsınız.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        }
+
         var courtInf = $("#selectCourt option:selected").text();
+        var date = $("#dateInf").val();
+
 
         $.ajax({
             type: "POST",
@@ -248,6 +411,8 @@
             dataType: "json",
             async: false,
             success: function (res) {
+
+
 
                 if (res == false) {
 
@@ -262,6 +427,37 @@
                     });
                 }
 
+
+                switch (getday) {
+                    case 0:
+                        day = "Pazar";
+                        break;
+                    case 1:
+                        day = "Pazartesi";
+                        break;
+                    case 2:
+                        day = "Salı";
+                        break;
+                    case 3:
+                        day = "Çarşamba";
+                        break;
+                    case 4:
+                        day = "Perşembe";
+                        break;
+                    case 5:
+                        day = "Cuma";
+                        break;
+                    case 6:
+                        day = "Cumartesi";
+                }
+
+
+                $("#CourtandTime").empty();
+                row = "";
+                row += '<div class="modal-header" style="background-color: #004e6c;">';
+                row += '<h4 style=" margin:auto; color:white">' + date + ' ' + ' - ' + ' ' + courtInf + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
+                row += '</div>';
+                $("#CourtandTime").append(row);
 
 
                 if (res.length > 0) {
@@ -280,7 +476,11 @@
 
                             if (res[i].isTaken == true)
 
-                                NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox"  checked disabled>';
+                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+
+                            else if (res[i].start <= time)
+
+                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
 
                             else
 
@@ -289,12 +489,9 @@
                             NewRow += '</div></div>';
 
 
-
                             $("#ResModal").append(NewRow);
 
                         }
-
-
                     }
 
                     else if (timeMin == "30") {
@@ -309,14 +506,16 @@
 
                             if (res[i].isTaken == true)
 
-                                NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox"  checked disabled>';
+                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
 
+                            else if (res[i].start < time)
+
+                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
                             else
 
                                 NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
                             NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label">' + res[i].start + '</label>';
                             NewRow += '</div></div>';
-
 
 
                             $("#ResModal").append(NewRow);
@@ -326,11 +525,7 @@
 
                     else if (timeMin == "15") {
 
-
-
                         $("#ResModal").empty();
-
-
 
                         for (var i = 0; i < res.length; i++) {
 
@@ -340,7 +535,11 @@
 
                             if (res[i].isTaken == true)
 
-                                NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox"  checked disabled>';
+                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+
+                            else if (res[i].start < time)
+
+                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
 
                             else
 
@@ -366,7 +565,6 @@
                                 }
                             }
                         });
-
                 }
             },
 
@@ -377,42 +575,9 @@
         });
     }
 
-
-    function openResModal() {
-
-
-
-        var resStartTime = $('#doRes').attr('start');
-        var resFinishTime = $('#doRes').attr('finish');
-        var dt = new Date();
-        var time = dt.getHours() + ":" + dt.getMinutes();
-
-
-
-        if (time < resStartTime || resFinishTime < time) {
-            $.confirm({
-                title: "Uyarı",
-                content: "Rezervasyon Saatleri Dışındasınız. Rezervasyon Saatleri:  ",
-                buttons: {
-                    TAMAM: function () {
-                        window.location.href = "Reservation"
-                    }
-                }
-            });
-        }
-
-        else {
-            $('#rsvModal').modal('toggle');
-        }
-
-
-    }
-
-
     function Approve() {
 
         var timeMin = $("#resTimeMin").val();
-
 
         // seçilen saatler
         var times = [];
@@ -420,117 +585,143 @@
             times.push(this.name);
         });
 
+        //CourtId
+        var id = $("#selectCourt option:selected").val();
 
         //rezervasyon saati
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
-        //CourtId
-        var id = $("#selectCourt option:selected").val();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
 
 
-        //bitiş tarihine 15,30,60 dk ekle
-        // Bir saatlik
+        if ($("#dateInf").val() < today) {
 
-        var resSetTime = $('#doRes').attr('setTime');
+            $.confirm({
+                title: "Uyarı",
+                content: "Önceki Günlere Rezervasyon Yapamazsınız.",
+                buttons: {
+                    TAMAM: function () {
 
-        if (resSetTime == 60) {
-            function addMinutes(time, minsToAdd) {
-                function D(J) { return (J < 10 ? '0' : '') + J; };
-                var piece = time.split(':');
-                var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
-
-                return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
-            }
-
-            if (timeMin == 15) {
-                var finishTime = times[3];
-                var resFinishTime = addMinutes(finishTime, '15');
-            }
-            else if (timeMin == 30) {
-                var finishTime = times[1];
-                var resFinishTime = addMinutes(finishTime, '30');
-            }
-            else {
-                var finishTime = times[0];
-                var resFinishTime = addMinutes(finishTime, '60');
-            }
-        }
-
-
-
-        var resobject = {
-
-            ResDate: '',
-            ResStartTime: '',
-            ResFinishTime: '',
-            ResEvent: '',
-            userId: '',
-            CourtId: '',
-            ResTime: '',
-        }
-
-        resobject.ResStartTime = times[0];
-        resobject.ResFinishTime = resFinishTime;
-
-        resobject.ResDate = $("#dateInf").val();
-        resobject.ResTime = time;
-        resobject.userId = $("#userId").text();
-        resobject.ResEvent = "event-1"
-        resobject.CourtId = id;
-
-
-
-
-        try {
-
-            $.ajax({
-                type: "POST",
-                url: '../Public/NewReservation',
-                cache: false,
-                data: resobject,
-                dataType: "json",
-                async: true,
-                success: function (res) {
-
-                    debugger;
-
-                    if (res == true) {
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti.",
-                            buttons: {
-                                TAMAM: function () {
-                                    window.location.href = "Reservation"
-                                }
-                            }
-                        });
                     }
-                    else
-                        $.confirm({
-                            title: "Uyarı",
-                            content: "Rezervasyon Kaydınız Onaylanmadı Lütfen Tekrar Deneyiniz.",
-                            buttons: {
-                                TAMAM: function () {
-                                    window.location.href = "Reservation"
-                                }
-                            }
-                        });
-
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
                 }
             });
-        } catch (e) {
-            console.log(e.message);
         }
 
+        else {
+
+
+
+            //bitiş tarihine 15,30,60 dk ekle
+            // Bir saatlik
+            var resSetTime = $('#doRes').attr('setTime');
+
+            if (resSetTime == 60) {
+                function addMinutes(time, minsToAdd) {
+                    function D(J) { return (J < 10 ? '0' : '') + J; };
+                    var piece = time.split(':');
+                    var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
+
+                    return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
+                }
+
+                if (timeMin == 15 && times.length < 5) {
+                    var finishTime = times[3];
+                    var resFinishTime = addMinutes(finishTime, '15');
+                }
+                else if (timeMin == 30 && times.length < 3) {
+                    var finishTime = times[1];
+                    var resFinishTime = addMinutes(finishTime, '30');
+                }
+                else if (timeMin == 60 && times.length < 2) {
+                    var finishTime = times[0];
+                    var resFinishTime = addMinutes(finishTime, '60');
+                }
+                else
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "En fazla 1 Saatlik Rezervasyon Yapabilirsiniz.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+            }
+
+            var resobject = {
+
+                ResDate: '',
+                ResStartTime: '',
+                ResFinishTime: '',
+                ResEvent: '',
+                userId: '',
+                CourtId: '',
+                ResTime: '',
+            }
+
+            resobject.ResStartTime = times[0];
+            resobject.ResFinishTime = resFinishTime;
+
+            resobject.ResDate = $("#dateInf").val();
+            resobject.ResTime = time;
+            resobject.userId = $("#userId").text();
+            resobject.ResEvent = "event-1"
+            resobject.CourtId = id;
+
+            try {
+
+                $.ajax({
+                    type: "POST",
+                    url: '../Public/NewReservation',
+                    cache: false,
+                    data: resobject,
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+
+                        if (res == true) {
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti.",
+                                buttons: {
+                                    TAMAM: function () {
+                                        window.location.href = "Reservation"
+                                    }
+                                }
+                            });
+                        }
+
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            } catch (e) {
+                console.log(e.message);
+            }
+        }
     }
 
+    function WebReservation() {
 
+        $.confirm({
+            title: "Uyarı",
+            content: "İnternet Üzerinden Rezervasyon Yetkiniz Bulunmamaktadır. İletişime Geçiniz.",
+            buttons: {
+                TAMAM: function () {
 
-
+                }
+            }
+        });
+    }
 
 </script>

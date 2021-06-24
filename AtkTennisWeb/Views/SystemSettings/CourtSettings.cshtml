@@ -40,8 +40,8 @@
                                     <tr style="text-align:center">
                                         <th>Adı </th>
                                         <th>Türü</th>
-                                        <th>Durumu</th>
                                         <th>Web Durumu</th>
+                                        <th>Durumu</th>
                                         <th>İşlemler</th>
 
 
@@ -54,6 +54,7 @@
                                         <tr style="text-align:center" id="">
                                             <td>@item.CourtName</td>
                                             <td>@item.CourtType</td>
+
                                             @if (item.CourtWebConditions == 1)
                                             {
                                                 <td>Web Aktif  </td>
@@ -62,13 +63,14 @@
                                             {
                                                 <td>Web Pasif  </td>
                                             }
+
                                             @if (item.CourtConditions == 1)
                                             {
                                                 <td>Aktif  </td>
                                             }
                                             else
                                             {
-                                                <td>Web Pasif  </td>
+                                                <td>Pasif </td>
                                             }
 
                                             <td>
@@ -114,19 +116,37 @@
                                     @foreach (var item2 in Model.courtPriceLists)
                                     {
 
-                                        <tr style="text-align:center">
-                                            <td>@item2.Name</td>
-                                            <td>@item2.CourtPrice</td>
-                                            <td>@item2.PriceType</td>
-                                            <td>@item2.RecipeType</td>
-                                            <td>@item2.Condition</td>
+                                    <tr style="text-align:center">
+                                        <td>@item2.Name</td>
+                                        <td>@item2.CourtPrice</td>
 
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)">Sil</button>
-                                            </td>
+                                        @{ if (@item2.PriceType == "1")
+                                            {
+                                                <td>Asıl Ücret</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Ek Ücret</td>
+                                            }
+                                        }
+                                        <td>@item2.RecipeType</td>
 
-                                        </tr>
+                                        @{ if (@item2.Condition == "1")
+                                            {
+                                                <td>Aktif</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Pasif</td>
+                                            }
+                                        }
+
+                                        <td>
+                                            <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)">Güncelle</button>
+                                            <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)">Sil</button>
+                                        </td>
+
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
@@ -248,11 +268,11 @@
 
                     <div class="col-md-6">
                         <div class="input-group">
-                            <label class="label">Durumu</label>
+                            <label class="label">Web Durumu</label>
 
                             <div class="input-group">
                                 <select id="courtWebCondition" class="form-control">
-                                    <option disabled="disabled" selected="selected">Durumu</option>
+                                    <option disabled="disabled" selected="selected"> Durumu</option>
 
                                     <option value="1">Web Aktif</option>
                                     <option value="0">Web Pasif</option>
@@ -303,10 +323,14 @@
 
                 <div class="roww roww-space">
                     <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Ücret Tipi</label>
-                            <input type="text" id="priceType" class="input--style-4">
-                        </div>
+                        <label class="label">Ücret Tipi</label>
+                        <select id="priceType" class="form-control">
+                            <option disabled="disabled" selected="selected">Ücret Tipi</option>
+
+                            <option value="1"> Asıl Ücret</option>
+                            <option value="0"> Ek Ücret</option>
+
+                        </select>
                     </div>
                     <div class="coll-2">
                         <div class="input--group">
@@ -318,10 +342,14 @@
 
                 <div class="roww roww-space">
                     <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Durumu</label>
-                            <input type="text" id="conditions" class="input--style-4">
-                        </div>
+                        <label class="label">Durumu</label>
+                        <select id="conditions" class="form-control">
+                            <option disabled="disabled" selected="selected">Durumu</option>
+
+                            <option value="1"> Aktif</option>
+                            <option value="0"> Pasif</option>
+
+                        </select>
                     </div>
 
                 </div>
@@ -409,7 +437,7 @@
             <div class="modal-body">
                 Silmek İstediğinize Emin Misiniz ?
             </div>
-            <div class="modal-footer" id="deleteOperationModel">
+            <div class="modal-footer" id="deleteOperateModel">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
                 <button type="button" class="btn btn-primary" onclick="deleteCourt(this.id)">Sil</button>
             </div>
@@ -470,7 +498,6 @@
                 async: true,
                 success: function (res) {
 
-                    debugger;
 
                     if (res == true) {
 
@@ -652,12 +679,10 @@
 
     function deleteOpenCourtModal(id) {
 
-        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#deleteOperateModel button:nth-of-type(2)").attr("id", id);
         $("#openDeleteCourtModal").modal("toggle");
 
     }
-
-
 
     function openUpdateCourtPriceModal(ID) {
         $.ajax({
@@ -675,9 +700,9 @@
 
                     $("#courtPriceName").val(res.name);
                     $("#price").val(res.courtPrice);
-                    $("#priceType").val(res.priceType);
+                    $("#priceType option:selected").text(res.priceType);
                     $("#recipeType").val(res.recipeType);
-                    $("#conditions").val(res.condition);
+                    $("#conditions option:selected").text(res.condition);
                     $("#updateCourtPriceModel button:nth-of-type(2)").attr("id", ID);
                     $('#updatePriceModalLong').modal('toggle');
                 }
@@ -704,11 +729,14 @@
 
     function updateCourtPriceList(id) {
 
+        var priceType = $("#priceType option:selected").val();
+        var condition = $("#conditions option:selected").val();
+
         $.ajax({
             type: "POST",
             url: '../SystemSettings/UpdateCourtPriceList',
             cache: false,
-            data: { "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), "priceType": $("#priceType").val(), "recipeType": $("#recipeType").val(), "condition": $("#conditions").val() },
+            data: { "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), priceType, "recipeType": $("#recipeType").val(), condition },
             dataType: "json",
             async: true,
             success: function (res) {

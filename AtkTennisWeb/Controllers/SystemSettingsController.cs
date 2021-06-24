@@ -41,8 +41,12 @@ namespace AtkTennisWeb.Controllers
                 model = Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteRole?id=" + id));
 
                 if (model == null)
-
                     return Json(false);
+                else
+                {
+                    if(model.Id == null)
+                        return Json(false);
+                }
             }
             catch (Exception)
             {

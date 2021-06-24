@@ -56,7 +56,7 @@ namespace AtkTennisApp.Controllers
                     Role2.RoleName = roleName;
                     Role2.Advisory = false;
                     Role2.Reservations = false;
-                    Role2.System = false;
+                    Role2.SystemSettings = false;
                     Role2.DebtandPayment = false;
 
                     db.Add(Role2);
@@ -80,6 +80,9 @@ namespace AtkTennisApp.Controllers
         {
 
             var role = await roleManager.FindByIdAsync(id);
+
+            
+
             UserSettings Role2 = new UserSettings();
             try
             {
@@ -92,13 +95,17 @@ namespace AtkTennisApp.Controllers
                 {
 
                     var result = await roleManager.DeleteAsync(role);
+
                     Role2 = db.userSettings.Where(x => x.RoleId == role.Id ).FirstOrDefault();
 
                     if (Role2.RoleId != null)
                     {
                         db.Remove(Role2);
                         db.SaveChanges();
-
+                    }
+                    else
+                    {
+                        return Json(new Helpers.Dto.AppIdentityRoleDto());
                     }
 
 
@@ -164,6 +171,11 @@ namespace AtkTennisApp.Controllers
 
             try
             {
+                UserSettings Role2 = new UserSettings();
+
+                var role = await roleManager.FindByIdAsync(id);
+
+                Role2 = db.userSettings.Where(x => x.RoleId == role.Id).FirstOrDefault();
 
                 model = await roleManager.FindByIdAsync(id);
 
@@ -174,6 +186,23 @@ namespace AtkTennisApp.Controllers
                 }
 
                 var result = await roleManager.UpdateAsync(model);
+               
+                Role2 = db.userSettings.Where(x => x.RoleId == role.Id).FirstOrDefault();
+
+                if (Role2.RoleId != null)
+                {
+                    Role2.RoleName = roleName;
+                    
+
+                    db.Update(Role2);
+                    db.SaveChanges();
+                }
+
+
+                if (result.Succeeded)
+                {
+                    return Json(role);
+                }
 
             }
             catch (Exception ex)
@@ -219,9 +248,9 @@ namespace AtkTennisApp.Controllers
                     UserSettings model2 = db.userSettings.SingleOrDefault(x => x.UserSettingsId == item);
 
                     if (activeAuth.Contains("System"))
-                        model2.System = true;
+                        model2.SystemSettings = true;
                     else
-                        model2.System = false;
+                        model2.SystemSettings = false;
                     if (activeAuth.Contains("Advisory"))
                         model2.Advisory = true;
                     else

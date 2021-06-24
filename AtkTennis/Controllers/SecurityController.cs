@@ -205,6 +205,7 @@ namespace AtkTennis.Controllers
 
         {
             var user = await userManager.FindByIdAsync(id);
+            var roles = await userManager.GetRolesAsync(user);
 
             if (user == null)
             {
@@ -227,6 +228,9 @@ namespace AtkTennis.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateUser(string id, string userName, string fullName, string phoneNumber, string email)
         {
+            var user = await userManager.FindByIdAsync(id);
+            var roles = await userManager.GetRolesAsync(user);
+
             AppIdentityUser model = new AppIdentityUser();
 
             try

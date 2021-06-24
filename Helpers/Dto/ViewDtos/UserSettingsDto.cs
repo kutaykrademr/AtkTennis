@@ -12,7 +12,7 @@ namespace Helpers.Dto.ViewDtos
         public bool Advisory { get; set; }
         public bool Reservations { get; set; }
         public bool DebtandPayment { get; set; }
-        public bool System { get; set; }
+        public bool SystemSettings { get; set; }
         public string RoleId { get; set; }
     }
 }

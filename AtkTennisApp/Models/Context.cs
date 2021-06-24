@@ -40,8 +40,8 @@ namespace AtkTennis.Models
         public DbSet<PrivateLesson> privateLessons { get; set; }
 
         public DbSet<ReservationSettings> reservationSettings { get; set; }
-        
 
+        public DbSet<MemberList> memberLists { get; set; }
 
 
     }

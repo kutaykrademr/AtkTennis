@@ -1,129 +1,16 @@
 ﻿@model List<Helpers.Dto.AppIdentityRoleDto>
-@*<section class="content">
-        <div class="content-wrapper">
-            <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
-                <div class="wrapper wrapper--w680">
-                    <div class="card card-4">
-                        <div class="card-body">
-                            <h2 class="title">Personel Kayıt</h2>
-                            <div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Ad-Soyad</label>
-                                            <input type="text" id="name" placeholder="Full-Name" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Giriş Yapacağı Kullanıcı Adı</label>
-                                            <input type="text" id="username" placeholder="UserName" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Birthday</label>
-                                            <div class="input--group-icon">
-                                                <input id="birthdate" placeholder="BirthDate (exp: gg.aa.yyyy)" class="input--style-4 js-datepicker" autocomplete="new-password">
-                                                <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Gender</label>
-                                            <div id="gender" class="p-t-10">
-                                                <label class="radio-container m-r-45">
-                                                    Male
-                                                    <input type="radio" checked="checked" name="gender" value="Male">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                                <label class="radio-container">
-                                                    Female
-                                                    <input type="radio" name="gender" value="Female">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Email</label>
-                                            <input type="email" id="email" placeholder="Email" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Phone Number</label>
-                                            <input type="text" class="input--style-4" id="phone" placeholder="Phone" autocomplete="new-password">
 
-
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                                </div>
-                                                <input type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="roww roww-space">
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Password</label>
-                                            <input type="password" id="password" placeholder="Password" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-                                    <div class="coll-2">
-                                        <div class="input--group">
-                                            <label class="label">Confirm Password</label>
-                                            <input type="password" id="checkpassword" placeholder="Confirm-Password" class="input--style-4" autocomplete="new-password">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="input--group">
-                                    <label class="label">Role</label>
-                                    <div class="rs-select2 js-select-simple select--no-search">
-                                        <select id="RegistersRole">
-                                            <option disabled="disabled" selected="selected">Choose option</option>
-
-                                            @for (int i = 0; i < Model.Count(); i++)
-                                            {
-                                                <option>@Model[i].NormalizedName</option>
-                                            }
-
-                                        </select>
-                                        <div class="select-dropdown"></div>
-                                    </div>
-                                </div>
-
-                                <div class="p-t-15">
-                                    <button class="btnn btn--radius-2 btn--blue" onclick="register()">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>*@
 
 <div class="content-wrapper">
     <div class="hold-transition register-page">
         <div class="register-box">
-            <div class="card" style="margin-left:-20px; margin-right:-20px">
+            <div class="card" style="margin-left:-300px; margin-right:-300px">
                 <div class="card-body register-card-body">
                     <p class="login-box-msg">Kayıt Formu </p>
-
                     <div>
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Adı Soyadı" autocomplete="new-password">
+                                <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -131,7 +18,7 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Kullanıcı Adı" autocomplete="new-password">
+                                <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -141,13 +28,13 @@
                         </div>
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input placeholder="Başlangıç Tarihi" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
                             </div>
                             <div class="input-group mb-3 col-md-6">
-                                <input placeholder="Bitiş Tarihi" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                <input placeholder="Bitiş Tarihi" type="text" class="form-control" id="finishDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
@@ -155,7 +42,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <select id="inputState" class="form-control">
+                                <select id="RegistersRole" class="form-control">
                                     <option disabled="disabled" selected>Türü</option>
                                     @for (int i = 0; i < Model.Count(); i++)
                                     {
@@ -165,24 +52,23 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <select id="inputState" class="form-control">
+                                <select id="condition" class="form-control">
                                     <option disabled="disabled" selected>Durumu</option>
-                                    <option>FAAL</option>
-                                    <option>ÇIKAN</option>
-                                    <option>DONDURULMUŞ</option>
-                                    <option>FAHRİ</option>
-                                    <option>İSTİFA</option>
-                                    <option>ONUR</option>
-                                    <option>VEFAT</option>
-                                    <option>BELİRTİLMEMİŞ</option>
-
+                                    <option>Faal</option>
+                                    <option>Çıkan</option>
+                                    <option>Dondurulmuş</option>
+                                    <option>Fahri</option>
+                                    <option>İstifa</option>
+                                    <option>Onur</option>
+                                    <option>Vefat</option>
+                                    <option>Belirtilmemiş</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input type="email" class="form-control" placeholder="T.C Kimlik"  autocomplete="new-password">
+                                <input type="email" class="form-control" placeholder="T.C Kimlik" id="identificationNumber" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-envelope"></span>
@@ -190,11 +76,11 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
-                                <select id="inputState" class="form-control">
+                                <select id="webReservation" class="form-control">
                                     <option disabled="disabled" selected>Web Rezervasyon</option>
 
-                                    <option>YAPABİLİR</option>
-                                    <option>YAPAMAZ</option>
+                                    <option value="1">Yapabilir</option>
+                                    <option value="2">Yapamaz</option>
 
                                 </select>
                             </div>
@@ -202,14 +88,14 @@
                         <div class="row">
 
                             <div class="input-group mb-3 col-md-6">
-                                <input placeholder="Telefon No" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
                             </div>
 
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Tel Açıklama" autocomplete="new-password">
+                                <input type="text" class="form-control" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -220,14 +106,14 @@
 
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input placeholder="Telefon No" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                <input placeholder="Telefon No" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
                             </div>
 
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Tel Açıklama" autocomplete="new-password">
+                                <input type="text" class="form-control" id="phone2Exp" placeholder="Tel Açıklama" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -238,7 +124,7 @@
 
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input type="email" class="form-control" placeholder="Email" autocomplete="new-password">
+                                <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-envelope"></span>
@@ -246,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Email Açıklama" autocomplete="new-password">
+                                <input type="text" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -256,13 +142,13 @@
                         </div>
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input placeholder="Doğum Tarihi" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
                             </div>
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Doğum Yeri" autocomplete="new-password">
+                                <input type="text" class="form-control" id="birthPlace" placeholder="Doğum Yeri" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -272,7 +158,7 @@
                         </div>
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Anne Adı" autocomplete="new-password">
+                                <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -280,25 +166,7 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Baba Adı" autocomplete="new-password">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-user"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Şehir" autocomplete="new-password">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-user"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="İlçe" autocomplete="new-password">
+                                <input type="text" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -308,7 +176,7 @@
                         </div>
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Meslek" autocomplete="new-password">
+                                <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -316,7 +184,25 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3 col-md-6">
-                                <input type="text" class="form-control" placeholder="Not" autocomplete="new-password">
+                                <input type="text" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group mb-3 col-md-6">
+                                <input type="text" class="form-control" id="job"  placeholder="Meslek" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3 col-md-6">
+                                <input type="text" class="form-control" id="note"  placeholder="Not" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -325,7 +211,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Password"  autocomplete="new-password">
+                            <input type="password" class="form-control" id="password" placeholder="Password" autocomplete="new-password">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>
@@ -333,7 +219,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Retype password"  autocomplete="new-password">
+                            <input type="password" class="form-control" id="checkpassword" placeholder="Retype password" autocomplete="new-password">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>
@@ -344,28 +230,25 @@
                             <div class="col-4">
                                 <button type="submit" class="btn btn-danger btn-block">Vazgeç</button>
                             </div>
-                            <!-- /.col -->
+
                             <div class="col-8">
-                                <button type="submit" class="btn btn-warning btn-block">Kaydet</button>
+                                <button type="submit" class="btn btn-warning btn-block" onclick="register()">Kaydet</button>
                             </div>
-                            <!-- /.col -->
+
                         </div>
                     </div>
                 </div>
-                <!-- /.form-box -->
-            </div><!-- /.card -->
+            </div>
         </div>
-        <!-- /.register-box -->
     </div>
 </div>
+
 
 
 <script>
 
 
     $(function () {
-
-
 
         $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
         $('[data-mask]').inputmask()
@@ -378,18 +261,45 @@
 
         name: null,
         username: null,
+        startDate: null,
+        finishDate: null,
+        role: null,
+        condition: null,
+        identificationNumber: null,
+        webReservation: null,
         phone: null,
-        password: null,
-        birthdate: null,
-        gender: null,
+        phoneExp: null,
+        phone2: null,
+        phone2Exp: null,
         email: null,
-        role: null
+        emailExp: null,
+        birthdate: null,
+        birthPlace: null,
+        motherName: null,
+        fatherName: null,
+        city: null,
+        district: null,
+        job: null,
+        note:null,
+        password: null,   
+        gender: null,
+             
     };
 
     function register() {
 
         if ($("#RegistersRole option:nth-of-type(1)").text() == $("#select2-RegistersRole-container").text()) {
-            alert("rol seçin");
+
+            $.confirm({
+                title: "Uyarı",
+                content: "Lütfen Rol Seçiniz",
+                buttons: {
+                    TAMAM: function () {
+
+                        window.location.href = "NewRegister"
+                    }
+                }
+            });
 
         } else {
 
@@ -397,17 +307,34 @@
 
                 userObj.name = $("#name").val();
                 userObj.username = $("#username").val();
-                userObj.phone = $("#phone").val();
-                userObj.password = $("#password").val();
-                userObj.birthdate = $("#birthdate").val();
-                userObj.gender = "Male";
-                userObj.email = $("#email").val();
+                userObj.startDate = $("#startDate").val();
+                userObj.finishDate = $("#finishDate").val();
                 userObj.role = $("#RegistersRole option:selected").text();
+                userObj.condition = $("#condition option:selected").text();
+                userObj.identificationNumber = $("#identificationNumber").val();
+                userObj.webReservation = $("#webReservation option:selected").val();
+                userObj.phone = $("#phone").val();
+                userObj.phoneExp = $("#phoneExp").val();
+                userObj.phone2 = $("#phone2").val();
+                userObj.phone2Exp = $("#phone2Exp").val();
+                userObj.email = $("#email").val();
+                userObj.emailExp = $("#emailExp").val();
+                userObj.birthdate = $("#birthdate").val();
+                userObj.birthPlace = $("#birthPlace").val();
+                userObj.motherName = $("#motherName").val();
+                userObj.fatherName = $("#fatherName").val();
+                userObj.city = $("#city").val();
+                userObj.district = $("#district").val();
+                userObj.job = $("#job").val();
+                userObj.note = $("#note").val();
+                userObj.password = $("#password").val();            
+                userObj.gender = "Male";
 
-
+               
+               
                 try {
                     $.ajax({
-                        type: "Get",
+                        type: "Post",
                         url: '../Home/Register',
                         cache: false,
                         data: userObj,
@@ -452,7 +379,16 @@
                 }
 
             } else {
-                alert("Şifreler uyumsuz.");
+                $.confirm({
+                    title: "Uyarı",
+                    content: "Şifreler Uyumsuz",
+                    buttons: {
+                        TAMAM: function () {
+
+
+                        }
+                    }
+                });
             }
         }
 

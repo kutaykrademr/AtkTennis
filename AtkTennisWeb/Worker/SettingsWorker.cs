@@ -34,7 +34,7 @@ namespace AtkTennisWeb.Worker
 
                     appLogList = Serializers.DeserializeJson<MutualsConstantsDto>(Request.Get(Mutuals.AppUrl + "Public/GetMySettings"));
 
-                    if(appLogList != null)
+                    if (appLogList != null)
                         Mutuals.CompName = appLogList.CompanyName;
 
                     if (appLogList == null)
@@ -81,11 +81,18 @@ namespace AtkTennisWeb.Worker
                             Mutuals.M6 = false;
                     }
 
+                    foreach (var item in appLogList.UserSettingsList)
+                    {
+                        if (Mutuals.UserSettings.ContainsKey(item.RoleId))
+                            Mutuals.UserSettings[item.RoleId] = item;
+                        else
+                            Mutuals.UserSettings.Add(item.RoleId, item);
+                    }
 
                 }
                 catch (Exception ex)
                 {
-                    
+
                 }
             }
 
@@ -147,6 +154,10 @@ namespace AtkTennisWeb.Worker
                         Mutuals.M6 = false;
                 }
 
+                foreach (var item in appLogList.UserSettingsList)
+                {
+                    Mutuals.UserSettings.Add(item.RoleId, item);
+                }
 
             }
             catch (Exception ex)
