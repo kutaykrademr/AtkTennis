@@ -28,7 +28,7 @@
                                 <h3>Özel Ders Türleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPrivLesson">Özel Ders Tarife Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPrivLesson"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -58,8 +58,8 @@
 
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item.PrivateLessonId" onclick="openUpdatePrivLessonModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item.PrivateLessonId" onclick="deletePrivLessonOpenModal(this.id)">Sil</button>
+                                                <button class="btn btn-outline-success" id="@item.PrivateLessonId" onclick="openUpdatePrivLessonModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.PrivateLessonId" onclick="deletePrivLessonOpenModal(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     }

@@ -15,7 +15,6 @@ namespace AtkTennisWeb.Controllers
         public IActionResult SignIn()
         {
 
-
             return View();
         }
 
@@ -42,7 +41,7 @@ namespace AtkTennisWeb.Controllers
                         HttpContext.Session.SetString("FullName", model.custom_name);
                         HttpContext.Session.SetString("Role", model.custom_role);
                         HttpContext.Session.SetString("RoleId", model.custom_roleId);
-          
+
                     }
                 }
                 else
@@ -130,16 +129,16 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult ChangeCurrentUserPass(string id , string currentPass , string newPass )
+        public JsonResult ChangeCurrentUserPass(string id, string currentPass, string newPass)
         {
             MemberListDto model = new MemberListDto();
 
             try
 
             {
-               model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass ));
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass));
 
-                
+
             }
             catch (Exception)
             {
@@ -151,7 +150,24 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult CheckResTable(string dateInf)
+        {
+            checkResViewDto model = new checkResViewDto();
 
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<checkResViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CheckResTable?date=" + dateInf));
+
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            return Json(model);
+
+        }
 
 
 

@@ -43,37 +43,43 @@
                         <div class="card-header d-flex justify-content-between">
                             @{
                                 var a = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault().WebReservation;
-                            }
-                            @if (a == "1")
-                            {
-                                <div class="card-title">
-                                    <button type="button" class="btn btn-primary courtbutton" onclick="openResModal()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="card-title">
-                                    <button type="button" class="btn btn-primary courtbutton" onclick="WebReservation()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
-                                </div>
-                            }
 
+                                @if (a == "1")
+                                {
+                                    <div class="card-title">
+                                        <button type="button" class="btn btn-primary courtbutton" onclick="openResModal()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="card-title">
+                                        <button type="button" class="btn btn-primary courtbutton" onclick="WebReservation()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
+                                    </div>
+                                }
+                            }
 
 
                             <div>
                                 <nav aria-label="Page navigation example">
                                     <ul id="getResTable" class="pagination">
-                                        <li class="page-item"><a style="color:black" href="" class="page-link" onclick="getRes()" value="@DateTime.Now">Bugün</a></li>
-                                        <li class="page-item"><a style="color:black" href="" class="page-link" onclick="getRes()" value="@DateTime.Now.AddDays(1)">Yarın</a></li>
-                                        <li class="page-item"><input class="form-control" type="date" value="@DateTime.Now" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
-                                        <li class="page-item"><a style="color:black; background-color:#f9f9f9" href="" class="page-link"><i class="fas fa-chevron-left"></i></a></li>
-                                        <li class="page-item"><a style="color:black; background-color:#f9f9f9" href="" class="page-link"><i class="fas fa-chevron-right"></i></a></li>
+                                        <li class="page-item"><button style="color:black" class="page-link" onclick="getRes('today')" name="@DateTime.Now">Bugün</button></li>
+                                        <li class="page-item"><button style="color:black" class="page-link" onclick="getRes('tomorrow')" name="@DateTime.Now.AddDays(1)">Yarın</button></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
+                                        <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                        <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
 
                         <div class="card-body">
-                            <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule" style="width: calc(100% * var(--component-padding));">
+
+                            <div id="asd">
+
+                            </div>
+                            @*<div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule" style="width: calc(100% * var(--component-padding));">
+
+
 
                                 <div class="cd-schedule__timeline">
                                     <ul>
@@ -85,7 +91,6 @@
 
                                     </ul>
                                 </div>
-
 
 
 
@@ -103,10 +108,9 @@
                                                         {
                                                             <li class="cd-schedule__event ">
 
-                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-content="event-abs-circuit" data-event="@item2.ResEvent" href="#0">
-                                                                    <em class="cd-schedule__name">KK </em>
+                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-content="event-abs-circuit" data-event="@item2.ResEvent">
+                                                                    <em class="cd-schedule__name">KK</em>
                                                                 </a>
-
                                                             </li>
                                                         }
                                                     }
@@ -114,8 +118,11 @@
                                                 </ul>
                                             </li>
                                         }
+
                                     </ul>
                                 </div>
+
+
 
                                 <div class="cd-schedule-modal">
 
@@ -138,7 +145,7 @@
 
                                 <div class="cd-schedule__cover-layer"></div>
 
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -156,9 +163,6 @@
             <div class="modal-header" style="background-color: #004e6c;">
                 <h4 style="margin:auto; color:white">Rezervasyon Bilgileri</h4>
             </div>
-
-
-
 
             <div class="modal-header">
                 <div class="col-sm-4">
@@ -187,7 +191,7 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <input class="form-control" type="date" value="@DateTime.Now" id="dateInf">
+                    <input class="form-control" type="date" id="dateInf">
                 </div>
 
                 @{
@@ -195,8 +199,9 @@
                 }
 
                 <div>
-                    <button type="button" class="btn btn-primary" style="visibility:hidden" id="resTimeMin" value="@resTimeMin.ReservationValue" onclick="getCourtTime()">Saat Ara</button>
+                    <button type="button" class="btn btn-primary" style="visibility:hidden" id="resTimeMin" value="@resTimeMin.ReservationValue">Saat Ara</button>
                 </div>
+
             </div>
 
             <div class="modal-header">
@@ -207,12 +212,9 @@
                 </div>
             </div>
 
-
             <div id="CourtandTime">
 
             </div>
-
-
 
             <div class="modal-header">
                 <div class="col-sm-6">
@@ -254,14 +256,7 @@
                         </table>
                     </div>
                 </div>
-
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" value="" id="">
-                </div>
-
             </div>
-
-
 
             <div style="visibility:hidden" class="modal-footer">
                 <textbox style="color:black; " id="userId">@userId</textbox>
@@ -305,6 +300,9 @@
             day = "0" + day;
         var today = now.getFullYear() + '-' + month + '-' + day;
 
+        $('#timeNow').change(function () {
+            ResCheck($('#timeNow').val());
+        });
 
         $('#dateInf').change(function () {
             getCourtTime();
@@ -315,10 +313,7 @@
         });
 
         $('#dateInf').val(today);
-
         $('#timeNow').val(today);
-
-
 
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -337,10 +332,158 @@
 
     });
 
-    function getRes() {
+    function getRes(time) {
+        var date = new Date();
+        if (time == "today") {
+            var month = (date.getMonth() + 1);
+            var day = date.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var date3 = date.getFullYear() + '-' + month + '-' + day;
+            $("#timeNow").val(date3);
 
+            ResCheck(date3);
+
+        } else if (time == "tomorrow") {
+            date.setDate(date.getDate() + 1);
+            var month = (date.getMonth() + 1);
+            var day = date.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var date2 = date.getFullYear() + '-' + month + '-' + day;
+
+            $("#timeNow").val(date2);
+
+            ResCheck(date2);
+
+        }
 
     }
+
+    function nextDate() {
+
+        var date = $("#timeNow").val();
+        const d = new Date(date);
+        d.setDate(d.getDate() + 1);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        var date2 = d.getFullYear() + '-' + month + '-' + day;
+
+        $("#timeNow").val(date2);
+        ResCheck(date2);
+    }
+
+    function preDate() {
+
+        var date = $("#timeNow").val();
+        const d = new Date(date);
+        d.setDate(d.getDate() - 1);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        var date5 = d.getFullYear() + '-' + month + '-' + day;
+
+        $("#timeNow").val(date5);
+        ResCheck(date5);
+    }
+
+    function ResCheck(date) {
+
+
+
+        $.ajax({
+            type: "POST",
+            url: '../Public/CheckResTable',
+            cache: false,
+            data: { "dateInf": date },
+            dataType: "json",
+            async: false,
+            success: function (res) {
+
+                debugger;
+
+
+                $("#asd").empty();
+               
+                row = "";
+                row +=' <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule" style="width: calc(100% * var(--component-padding));">';
+                row +='<div class="cd-schedule__timeline">';
+                row +='<ul>';
+
+                for (var b = 0; b < res.resTimes.length; b += 4) {
+
+                    row += '<li><span>' + res.resTimes[b].resTimes + '</span></li>';
+                }  
+                row += '</ul></div>';
+
+                row += '<div class="cd-schedule__events">';
+                row += '<ul>';
+
+                for (var i = 0; i < res.courts.length; i++) {
+
+                    row += '<li class="cd-schedule__group">';
+                    row += '<div class="cd-schedule__top-info"><span>' + res.courts[i].courtName + '</span></div>';
+                    row += '<ul>';
+
+                    for (var a = 0; a < res.reservations.length; a++) {
+
+                        if (res.courts[i].courtId == res.reservations[a].court.courtId) {
+                            row += '<li class="cd-schedule__event">';
+                            row += '<a data-start="' + res.reservations[a].resStartTime + '"data-end="' + res.reservations[a].resFinishTime + '"data-content="event-abs-circuit" data-event="' + res.reservations[a].resEvent + '">';
+                            row += '<em class="cd-schedule__name">KK</em>';
+                            row += '</a>';
+                            row += '</li>';
+                        }
+                    }
+
+                    row += '</ul>';
+                    row += '</li>';
+                }
+                row += '</ul>';
+                row += '</div>';
+
+
+               
+                row += '<div class="cd-schedule-modal">';
+                row += '<header class="cd-schedule-modal__header">';
+                row += '<div class="cd-schedule-modal__content">';
+                row += '<span class="cd-schedule-modal__date"></span>';
+                row += '<h3 class="cd-schedule-modal__name"></h3>';
+                row += '</div>';
+
+                row += '<div class="cd-schedule-modal__header-bg"></div>';
+                row += '</header>';
+                row += '<div class="cd-schedule-modal__body">';
+                row += '<div class="cd-schedule-modal__event-info"></div>';
+                row += '<div class="cd-schedule-modal__body-bg"></div>';
+                row += '</div>';
+
+                row += '<a href="#0" class="cd-schedule-modal__close text-replace">Close</a>';
+                row += '</div>';
+                row += '<div class="cd-schedule__cover-layer"></div>';
+                row += '</div>';
+
+
+
+                $("#asd").append(row);
+            }
+        })
+    }
+
+
 
 
     function openResModal() {
@@ -400,6 +543,7 @@
         }
 
         var courtInf = $("#selectCourt option:selected").text();
+
         var date = $("#dateInf").val();
 
 
@@ -411,8 +555,6 @@
             dataType: "json",
             async: false,
             success: function (res) {
-
-
 
                 if (res == false) {
 

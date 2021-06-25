@@ -363,6 +363,31 @@ namespace AtkTennisApp.Controllers
             return Json(true);
 
         }
+
+        [HttpGet("CheckResTable", Name = "CheckResTable")]
+        public  JsonResult CheckResTable(string date)
+
+        {
+            
+            checkResViewModel model = new checkResViewModel();
+
+            try
+            {
+                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
+                model.courts = db.courts.ToList();
+                model.resTimes = db.resTimes.ToList();
+ 
+            }
+            catch (Exception ex)
+            {
+                model = new checkResViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
     }
 
     public class court_reserve

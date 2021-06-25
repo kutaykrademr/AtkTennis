@@ -29,9 +29,7 @@
                                 <h3>Rol Düzenle</h3>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addRole">Rol Ekle</button>
-
-
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addRole"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -50,8 +48,8 @@
                                         <tr style="text-align:center" id="">
                                             <td>@Model.appIdentityRoles[i].Name</td>
                                             <td>
-                                                <button class="btn btn-warning" id="@Model.appIdentityRoles[i].Id" onclick="openUpdateRoleModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteOpenModal(this.id)">Sil</button>
+                                                <button class="btn btn-warning" id="@Model.appIdentityRoles[i].Id" onclick="openUpdateRoleModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteOpenModal(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>

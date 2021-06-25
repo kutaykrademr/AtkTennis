@@ -30,7 +30,7 @@
                                 <h3>Kort İşlemleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt">Kort Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -74,8 +74,8 @@
                                             }
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteOpenCourtModal(this.id) ">Sil</button>
+                                                <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteOpenCourtModal(this.id) "><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -94,7 +94,7 @@
                                 <h3>Kort Ücret Tarifesi</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice">Tarife Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -142,8 +142,8 @@
                                         }
 
                                         <td>
-                                            <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)">Güncelle</button>
-                                            <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)">Sil</button>
+                                            <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)"><i class="fas fa-trash"></i></button>
                                         </td>
 
                                     </tr>

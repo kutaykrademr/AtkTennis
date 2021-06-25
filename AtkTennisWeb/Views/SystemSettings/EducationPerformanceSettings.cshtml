@@ -28,7 +28,7 @@
                                 <h3>Performans Türleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceType">Performans Türü Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceType"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -53,8 +53,8 @@
                                             <td>@item.PerformanceTypes</td>
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item.PerformanceTypesId" onclick="openUpdatePerformanceType(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item.PerformanceTypesId" onclick="deletePerTypeOpenModal(this.id)">Sil</button>
+                                                <button class="btn btn-outline-success" id="@item.PerformanceTypesId" onclick="openUpdatePerformanceType(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.PerformanceTypesId" onclick="deletePerTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     }
@@ -71,7 +71,7 @@
                                 <h3>Performans Seviyeleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel">Performans Seviyesi Ekle</button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -95,8 +95,8 @@
                                             <td>@item.PerQuotaInf</td>
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)">Güncelle</button>
-                                                <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)">Sil</button>
+                                                <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     }
@@ -142,8 +142,8 @@
                                                 <td>@item.PerQuotaInf</td>
 
                                                 <td>
-                                                    <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)">Güncelle</button>
-                                                    <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)">Sil</button>
+                                                    <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         }
