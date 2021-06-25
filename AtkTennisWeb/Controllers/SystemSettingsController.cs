@@ -370,8 +370,6 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
-
-
         public JsonResult AddNewSchoolType(string schoolType, string schoolCode)
         {
             SchoolTypeDto model = new SchoolTypeDto();

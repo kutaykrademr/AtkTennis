@@ -116,37 +116,37 @@
                                     @foreach (var item2 in Model.courtPriceLists)
                                     {
 
-                                    <tr style="text-align:center">
-                                        <td>@item2.Name</td>
-                                        <td>@item2.CourtPrice</td>
+                                        <tr style="text-align:center">
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice</td>
 
-                                        @{ if (@item2.PriceType == "1")
-                                            {
-                                                <td>Asıl Ücret</td>
+                                            @{ if (@item2.PriceType == "1")
+                                                {
+                                                    <td>Asıl Ücret</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Ek Ücret</td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td>Ek Ücret</td>
-                                            }
-                                        }
-                                        <td>@item2.RecipeType</td>
+                                            <td>@item2.RecipeType</td>
 
-                                        @{ if (@item2.Condition == "1")
-                                            {
-                                                <td>Aktif</td>
+                                            @{ if (@item2.Condition == "1")
+                                                {
+                                                    <td>Aktif</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Pasif</td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td>Pasif</td>
-                                            }
-                                        }
 
-                                        <td>
-                                            <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
-                                            <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)"><i class="fas fa-trash"></i></button>
-                                        </td>
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)"><i class="fas fa-trash"></i></button>
+                                            </td>
 
-                                    </tr>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -231,58 +231,41 @@
             </div>
             <div class="modal-body">
 
-                <div class="roww roww-space">
-
-                    <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Adı</label>
-                            <input type="text" id="name" class="input--style-4">
-                        </div>
+                <div class="row ">
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Adı</label>
+                        <input type="text" id="name" class="form-control">
                     </div>
-                    <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Türü</label>
-                            <input type="text" id="type" class="input--style-4">
-                        </div>
+                    <div class="col-md-6 form-group">
+
+                        <label class="col-form-label">Türü</label>
+                        <input type="text" id="type" class="form-control">
+
                     </div>
                 </div>
 
-                <div class="row roww-space">
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Durumu</label>
 
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <label class="label">Durumu</label>
+                        <select id="courtCondition" class="form-control">
+                            <option disabled="disabled" selected="selected">Durumu</option>
 
-                            <div class="input-group">
-                                <select id="courtCondition" class="form-control">
-                                    <option disabled="disabled" selected="selected">Durumu</option>
+                            <option value="1"> Aktif</option>
+                            <option value="0"> Pasif</option>
 
-                                    <option value="1"> Aktif</option>
-                                    <option value="0"> Pasif</option>
-
-                                </select>
-                            </div>
-
-                        </div>
+                        </select>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <label class="label">Web Durumu</label>
+                    <div class="col-md-6 form-group" >                
+                            <label class="col-form-label">Web Durumu</label>
+                            <select id="courtWebCondition" class="form-control">
+                                <option disabled="disabled" selected="selected"> Durumu</option>
 
-                            <div class="input-group">
-                                <select id="courtWebCondition" class="form-control">
-                                    <option disabled="disabled" selected="selected"> Durumu</option>
-
-                                    <option value="1">Web Aktif</option>
-                                    <option value="0">Web Pasif</option>
-
-                                </select>
-                            </div>
-
-                        </div>
+                                <option value="1">Web Aktif</option>
+                                <option value="0">Web Pasif</option>
+                            </select>         
                     </div>
-
                 </div>
             </div>
 
@@ -294,6 +277,7 @@
     </div>
 </div>
 
+
 <div class="modal fade" id="updatePriceModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -304,51 +288,41 @@
                 </button>
             </div>
             <div class="modal-body">
-
-                <div class="roww roww-space">
-
-                    <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Adı</label>
-                            <input type="text" id="courtPriceName" class="input--style-4">
-                        </div>
+                <div class="row ">
+                    <div class="col-md-6 form-group">                  
+                            <label class="col-form-label">Adı</label>
+                            <input type="text" id="courtPriceName" class="form-control">                      
                     </div>
-                    <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Fiyatı</label>
-                            <input type="text" id="price" class="input--style-4">
-                        </div>
+                    <div class="col-md-6 form-group">           
+                            <label class="col-form-label">Fiyatı</label>
+                            <input type="text" id="price" class="form-control">         
                     </div>
                 </div>
 
-                <div class="roww roww-space">
-                    <div class="coll-2">
-                        <label class="label">Ücret Tipi</label>
+                <div class="row ">
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Ücret Tipi</label>
                         <select id="priceType" class="form-control">
                             <option disabled="disabled" selected="selected">Ücret Tipi</option>
 
                             <option value="1"> Asıl Ücret</option>
                             <option value="0"> Ek Ücret</option>
-
                         </select>
                     </div>
-                    <div class="coll-2">
-                        <div class="input--group">
-                            <label class="label">Tarife Tipi</label>
-                            <input type="text" id="recipeType" class="input--style-4">
-                        </div>
+                    <div class="col-md-6 form-group">                     
+                            <label class="col-form-label">Tarife Tipi</label>
+                            <input type="text" id="recipeType" class="form-control">                
                     </div>
                 </div>
 
-                <div class="roww roww-space">
-                    <div class="coll-2">
-                        <label class="label">Durumu</label>
+                <div class="row ">
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Durumu</label>
                         <select id="conditions" class="form-control">
                             <option disabled="disabled" selected="selected">Durumu</option>
 
                             <option value="1"> Aktif</option>
                             <option value="0"> Pasif</option>
-
                         </select>
                     </div>
 

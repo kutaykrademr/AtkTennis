@@ -559,8 +559,6 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-
-
         [HttpGet("NewSchoolType", Name = "NewSchoolType")]
         public SchoolType NewSchoolType(string schoolType, string schoolCode)
         {
@@ -621,7 +619,6 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetSchoolTypeInf", Name = "GetSchoolTypeInf")]
         public JsonResult GetSchoolTypeInf(int id)
         {
-
 
             SchoolType model = new SchoolType();
 

@@ -636,6 +636,7 @@
     }
 
     function openUpdateschoolType(id) {
+
         $.ajax({
             type: "GET",
             url: '../SystemSettings/GetSchoolTypeInf',
@@ -645,48 +646,7 @@
             async: true,
             success: function (res) {
 
-
-
-                if (res != null) {
-
-                    $("#schoolCodes").val(res.code);
-                    $("#schoolTypes").val(res.types);
-
-                    $("#updateOperationModel button:nth-of-type(2)").attr("id", id);
-                    $('#updateType').modal('toggle');
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function openUpdateschoolType(id) {
-        $.ajax({
-            type: "GET",
-            url: '../SystemSettings/GetSchoolPriceInf',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
+                
 
                 if (res != null) {
 
@@ -716,6 +676,7 @@
             }
         });
     }
+
 
 
 
