@@ -152,22 +152,33 @@ namespace AtkTennisWeb.Controllers
 
         public JsonResult CheckResTable(string dateInf)
         {
-            checkResViewDto model = new checkResViewDto();
+            List<ReservationDto> model = new List<ReservationDto>();
 
             try
-
             {
-                model = Helpers.Serializers.DeserializeJson<checkResViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CheckResTable?date=" + dateInf));
-
+                model = Helpers.Serializers.DeserializeJson<List<ReservationDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CheckResTable?date=" + dateInf));
             }
             catch (Exception)
             {
-                return Json(new ReservationViewDto());
+                return Json(new List<ReservationDto>());
             }
 
             return Json(model);
 
         }
+
+        public IActionResult TablePartial()
+        {
+            ViewBag.DData = "sadxc";
+
+            return new PartialViewResult { 
+                ViewName= "_ResTablePartialView",
+                ViewData = ViewData
+            };
+
+        }
+       
+
 
 
 

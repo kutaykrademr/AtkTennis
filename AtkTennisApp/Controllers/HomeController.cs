@@ -91,7 +91,7 @@ namespace AtkTennisApp.Controllers
                     Role.Description = "Can Perform Crud Operations";
                     var roleResult = roleManager.CreateAsync(Role).Result;
                 }
-
+                
                 user.UserName = username;
                 user.Email = email;
                 user.FullName = name;

@@ -52,86 +52,60 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Home</a>
+                    <a href="~/Home/Index" class="nav-link">AnaMenü</a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Sistem Ayarları</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="~/SystemSettings/IdentityRoleSettings" class="dropdown-item">Rol ve Yetkilendirme </a></li>
+                        <li><a href="~/SystemSettings/CourtSettings" class="dropdown-item">Kort Ayarları</a></li>
+                        <li><a href="~/SystemSettings/ReservationSettings" class="dropdown-item">Rezervasyon Ayarları</a></li>
+
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-submenu dropdown-hover">
+                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Eğitim Ayarları</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+
+                                <li><a href="~/SystemSettings/EducationSchoolSettings" class="dropdown-item">Okul</a></li>
+                                <li><a href="~/SystemSettings/EducationPerformanceSettings" class="dropdown-item">Performans</a></li>
+                                <li><a href="~/SystemSettings/EducationPrivateLessonSettings" class="dropdown-item">Özel Ders</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu dropdown-hover">
+                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Öğrenci Gel. Tak. Ayarları</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+
+                                <li><a href="#" class="dropdown-item">Antreman Havuzu</a></li>
+                                <li><a href="#" class="dropdown-item">Fiziksel Çalışmalar</a></li>
+                                <li><a href="#" class="dropdown-item">Oyunlar</a></li>
+                                <li><a href="#" class="dropdown-item">Gelişim Formları</a></li>
+                                <li><a href="#" class="dropdown-item">İçerik İşlemleri</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Danışma</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="~/Home/NewRegister" class="dropdown-item">Yeni Üye Kayıt</a></li>
+                        <li><a href="~/Home/ListUser" class="dropdown-item">Üye Listeleri</a></li>
+                        <li><a href="#" class="dropdown-item">Öğrenci Kayıt</a></li>
+                        <li><a href="#" class="dropdown-item">Öğrenci Listleri</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Rezervasyonlar</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="~/Public/Reservation" class="dropdown-item">Rezervasyon Yap</a></li>
+                        <li><a href="#" class="dropdown-item">Rezervasyon Listem</a></li>
+                        <li><a href="#" class="dropdown-item">Rezervasyon İptali</a></li>
+                        <li><a href="#" class="dropdown-item">Üyelik Aidatlarım</a></li>
+                    </ul>
                 </li>
             </ul>
 
-            <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
-                </li>
-                <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
@@ -158,20 +132,10 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
-                @*<li class="nav-item">
-                        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                        </a>
-                    </li>*@
-                @*<li class="nav-item">
-                        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                            <i class="fas fa-th-large"></i>
-                        </a>
-                    </li>*@
             </ul>
         </nav>
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
+
+
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
@@ -196,17 +160,6 @@
                     </div>
                 </div>
 
-                <!-- SidebarSearch Form -->
-                <div class="form-inline">
-                    <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
@@ -514,13 +467,13 @@
 
 
 
-        
+
         function changeCurrentPassModal(id) {
 
             $("#updateModels button:nth-of-type(2)").attr("id", id);
             $('#updatesModal').modal('toggle');
-           
-        } 
+
+        }
 
         function updateCurrentUserPass(id) {
 
@@ -530,8 +483,7 @@
 
             debugger;
 
-            if (newPass == newPassCheck)
-            {
+            if (newPass == newPassCheck) {
 
                 try {
 
@@ -596,9 +548,9 @@
                     }
                 });
             }
-        } 
-        
-            
+        }
+
+
     </script>
 
 
@@ -621,6 +573,7 @@
     <script src="~/plugins/jszip/jszip.min.js"></script>
     <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
     <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
+    
 
     <script src="~/vendor/select2/select2.min.js"></script>
     @*<script src="~/rjs/global.js"></script>*@

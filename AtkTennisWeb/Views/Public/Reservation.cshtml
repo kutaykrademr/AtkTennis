@@ -88,30 +88,14 @@
 
                             <div class="cd-schedule__events">
                                 <ul>
-                                    @foreach (var item in Model.courts)
-                                    {
-                                        <li class="cd-schedule__group">
-                                            <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
+                                    <partial name="~/Views/Public/_ResTablePartialView.cshtml" />
+                                    @*@await Html.PartialAsync("_ResTablePartialView")*@
 
-                                            <ul style="height:850px">
-                                                @foreach (var item2 in Model.reservations)
-                                                {
-                                                    if (item.CourtId == item2.Court.CourtId)
-                                                    {
-                                                        <li class="cd-schedule__event ">
-
-                                                            <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-event="@item2.ResEvent">
-                                                                <em class="cd-schedule__name">KK</em>
-                                                            </a>
-                                                        </li>
-                                                    }
-                                                }
-                                            </ul>
-                                        </li>
-                                    }
+                                    @*@Html.Partial("_ResTablePartialView");*@
                                 </ul>
                             </div>
 
+                          
 
                             <div class="cd-schedule-modal">
                                 <header class="cd-schedule-modal__header">
@@ -400,72 +384,21 @@
             async: false,
             success: function (res) {
 
+                $.ajax({
+                    type: "GET",
+                    url: '../Public/TablePartial',
+                    success: () => {
+                        alert("Partial");
+                    }
+
+                });
+
+
                 debugger;
 
 
-                //$("#asd").empty();
 
-                //row = "";
-                //row +=' <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule" style="width: calc(100% * var(--component-padding));">';
-                //row +='<div class="cd-schedule__timeline">';
-                //row +='<ul>';
-
-                //for (var b = 0; b < res.resTimes.length; b += 4) {
-
-                //    row += '<li><span>' + res.resTimes[b].resTimes + '</span></li>';
-                //}
-                //row += '</ul></div>';
-
-                //row += '<div class="cd-schedule__events">';
-                //row += '<ul>';
-
-                //for (var i = 0; i < res.courts.length; i++) {
-
-                //    row += '<li class="cd-schedule__group">';
-                //    row += '<div class="cd-schedule__top-info"><span>' + res.courts[i].courtName + '</span></div>';
-                //    row += '<ul>';
-
-                //    for (var a = 0; a < res.reservations.length; a++) {
-
-                //        if (res.courts[i].courtId == res.reservations[a].court.courtId) {
-                //            row += '<li class="cd-schedule__event">';
-                //            row += '<a data-start="' + res.reservations[a].resStartTime + '"data-end="' + res.reservations[a].resFinishTime + '"data-content="event-abs-circuit" data-event="' + res.reservations[a].resEvent + '">';
-                //            row += '<em class="cd-schedule__name">KK</em>';
-                //            row += '</a>';
-                //            row += '</li>';
-                //        }
-                //    }
-
-                //    row += '</ul>';
-                //    row += '</li>';
-                //}
-                //row += '</ul>';
-                //row += '</div>';
-
-
-
-                //row += '<div class="cd-schedule-modal">';
-                //row += '<header class="cd-schedule-modal__header">';
-                //row += '<div class="cd-schedule-modal__content">';
-                //row += '<span class="cd-schedule-modal__date"></span>';
-                //row += '<h3 class="cd-schedule-modal__name"></h3>';
-                //row += '</div>';
-
-                //row += '<div class="cd-schedule-modal__header-bg"></div>';
-                //row += '</header>';
-                //row += '<div class="cd-schedule-modal__body">';
-                //row += '<div class="cd-schedule-modal__event-info"></div>';
-                //row += '<div class="cd-schedule-modal__body-bg"></div>';
-                //row += '</div>';
-
-                //row += '<a href="#0" class="cd-schedule-modal__close text-replace">Close</a>';
-                //row += '</div>';
-                //row += '<div class="cd-schedule__cover-layer"></div>';
-                //row += '</div>';
-
-
-
-                //$("#asd").append(row);
+                
             }
         })
     }

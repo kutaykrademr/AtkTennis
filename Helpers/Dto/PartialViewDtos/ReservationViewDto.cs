@@ -14,9 +14,5 @@ namespace Helpers.Dto.PartialViewDtos
         public List<ReservationSettingsDto> reservationSettings { get; set; } = new List<ReservationSettingsDto>();
         public List<MemberListDto> memberLists { get; set; } = new List<MemberListDto>();
        
-      
-      
-
-
     }
 }

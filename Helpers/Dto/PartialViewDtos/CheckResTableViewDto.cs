@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Helpers.Dto.PartialViewDtos
 {
-    public class checkResViewDto
+   public class CheckResTableViewDto
     {
-        public List<CourtDto> courts { get; set; } = new List<CourtDto>();
         public List<ReservationDto> reservations { get; set; } = new List<ReservationDto>();
+        public List<CourtDto> courts { get; set; } = new List<CourtDto>();
         public List<ResTimeDto> resTimes { get; set; } = new List<ResTimeDto>();
     }
 }

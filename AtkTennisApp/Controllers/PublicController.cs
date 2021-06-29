@@ -369,18 +369,17 @@ namespace AtkTennisApp.Controllers
 
         {
             
-            checkResViewModel model = new checkResViewModel();
+            List<Reservation> model = new List<Reservation>();
 
             try
             {
-                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
-                model.courts = db.courts.ToList();
-                model.resTimes = db.resTimes.ToList();
+                model = db.reservations.Where(x => x.ResDate == date).ToList();
+                
  
             }
             catch (Exception ex)
             {
-                model = new checkResViewModel();
+                model = new List<Reservation> ();
 
                 Mutuals.monitizer.AddException(ex);
             }

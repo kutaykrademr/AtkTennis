@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace AtkTennisApp.ViewModels
 {
-    public class checkResViewModel
+    public class CheckResTableViewModel
     {
-        public List<Court> courts { get; set; } = new List<Court>();
         public List<Reservation> reservations { get; set; } = new List<Reservation>();
+        public List<Court> courts { get; set; } = new List<Court>();
         public List<ResTime> resTimes { get; set; } = new List<ResTime>();
     }
 }
