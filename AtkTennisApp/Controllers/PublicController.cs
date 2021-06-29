@@ -110,7 +110,7 @@ namespace AtkTennisApp.Controllers
         {
             ReservationViewModel model = new ReservationViewModel();
 
-            ViewBag.date = date;
+           
             try
             {
                 model.resTimes = db.resTimes.ToList();
@@ -143,10 +143,8 @@ namespace AtkTennisApp.Controllers
             if (timeMin == 30)
             {
                 var court = db.courts.Where(x => x.CourtName == courtInf).FirstOrDefault();
-
                 var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf).ToList();
                 var day_routine = db.resTimes.Where(x => x.ResTimes30 == timeMin).ToList();
-
 
 
                 List<court_reserve> daily_reservations = new List<court_reserve>();

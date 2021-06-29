@@ -75,6 +75,8 @@ namespace AtkTennisWeb.Controllers
                 model = new ReservationViewDto();
             }
 
+            ViewBag.date = date;
+
             return View(model);
         }
 

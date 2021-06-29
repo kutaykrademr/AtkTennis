@@ -144,7 +144,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/DeleteUser?id=" + id));
 
-                if (model != null)
+                if (model == null)
 
                     return Json(false);
             }

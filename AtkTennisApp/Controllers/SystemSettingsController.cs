@@ -81,9 +81,8 @@ namespace AtkTennisApp.Controllers
 
             var role = await roleManager.FindByIdAsync(id);
 
-            
-
             UserSettings Role2 = new UserSettings();
+
             try
             {
                 if (role == null)
@@ -105,13 +104,13 @@ namespace AtkTennisApp.Controllers
                     }
                     else
                     {
-                        return Json(new Helpers.Dto.AppIdentityRoleDto());
+                        return Json(false);
                     }
 
 
                     if (result.Succeeded)
                     {
-                        return Json(role);
+                        return Json(true);
                     }
                 }
 

@@ -384,7 +384,8 @@
             async: true,
             success: function (res) {
 
-                if (res != null) {
+
+                if (res != false) {
 
                     $("#openDeleteUserModal").modal("toggle");
 
@@ -398,9 +399,6 @@
                             }
                         }
                     });
-
-
-
                 }
 
                 else {
@@ -433,8 +431,7 @@
             async: true,
             success: function (res) {
 
-
-
+               
                 if (res != null) {
 
                     $("#name").val(res.fullName);

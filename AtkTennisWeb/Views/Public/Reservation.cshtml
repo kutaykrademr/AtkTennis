@@ -63,17 +63,18 @@
                                     <ul class="pagination">
 
                                         @{
-                                            DateTime date1 = DateTime.UtcNow.Date;
+                                            DateTime date1 = DateTime.Now;
                                             var date2 = date1.AddDays(1);
                                             var today = date1.ToString("yyyy-MM-dd");
                                             var tomorrow = date2.ToString("yyyy-MM-dd");
-
                                         }
-                                        <li class="page-item"><button style="color:black;  background-color:#ffc107" class="page-link" href="~/Public/Reservation?date=@today">Bugün</button></li>
-                                        <li class="page-item"><button style="color:black" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</button></li>
+
+                                        <li class="page-item"><a style="color:black;  background-color:#ffc107" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
+                                        <li class="page-item"><a style="color:black" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</a></li>
                                         <li class="page-item"><input class="form-control" type="date" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
                                         <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
                                         <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
+
                                     </ul>
                                 </nav>
                             </div>
@@ -202,6 +203,10 @@
 
             </div>
 
+            <div id="CourtandTime">
+
+            </div>
+
             <div class="modal-header">
                 <div class="row" id="court_select">
                     <div id="ResModal" style="display: contents;">
@@ -210,9 +215,7 @@
                 </div>
             </div>
 
-            <div id="CourtandTime">
 
-            </div>
 
             <div class="modal-header">
                 <div class="col-sm-6">
@@ -291,6 +294,8 @@
 
 <script>
 
+    var picker = "@ViewBag.Date";
+
     $(document).ready(function () {
 
         $("#example1").DataTable({
@@ -309,9 +314,7 @@
         });
 
 
-        
-            
-        
+
 
             var now = new Date();
             var month = (now.getMonth() + 1);
@@ -327,12 +330,15 @@
 
         //Rezervasyon Şema Tarih
 
-        $('#timeNow').val(today);
+      $('#timeNow').val(picker);
 
-            $('#timeNow').change(function () {
-                window.location.href = "Reservation?date=" + $('#timeNow').val();
 
-            });
+
+        $('#timeNow').change(function () {
+
+            window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+         });
 
         //Rezervasyon Şema Tarih//
 
@@ -351,9 +357,11 @@
 
     });
 
+    // Rezervasyon Şema Tarih
     function nextDate() {
 
         var date = $("#timeNow").val();
+
         const d = new Date(date);
         d.setDate(d.getDate() + 1);
 
@@ -363,9 +371,10 @@
             month = "0" + month;
         if (day < 10)
             day = "0" + day;
+
         var date3 = d.getFullYear() + '-' + month + '-' + day;
 
-        $("#timeNow").val(date3);
+
 
         window.location.href = "Reservation?date=" + date3;
     }
@@ -373,6 +382,7 @@
     function preDate() {
 
         var date = $("#timeNow").val();
+
         const d = new Date(date);
         d.setDate(d.getDate() - 1);
 
@@ -384,7 +394,7 @@
             day = "0" + day;
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
-        $("#timeNow").val(date4);
+
 
         window.location.href = "Reservation?date=" + date4;
 
@@ -428,7 +438,11 @@
 
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes();
-        var getday = dt.getDay();
+        
+
+        var days = new Date($('#dateInf').val());
+        var getday = days.getDay();
+
 
         var dd = String(dt.getDate()).padStart(2, '0');
         var mm = String(dt.getMonth() + 1).padStart(2, '0');
@@ -436,6 +450,8 @@
 
         var today = yyyy + '-' + mm + '-' + dd;
 
+        var courtInf = $("#selectCourt option:selected").text();
+        var date = $("#dateInf").val();
 
         if ($("#dateInf").val() < today) {
 
@@ -445,184 +461,124 @@
                 buttons: {
                     TAMAM: function () {
 
+                        $("#dateInf").val(today)
                     }
                 }
             });
         }
 
-        var courtInf = $("#selectCourt option:selected").text();
+        else {
 
-        var date = $("#dateInf").val();
+            $.ajax({
+                type: "POST",
+                url: '../Public/GetResTime',
+                cache: false,
+                data: { "dateInf": $("#dateInf").val(), courtInf, "timeMin": $("#resTimeMin").val() },
+                dataType: "json",
+                async: false,
+                success: function (res) {
 
-
-        $.ajax({
-            type: "POST",
-            url: '../Public/GetResTime',
-            cache: false,
-            data: { "dateInf": $("#dateInf").val(), courtInf, "timeMin": $("#resTimeMin").val() },
-            dataType: "json",
-            async: false,
-            success: function (res) {
-
-                if (res == false) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Lütfen Kort Bilgisi ve/veya Tarih Giriniz.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-
-                switch (getday) {
-                    case 0:
-                        day = "Pazar";
-                        break;
-                    case 1:
-                        day = "Pazartesi";
-                        break;
-                    case 2:
-                        day = "Salı";
-                        break;
-                    case 3:
-                        day = "Çarşamba";
-                        break;
-                    case 4:
-                        day = "Perşembe";
-                        break;
-                    case 5:
-                        day = "Cuma";
-                        break;
-                    case 6:
-                        day = "Cumartesi";
-                }
-
-
-                $("#CourtandTime").empty();
-                row = "";
-                row += '<div class="modal-header" style="background-color: #004e6c;">';
-                row += '<h4 style=" margin:auto; color:white">' + date + ' ' + ' - ' + ' ' + courtInf + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
-                row += '</div>';
-                $("#CourtandTime").append(row);
-
-
-                if (res.length > 0) {
-
-                    var timeMin = $("#resTimeMin").val();
-
-                    if (timeMin == "60") {
-
-                        $("#ResModal").empty();
-
-                        for (var i = 0; i < res.length; i++) {
-
-                            NewRow = "";
-                            NewRow += '<div class="form-group">';
-                            NewRow += '<div class="custom-control custom-checkbox" id="checkTimeTable">';
-
-                            if (res[i].isTaken == true)
-
-                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-
-                            else if (res[i].start <= time)
-
-                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-
-                            else
-
-                                NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
-                            NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label">' + res[i].start + '</label>';
-                            NewRow += '</div></div>';
-
-
-                            $("#ResModal").append(NewRow);
-
-                        }
-                    }
-
-                    else if (timeMin == "30") {
-
-                        $("#ResModal").empty();
-
-                        for (var i = 0; i < res.length; i++) {
-
-                            NewRow = "";
-                            NewRow += '<div class="form-group">';
-                            NewRow += '<div class="custom-control custom-checkbox" id="checkTimeTable">';
-
-                            if (res[i].isTaken == true)
-
-                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-
-                            else if (res[i].start < time)
-
-                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-                            else
-
-                                NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
-                            NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label">' + res[i].start + '</label>';
-                            NewRow += '</div></div>';
-
-
-                            $("#ResModal").append(NewRow);
-
-                        }
-                    }
-
-                    else if (timeMin == "15") {
-
-                        $("#ResModal").empty();
-
-                        for (var i = 0; i < res.length; i++) {
-
-                            NewRow = "";
-                            NewRow += '<div class="form-group">';
-                            NewRow += '<div class="custom-control custom-checkbox" id="checkTimeTable">';
-
-                            if (res[i].isTaken == true)
-
-                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-
-                            else if (res[i].start < time)
-
-                                NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-
-                            else
-
-                                NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
-                            NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label">' + res[i].start + '</label>';
-                            NewRow += '</div></div>';
-
-
-
-                            $("#ResModal").append(NewRow);
-
-                        }
-                    }
-
-                    else
+                    if (res == false) {
 
                         $.confirm({
-                            title: "Uyarı  ",
-                            content: "Rezervasyon Ayarlarını Gözden Geçiriniz , Minimum Zaman Dilimi (Dakika)(15,30,60)",
+                            title: "Bilgilendirme",
+                            content: "Lütfen Kort Bilgisi ve/veya Tarih Giriniz.",
                             buttons: {
                                 TAMAM: function () {
 
                                 }
                             }
                         });
-                }
-            },
+                    }
 
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+
+                    switch (getday) {
+                        case 0:
+                            day = "Pazar";
+                            break;
+                        case 1:
+                            day = "Pazartesi";
+                            break;
+                        case 2:
+                            day = "Salı";
+                            break;
+                        case 3:
+                            day = "Çarşamba";
+                            break;
+                        case 4:
+                            day = "Perşembe";
+                            break;
+                        case 5:
+                            day = "Cuma";
+                            break;
+                        case 6:
+                            day = "Cumartesi";
+                    }
+
+                    $("#CourtandTime").empty();
+                    row = "";
+                    row += '<div class="modal-header" style="background-color: #004e6c;">';
+                    row += '<h4 style=" margin:auto; color:white"><i class="fas fa-flag nav-icon"></i>' + ' ' + courtInf + ' ' + ' - ' + ' ' + date + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
+                    row += '</div>';
+                    $("#CourtandTime").append(row);
+
+
+                    if (res.length > 0) {
+
+                        var timeMin = $("#resTimeMin").val();
+
+                        if (timeMin == "60" || timeMin == "30" || timeMin == "15" ) {
+
+                            $("#ResModal").empty();
+
+                            for (var i = 0; i < res.length; i++) {
+
+                                NewRow = "";
+                                NewRow += '<div class="form-group">';
+                                NewRow += '<div class="custom-control custom-checkbox" id="checkTimeTable">';
+
+                                if (res[i].isTaken == true)
+
+                                    NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+
+                                else if (res[i].start <= time && date == today)
+
+                                    NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+                               
+                                else
+
+                                    NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
+                                NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label">' + res[i].start + '</label>';
+                                NewRow += '</div></div>';
+
+
+                                $("#ResModal").append(NewRow);
+
+                            }
+                        }
+
+                        else
+
+                            $.confirm({
+                                title: "Uyarı  ",
+                                content: "Rezervasyon Ayarlarını Gözden Geçiriniz , Minimum Zaman Dilimi (Dakika)(15,30,60)",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                    }
+                },
+
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
     }
 
     function Approve() {
@@ -635,130 +591,108 @@
             times.push(this.name);
         });
 
-        //CourtId
-        var id = $("#selectCourt option:selected").val();
-
-        //rezervasyon saati
+        //saat
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
+        //CourtId
+        var id = $("#selectCourt option:selected").val();
 
-        var today = yyyy + '-' + mm + '-' + dd;
+        //bitiş tarihine 15,30,60 dk ekle
+        // Bir saatlik
+        var resSetTime = $('#doRes').attr('setTime');
 
+        if (resSetTime == 60) {
+            function addMinutes(time, minsToAdd) {
+                function D(J) { return (J < 10 ? '0' : '') + J; };
+                var piece = time.split(':');
+                var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
 
-        if ($("#dateInf").val() < today) {
-
-            $.confirm({
-                title: "Uyarı",
-                content: "Önceki Günlere Rezervasyon Yapamazsınız.",
-                buttons: {
-                    TAMAM: function () {
-
-                    }
-                }
-            });
-        }
-
-        else {
-
-
-
-            //bitiş tarihine 15,30,60 dk ekle
-            // Bir saatlik
-            var resSetTime = $('#doRes').attr('setTime');
-
-            if (resSetTime == 60) {
-                function addMinutes(time, minsToAdd) {
-                    function D(J) { return (J < 10 ? '0' : '') + J; };
-                    var piece = time.split(':');
-                    var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
-
-                    return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
-                }
-
-                if (timeMin == 15 && times.length < 5) {
-                    var finishTime = times[3];
-                    var resFinishTime = addMinutes(finishTime, '15');
-                }
-                else if (timeMin == 30 && times.length < 3) {
-                    var finishTime = times[1];
-                    var resFinishTime = addMinutes(finishTime, '30');
-                }
-                else if (timeMin == 60 && times.length < 2) {
-                    var finishTime = times[0];
-                    var resFinishTime = addMinutes(finishTime, '60');
-                }
-                else
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "En fazla 1 Saatlik Rezervasyon Yapabilirsiniz.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
+                return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
             }
 
-            var resobject = {
-
-                ResDate: '',
-                ResStartTime: '',
-                ResFinishTime: '',
-                ResEvent: '',
-                userId: '',
-                CourtId: '',
-                ResTime: '',
+            if (timeMin == 15 && times.length < 5) {
+                var finishTime = times[3];
+                var resFinishTime = addMinutes(finishTime, '15');
             }
+            else if (timeMin == 30 && times.length < 3) {
+                var finishTime = times[1];
+                var resFinishTime = addMinutes(finishTime, '30');
+            }
+            else if (timeMin == 60 && times.length < 2) {
+                var finishTime = times[0];
+                var resFinishTime = addMinutes(finishTime, '60');
+            }
+            else
+                $.confirm({
+                    title: "Uyarı",
+                    content: "En fazla 1 Saatlik Rezervasyon Yapabilirsiniz.",
+                    buttons: {
+                        TAMAM: function () {
 
-            resobject.ResStartTime = times[0];
-            resobject.ResFinishTime = resFinishTime;
-
-            resobject.ResDate = $("#dateInf").val();
-            resobject.ResTime = time;
-            resobject.userId = $("#userId").text();
-            resobject.ResEvent = "event-1"
-            resobject.CourtId = id;
-
-            try {
-
-                $.ajax({
-                    type: "POST",
-                    url: '../Public/NewReservation',
-                    cache: false,
-                    data: resobject,
-                    dataType: "json",
-                    async: true,
-                    success: function (res) {
-
-
-
-                        if (res == true) {
-                            $.confirm({
-                                title: "Bilgilendirme",
-                                content: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti.",
-                                buttons: {
-                                    TAMAM: function () {
-                                        window.location.href = "Reservation"
-                                    }
-                                }
-                            });
                         }
-
-
-                    },
-                    error: function (textStatus, errorThrown) {
-                        console.log(JSON.stringify(textStatus));
-                        console.log(textStatus);
                     }
                 });
-            } catch (e) {
-                console.log(e.message);
-            }
         }
+
+        var resobject = {
+
+            ResDate: '',
+            ResStartTime: '',
+            ResFinishTime: '',
+            ResEvent: '',
+            userId: '',
+            CourtId: '',
+            ResTime: '',
+        }
+
+        resobject.ResStartTime = times[0];
+        resobject.ResFinishTime = resFinishTime;
+
+        resobject.ResDate = $("#dateInf").val();
+        resobject.ResTime = time;
+        resobject.userId = $("#userId").text();
+        resobject.ResEvent = "event-1"
+        resobject.CourtId = id;
+
+        try {
+
+            $.ajax({
+                type: "POST",
+                url: '../Public/NewReservation',
+                cache: false,
+                data: resobject,
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    $('#rsvModal').modal('toggle');
+
+                                    window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        } catch (e) {
+            console.log(e.message);
+        }
+
     }
 
     function WebReservation() {
@@ -773,6 +707,6 @@
             }
         });
     }
-    //Rezervasyon Yap//
+
 
 </script>

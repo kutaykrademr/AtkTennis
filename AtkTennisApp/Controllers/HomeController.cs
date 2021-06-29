@@ -36,10 +36,10 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelDto GetHome()
         {
-           
+
             HomeModelDto model = new HomeModelDto();
             try
-            {   
+            {
                 model.TotalUserCount = userManager.Users.Count();
                 model.TotalRoleCount = roleManager.Roles.Count();
             }
@@ -91,7 +91,7 @@ namespace AtkTennisApp.Controllers
                     Role.Description = "Can Perform Crud Operations";
                     var roleResult = roleManager.CreateAsync(Role).Result;
                 }
-                
+
                 user.UserName = username;
                 user.Email = email;
                 user.FullName = name;
@@ -100,7 +100,7 @@ namespace AtkTennisApp.Controllers
                 Role.Name = role;
 
                 var result = userManager.CreateAsync(user, password).Result;
-               
+
                 var id = user.Id;
 
                 model2.UserId = id;
@@ -131,7 +131,7 @@ namespace AtkTennisApp.Controllers
 
                 db.Add(model2);
                 db.SaveChanges();
-                
+
 
                 if (result.Succeeded)
                 {
@@ -177,7 +177,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
-        public async Task<JsonResult> UpdateMemberList(string id,  string checkpass ,string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        public async Task<JsonResult> UpdateMemberList(string id, string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
         {
             AppIdentityUser model = new AppIdentityUser();
             MemberList model2 = new MemberList();
@@ -185,12 +185,12 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-               
+
 
                 model = await userManager.FindByIdAsync(id);
 
                 model2 = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
-                
+
 
                 if (model != null)
                 {
@@ -199,10 +199,10 @@ namespace AtkTennisApp.Controllers
                     model.FullName = name;
                     model.BirthDate = birthdate;
                     model.PhoneNumber = phone;
-                    
+
                 }
 
-                
+
                 model2.BirthDate = birthdate;
                 model2.BirthPlace = birthPlace;
                 model2.City = city;
@@ -227,10 +227,10 @@ namespace AtkTennisApp.Controllers
                 model2.UserName = username;
                 model2.WebReservation = webReservation;
                 model2.Role = role;
-                
 
 
-                var user = await userManager.FindByIdAsync(id);      
+
+                var user = await userManager.FindByIdAsync(id);
                 var role_to_remove = await userManager.GetRolesAsync(user);
                 var result = await userManager.RemoveFromRoleAsync(user, role_to_remove[0]);
 
@@ -250,7 +250,7 @@ namespace AtkTennisApp.Controllers
                 db.Update(model2);
                 db.SaveChanges();
 
-              
+
             }
             catch (Exception ex)
             {
@@ -262,9 +262,9 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetMemberListInf", Name = "GetMemberListInf")]
-        public async Task<JsonResult> GetMemberListInf(string id)
+        public JsonResult GetMemberListInf(string id)
 
-        {
+        { 
             MemberList model = new MemberList();
 
             try
@@ -279,41 +279,44 @@ namespace AtkTennisApp.Controllers
 
             return Json(model);
         }
-        
+
         [HttpGet("DeleteUser", Name = "DeleteUser")]
-        public async  Task<IActionResult> DeleteUser(string id)
+        public async Task<JsonResult> DeleteUser(string id)
         {
             AppIdentityUser model = new AppIdentityUser();
-
             var user = await userManager.FindByIdAsync(id);
 
-            try
-            {
-                if (user == null)
-                {
-                    ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
-                    return View("Not Found");
-                }
-                else
-                {
+            MemberList user2 = new MemberList();
+            user2 = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
 
+            if (user == null || user2 == null)
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
                     var result = await userManager.DeleteAsync(user);
+
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("ListUsers");
+                        db.Remove(user2);
+                        db.SaveChanges();
+
+                        return Json(user2);
                     }
                 }
-                return View();
 
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(true);
             }
-            catch (Exception ex)
-            {
-                Mutuals.monitizer.AddException(ex);
-
-            }
-
-            return View(user);
         }
     }
 
