@@ -57,15 +57,14 @@ namespace AtkTennisWeb.Controllers
             return Json("true");
 
         }
-
-        public IActionResult Reservation()
+        
+        public IActionResult Reservation(string date)
         {
             ReservationViewDto model = new ReservationViewDto();
 
             try
             {
-                var getResult = Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes");
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(getResult);
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes?date="+ date));
 
                 if (model == null)
 
@@ -150,43 +149,14 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult CheckResTable(string dateInf)
-        {
-            List<ReservationDto> model = new List<ReservationDto>();
+    }
+    
 
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<List<ReservationDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CheckResTable?date=" + dateInf));
-            }
-            catch (Exception)
-            {
-                return Json(new List<ReservationDto>());
-            }
-
-            return Json(model);
-
-        }
-
-        public IActionResult TablePartial()
-        {
-            ViewBag.DData = "sadxc";
-
-            return new PartialViewResult { 
-                ViewName= "_ResTablePartialView",
-                ViewData = ViewData
-            };
-
-        }
-       
-
-
-
-
-        public class court_reserved
-        {
-            public int timeId { get; set; }
-            public string start { get; set; }
-            public bool isTaken { get; set; }
-        }
+    public class court_reserved
+    {
+        public int timeId { get; set; }
+        public string start { get; set; }
+        public bool isTaken { get; set; }
     }
 }
+

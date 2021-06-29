@@ -143,8 +143,8 @@
                 <span class="brand-text font-weight-light">
                     @if (Mutuals.CompName == null)
                     {@Html.Raw("---------------")}
-                else
-                { @Mutuals.CompName}
+                    else
+                    { @Mutuals.CompName}
                 </span>
             </a>
 
@@ -230,8 +230,13 @@
 
                             <ul class="nav nav-treeview">
 
-                                <li class="nav-item">
-                                    <a href="~/Public/Reservation" class="nav-link">
+                                @{ 
+                                    DateTime today = DateTime.UtcNow.Date;
+                                    var date = today.ToString("yyyy-MM-dd");
+                                }
+
+                                <li class="nav-item">                            
+                                    <a href="~/Public/Reservation?date=@date" class="nav-link">
                                         <i class="fas fa-calendar-check nav-icon"></i>
                                         <p>Rezervasyon Yap</p>
                                     </a>
@@ -257,9 +262,6 @@
                                         <p>Üyelik Aidatlarım</p>
                                     </a>
                                 </li>
-
-
-
                             </ul>
                         </li>
 

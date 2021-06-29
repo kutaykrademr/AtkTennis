@@ -58,12 +58,19 @@
                                 }
                             }
 
-
                             <div>
                                 <nav aria-label="Page navigation example">
-                                    <ul id="getResTable" class="pagination">
-                                        <li class="page-item"><button style="color:black; background-color:#ffc107" class="page-link" onclick="getRes('today')" name="@DateTime.Now">Bugün</button></li>
-                                        <li class="page-item"><button style="color:black" class="page-link" onclick="getRes('tomorrow')" name="@DateTime.Now.AddDays(1)">Yarın</button></li>
+                                    <ul class="pagination">
+
+                                        @{
+                                            DateTime date1 = DateTime.UtcNow.Date;
+                                            var date2 = date1.AddDays(1);
+                                            var today = date1.ToString("yyyy-MM-dd");
+                                            var tomorrow = date2.ToString("yyyy-MM-dd");
+
+                                        }
+                                        <li class="page-item"><button style="color:black;  background-color:#ffc107" class="page-link" href="~/Public/Reservation?date=@today">Bugün</button></li>
+                                        <li class="page-item"><button style="color:black" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</button></li>
                                         <li class="page-item"><input class="form-control" type="date" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
                                         <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
                                         <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
@@ -74,28 +81,48 @@
 
 
                         <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
+
                             <div class="cd-schedule__timeline">
                                 <ul>
-                                    
-                                    @for (int i = 0; i < Model.resTimes.Count; i += 4 )
+
+                                    @for (int i = 0; i < Model.resTimes.Count; i += 4)
                                     {
                                         <li><span>@Model.resTimes[i].ResTimes</span></li>
 
                                     }
-                                    
+
                                 </ul>
                             </div> <!-- .cd-schedule__timeline -->
 
+
                             <div class="cd-schedule__events">
                                 <ul>
-                                    <partial name="~/Views/Public/_ResTablePartialView.cshtml" />
-                                    @*@await Html.PartialAsync("_ResTablePartialView")*@
+                                    @foreach (var item in Model.courts)
+                                    {
+                                        <li class="cd-schedule__group">
+                                            <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
 
-                                    @*@Html.Partial("_ResTablePartialView");*@
+
+                                            <ul style="height:850px">
+                                                @foreach (var item2 in Model.reservations)
+                                                {
+                                                    if (item.CourtId == item2.Court.CourtId)
+                                                    {
+                                                        <li class="cd-schedule__event ">
+
+                                                            <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-event="@item2.ResEvent">
+                                                                <em class="cd-schedule__name">KK</em>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
                                 </ul>
+
                             </div>
 
-                          
 
                             <div class="cd-schedule-modal">
                                 <header class="cd-schedule-modal__header">
@@ -252,6 +279,11 @@
     </div>
 </div>
 
+@foreach (var item in Model.reservations)
+{
+    <button id="resDatePicker" value="@item.ResDate"></button>
+}
+
 
 <script src="~/workSch/util.js"></script>
 <script src="~/workSch/main.js"></script>
@@ -260,31 +292,6 @@
 <script>
 
     $(document).ready(function () {
-
-        var now = new Date();
-        var month = (now.getMonth() + 1);
-        var day = now.getDate();
-
-        if (month < 10)
-            month = "0" + month;
-        if (day < 10)
-            day = "0" + day;
-        var today = now.getFullYear() + '-' + month + '-' + day;
-
-        $('#timeNow').change(function () {
-            ResCheck($('#timeNow').val());
-        });
-
-        $('#dateInf').change(function () {
-            getCourtTime();
-        });
-
-        $('#selectCourt').change(function () {
-            getCourtTime();
-        });
-
-        $('#dateInf').val(today);
-        $('#timeNow').val(today);
 
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -301,39 +308,48 @@
             "responsive": true,
         });
 
+
+        
+            
+        
+
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+
+        var today = now.getFullYear() + '-' + month + '-' + day;
+
+
+        //Rezervasyon Şema Tarih
+
+        $('#timeNow').val(today);
+
+            $('#timeNow').change(function () {
+                window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+            });
+
+        //Rezervasyon Şema Tarih//
+
+
+        //Rezervasyon Yap
+        $('#dateInf').val(today);
+
+        $('#dateInf').change(function () {
+                getCourtTime();
+            });
+        $('#selectCourt').change(function () {
+                getCourtTime();
+            });
+        //Rezervasyon Yap//
+
+
     });
-
-    function getRes(time) {
-        var date = new Date();
-        if (time == "today") {
-            var month = (date.getMonth() + 1);
-            var day = date.getDate();
-            if (month < 10)
-                month = "0" + month;
-            if (day < 10)
-                day = "0" + day;
-            var date3 = date.getFullYear() + '-' + month + '-' + day;
-            $("#timeNow").val(date3);
-
-            ResCheck(date3);
-
-        } else if (time == "tomorrow") {
-            date.setDate(date.getDate() + 1);
-            var month = (date.getMonth() + 1);
-            var day = date.getDate();
-            if (month < 10)
-                month = "0" + month;
-            if (day < 10)
-                day = "0" + day;
-            var date2 = date.getFullYear() + '-' + month + '-' + day;
-
-            $("#timeNow").val(date2);
-
-            ResCheck(date2);
-
-        }
-
-    }
 
     function nextDate() {
 
@@ -347,10 +363,11 @@
             month = "0" + month;
         if (day < 10)
             day = "0" + day;
-        var date2 = d.getFullYear() + '-' + month + '-' + day;
+        var date3 = d.getFullYear() + '-' + month + '-' + day;
 
-        $("#timeNow").val(date2);
-        ResCheck(date2);
+        $("#timeNow").val(date3);
+
+        window.location.href = "Reservation?date=" + date3;
     }
 
     function preDate() {
@@ -365,47 +382,18 @@
             month = "0" + month;
         if (day < 10)
             day = "0" + day;
-        var date5 = d.getFullYear() + '-' + month + '-' + day;
+        var date4 = d.getFullYear() + '-' + month + '-' + day;
 
-        $("#timeNow").val(date5);
-        ResCheck(date5);
+        $("#timeNow").val(date4);
+
+        window.location.href = "Reservation?date=" + date4;
+
     }
-
-    function ResCheck(date) {
-
-
-
-        $.ajax({
-            type: "POST",
-            url: '../Public/CheckResTable',
-            cache: false,
-            data: { "dateInf": date },
-            dataType: "json",
-            async: false,
-            success: function (res) {
-
-                $.ajax({
-                    type: "GET",
-                    url: '../Public/TablePartial',
-                    success: () => {
-                        alert("Partial");
-                    }
-
-                });
-
-
-                debugger;
+    //Rezervasyon Şema Tarih//
 
 
 
-                
-            }
-        })
-    }
-
-
-
-
+    //Rezervasyon Yap
     function openResModal() {
 
         var resStartTime = $('#doRes').attr('start');
@@ -785,5 +773,6 @@
             }
         });
     }
+    //Rezervasyon Yap//
 
 </script>

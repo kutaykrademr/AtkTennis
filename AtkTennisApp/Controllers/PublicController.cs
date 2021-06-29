@@ -23,8 +23,6 @@ namespace AtkTennisApp.Controllers
         private readonly RoleManager<AppIdentityRole> roleManager;
         private readonly SignInManager<AppIdentityUser> signInManager;
 
-
-
         public PublicController(UserManager<AppIdentityUser> userManager,
             RoleManager<AppIdentityRole> roleManager,
             SignInManager<AppIdentityUser> signInManager)
@@ -34,8 +32,6 @@ namespace AtkTennisApp.Controllers
             this.signInManager = signInManager;
 
         }
-
-
 
         Context db = new Context();
 
@@ -109,17 +105,18 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetRes", Name = "GetRes")]
-        public ReservationViewModel GetRes()
+        public ReservationViewModel GetRes(string date)
 
         {
             ReservationViewModel model = new ReservationViewModel();
-             
+
+            ViewBag.date = date;
             try
             {
                 model.resTimes = db.resTimes.ToList();
                 model.courts = db.courts.ToList();
                 model.courtPriceLists = db.courtPriceLists.ToList();
-                model.reservations = db.reservations.ToList();
+                model.reservations = db.reservations.Where(x=>x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
                       
@@ -364,29 +361,6 @@ namespace AtkTennisApp.Controllers
 
         }
 
-        [HttpGet("CheckResTable", Name = "CheckResTable")]
-        public  JsonResult CheckResTable(string date)
-
-        {
-            
-            List<Reservation> model = new List<Reservation>();
-
-            try
-            {
-                model = db.reservations.Where(x => x.ResDate == date).ToList();
-                
- 
-            }
-            catch (Exception ex)
-            {
-                model = new List<Reservation> ();
-
-                Mutuals.monitizer.AddException(ex);
-            }
-
-            return Json(model);
-
-        }
     }
 
     public class court_reserve
