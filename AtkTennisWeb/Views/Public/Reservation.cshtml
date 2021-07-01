@@ -44,7 +44,7 @@
                             @{
                                 var a = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault().WebReservation;
 
-                                @if (a == "1")
+                                if (a == "1")
                                 {
                                     <div class="card-title">
                                         <button type="button" class="btn btn-danger courtbutton" onclick="openResModal()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
@@ -282,10 +282,7 @@
     </div>
 </div>
 
-@foreach (var item in Model.reservations)
-{
-    <button id="resDatePicker" value="@item.ResDate"></button>
-}
+
 
 
 <script src="~/workSch/util.js"></script>

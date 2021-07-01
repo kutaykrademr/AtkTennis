@@ -57,14 +57,14 @@ namespace AtkTennisWeb.Controllers
             return Json("true");
 
         }
-        
+
         public IActionResult Reservation(string date)
         {
             ReservationViewDto model = new ReservationViewDto();
 
             try
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes?date="+ date));
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetRes?date=" + date));
 
                 if (model == null)
 
@@ -151,8 +151,26 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public IActionResult Logout()
+        {
+
+            try
+                
+            {
+                Helpers.Request.Get(Mutuals.AppUrl + "Public/Logout");
+            }
+
+            catch (Exception)
+            {
+                
+            }
+
+            return RedirectToAction("SignIn", "Public");
+        }
     }
-    
+
+
+
 
     public class court_reserved
     {

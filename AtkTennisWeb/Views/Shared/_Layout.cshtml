@@ -41,6 +41,11 @@
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
 }
 
+@{
+    DateTime today = DateTime.Now;
+    var date = today.ToString("yyyy-MM-dd");
+}
+
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
@@ -97,7 +102,7 @@
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Rezervasyonlar</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                        <li><a href="~/Public/Reservation" class="dropdown-item">Rezervasyon Yap</a></li>
+                        <li><a href="~/Public/Reservation?date=@date" class="dropdown-item">Rezervasyon Yap</a></li>
                         <li><a href="#" class="dropdown-item">Rezervasyon Listem</a></li>
                         <li><a href="#" class="dropdown-item">Rezervasyon İptali</a></li>
                         <li><a href="#" class="dropdown-item">Üyelik Aidatlarım</a></li>
@@ -143,8 +148,8 @@
                 <span class="brand-text font-weight-light">
                     @if (Mutuals.CompName == null)
                     {@Html.Raw("---------------")}
-                    else
-                    { @Mutuals.CompName}
+                else
+                { @Mutuals.CompName}
                 </span>
             </a>
 
@@ -152,11 +157,20 @@
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="~/adminRoot/images/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
-                    </div>
+
+
+
                     <div class="info">
-                        <a id="@userId" onclick="changeCurrentPassModal(this.id)" href="#" class="d-block">@fullname <i style="margin-left:30px" class="fas fa-user-cog"></i></a>
+                        <div class="row">
+                            <div class="col-md-1"><i style="font-size:24px; color:white" class="fas fa-user-circle"></i></div>
+
+                            <div style="margin-left:15px" class="col-md-1"><a class="d-block">@fullname</a></div>
+
+                            <div style="margin-left:102px" class="col-md-2"><a style="color:white" id="@userId" href="" onclick="changeCurrentPassModal(this.id)" class="fas fa-user-cog"></a></div>
+
+                            <div class="col-md-2"><a href="~/Public/Logout" style="color:#dc3545; font-size:21px ; margin-top:1px" class="fas fa-sign-out-alt"></a></div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -167,7 +181,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
-                            <a style="background-color:#dc3545" href="~/Home/Index" class="nav-link active">
+                            <a style="background-color:#ffc107" href="~/Home/Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Ana Menü
@@ -230,12 +244,9 @@
 
                             <ul class="nav nav-treeview">
 
-                                @{ 
-                                    DateTime today = DateTime.Now;
-                                    var date = today.ToString("yyyy-MM-dd");
-                                }
 
-                                <li class="nav-item">                            
+
+                                <li class="nav-item">
                                     <a href="~/Public/Reservation?date=@date" class="nav-link">
                                         <i class="fas fa-calendar-check nav-icon"></i>
                                         <p>Rezervasyon Yap</p>
@@ -483,7 +494,7 @@
             var newPass = $("#newPassword").val();
             var newPassCheck = $("#checkPassword").val();
 
-            debugger;
+
 
             if (newPass == newPassCheck) {
 
@@ -553,6 +564,7 @@
         }
 
 
+
     </script>
 
 
@@ -575,7 +587,8 @@
     <script src="~/plugins/jszip/jszip.min.js"></script>
     <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
     <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
-    
+
+
 
     <script src="~/vendor/select2/select2.min.js"></script>
     @*<script src="~/rjs/global.js"></script>*@
@@ -590,6 +603,7 @@
     <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
 </body>
 </html>
 

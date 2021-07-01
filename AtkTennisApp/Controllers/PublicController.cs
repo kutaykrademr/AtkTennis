@@ -359,6 +359,23 @@ namespace AtkTennisApp.Controllers
 
         }
 
+        [HttpGet("Logout", Name = "Logout")]
+        public async Task<IActionResult> Logout()
+
+        {      
+            try
+            {
+                await signInManager.SignOutAsync();
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return View();
+        }
+
     }
 
     public class court_reserve
