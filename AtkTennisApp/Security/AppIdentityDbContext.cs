@@ -9,6 +9,10 @@ namespace AtkTennisApp.Security
 {
     public class AppIdentityDbContext : IdentityDbContext<AppIdentityUser,AppIdentityRole,string>
     {
+        public AppIdentityDbContext()
+        {
+        }
+
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext>options):base(options)
         {
 

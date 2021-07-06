@@ -14,6 +14,9 @@ namespace Helpers.Dto.ViewDtos
         public string ResEvent { get; set; }
         public string UserId { get; set; }
         public string CourtId { get; set; }
+        public string ResNowDate { get; set; }
+        public bool PriceInf { get; set; }
+
 
         public CourtDto Court { get; set; }
     }

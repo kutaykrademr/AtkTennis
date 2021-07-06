@@ -113,7 +113,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent));
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate));
 
             }
             catch (Exception)
@@ -143,11 +143,51 @@ namespace AtkTennisWeb.Controllers
             }
             catch (Exception)
             {
-                return Json(new ReservationViewDto());
+                return Json(new MemberListDto());
             }
 
             return Json(true);
 
+
+        }
+
+        public JsonResult GetResModalInf(int id)
+        {
+            ResSchemaModalDto model = new ResSchemaModalDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ResSchemaModalDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResModalInf?id=" + id ));
+
+
+            }
+            catch (Exception)
+            {
+                return Json(new ResSchemaModalDto());
+            }
+
+            return Json(model);
+
+
+        }
+
+        public JsonResult CancelRes(int id)
+        {
+            ReservationDto model = new ReservationDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id));
+
+            }
+            catch (Exception)
+            {
+                return Json(new ResSchemaModalDto());
+            }
+
+            return Json(true);
 
         }
 

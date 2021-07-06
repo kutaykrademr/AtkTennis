@@ -166,7 +166,7 @@
 
                             <div style="margin-left:15px" class="col-md-1"><a class="d-block">@fullname</a></div>
 
-                            <div style="margin-left:102px" class="col-md-2"><a style="color:white" id="@userId" href="" onclick="changeCurrentPassModal(this.id)" class="fas fa-user-cog"></a></div>
+                            <div style="margin-left:102px" class="col-md-2"><a style="color:white" id="@userId"  onclick="changeCurrentPassModal(this.id)" class="fas fa-user-cog"></a></div>
 
                             <div class="col-md-2"><a href="~/Public/Logout" style="color:#dc3545; font-size:21px ; margin-top:1px" class="fas fa-sign-out-alt"></a></div>
 
@@ -178,8 +178,8 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+
                         <li class="nav-item menu-open">
                             <a style="background-color:#ffc107" href="~/Home/Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -189,214 +189,220 @@
                                 </p>
                             </a>
                         </li>
-
-                        <li class="nav-item menu-is-opening menu-open">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-circle"></i>
-                                <p>
-                                    Danışma
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="~/Home/NewRegister" class="nav-link">
-                                        <i class="fas fa-th nav-icon"></i>
-                                        <p>Yeni Üye Kayıt</p>
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a href="~/Home/ListUser" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Üye Listeleri</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="fas fa-th nav-icon"></i>
-                                        <p>Yeni Öğrenci Kayıt</p>
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Öğrenci Listeleri</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <li class="nav-item  menu-is-opening menu-open">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-bell"></i>
-                                <p>
-                                    Rezervasyonlar
-                                    <i class="fas fa-angle-left right"></i>
-
-                                </p>
-                            </a>
-
-                            <ul class="nav nav-treeview">
-
-
-
-                                <li class="nav-item">
-                                    <a href="~/Public/Reservation?date=@date" class="nav-link">
-                                        <i class="fas fa-calendar-check nav-icon"></i>
-                                        <p>Rezervasyon Yap</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
-                                        <i class="fas fa-table nav-icon"></i>
-                                        <p>Rezervasyon Listem</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
-                                        <i class="fas fa-table nav-icon"></i>
-                                        <p>Rezervasyon İptali</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
-                                        <i class="fas fa-table nav-icon"></i>
-                                        <p>Üyelik Aidatlarım</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-
-
-                        @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
+                        
+                        @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Advisory)
                         {
-                            <li class="nav-item ">
+
+
+                            <li class="nav-item menu-is-opening menu-open">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-cog"></i>
+                                    <i class="nav-icon fas fa-user-circle"></i>
                                     <p>
-                                        Sistem Ayarları
-                                        <i class="right fas fa-angle-left"></i>
+                                        Danışma
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Home/NewRegister" class="nav-link">
+                                            <i class="fas fa-th nav-icon"></i>
+                                            <p>Yeni Üye Kayıt</p>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a href="~/Home/ListUser" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Üye Listeleri</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="fas fa-th nav-icon"></i>
+                                            <p>Yeni Öğrenci Kayıt</p>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Öğrenci Listeleri</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        }
+
+                            <li class="nav-item  menu-is-opening menu-open">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-bell"></i>
+                                    <p>
+                                        Rezervasyonlar
+                                        <i class="fas fa-angle-left right"></i>
+
                                     </p>
                                 </a>
 
                                 <ul class="nav nav-treeview">
 
+
+
                                     <li class="nav-item">
-                                        <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
-                                            <i class="fas fa-id-card nav-icon"></i>
-                                            <p>Rol ve Yetkilendirme </p>
+                                        <a href="~/Public/Reservation?date=@date" class="nav-link">
+                                            <i class="fas fa-calendar-check nav-icon"></i>
+                                            <p>Rezervasyon Yap</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="~/SystemSettings/CourtSettings" class="nav-link">
-                                            <i class="fas fa-flag nav-icon"></i>
-                                            <p>Kort Ayarları </p>
+                                        <a href="~/Admin/ReservationTable" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Rezervasyon Listem</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-table-tennis"></i>
-                                            <p>
-                                                Eğitim Ayarları
-                                                <i class="right fas fa-angle-left"></i>
-                                            </p>
+                                        <a href="~/Admin/ReservationTable" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Rezervasyon İptali</p>
                                         </a>
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Okul</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Performans</p>
-                                                </a>
-                                            </li>
-
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Özel Ders</p>
-                                                </a>
-                                            </li>
-                                        </ul>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                            <p>
-                                                Öğr. Gel. ve Tak. Ayar.
-                                                <i class="right fas fa-angle-left"></i>
-                                            </p>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Antreman Havuzu</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Fiziksel Çalışmalar</p>
-                                                </a>
-                                            </li>
-
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Oyunlar</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Gelişim Formları</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>İçerik İşlemleri</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/SystemSettings/ReservationSettings" class="nav-link">
-                                            <i class="fas fa-bell nav-icon"></i>
-                                            <p>Reservasyon Ayarları </p>
+                                        <a href="~/Admin/ReservationTable" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Üyelik Aidatlarım</p>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                        }
 
 
-                    </ul>
+
+                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
+                            {
+                                <li class="nav-item ">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-cog"></i>
+                                        <p>
+                                            Sistem Ayarları
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
+                                                <i class="fas fa-id-card nav-icon"></i>
+                                                <p>Rol ve Yetkilendirme </p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/CourtSettings" class="nav-link">
+                                                <i class="fas fa-flag nav-icon"></i>
+                                                <p>Kort Ayarları </p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-table-tennis"></i>
+                                                <p>
+                                                    Eğitim Ayarları
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Okul</p>
+                                                    </a>
+                                                </li>
+
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Performans</p>
+                                                    </a>
+                                                </li>
+
+
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Özel Ders</p>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                                <p>
+                                                    Öğr. Gel. ve Tak. Ayar.
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Antreman Havuzu</p>
+                                                    </a>
+                                                </li>
+
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Fiziksel Çalışmalar</p>
+                                                    </a>
+                                                </li>
+
+
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Oyunlar</p>
+                                                    </a>
+                                                </li>
+
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Gelişim Formları</p>
+                                                    </a>
+                                                </li>
+
+                                                <li class="nav-item">
+                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>İçerik İşlemleri</p>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/ReservationSettings" class="nav-link">
+                                                <i class="fas fa-bell nav-icon"></i>
+                                                <p>Reservasyon Ayarları </p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+
+
+                        </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>
@@ -457,24 +463,14 @@
             </div>
         </div>
 
-
-
-
-
-
-
-
-
-        <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
+           
         </aside>
-        <!-- /.control-sidebar -->
+      
     </div>
-    <!-- ./wrapper -->
-    <!-- jQuery UI 1.11.4 -->
+
     <script src="~/lib/jquery/dist/jquery-ui.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    
     <script>
         $.widget.bridge('uibutton', $.ui.button)
 
@@ -509,7 +505,7 @@
                         async: true,
                         success: function (res) {
 
-                            debugger;
+                            
 
                             if (res == true) {
 

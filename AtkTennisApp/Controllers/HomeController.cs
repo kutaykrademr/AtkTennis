@@ -76,7 +76,7 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
         {
             MemberList model2 = new MemberList();
 
@@ -105,6 +105,7 @@ namespace AtkTennisApp.Controllers
 
                 model2.UserId = id;
                 model2.FullName = name;
+                model2.NickName = nickName;
                 model2.Gender = gender;
                 model2.UserName = username;
                 model2.StartDate = startDate;
@@ -129,13 +130,14 @@ namespace AtkTennisApp.Controllers
                 model2.Note = note;
                 model2.Password = password;
 
-                db.Add(model2);
-                db.SaveChanges();
+               
 
 
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, role).Wait();
+                    db.Add(model2);
+                    db.SaveChanges();
                 }
                 else
                 {

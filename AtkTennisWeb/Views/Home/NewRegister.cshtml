@@ -9,7 +9,7 @@
                     <p class="login-box-msg">Kayıt Formu </p>
                     <div>
                         <div class="row">
-                            <div class="input-group mb-3 col-md-6">
+                            <div class="input-group mb-3 col-md-4">
                                 <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -17,7 +17,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="input-group mb-3 col-md-6">
+                            <div class="input-group mb-3 col-md-4">
                                 <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -25,7 +25,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="input-group mb-3 col-md-4">
+                                <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
                                 <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
@@ -40,6 +49,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <select id="RegistersRole" class="form-control">
@@ -51,6 +61,7 @@
 
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <select id="condition" class="form-control">
                                     <option disabled="disabled" selected>Durumu</option>
@@ -85,8 +96,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
 
+                        <div class="row">
                             <div class="input-group mb-3 col-md-6">
                                 <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
                                 <div class="input-group-prepend">
@@ -140,6 +151,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
                                 <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
@@ -156,6 +168,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
                                 <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
@@ -174,6 +187,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
                                 <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
@@ -192,6 +206,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="input-group mb-3 col-md-6">
                                 <input type="text" class="form-control" id="job"  placeholder="Meslek" autocomplete="new-password">
@@ -210,6 +225,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="input-group mb-3">
                             <input type="password" class="form-control" id="password" placeholder="Password" autocomplete="new-password">
                             <div class="input-group-append">
@@ -218,6 +234,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="input-group mb-3">
                             <input type="password" class="form-control" id="checkpassword" placeholder="Retype password" autocomplete="new-password">
                             <div class="input-group-append">
@@ -283,6 +300,7 @@
         note:null,
         password: null,   
         gender: null,
+        nickName:null,
              
     };
 
@@ -307,6 +325,7 @@
 
                 userObj.name = $("#name").val();
                 userObj.username = $("#username").val();
+                userObj.nickName = $("#nickName").val();
                 userObj.startDate = $("#startDate").val();
                 userObj.finishDate = $("#finishDate").val();
                 userObj.role = $("#RegistersRole option:selected").text();
@@ -342,7 +361,7 @@
                         async: true,
                         success: function (res) {
 
-                            if (res.fullName != null && res.birthDate != null)
+                            if (res != null )
 
                                 $.confirm({
                                     title: "Bilgilendirme",

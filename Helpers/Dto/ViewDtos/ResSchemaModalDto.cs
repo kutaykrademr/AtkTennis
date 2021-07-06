@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-#nullable disable
-
-namespace AtkTennisApp.Models
+namespace Helpers.Dto.ViewDtos
 {
-    public partial class Reservation
+    public class ResSchemaModalDto
     {
-        [Key]
         public int ResId { get; set; }
         public string ResDate { get; set; }
+        public string ResTime { get; set; }
         public string ResStartTime { get; set; }
         public string ResFinishTime { get; set; }
         public string ResEvent { get; set; }
-        public string ResTime { get; set; }
-        public string UserId { get; set; }     
+        public string FullName { get; set; }
+        public string NickName { get; set; }
+        public string CourtName { get; set; }
         public string ResNowDate { get; set; }
         public bool PriceInf { get; set; }
-      
-        
-
-        public Court Court { get; set; }
-        
 
     }
 }

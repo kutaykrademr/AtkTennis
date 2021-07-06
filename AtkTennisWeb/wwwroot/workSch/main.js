@@ -83,6 +83,7 @@
 
 	ScheduleTemplate.prototype.initEvents = function() {
 		var self = this;
+
 		for(var i = 0; i < this.singleEvents.length; i++) {
 			// open modal when user selects an event
 			this.singleEvents[i].addEventListener('click', function(event){

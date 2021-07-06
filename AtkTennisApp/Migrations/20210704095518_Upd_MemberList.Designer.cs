@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210704095518_Upd_MemberList")]
+    partial class Upd_MemberList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,9 +354,6 @@ namespace AtkTennisApp.Migrations
 
                     b.Property<int?>("CourtId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("PriceInf")
-                        .HasColumnType("bit");
 
                     b.Property<string>("ResDate")
                         .HasColumnType("nvarchar(max)");

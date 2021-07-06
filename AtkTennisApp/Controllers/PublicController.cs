@@ -12,6 +12,7 @@ using AtkTennisApp.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Helpers.Dto.ViewDtos;
 
 namespace AtkTennisApp.Controllers
 {
@@ -94,8 +95,11 @@ namespace AtkTennisApp.Controllers
                 
 
                 var user =  await userManager.FindByIdAsync(model.custom_userid);
+
                 var roles = await userManager.GetRolesAsync(user);
+
                 var roleID = await roleManager.FindByNameAsync(roles[0]);
+
                 model.custom_role = roles[0];
                 model.custom_roleId = roleID.Id;
 
@@ -266,14 +270,14 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservation", Name = "NewReservation")]
-        public JsonResult NewReservation(string ResDate , string ResTime ,string ResStartTime , string ResFinishTime , string ResEvent, string UserId , int CourtId)
+        public JsonResult NewReservation(string ResDate , string ResTime ,string ResStartTime , string ResFinishTime , string ResEvent, string UserId , int CourtId , string ResNowDate)
         {
 
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
 
-            if (ResDate == null || ResTime ==null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null )
+            if (ResDate == null || ResTime ==null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate==null )
             {
                 return Json(false);
             }
@@ -304,6 +308,7 @@ namespace AtkTennisApp.Controllers
                     res.ResEvent = ResEvent;
                     res.ResTime = ResTime;
                     res.UserId = UserId;
+                    res.ResNowDate = ResNowDate;
                     
 
                     db.reservations.Add(res);
@@ -351,6 +356,81 @@ namespace AtkTennisApp.Controllers
             catch (Exception ex)
             {
                 model = new MemberList();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(true);
+
+        }
+
+        [HttpGet("GetResModalInf", Name = "GetResModalInf")]
+        public JsonResult GetResModalInf(int id)
+
+        {
+            MemberList mem = new MemberList();
+            ReservationCourtViewModel model = new ReservationCourtViewModel();
+            ResSchemaModalDto model2 = new ResSchemaModalDto();
+
+            try
+            {
+                var a = db.reservations.ToList();
+
+                model.courts = db.courts.ToList();
+                model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                
+
+                mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
+
+                model2.FullName = mem.FullName;
+                model2.NickName = mem.NickName;
+                model2.CourtName = model.reservations.Court.CourtName;
+                model2.ResDate = model.reservations.ResDate;
+                model2.ResEvent = model.reservations.ResEvent;
+                model2.ResFinishTime = model.reservations.ResFinishTime;
+                model2.ResId = id;
+                model2.ResStartTime = model.reservations.ResStartTime;
+                model2.ResTime = model.reservations.ResTime;
+                model2.ResNowDate = model.reservations.ResNowDate;
+              
+               
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationCourtViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model2);
+
+        }
+
+        [HttpGet("CancelRes", Name = "CancelRes")]
+        public JsonResult CancelRes(int id)
+
+        {
+            Reservation model = new Reservation();
+
+            try
+            {
+                
+                model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+
+                if (model != null)
+                {
+                    db.Remove(model);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new Reservation();
 
                 Mutuals.monitizer.AddException(ex);
             }

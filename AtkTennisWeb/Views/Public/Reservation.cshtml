@@ -11,6 +11,7 @@
 <link href="~/workSch/style.css" rel="stylesheet" />
 
 @{
+  
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
@@ -58,6 +59,10 @@
                                 }
                             }
 
+                            <div style="margin:8px" id="TimeInf">
+
+                            </div>
+
                             <div>
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
@@ -104,16 +109,27 @@
                                             <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
 
 
-                                            <ul style="height:850px">
+                                            <ul>
                                                 @foreach (var item2 in Model.reservations)
                                                 {
                                                     if (item.CourtId == item2.Court.CourtId)
                                                     {
                                                         <li class="cd-schedule__event ">
 
-                                                            <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" data-event="@item2.ResEvent">
-                                                                <em class="cd-schedule__name">KK</em>
-                                                            </a>
+                                                            @if (item2.UserId == userId)
+                                                            {
+                                                                <a id="@item2.ResId" data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" onclick="openResInfModal(this.id)" style="background-color:#9a12b3 ">
+                                                                    <em class="cd-schedule__name">kk</em>
+                                                                </a>
+                                                            }
+
+                                                            else
+                                                            {
+                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" style="background-color:#9a12b3 ">
+                                                                    <em class="cd-schedule__name">KK</em>
+                                                                </a>
+                                                            }
+
                                                         </li>
                                                     }
                                                 }
@@ -126,24 +142,20 @@
 
 
                             <div class="cd-schedule-modal">
-                                <header class="cd-schedule-modal__header">
-                                    <div class="cd-schedule-modal__content">
-                                        <span class="cd-schedule-modal__date"></span>
-                                        <h3 class="cd-schedule-modal__name"></h3>
-                                    </div>
 
-                                    <div class="cd-schedule-modal__header-bg"></div>
-                                </header>
-
-                                <div class="cd-schedule-modal__body">
-                                    <div class="cd-schedule-modal__event-info"></div>
-                                    <div class="cd-schedule-modal__body-bg"></div>
-                                </div>
-
-                                <a href="#0" class="cd-schedule-modal__close text-replace">Close</a>
                             </div>
 
                             <div class="cd-schedule__cover-layer"></div>
+
+                        </div>
+
+                        <div class="card-footer d-flex justify-content-between">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item"><a style="color: white; background-color:#32c5d2" class="page-link">Üye</a></li>
+                                    <li class="page-item"><a style="color: white; background-color:#9a12b3" class="page-link">Ant</a></li>
+                                </ul>
+                            </nav>
 
                         </div>
                     </div>
@@ -154,8 +166,115 @@
 </div>
 
 
-<!-- Button trigger modal -->
-<!-- Modal -->
+<div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #004e6c;">
+                <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
+                <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            
+                <div class="card">
+                    <div class="card-body row" style="background-color: #f7f7f7f7;">
+
+                        <h5 class="col-md-9" id="nickAndFullName"></h5>
+                        <div id="cancelRes" class="col-md-0">
+                            <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelRes(this.id)">İptal Et</button>
+                        </div>
+                        <div class="col-md">
+                            <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body" style="background-color:#f7f7f7">
+                                <ul style="font-size:20px" class="list-group list-group-flush">
+                                    <li id="courtName" class="list-group-item"></li>
+                                    <li id="resDate" class="list-group-item"></li>
+                                    <li id="resTime" class="list-group-item"></li>
+                                    <li id="resNowDate" class="list-group-item"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div id="PriceInf" class="info-box shadow-lg">
+
+                                </div>
+
+                                <div class="info-box shadow-lg">
+                                    <div class="info-box-content">
+                                        <table style="text-align:center" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Ücret Bilgisi</th>
+                                                    <th scope="col">Ücret </th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>Kort</td>
+                                                    <td>40</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Işık</td>
+                                                    <td>40</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="info-box shadow-lg">
+                                    <div class="info-box-content">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger">Track Artist</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -189,8 +308,20 @@
                     </div>
                 </div>
 
+
                 <div class="col-sm-6">
-                    <input class="form-control" type="date" id="dateInf">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+
+
+                            <li class="page-item"><button style="color:black; background-color:#ffc107" class="page-link" onclick="getRes('today')" name="@DateTime.Now">Bugün</button></li>
+                            <li class="page-item"><button style="color:black" class="page-link" onclick="getRes('tomorrow')" name="@DateTime.Now.AddDays(1)">Yarın</button></li>
+                            <li class="page-item"><input class="form-control" type="date" id="dateInf" style="border: 1px solid var(--color-contrast-low);"></li>
+                            <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="pre()"><i class="fas fa-chevron-left"></i></button></li>
+                            <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="next()"><i class="fas fa-chevron-right"></i></button></li>
+
+                        </ul>
+                    </nav>
                 </div>
 
                 @{
@@ -198,14 +329,12 @@
                 }
 
                 <div>
-                    <button type="button" class="btn btn-primary" style="visibility:hidden" id="resTimeMin" value="@resTimeMin.ReservationValue">Saat Ara</button>
+                    <button type="button" class="btn btn-primary" style="visibility:hidden" id="resTimeMin" value="@resTimeMin.ReservationValue"></button>
                 </div>
 
             </div>
 
-            <div id="CourtandTime">
 
-            </div>
 
             <div class="modal-header">
                 <div class="row" id="court_select">
@@ -215,6 +344,9 @@
                 </div>
             </div>
 
+            <div id="CourtandTime">
+
+            </div>
 
 
             <div class="modal-header">
@@ -311,8 +443,6 @@
         });
 
 
-
-
             var now = new Date();
             var month = (now.getMonth() + 1);
             var day = now.getDate();
@@ -327,8 +457,7 @@
 
         //Rezervasyon Şema Tarih
 
-      $('#timeNow').val(picker);
-
+        $('#timeNow').val(picker);
 
 
         $('#timeNow').change(function () {
@@ -336,8 +465,6 @@
             window.location.href = "Reservation?date=" + $('#timeNow').val();
 
          });
-
-        //Rezervasyon Şema Tarih//
 
 
         //Rezervasyon Yap
@@ -347,11 +474,48 @@
                 getCourtTime();
             });
         $('#selectCourt').change(function () {
+
                 getCourtTime();
-            });
-        //Rezervasyon Yap//
+        });
 
 
+        //TimeInf
+        var time = $('#timeNow').val();
+        var b = time.split("-");
+        var timeNow = b[2] + '-' + b[1] + '-' + b[0];
+
+        var days = new Date(time);
+        var getday = days.getDay();
+
+
+
+        switch (getday) {
+            case 0:
+                day = "Pazar";
+                break;
+            case 1:
+                day = "Pazartesi";
+                break;
+            case 2:
+                day = "Salı";
+                break;
+            case 3:
+                day = "Çarşamba";
+                break;
+            case 4:
+                day = "Perşembe";
+                break;
+            case 5:
+                day = "Cuma";
+                break;
+            case 6:
+                day = "Cumartesi";
+        }
+
+        $("#TimeInf").empty();
+        row = "";
+        row += '<h4 style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i>' + ' ' + timeNow + ' ' + ' - ' + ' ' + day + ' ' + '</h4>';
+        $("#TimeInf").append(row);
     });
 
     // Rezervasyon Şema Tarih
@@ -396,9 +560,6 @@
         window.location.href = "Reservation?date=" + date4;
 
     }
-    //Rezervasyon Şema Tarih//
-
-
 
     //Rezervasyon Yap
     function openResModal() {
@@ -431,15 +592,89 @@
         $('#rsvModal').modal('toggle');
     }
 
+    function getRes(time) {
+
+        var date = new Date();
+
+
+
+        if (time == "today") {
+            var month = (date.getMonth() + 1);
+            var day = date.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var date3 = date.getFullYear() + '-' + month + '-' + day;
+            $("#dateInf").val(date3);
+
+            getCourtTime();
+
+
+        } else if (time == "tomorrow") {
+            date.setDate(date.getDate() + 1);
+            var month = (date.getMonth() + 1);
+            var day = date.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var date2 = date.getFullYear() + '-' + month + '-' + day;
+
+            $("#dateInf").val(date2);
+
+            getCourtTime();
+
+        }
+
+    }
+
+    function next() {
+
+        var date = $("#dateInf").val();
+
+        const d = new Date(date);
+        d.setDate(d.getDate() + 1);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+
+        var date3 = d.getFullYear() + '-' + month + '-' + day;
+        $("#dateInf").val(date3);
+        getCourtTime()
+    }
+
+    function pre() {
+
+        var date = $("#dateInf").val();
+
+        const d = new Date(date);
+        d.setDate(d.getDate() - 1);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        var date4 = d.getFullYear() + '-' + month + '-' + day;
+
+        $("#dateInf").val(date4);
+        getCourtTime()
+
+    }
+
     function getCourtTime() {
 
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes();
-        
 
         var days = new Date($('#dateInf').val());
         var getday = days.getDay();
-
 
         var dd = String(dt.getDate()).padStart(2, '0');
         var mm = String(dt.getMonth() + 1).padStart(2, '0');
@@ -448,7 +683,11 @@
         var today = yyyy + '-' + mm + '-' + dd;
 
         var courtInf = $("#selectCourt option:selected").text();
+
         var date = $("#dateInf").val();
+        var b = date.split("-");
+        var timeInf = b[2] + '-' + b[1] + '-' + b[0];
+
 
         if ($("#dateInf").val() < today) {
 
@@ -488,7 +727,6 @@
                         });
                     }
 
-
                     switch (getday) {
                         case 0:
                             day = "Pazar";
@@ -515,7 +753,7 @@
                     $("#CourtandTime").empty();
                     row = "";
                     row += '<div class="modal-header" style="background-color: #004e6c;">';
-                    row += '<h4 style=" margin:auto; color:white"><i class="fas fa-flag nav-icon"></i>' + ' ' + courtInf + ' ' + ' - ' + ' ' + date + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
+                    row += '<h4 style=" margin:auto; color:white"><i class="fas fa-flag nav-icon"></i>' + ' ' + courtInf + ' ' + ' - ' + ' ' + timeInf + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
                     row += '</div>';
                     $("#CourtandTime").append(row);
 
@@ -541,7 +779,7 @@
                                 else if (res[i].start <= time && date == today)
 
                                     NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-                               
+
                                 else
 
                                     NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
@@ -588,10 +826,15 @@
             times.push(this.name);
         });
 
-        //saat
+        //saat  - tarih
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
         //CourtId
         var id = $("#selectCourt option:selected").val();
 
@@ -641,8 +884,10 @@
             userId: '',
             CourtId: '',
             ResTime: '',
+            ResNowDate:'',
         }
 
+        resobject.ResNowDate = today;
         resobject.ResStartTime = times[0];
         resobject.ResFinishTime = resFinishTime;
 
@@ -703,6 +948,131 @@
                 }
             }
         });
+    }
+
+    //RezervasyonBilgiModal
+
+    function openResInfModal(id) {
+
+        $.ajax({
+            type: "GET",
+            url: '../Public/GetResModalInf',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                $("#PriceInf").empty();
+                row = "";
+
+                if (res.priceInf == false) {
+                    row += '<span class="info-box-icon bg-danger"><i class="fas fa-times"></i></span>';
+                    row += '<div class="info-box-content">';
+                    row += '<span class="info-box-text">Ücreti Ödenmedi - Borç Mevcut</span>';
+                }
+                else {
+                    row += '<span style="background-color:#82c91e" class="info-box-icon "><i class="fas fa-check"></i></span>';
+                    row += '<div class="info-box-content">';
+                    row += '<span class="info-box-text">Ücreti Ödendi - Borç Mevcut Değil</span>';
+                }
+                row += '</div>';
+                $("#PriceInf").append(row);
+
+
+
+                var a = res.resNowDate.split("-");
+                var nowDate = a[2] + '-' + a[1] + '-' + a[0];
+
+                var b = res.resDate.split("-");
+                var date = b[2] + '-' + b[1] + '-' + b[0];
+
+                var days = new Date(res.resDate);
+                var getday = days.getDay();
+
+                switch (getday) {
+                    case 0:
+                        day = "Pazar";
+                        break;
+                    case 1:
+                        day = "Pazartesi";
+                        break;
+                    case 2:
+                        day = "Salı";
+                        break;
+                    case 3:
+                        day = "Çarşamba";
+                        break;
+                    case 4:
+                        day = "Perşembe";
+                        break;
+                    case 5:
+                        day = "Cuma";
+                        break;
+                    case 6:
+                        day = "Cumartesi";
+                }
+
+                if (res != null) {
+
+                    $("#nickAndFullName").text(res.nickName + ' - ' + res.fullName);
+                    $("#courtName").text('Kort Adı:' +' ' + res.courtName);
+                    $("#resDate").text('Tarih-Gün:' + ' ' + date + ' - ' + day);
+                    $("#resTime").text('Saat:' + ' ' + res.resStartTime + ' - ' + res.resFinishTime);
+                    $("#resNowDate").text('Oluşturulma'+':' + ' ' + nowDate + ' - ' + res.resTime);
+
+                    $("#cancelRes button:nth-of-type(1)").attr("id", id);
+                    $('#openResInf').modal('toggle');
+
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Üye Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+
+    function cancelRes(id) {
+
+        debugger;
+
+        $.ajax({
+            type: "GET",
+            url: '../Public/CancelRes',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                
+
+       
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
     }
 
 
