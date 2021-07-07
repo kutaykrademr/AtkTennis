@@ -11,7 +11,7 @@
 <link href="~/workSch/style.css" rel="stylesheet" />
 
 @{
-  
+
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
@@ -176,7 +176,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            
+
                 <div class="card">
                     <div class="card-body row" style="background-color: #f7f7f7f7;">
 
@@ -323,15 +323,6 @@
                         </ul>
                     </nav>
                 </div>
-
-                @{
-                    var resTimeMin = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Minimum Zaman Dilimi (Dakika)(15,30,60)").FirstOrDefault();
-                }
-
-                <div>
-                    <button type="button" class="btn btn-primary" style="visibility:hidden" id="resTimeMin" value="@resTimeMin.ReservationValue"></button>
-                </div>
-
             </div>
 
 
@@ -567,29 +558,45 @@
         var resStartTime = $('#doRes').attr('start');
         var resFinishTime = $('#doRes').attr('finish');
         var dt = new Date();
-        var time = dt.getHours() + ":" + dt.getMinutes();
+        var hours = dt.getHours();
+        var min = dt.getMinutes();
+
+        if (hours < 10)
+        {
+            var time = "0" +  hours + ":" + min;
+        }
+        else if (min < 10) {
+            var time = hours + ":" + "0" +  min;
+        }
+        else if (hours < 10 && min <10) {
+            var time = "0" + hours + ":" + "0" + min;
+        }
+        else
+            var time =  hours + ":" + min;
 
 
 
-        //if (resStartTime < time && resFinishTime > time) {
+        var a = time.split(":");
+        var b = resStartTime.split(":");
+        var c = resFinishTime.split(":");
 
-        //    $('#rsvModal').modal('toggle');
-        //}
+        var nowTime = a[0] + a[1];
+        var sTime = b[0] + b[1];
+        var fTime = c[0] + c[1];
 
-        //else {
+        debugger;
 
-        //    $.confirm({
-        //        title: "Uyarı",
-        //        content: "Rezervasyon Saatleri Dışındasınız. Rezervasyon Saatleri:" + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.",
-        //        buttons: {
-        //            TAMAM: function () {
-        //                window.location.href = "Reservation"
-        //            }
-        //        }
-        //    });
-        //}
+        if (sTime < nowTime && fTime > nowTime) {
 
-        $('#rsvModal').modal('toggle');
+            $('#rsvModal').modal('toggle');
+        }
+
+        else {
+
+            swal("Rezervasyon Saatleri Dışındasınız !", "Rezervasyon Saatleri: " + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.", "warning", {
+                button: "Tamam",
+            });
+        }
     }
 
     function getRes(time) {
@@ -671,7 +678,22 @@
     function getCourtTime() {
 
         var dt = new Date();
-        var time = dt.getHours() + ":" + dt.getMinutes();
+        var hours = dt.getHours();
+        var min = dt.getMinutes();
+
+        if (hours < 10)
+        {
+            var time = "0" +  hours + ":" + min;
+        }
+        else if (min < 10) {
+            var time = hours + ":" + "0" +  min;
+        }
+        else if (hours < 10 && min <10) {
+            var time = "0" + hours + ":" + "0" + min;
+        }
+        else
+            var time =  hours + ":" + min;
+
 
         var days = new Date($('#dateInf').val());
         var getday = days.getDay();
@@ -691,16 +713,12 @@
 
         if ($("#dateInf").val() < today) {
 
-            $.confirm({
-                title: "Uyarı",
-                content: "Önceki Günlere Rezervasyon Yapamazsınız.",
-                buttons: {
-                    TAMAM: function () {
-
-                        $("#dateInf").val(today)
-                    }
-                }
+            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+                button: "Tamam",
             });
+
+            $("#dateInf").val(today)
+           
         }
 
         else {
@@ -709,22 +727,17 @@
                 type: "POST",
                 url: '../Public/GetResTime',
                 cache: false,
-                data: { "dateInf": $("#dateInf").val(), courtInf, "timeMin": $("#resTimeMin").val() },
+                data: { "dateInf": $("#dateInf").val(), courtInf },
                 dataType: "json",
                 async: false,
                 success: function (res) {
 
                     if (res == false) {
 
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Lütfen Kort Bilgisi ve/veya Tarih Giriniz.",
-                            buttons: {
-                                TAMAM: function () {
-
-                                }
-                            }
+                        swal("Uyarı !", "Lütfen Kort Bilgisi ve/veya Tarih Giriniz.", "warning", {
+                            button: "Tamam",
                         });
+
                     }
 
                     switch (getday) {
@@ -760,13 +773,9 @@
 
                     if (res.length > 0) {
 
-                        var timeMin = $("#resTimeMin").val();
-
-                        if (timeMin == "60" || timeMin == "30" || timeMin == "15" ) {
-
                             $("#ResModal").empty();
 
-                            for (var i = 0; i < res.length; i++) {
+                        for (var i = 0; i < res.length; i++) {
 
                                 NewRow = "";
                                 NewRow += '<div class="form-group">';
@@ -788,24 +797,10 @@
 
 
                                 $("#ResModal").append(NewRow);
-
-                            }
                         }
 
-                        else
-
-                            $.confirm({
-                                title: "Uyarı  ",
-                                content: "Rezervasyon Ayarlarını Gözden Geçiriniz , Minimum Zaman Dilimi (Dakika)(15,30,60)",
-                                buttons: {
-                                    TAMAM: function () {
-
-                                    }
-                                }
-                            });
                     }
                 },
-
 
                 error: function (textStatus, errorThrown) {
                     console.log(JSON.stringify(textStatus));
@@ -817,8 +812,6 @@
     }
 
     function Approve() {
-
-        var timeMin = $("#resTimeMin").val();
 
         // seçilen saatler
         var times = [];
@@ -838,42 +831,42 @@
         //CourtId
         var id = $("#selectCourt option:selected").val();
 
-        //bitiş tarihine 15,30,60 dk ekle
-        // Bir saatlik
-        var resSetTime = $('#doRes').attr('setTime');
+        ////bitiş tarihine 15,30,60 dk ekle
+        //// Bir saatlik
+        //var resSetTime = $('#doRes').attr('setTime');
 
-        if (resSetTime == 60) {
-            function addMinutes(time, minsToAdd) {
-                function D(J) { return (J < 10 ? '0' : '') + J; };
-                var piece = time.split(':');
-                var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
+        //if (resSetTime == 1) {
+        //    function addMinutes(time, minsToAdd) {
+        //        function D(J) { return (J < 10 ? '0' : '') + J; };
+        //        var piece = time.split(':');
+        //        var mins = piece[0] * 60 + +piece[1] + +minsToAdd;
 
-                return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
-            }
+        //        return D(mins % (24 * 60) / 60 | 0) + ':' + D(mins % 60);
+        //    }
 
-            if (timeMin == 15 && times.length < 5) {
-                var finishTime = times[3];
-                var resFinishTime = addMinutes(finishTime, '15');
-            }
-            else if (timeMin == 30 && times.length < 3) {
-                var finishTime = times[1];
-                var resFinishTime = addMinutes(finishTime, '30');
-            }
-            else if (timeMin == 60 && times.length < 2) {
-                var finishTime = times[0];
-                var resFinishTime = addMinutes(finishTime, '60');
-            }
-            else
-                $.confirm({
-                    title: "Uyarı",
-                    content: "En fazla 1 Saatlik Rezervasyon Yapabilirsiniz.",
-                    buttons: {
-                        TAMAM: function () {
+        //    if (timeMin == 15 && times.length < 5) {
+        //        var finishTime = times[3];
+        //        var resFinishTime = addMinutes(finishTime, '15');
+        //    }
+        //    else if (timeMin == 30 && times.length < 3) {
+        //        var finishTime = times[1];
+        //        var resFinishTime = addMinutes(finishTime, '30');
+        //    }
+        //    else if (timeMin == 60 && times.length < 2) {
+        //        var finishTime = times[0];
+        //        var resFinishTime = addMinutes(finishTime, '60');
+        //    }
+        //    else
+        //        $.confirm({
+        //            title: "Uyarı",
+        //            content: "En fazla 1 Saatlik Rezervasyon Yapabilirsiniz.",
+        //            buttons: {
+        //                TAMAM: function () {
 
-                        }
-                    }
-                });
-        }
+        //                }
+        //            }
+        //        });
+        //}
 
         var resobject = {
 
@@ -889,7 +882,7 @@
 
         resobject.ResNowDate = today;
         resobject.ResStartTime = times[0];
-        resobject.ResFinishTime = resFinishTime;
+        resobject.ResFinishTime = times[(times.length - 1)];
 
         resobject.ResDate = $("#dateInf").val();
         resobject.ResTime = time;
@@ -908,20 +901,19 @@
                 async: true,
                 success: function (res) {
 
-
                     if (res == true) {
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti.",
-                            buttons: {
-                                TAMAM: function () {
 
-                                    $('#rsvModal').modal('toggle');
+                        $('#rsvModal').modal('toggle');
 
-                                    window.location.href = "Reservation?date=" + $('#timeNow').val();
+                        swal({
+                            title: "Rezervasyon Başarılı",
+                            text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
+                            
+                            window.location.href = "Reservation?date=" + $('#timeNow').val();
 
-                                }
-                            }
                         });
                     }
 
@@ -936,17 +928,10 @@
         }
 
     }
-
     function WebReservation() {
 
-        $.confirm({
-            title: "Uyarı",
-            content: "İnternet Üzerinden Rezervasyon Yetkiniz Bulunmamaktadır. İletişime Geçiniz.",
-            buttons: {
-                TAMAM: function () {
-
-                }
-            }
+        swal("Dikkat!", "İnternet Üzerinden Rezervasyon Yetkiniz Bulunmamaktadır.", "warning", {
+            button: "Tamam",
         });
     }
 
@@ -1048,31 +1033,60 @@
 
     }
 
-
     function cancelRes(id) {
 
-        debugger;
+        $('#openResInf').modal('toggle');
 
-        $.ajax({
-            type: "GET",
-            url: '../Public/CancelRes',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
+        swal({
+            title: "Emin Misiniz?",
+            text: "Rezervasyon Bilgisi Silinecek !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
 
-                
+                    $.ajax({
+                        type: "GET",
+                        url: '../Public/CancelRes',
+                        cache: false,
+                        data: { "id": id },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
 
-       
-            },
+                            if (res != null) {
 
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+                                swal({
+                                    title: "Rezervasyon Silindi",
+                                    text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Silindi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
 
+                                    window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+                                });
+
+                            }
+                        },
+
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+
+                }
+                else
+                    swal({
+                        title: "Rezervasyon Korundu",
+                        text: "Rezervasyonu Silmekten Vazgeçtiniz!",
+                        icon: "success",
+                        button: "Tamam",
+                    });
+            });
     }
 
 

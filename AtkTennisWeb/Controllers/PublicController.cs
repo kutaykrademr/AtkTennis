@@ -80,13 +80,13 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
-        public JsonResult GetResTime(string courtInf, string dateInf, int timeMin)
+        public JsonResult GetResTime(string courtInf, string dateInf)
         {
             List<court_reserved> model = new List<court_reserved>();
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<List<court_reserved>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResTime?courtInf=" + courtInf + "&dateInf=" + dateInf + "&timeMin=" + timeMin));
+                model = Helpers.Serializers.DeserializeJson<List<court_reserved>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResTime?courtInf=" + courtInf + "&dateInf=" + dateInf ));
 
                 if (model == null)
 
@@ -181,13 +181,21 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id));
 
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
             }
             catch (Exception)
             {
                 return Json(new ResSchemaModalDto());
             }
 
-            return Json(true);
+            return Json(model);
 
         }
 

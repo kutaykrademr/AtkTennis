@@ -259,6 +259,26 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult AddNewCourtTimeInf(string courtStartTime, int courtId, string courtFinishTime, string courtPeriod)
+        {
+            CourtTimeInfDto model = new CourtTimeInfDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtTimeInfDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddNewCourtTimeInf?courtId=" + courtId + "&courtStartTime=" + courtStartTime + "&courtFinishTime=" + courtFinishTime + "&courtPeriod=" + courtPeriod ));
+
+                if ( model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtTimeInfDto());
+            }
+
+            return Json(true);
+
+
+        }
 
 
         //Kort Ücret Ayarları

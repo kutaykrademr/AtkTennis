@@ -8,7 +8,7 @@ namespace Helpers
 {
     public static class Request
     {
-        public static string Get(string url, string token = "")
+        public static string Get(string url, string token = "", string v = null)
         {
             string result = string.Empty;
 

@@ -11,7 +11,7 @@ using AtkTennisApp.ViewModels;
 
 namespace AtkTennisApp.Controllers
 {
-    
+
 
     [Route("[controller]")]
     [ApiController]
@@ -35,7 +35,7 @@ namespace AtkTennisApp.Controllers
         #region IdentityRoleSettings
 
         [HttpGet("NewRole", Name = "NewRole")]
-        public AppIdentityRole NewRole( string roleName)
+        public AppIdentityRole NewRole(string roleName)
         {
 
             var Role = new AppIdentityRole();
@@ -72,7 +72,7 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
             }
 
-            return Role;           
+            return Role;
         }
 
         [HttpGet("DeleteRole", Name = "DeleteRole")]
@@ -87,7 +87,7 @@ namespace AtkTennisApp.Controllers
             {
                 if (role == null)
                 {
-                    ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";       
+                    ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
                 }
 
                 else
@@ -95,7 +95,7 @@ namespace AtkTennisApp.Controllers
 
                     var result = await roleManager.DeleteAsync(role);
 
-                    Role2 = db.userSettings.Where(x => x.RoleId == role.Id ).FirstOrDefault();
+                    Role2 = db.userSettings.Where(x => x.RoleId == role.Id).FirstOrDefault();
 
                     if (Role2.RoleId != null)
                     {
@@ -149,7 +149,7 @@ namespace AtkTennisApp.Controllers
 
         {
             AppIdentityRole model = new AppIdentityRole();
-           
+
             try
             {
                 model = await roleManager.FindByIdAsync(ID);
@@ -179,19 +179,19 @@ namespace AtkTennisApp.Controllers
                 model = await roleManager.FindByIdAsync(id);
 
                 if (model != null)
-                {                   
+                {
                     model.NormalizedName = roleName;
                     model.Name = roleName;
                 }
 
                 var result = await roleManager.UpdateAsync(model);
-               
+
                 Role2 = db.userSettings.Where(x => x.RoleId == role.Id).FirstOrDefault();
 
                 if (Role2.RoleId != null)
                 {
                     Role2.RoleName = roleName;
-                    
+
 
                     db.Update(Role2);
                     db.SaveChanges();
@@ -222,7 +222,7 @@ namespace AtkTennisApp.Controllers
             {
                 List<string> trueList = new List<string>(trueStr.Split("-").ToArray());
 
-               
+
 
                 model = db.userSettings.ToList();
                 List<int> idList = new List<int>();
@@ -237,7 +237,7 @@ namespace AtkTennisApp.Controllers
                     activeAuth.Clear();
                     foreach (var item2 in trueList)
                     {
-                        if(item == Convert.ToInt32(item2.Split("_")[1]))
+                        if (item == Convert.ToInt32(item2.Split("_")[1]))
                         {
                             activeAuth.Add(item2.Split("_")[0]);
                         }
@@ -289,24 +289,25 @@ namespace AtkTennisApp.Controllers
         public CourtSettingsViewModel GetCourt()
 
         {
-           CourtSettingsViewModel model = new CourtSettingsViewModel();
-         
-           
+            CourtSettingsViewModel model = new CourtSettingsViewModel();
+
+
             try
             {
                 model.courtPriceLists = db.courtPriceLists.ToList();
                 model.Courts = db.courts.ToList();
+                model.courtTimeInfs = db.courtTimeInfs.ToList();
 
             }
             catch (Exception ex)
             {
                 model = new CourtSettingsViewModel();
-                
+
                 Mutuals.monitizer.AddException(ex);
             }
 
             return model;
-          
+
         }
 
 
@@ -329,7 +330,7 @@ namespace AtkTennisApp.Controllers
 
                     db.Add(Court);
                     db.SaveChanges();
-                   
+
                 }
 
             }
@@ -350,8 +351,8 @@ namespace AtkTennisApp.Controllers
             Court model = new Court();
 
             try
-            {        
-                    model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();   
+            {
+                model = db.courts.Where(x => x.CourtId == ID).SingleOrDefault();
             }
             catch (Exception ex)
             {
@@ -364,7 +365,7 @@ namespace AtkTennisApp.Controllers
 
         //kontrol eksiği var
         [HttpGet("UpdateCourt", Name = "UpdateCourt")]
-        public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition)
+        public JsonResult UpdateCourt(int id, string courtName, string courtType, int courtCondition, int courtWebCondition)
         {
             Court model = new Court();
 
@@ -408,7 +409,7 @@ namespace AtkTennisApp.Controllers
                     db.Remove(model);
                     db.SaveChanges();
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -420,7 +421,49 @@ namespace AtkTennisApp.Controllers
         }
 
 
+        [HttpGet("AddNewCourtTimeInf", Name = "AddNewCourtTimeInf")]
+        public JsonResult AddNewCourtTimeInf(int courtId, string courtStartTime, string courtFinishTime, string courtPeriod)
+        {
 
+
+            CourtTimeInf model = new CourtTimeInf();
+
+
+            try
+            {
+                if (courtId != null || courtStartTime != null || courtFinishTime != null || courtPeriod != null)
+                {
+
+                    var a = db.courtTimeInfs.Where(x => x.CourtId == courtId).FirstOrDefault();
+
+                    if (a == null)
+                    {
+                        model.CourtId = courtId;
+                        model.CourtStartTime = courtStartTime;
+                        model.CourtFinishTime = courtFinishTime;
+                        model.CourtTimePeriod = courtPeriod;
+
+                        db.Add(model);
+                        db.SaveChanges();
+                    }
+
+
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
 
 
         [HttpGet("NewCourtPriceList", Name = "NewCourtPriceList")]
@@ -431,20 +474,20 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                if (recipeName != null ||  recipePriceType != null || courtRecipeType != null || recipeCondition != null)
+                if (recipeName != null || recipePriceType != null || courtRecipeType != null || recipeCondition != null)
                 {
                     CourtPriceList.Name = recipeName;
                     CourtPriceList.CourtPrice = recipePrice;
                     CourtPriceList.PriceType = recipePriceType;
                     CourtPriceList.RecipeType = courtRecipeType;
                     CourtPriceList.Condition = recipeCondition;
-                
+
 
                     db.Add(CourtPriceList);
                     db.SaveChanges();
 
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -476,7 +519,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateCourtPriceList", Name = "UpdateCourtPriceList")]
-        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType , string condition)
+        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition)
         {
             CourtPriceList model = new CourtPriceList();
 
@@ -545,9 +588,9 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model.schoolPriceTypes = db.schoolPriceTypes.ToList();
-                model.schoolPrices = db.schoolPrices.ToList(); 
+                model.schoolPrices = db.schoolPrices.ToList();
                 model.schoolTypes = db.schoolTypes.ToList();
-                model.schoolLevels = db.schoolLevels.ToList();       
+                model.schoolLevels = db.schoolLevels.ToList();
             }
             catch (Exception ex)
             {
@@ -566,7 +609,7 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                if (schoolCode != null || schoolType != null )
+                if (schoolCode != null || schoolType != null)
                 {
                     model.Code = schoolCode;
                     model.Types = schoolType;
@@ -597,8 +640,8 @@ namespace AtkTennisApp.Controllers
             {
                 model = db.schoolTypes.Where(x => x.SchoolTypesId == id).SingleOrDefault();
 
-                if (model != null )
-                {                                     
+                if (model != null)
+                {
 
                     db.Remove(model);
                     db.SaveChanges();
@@ -666,7 +709,7 @@ namespace AtkTennisApp.Controllers
 
                 model.Code = code;
                 model.Types = type;
-             
+
 
                 db.Update(model);
                 db.SaveChanges();
@@ -692,9 +735,9 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                if (levelName != null )
+                if (levelName != null)
                 {
-                    
+
                     model.Levels = levelName;
 
 
@@ -771,7 +814,7 @@ namespace AtkTennisApp.Controllers
 
                 model = db.schoolLevels.Where(x => x.SchoolLevelId == id).SingleOrDefault();
 
-               
+
                 model.Levels = levelName;
 
 
@@ -1044,7 +1087,7 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model.privateLessons = db.privateLessons.ToList();
-              
+
             }
             catch (Exception ex)
             {
@@ -1058,7 +1101,7 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("NewPrivLesson", Name = "NewPrivLesson")]
-        public PrivateLesson NewPrivLesson(string inf, string type , int? price , int? teacherprice)
+        public PrivateLesson NewPrivLesson(string inf, string type, int? price, int? teacherprice)
         {
 
             PrivateLesson model = new PrivateLesson();
@@ -1136,7 +1179,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdatePrivLesson", Name = "UpdatePrivLesson")]
-        public JsonResult UpdatePrivLesson(int id, string tariffeInf, string privLesType , int? privLesPrice , int? teacherPrice)
+        public JsonResult UpdatePrivLesson(int id, string tariffeInf, string privLesType, int? privLesPrice, int? teacherPrice)
         {
             PrivateLesson model = new PrivateLesson();
             try
@@ -1187,7 +1230,7 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-    
+
 
         [HttpGet("NewResSet", Name = "NewResSet")]
         public ReservationSettings NewResSet(string setInf, string setVal)
@@ -1197,7 +1240,7 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                if (setInf != null || setVal != null )
+                if (setInf != null || setVal != null)
                 {
                     model.ReservationSettingsInf = setInf;
                     model.ReservationValue = setVal;
@@ -1247,13 +1290,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateResSet", Name = "UpdateResSet")]
-        public ReservationSettings UpdateResSet(string updStr )
+        public ReservationSettings UpdateResSet(string updStr)
         {
 
             ReservationSettings model = new ReservationSettings();
 
             string[] updList = updStr.Split("-");
-            
+
 
             try
             {

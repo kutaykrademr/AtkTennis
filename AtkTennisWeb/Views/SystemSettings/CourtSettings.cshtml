@@ -75,7 +75,7 @@
 
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteOpenCourtModal(this.id) "><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -87,6 +87,57 @@
                         </div>
                     </div>
 
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kort Rezervasyon Saatleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtTimeModal"><i class="fas fa-plus-square"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Başlangıç Saati</th>
+                                        <th>Bitiş Saati</th>
+                                        <th>Zaman Dilimi</th>
+                                        <th>İşlemler</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.courtTimeInfs)
+                                    {
+                                        <tr style="text-align:center" id="">
+                                                                   
+                                            @{
+                                                var Court = Model.Courts.Where(x => x.CourtId == item.CourtId).FirstOrDefault();
+                                            }
+
+                                            <td>@Court.CourtName</td>
+                                            <td>@item.CourtStartTime</td>
+                                            <td>@item.CourtFinishTime</td>
+                                            <td>@item.CourtTimePeriod</td>
+                                          
+
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteOpenCourtModal(this.id) "><i class="fas fa-trash"></i></button>
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
@@ -143,7 +194,7 @@
 
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteOpenCourtPriceModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteCourtPrice(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -158,7 +209,60 @@
     </section>
 </div>
 
+<div class="modal fade" id="addCourtTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kort Saatleri Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Kort Adı:</label>
+                        <div class="input-group">
+                            <select id="addCourtName" class="form-control">
+                               
+                                @foreach (var item in Model.Courts)
+                                {
+                                    <option value="@item.CourtId">@item.CourtName</option>
+                                }
 
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Başlangıç Saati:</label>
+                        <input type="text" class="form-control" id="courtStartTime">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Bitiş Saati:</label>
+                        <input type="text" class="form-control" id="courtFinishTime">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="recipient-name" class="col-form-label">Zaman Dilimi:</label>
+                        <div class="input-group">
+                            <select id="courtPeriod" class="form-control">
+                                                           
+                                    <option>15</option>
+                                    <option>30</option>
+                                    <option>60</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddCourtTime()">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -379,45 +483,9 @@
     </div>
 </div>
 
-<div class="modal fade" id="openDeleteCourtPriceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperationModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deleteCourtPrice(this.id)">Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="openDeleteCourtModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperateModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deleteCourt(this.id)">Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 
 
 <script>
@@ -475,20 +543,21 @@
 
                     if (res == true) {
 
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Kort başarıyla eklendi.",
-                            buttons: {
-                                TAMAM: function () {
+                        swal({
+                            title: "Kort Ekleme Başarılı",
+                            text: "Kort Ekleme Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
 
-                                    window.location.href = "CourtSettings"
-                                }
-                            }
+                            window.location.href = "CourtSettings"
                         });
 
+                        
 
                     }
                     else {
+
                         $.confirm({
                             title: "Uyarı",
                             content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
@@ -568,18 +637,15 @@
 
                 if (res != null) {
 
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Kort başarıyla güncellendi.",
-                        buttons: {
-                            TAMAM: function () {
+                    swal({
+                        title: "Kort Güncellendi",
+                        text: "Kort Güncelleme Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
 
-                                window.location.href = "CourtSettings"
-                            }
-                        }
+                        window.location.href = "CourtSettings"
                     });
-
-
 
                 }
 
@@ -605,58 +671,58 @@
 
     function deleteCourt(id) {
 
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeleteCourt',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
+        swal({
+            title: "Emin Misiniz?",
+            text: "Tarife Bilgisi Silinecek !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '../SystemSettings/DeleteCourt',
+                        cache: false,
+                        data: { "id": id },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
 
-                if (res != null) {
+                            if (res != null) {
 
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Kort başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
+                                swal({
+                                    title: "Kort Silindi",
+                                    text: "Kort  Başarılı Bir Şekilde Silindi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
 
-                                window.location.href = "CourtSettings"
+                                    window.location.href = "CourtSettings";
+
+                                });
                             }
+                            else {
+                                alert("Hata");
+                            }
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
                         }
                     });
-
-
-
                 }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Bir Hata Oluştu.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
+                else
+                    swal({
+                        title: "Kort Korundu",
+                        text: "Kortu Silmekten Vazgeçtiniz!",
+                        icon: "success",
+                        button: "Tamam",
                     });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+            });   
     }
 
-    function deleteOpenCourtModal(id) {
 
-        $("#deleteOperateModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeleteCourtModal").modal("toggle");
-
-    }
 
     function openUpdateCourtPriceModal(ID) {
         $.ajax({
@@ -719,18 +785,16 @@
 
                 if (res != null) {
 
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Tarife başarıyla güncellendi.",
-                        buttons: {
-                            TAMAM: function () {
+                    swal({
+                        title: "Tarife Güncellendi",
+                        text: "Tarife Güncellemesi Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
 
-                                window.location.href = "CourtSettings"
-                            }
-                        }
+                        window.location.href = "CourtSettings"
+
                     });
-
-
 
                 }
 
@@ -756,50 +820,69 @@
 
     function deleteCourtPrice(id) {
 
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeleteCourtPrice',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
+        swal({
+            title: "Emin Misiniz?",
+            text: "Tarife Bilgisi Silinecek !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '../SystemSettings/DeleteCourtPrice',
+                        cache: false,
+                        data: { "id": id },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
 
-                if (res != null) {
+                            if (res != null) {
 
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Tarife başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
+                                swal({
+                                    title: "Tarife Silindi",
+                                    text: "Tarife  Başarılı Bir Şekilde Silindi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
 
-                                window.location.href = "CourtSettings"
-                            }
-                        }
-                    });
+                                    window.location.href = "CourtSettings";
 
-
-
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Kullanıcı Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
+                                });
 
                             }
+
+                            else {
+                                $.confirm({
+                                    title: "Uyarı",
+                                    content: "Kullanıcı Bulunamadı.",
+                                    buttons: {
+                                        TAMAM: function () {
+
+                                        }
+                                    }
+                                });
+                            }
+
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
                         }
                     });
                 }
+                else
+                    swal({
+                        title: "Tarife Korundu",
+                        text: "Tarifeyi Silmekten Vazgeçtiniz!",
+                        icon: "success",
+                        button: "Tamam",
+                    });
+            });   
 
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+
+        
     }
 
     function saveAddCourtPrice() {
@@ -817,17 +900,15 @@
 
                 if (res == true) {
 
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Tarife başarıyla eklendi.",
-                        buttons: {
-                            TAMAM: function () {
+                    swal({
+                        title: "Tarife Ekleme Başarılı",
+                        text: "Tarige Ekleme Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
 
-                                window.location.href = "CourtSettings"
-                            }
-                        }
+                        window.location.href = "CourtSettings"
                     });
-
 
                 }
                 else {
@@ -850,14 +931,79 @@
         });
     }
 
-    function deleteOpenCourtPriceModal(id) {
+    function saveAddCourtTime() {
 
-        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeleteCourtPriceModal").modal("toggle");
+
+
+        if ($("#courtStartTime").val() == "" || $("#courtFinishTime").val() == "" || $("#addCourtName option:selected").val() == "" || $("#courtPeriod option:selected").val() == "") {
+
+            swal({
+                title: "Uyarı",
+                text: "Lütfen Kort Bilgilerini Eksizsiz Doldurunuz!",
+                icon: "success",
+                button: "Tamam",
+            });
+        }
+
+        else {
+
+           
+
+            var courtId = $("#addCourtName option:selected").val()
+            var courtPeriod = $("#courtPeriod option:selected").val()
+
+            
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddNewCourtTimeInf',
+                cache: false,
+                data: { "courtStartTime": $("#courtStartTime").val(), "courtFinishTime": $("#courtFinishTime").val(), "courtId": courtId, "courtPeriod": courtPeriod },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true)
+                    {
+                        swal({
+                            title: "Kort Saati Eklendi",
+                            text: "Kort Saat Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
+
+                            window.location.href = "CourtSettings"
+
+                        });
+
+                    }
+
+                    else
+                    {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Önceden Eklenmiş Olabilir.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "CourtSettings"
+                                }
+                                
+                            }
+                        });
+                    }
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
 
     }
-
-
 
 </script>
 

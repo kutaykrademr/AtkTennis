@@ -13,6 +13,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Helpers.Dto.ViewDtos;
+using System.Globalization;
 
 namespace AtkTennisApp.Controllers
 {
@@ -59,7 +60,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("SignIn", Name = "SignIn")]
-        public async Task<SignIn>  SignIn(string UserName, string Password)
+        public async Task<SignIn> SignIn(string UserName, string Password)
         {
 
             SignIn Model2 = new SignIn();
@@ -86,15 +87,15 @@ namespace AtkTennisApp.Controllers
                     return new SignIn();
                 }
 
-               
+
 
                 model.UserName = Model2.UserName;
                 model.Password = Model2.Password;
-                model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;         
+                model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;
                 model.custom_name = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).FullName;
-                
 
-                var user =  await userManager.FindByIdAsync(model.custom_userid);
+
+                var user = await userManager.FindByIdAsync(model.custom_userid);
 
                 var roles = await userManager.GetRolesAsync(user);
 
@@ -108,22 +109,24 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+
+
         [HttpGet("GetRes", Name = "GetRes")]
         public ReservationViewModel GetRes(string date)
 
         {
             ReservationViewModel model = new ReservationViewModel();
 
-           
+
             try
             {
                 model.resTimes = db.resTimes.ToList();
                 model.courts = db.courts.ToList();
                 model.courtPriceLists = db.courtPriceLists.ToList();
-                model.reservations = db.reservations.Where(x=>x.ResDate == date).ToList();
+                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
-                      
+
             }
             catch (Exception ex)
             {
@@ -137,147 +140,163 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetResTime", Name = "GetResTime")]
-        public JsonResult GetResTime(string courtInf, string dateInf , int timeMin)
+        public JsonResult GetResTime(string courtInf, string dateInf)
         {
             if (courtInf == "Kort Seçiniz")
             {
                 return Json("false");
             }
 
-            if (timeMin == 30)
+            var court = db.courts.Where(x => x.CourtName == courtInf).FirstOrDefault();
+            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf).ToList();
+            var courtTime = db.courtTimeInfs.Where(x => x.CourtId == court.CourtId).FirstOrDefault();
+           
+
+            if (courtTime == null) 
             {
-                var court = db.courts.Where(x => x.CourtName == courtInf).FirstOrDefault();
-                var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf).ToList();
-                var day_routine = db.resTimes.Where(x => x.ResTimes30 == timeMin).ToList();
-
-
-                List<court_reserve> daily_reservations = new List<court_reserve>();
-
-                try
-                {
-
-                    bool _isTaken = false;
-
-                    for (int i = 0; i < day_routine.Count(); i++)
-                    {
-                        foreach (var item in model)
-                        {
-                            if (day_routine[i].ResTimes == item.ResStartTime) _isTaken = true;
-                            if (day_routine[i].ResTimes == item.ResFinishTime) _isTaken = false;
-                        }
-
-                        daily_reservations.Add(new court_reserve
-                        {
-                            start = day_routine[i].ResTimes,
-                            isTaken = _isTaken,
-                            timeId = day_routine[i].ResTimeId
-                        }
-                        );
-                    }
-
-
-                }
-                catch (Exception ex)
-                {
-                    model = new List<Reservation>();
-                    Mutuals.monitizer.AddException(ex);
-                }
-
-                return Json(daily_reservations);
+                return Json(false);
             }
 
-            else if (timeMin == 60)
+            string startTime = courtTime.CourtStartTime;
+            string finishTime = courtTime.CourtFinishTime;
+            string period = courtTime.CourtTimePeriod;
+            var periodTime = Convert.ToDouble(period);
+
+            var mStartTime = startTime.Split(":");
+            var sTime = mStartTime[0] + mStartTime[1];
+
+            var mFinishTime = finishTime.Split(":");
+            var fTime = mFinishTime[0] + mFinishTime[1];
+
+            var mf = Convert.ToInt32(fTime);
+            var ms = Convert.ToInt32(sTime);
+
+            var miles = ((mf - ms) / 100);
+
+            List<res_time> res_Times = new List<res_time>();
+
+            if (periodTime == 15)
             {
-                var court = db.courts.Where(x => x.CourtName == courtInf).FirstOrDefault();
-                var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf).ToList();
-                var day_routine = db.resTimes.Where(x => x.Restimes60 == timeMin).ToList();
+                var count = (miles * 4);
 
-                List<court_reserve> daily_reservations = new List<court_reserve>();
 
-                try
+                for (int i = 0; i < count; i++)
                 {
+                    var a = Convert.ToDateTime(startTime);
+                    var b = a.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
 
-                    bool _isTaken = false;
+                    var d = Convert.ToString(c);
 
-                    for (int i = 0; i < day_routine.Count(); i++)
+                    startTime = d;
+
+
+
+                    res_Times.Add(new res_time
                     {
-                        foreach (var item in model)
-                        {
-                            if (day_routine[i].ResTimes == item.ResStartTime) _isTaken = true;
-                            if (day_routine[i].ResTimes == item.ResFinishTime) _isTaken = false;
-                        }
-
-                        daily_reservations.Add(new court_reserve
-                        {
-                            start = day_routine[i].ResTimes,
-                            isTaken = _isTaken,
-                            timeId = day_routine[i].ResTimeId
-                        }
-                        );
-                    }
-
-
+                        TimesId = i,
+                        Times = d
+                    });
+                    
                 }
-                catch (Exception ex)
-                {
-                    model = new List<Reservation>();
-                    Mutuals.monitizer.AddException(ex);
-                }
-                return Json(daily_reservations);
+           
             }
+            else if (periodTime == 30)
+            {
+                var count = miles * 2;
 
+                for (int i = 0; i < count; i++)
+                {
+                    var a = Convert.ToDateTime(startTime);
+                    var b = a.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+
+                    var d = Convert.ToString(c);
+
+                    startTime = d;
+
+
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Times = d
+                    });
+
+                }
+            }
             else
             {
-                var court = db.courts.Where(x => x.CourtName == courtInf).FirstOrDefault();
-                var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf).ToList();
-                var day_routine = db.resTimes.ToList();
+                var count = miles;
 
-                List<court_reserve> daily_reservations = new List<court_reserve>();
-
-                try
+                for (int i = 0; i < count; i++)
                 {
+                    var a = Convert.ToDateTime(startTime);
+                    var b = a.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
 
-                    bool _isTaken = false;
+                    var d = Convert.ToString(c);
 
-                    for (int i = 0; i < day_routine.Count(); i++)
+                    startTime = d;
+
+
+
+                    res_Times.Add(new res_time
                     {
-                        foreach (var item in model)
-                        {
-                            if (day_routine[i].ResTimes == item.ResStartTime) _isTaken = true;
-                            if (day_routine[i].ResTimes == item.ResFinishTime) _isTaken = false;
-                        }
+                        TimesId = i,
+                        Times = d
+                    });
 
-                        daily_reservations.Add(new court_reserve
-                        {
-                            start = day_routine[i].ResTimes,
-                            isTaken = _isTaken,
-                            timeId = day_routine[i].ResTimeId
-                        }
-                        );
+                }
+
+            }
+
+            var day_routine = res_Times;
+            List<court_reserve> daily_reservations = new List<court_reserve>();
+
+            try
+            {
+
+                bool _isTaken = false;
+
+                for (int i = 0; i < day_routine.Count(); i++)
+                {
+                    foreach (var item in model)
+                    {
+                        if (day_routine[i].Times == item.ResStartTime) _isTaken = true;
+                        if (day_routine[i].Times == item.ResFinishTime) _isTaken = false;
                     }
 
-
+                    daily_reservations.Add(new court_reserve
+                    {
+                        start = day_routine[i].Times,
+                        isTaken = _isTaken,
+                        timeId = day_routine[i].TimesId
+                    }
+                    );
                 }
-                catch (Exception ex)
-                {
-                    model = new List<Reservation>();
-                    Mutuals.monitizer.AddException(ex);
-                }
 
-                return Json(daily_reservations);
+
             }
-      
+            catch (Exception ex)
+            {
+                model = new List<Reservation>();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(daily_reservations);
+
         }
 
         [HttpGet("NewReservation", Name = "NewReservation")]
-        public JsonResult NewReservation(string ResDate , string ResTime ,string ResStartTime , string ResFinishTime , string ResEvent, string UserId , int CourtId , string ResNowDate)
+        public JsonResult NewReservation(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate)
         {
 
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
 
-            if (ResDate == null || ResTime ==null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate==null )
+            if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null)
             {
                 return Json(false);
             }
@@ -296,7 +315,7 @@ namespace AtkTennisApp.Controllers
 
                 }
             }
-         
+
             if (model == null)
             {
                 try
@@ -309,7 +328,7 @@ namespace AtkTennisApp.Controllers
                     res.ResTime = ResTime;
                     res.UserId = UserId;
                     res.ResNowDate = ResNowDate;
-                    
+
 
                     db.reservations.Add(res);
                     db.SaveChanges();
@@ -317,7 +336,7 @@ namespace AtkTennisApp.Controllers
 
                 catch (Exception e)
                 {
-                    
+
                     return Json("false");
 
                 }
@@ -328,6 +347,8 @@ namespace AtkTennisApp.Controllers
 
                 return Json("false");
         }
+
+
 
         [HttpGet("ChangeCurrentUserPass", Name = "ChangeCurrentUserPass")]
         public async Task<JsonResult> ChangeCurrentUserPass(string id, string currentPass, string newPass)
@@ -378,7 +399,7 @@ namespace AtkTennisApp.Controllers
 
                 model.courts = db.courts.ToList();
                 model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
-                
+
 
                 mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
 
@@ -392,8 +413,8 @@ namespace AtkTennisApp.Controllers
                 model2.ResStartTime = model.reservations.ResStartTime;
                 model2.ResTime = model.reservations.ResTime;
                 model2.ResNowDate = model.reservations.ResNowDate;
-              
-               
+
+
             }
             catch (Exception ex)
             {
@@ -414,13 +435,15 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                
+
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
 
                 if (model != null)
                 {
                     db.Remove(model);
                     db.SaveChanges();
+
+                    return Json(model);
                 }
                 else
                 {
@@ -435,14 +458,14 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
             }
 
-            return Json(true);
+            return Json(model);
 
         }
 
         [HttpGet("Logout", Name = "Logout")]
         public async Task<IActionResult> Logout()
 
-        {      
+        {
             try
             {
                 await signInManager.SignOutAsync();
@@ -464,5 +487,14 @@ namespace AtkTennisApp.Controllers
         public string start { get; set; }
         public bool isTaken { get; set; }
     }
+
+    public class res_time
+    {
+        public int TimesId { get; set; }
+        public string Times { get; set; }
+       
+    }
+
+
 
 }

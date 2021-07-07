@@ -43,6 +43,8 @@ namespace AtkTennis.Models
 
         public DbSet<MemberList> memberLists { get; set; }
 
+        public DbSet<CourtTimeInf> courtTimeInfs { get; set; }
+
 
     }
 }
