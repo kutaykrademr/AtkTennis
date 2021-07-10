@@ -17,6 +17,24 @@
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
 
+<style>
+    .reservationForm {
+        padding: 1rem 0 0.3rem 0 !important;
+        border: 1px solid #dedede !important;
+        margin: 0.2rem !important;
+    }
+    .custom-control2 {
+        padding: 0.2rem!important;
+    }
+    .custom-control-label2::before {
+        top: -0.75rem !important;
+        left: 0.8rem !important;
+    }
+    .custom-control-label2::after {
+        top: -0.75rem !important;
+        left: 0.8rem !important;
+    }
+</style>
 <div class="content-wrapper">
 
     <section class="content-header">
@@ -778,8 +796,8 @@
                         for (var i = 0; i < res.length; i++) {
 
                                 NewRow = "";
-                                NewRow += '<div class="form-group">';
-                                NewRow += '<div class="custom-control custom-checkbox" id="checkTimeTable">';
+                                NewRow += '<div class="form-group reservationForm">';
+                                NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeTable">';
 
                                 if (res[i].isTaken == true)
 
@@ -792,7 +810,7 @@
                                 else
 
                                     NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
-                                NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label">' + res[i].start + '</label>';
+                            NewRow += '<label for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
                                 NewRow += '</div></div>';
 
 
