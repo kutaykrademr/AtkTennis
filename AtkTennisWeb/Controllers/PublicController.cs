@@ -194,9 +194,7 @@ namespace AtkTennisWeb.Controllers
             {
                 return Json(new ResSchemaModalDto());
             }
-
-            return Json(model);
-
+       
         }
 
         public IActionResult Logout()

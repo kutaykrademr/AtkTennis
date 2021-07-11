@@ -15,7 +15,11 @@
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+
+
 }
+
+
 
 <style>
     .reservationForm {
@@ -23,253 +27,262 @@
         border: 1px solid #dedede !important;
         margin: 0.2rem !important;
     }
+
     .custom-control2 {
-        padding: 0.2rem!important;
+        padding: 0.2rem !important;
     }
+
     .custom-control-label2::before {
         top: -0.75rem !important;
         left: 0.8rem !important;
     }
+
     .custom-control-label2::after {
         top: -0.75rem !important;
         left: 0.8rem !important;
     }
 </style>
-<div class="content-wrapper">
 
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Rezervasyon Genel Durum</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
+<div  style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
+
+
+
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Rezervasyon Genel Durum</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">DataTables</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
 
-                        <div class="card-header d-flex justify-content-between">
-                            @{
-                                var a = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault().WebReservation;
+                            <div class="card-header d-flex justify-content-between">
+                                @{
+                                    var a = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault().WebReservation;
 
-                                if (a == "1")
-                                {
-                                    <div class="card-title">
-                                        <button type="button" class="btn btn-danger courtbutton" onclick="openResModal()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
-                                    </div>
+                                    if (a == "1")
+                                    {
+                                        <div class="card-title">
+                                            <button type="button" class="btn btn-danger courtbutton" onclick="openResModal()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="card-title">
+                                            <button type="button" class="btn btn-danger courtbutton" onclick="WebReservation()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
+                                        </div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div class="card-title">
-                                        <button type="button" class="btn btn-danger courtbutton" onclick="WebReservation()"> Yeni Rezervasyon <i style="margin-left:10px" class="fas fa-plus"></i></button>
-                                    </div>
-                                }
-                            }
 
-                            <div style="margin:8px" id="TimeInf">
+                                <div style="margin:8px" id="TimeInf">
 
+                                </div>
+
+                                <div>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+
+                                            @{
+                                                DateTime date1 = DateTime.Now;
+                                                var date2 = date1.AddDays(1);
+                                                var today = date1.ToString("yyyy-MM-dd");
+                                                var tomorrow = date2.ToString("yyyy-MM-dd");
+                                            }
+
+                                            <li class="page-item"><a style="color:black;  background-color:#ffc107" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
+                                            <li class="page-item"><a style="color:black" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</a></li>
+                                            <li class="page-item"><input class="form-control" type="date" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
+                                            <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                            <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
 
-                            <div>
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
 
-                                        @{
-                                            DateTime date1 = DateTime.Now;
-                                            var date2 = date1.AddDays(1);
-                                            var today = date1.ToString("yyyy-MM-dd");
-                                            var tomorrow = date2.ToString("yyyy-MM-dd");
+                            <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
+
+                                <div class="cd-schedule__timeline">
+                                    <ul>
+
+                                        @for (int i = 0; i < Model.resTimes.Count; i += 4)
+                                        {
+                                            <li><span>@Model.resTimes[i].ResTimes</span></li>
+
                                         }
 
-                                        <li class="page-item"><a style="color:black;  background-color:#ffc107" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
-                                        <li class="page-item"><a style="color:black" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</a></li>
-                                        <li class="page-item"><input class="form-control" type="date" id="timeNow" style="border: 1px solid var(--color-contrast-low);"></li>
-                                        <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
-                                        <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
+                                    </ul>
+                                </div> <!-- .cd-schedule__timeline -->
 
+
+                                <div class="cd-schedule__events">
+                                    <ul>
+                                        @foreach (var item in Model.courts)
+                                        {
+                                            <li class="cd-schedule__group">
+                                                <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
+
+
+                                                <ul>
+                                                    @foreach (var item2 in Model.reservations)
+                                                    {
+                                                        if (item.CourtId == item2.Court.CourtId)
+                                                        {
+                                                            <li class="cd-schedule__event ">
+
+                                                                @if (item2.UserId == userId)
+                                                                {
+                                                                    <a id="@item2.ResId" data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" onclick="openResInfModal(this.id)" style="background-color:#9a12b3 ">
+                                                                        <em class="cd-schedule__name">kk</em>
+                                                                    </a>
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" style="background-color:#9a12b3 ">
+                                                                        <em class="cd-schedule__name">KK</em>
+                                                                    </a>
+                                                                }
+
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </div>
+
+
+                                <div class="cd-schedule-modal">
+
+                                </div>
+
+                                <div class="cd-schedule__cover-layer"></div>
+
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-between">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li class="page-item"><a style="color: white; background-color:#32c5d2" class="page-link">Üye</a></li>
+                                        <li class="page-item"><a style="color: white; background-color:#9a12b3" class="page-link">Ant</a></li>
                                     </ul>
                                 </nav>
-                            </div>
-                        </div>
-
-
-                        <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
-
-                            <div class="cd-schedule__timeline">
-                                <ul>
-
-                                    @for (int i = 0; i < Model.resTimes.Count; i += 4)
-                                    {
-                                        <li><span>@Model.resTimes[i].ResTimes</span></li>
-
-                                    }
-
-                                </ul>
-                            </div> <!-- .cd-schedule__timeline -->
-
-
-                            <div class="cd-schedule__events">
-                                <ul>
-                                    @foreach (var item in Model.courts)
-                                    {
-                                        <li class="cd-schedule__group">
-                                            <div class="cd-schedule__top-info"><span>@item.CourtName</span></div>
-
-
-                                            <ul>
-                                                @foreach (var item2 in Model.reservations)
-                                                {
-                                                    if (item.CourtId == item2.Court.CourtId)
-                                                    {
-                                                        <li class="cd-schedule__event ">
-
-                                                            @if (item2.UserId == userId)
-                                                            {
-                                                                <a id="@item2.ResId" data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" onclick="openResInfModal(this.id)" style="background-color:#9a12b3 ">
-                                                                    <em class="cd-schedule__name">kk</em>
-                                                                </a>
-                                                            }
-
-                                                            else
-                                                            {
-                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" style="background-color:#9a12b3 ">
-                                                                    <em class="cd-schedule__name">KK</em>
-                                                                </a>
-                                                            }
-
-                                                        </li>
-                                                    }
-                                                }
-                                            </ul>
-                                        </li>
-                                    }
-                                </ul>
 
                             </div>
-
-
-                            <div class="cd-schedule-modal">
-
-                            </div>
-
-                            <div class="cd-schedule__cover-layer"></div>
-
-                        </div>
-
-                        <div class="card-footer d-flex justify-content-between">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <li class="page-item"><a style="color: white; background-color:#32c5d2" class="page-link">Üye</a></li>
-                                    <li class="page-item"><a style="color: white; background-color:#9a12b3" class="page-link">Ant</a></li>
-                                </ul>
-                            </nav>
-
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
 
-<div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #004e6c;">
-                <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
-                <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <div class="card">
-                    <div class="card-body row" style="background-color: #f7f7f7f7;">
-
-                        <h5 class="col-md-9" id="nickAndFullName"></h5>
-                        <div id="cancelRes" class="col-md-0">
-                            <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelRes(this.id)">İptal Et</button>
-                        </div>
-                        <div class="col-md">
-                            <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
-                        </div>
-                    </div>
-
+    <div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #004e6c;">
+                    <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
+                    <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <div class="modal-body">
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-body" style="background-color:#f7f7f7">
-                                <ul style="font-size:20px" class="list-group list-group-flush">
-                                    <li id="courtName" class="list-group-item"></li>
-                                    <li id="resDate" class="list-group-item"></li>
-                                    <li id="resTime" class="list-group-item"></li>
-                                    <li id="resNowDate" class="list-group-item"></li>
-                                </ul>
+                    <div class="card">
+                        <div class="card-body row" style="background-color: #f7f7f7f7;">
+
+                            <h5 class="col-md-9" id="nickAndFullName"></h5>
+                            <div id="cancelRes" class="col-md-0">
+                                <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelRes(this.id)">İptal Et</button>
+                            </div>
+                            <div class="col-md">
+                                <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
                             </div>
                         </div>
+
                     </div>
 
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <div id="PriceInf" class="info-box shadow-lg">
-
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body" style="background-color:#f7f7f7">
+                                    <ul style="font-size:20px" class="list-group list-group-flush">
+                                        <li id="courtName" class="list-group-item"></li>
+                                        <li id="resDate" class="list-group-item"></li>
+                                        <li id="resTime" class="list-group-item"></li>
+                                        <li id="resNowDate" class="list-group-item"></li>
+                                    </ul>
                                 </div>
+                            </div>
+                        </div>
 
-                                <div class="info-box shadow-lg">
-                                    <div class="info-box-content">
-                                        <table style="text-align:center" class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Ücret Bilgisi</th>
-                                                    <th scope="col">Ücret </th>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
 
-                                                </tr>
-                                            </thead>
+                                    <div id="PriceInf" class="info-box shadow-lg">
 
-                                            <tbody>
-                                                <tr>
-                                                    <td>Kort</td>
-                                                    <td>40</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Işık</td>
-                                                    <td>40</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
                                     </div>
-                                </div>
 
-                                <div class="info-box shadow-lg">
-                                    <div class="info-box-content">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
+                                    <div class="info-box shadow-lg">
+                                        <div class="info-box-content">
+                                            <table style="text-align:center" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Ücret Bilgisi</th>
+                                                        <th scope="col">Ücret </th>
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Kort</td>
+                                                        <td>40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Işık</td>
+                                                        <td>40</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="info-box shadow-lg">
+                                        <div class="info-box-content">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -278,14 +291,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger">Track Artist</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger">Track Artist</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
@@ -293,144 +305,144 @@
 
 
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #004e6c;">
-                <h4 style="margin:auto; color:white">Rezervasyon Bilgileri</h4>
-            </div>
-
-            <div class="modal-header">
-                <div class="col-sm-4">
-                    <h4>Sayın , @fullname</h4>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #004e6c;">
+                    <h4 style="margin:auto; color:white">Rezervasyon Bilgileri</h4>
                 </div>
-            </div>
 
-            <div class="modal-header">
-                <div class="col-sm-6">
-                    <div class="form-group">
-
-                        <select id="selectCourt" class="form-control">
-                            <option disabled="disabled" selected="selected">Kort Seçiniz</option>
-
-                            @foreach (var item in Model.courts)
-                            {
-                                if (item.CourtWebConditions == 1)
-                                {
-                                    <option value="@item.CourtId">@item.CourtName</option>
-                                }
-
-                            }
-
-                        </select>
+                <div class="modal-header">
+                    <div class="col-sm-4">
+                        <h4>Sayın , @fullname</h4>
                     </div>
                 </div>
 
+                <div class="modal-header">
+                    <div class="col-sm-6">
+                        <div class="form-group">
 
-                <div class="col-sm-6">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
+                            <select id="selectCourt" class="form-control">
+                                <option disabled="disabled" selected="selected">Kort Seçiniz</option>
 
-
-                            <li class="page-item"><button style="color:black; background-color:#ffc107" class="page-link" onclick="getRes('today')" name="@DateTime.Now">Bugün</button></li>
-                            <li class="page-item"><button style="color:black" class="page-link" onclick="getRes('tomorrow')" name="@DateTime.Now.AddDays(1)">Yarın</button></li>
-                            <li class="page-item"><input class="form-control" type="date" id="dateInf" style="border: 1px solid var(--color-contrast-low);"></li>
-                            <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="pre()"><i class="fas fa-chevron-left"></i></button></li>
-                            <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="next()"><i class="fas fa-chevron-right"></i></button></li>
-
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-
-
-
-            <div class="modal-header">
-                <div class="row" id="court_select">
-                    <div id="ResModal" style="display: contents;">
-
-                    </div>
-                </div>
-            </div>
-
-            <div id="CourtandTime">
-
-            </div>
-
-
-            <div class="modal-header">
-                <div class="col-sm-6">
-                    <div class="form-group" style="text-align:center">
-                        <table class="table table-bordered ">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Adı</th>
-                                    <th scope="col">Fiyatı</th>
-                                    <th scope="col">Seç</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item2 in Model.courtPriceLists)
+                                @foreach (var item in Model.courts)
                                 {
-                                    if (item2.Condition == "1")
+                                    if (item.CourtWebConditions == 1)
                                     {
-                                        <tr>
-                                            <td>@item2.Name</td>
-                                            <td>@item2.CourtPrice</td>
-                                            <td>
-                                                <div class="custom-control custom-checkbox">
-                                                    @{ if (item2.PriceType == "1")
-                                                        {
-                                                            <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="@item2.CourtPriceListId" checked="" disabled="">
-                                                        }
-                                                        else
-                                                        {
-                                                            <input class="custom-control-input custom-control-input-danger" type="checkbox" id="@item2.CourtPriceListId">
-                                                        }
-                                                    }
-                                                    <label for="@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <option value="@item.CourtId">@item.CourtName</option>
                                     }
+
                                 }
-                            </tbody>
-                        </table>
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+
+
+                                <li class="page-item"><button style="color:black; background-color:#ffc107" class="page-link" onclick="getRes('today')" name="@DateTime.Now">Bugün</button></li>
+                                <li class="page-item"><button style="color:black" class="page-link" onclick="getRes('tomorrow')" name="@DateTime.Now.AddDays(1)">Yarın</button></li>
+                                <li class="page-item"><input class="form-control" type="date" id="dateInf" style="border: 1px solid var(--color-contrast-low);"></li>
+                                <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="pre()"><i class="fas fa-chevron-left"></i></button></li>
+                                <li class="page-item"><button style="color:black; background-color:#f9f9f9" class="page-link" onclick="next()"><i class="fas fa-chevron-right"></i></button></li>
+
+                            </ul>
+                        </nav>
                     </div>
                 </div>
-            </div>
 
-            <div style="visibility:hidden" class="modal-footer">
-                <textbox style="color:black; " id="userId">@userId</textbox>
-            </div>
 
-            @{
 
-                var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
-                var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
-                var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
+                <div class="modal-header">
+                    <div class="row" id="court_select">
+                        <div id="ResModal" style="display: contents;">
 
-                var startTime = start.ReservationValue;
-                var finishTime = finish.ReservationValue;
-                var resSetTime = resSettingsTime.ReservationValue;
-            }
+                        </div>
+                    </div>
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" setTime="@resSetTime" start="@startTime" finish="@finishTime" id="doRes" onclick="Approve()">Rezervasyon Yap</button>
+                <div id="CourtandTime">
+
+                </div>
+
+
+                <div class="modal-header">
+                    <div class="col-sm-6">
+                        <div class="form-group" style="text-align:center">
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Adı</th>
+                                        <th scope="col">Fiyatı</th>
+                                        <th scope="col">Seç</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item2 in Model.courtPriceLists)
+                                    {
+                                        if (item2.Condition == "1")
+                                        {
+                                            <tr>
+                                                <td>@item2.Name</td>
+                                                <td>@item2.CourtPrice</td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        @{ if (item2.PriceType == "1")
+                                                            {
+                                                                <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="@item2.CourtPriceListId" checked="" disabled="">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="custom-control-input custom-control-input-danger" type="checkbox" id="@item2.CourtPriceListId">
+                                                            }
+                                                        }
+                                                        <label for="@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="visibility:hidden" class="modal-footer">
+                    <textbox style="color:black; " id="userId">@userId</textbox>
+                </div>
+
+                @{
+
+                    var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
+                    var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
+                    var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
+
+                    var startTime = start.ReservationValue;
+                    var finishTime = finish.ReservationValue;
+                    var resSetTime = resSettingsTime.ReservationValue;
+                }
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" setTime="@resSetTime" start="@startTime" finish="@finishTime" id="doRes" onclick="Approve()">Rezervasyon Yap</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
 
-<script src="~/workSch/util.js"></script>
-<script src="~/workSch/main.js"></script>
+    <script src="~/workSch/util.js"></script>
+    <script src="~/workSch/main.js"></script>
 
 
-<script>
+    <script>
 
     var picker = "@ViewBag.Date";
 
@@ -462,6 +474,7 @@
             day = "0" + day;
 
         var today = now.getFullYear() + '-' + month + '-' + day;
+
 
 
         //Rezervasyon Şema Tarih
@@ -602,7 +615,6 @@
         var sTime = b[0] + b[1];
         var fTime = c[0] + c[1];
 
-        debugger;
 
         if (sTime < nowTime && fTime > nowTime) {
 
@@ -695,6 +707,7 @@
 
     function getCourtTime() {
 
+
         var dt = new Date();
         var hours = dt.getHours();
         var min = dt.getMinutes();
@@ -713,6 +726,7 @@
             var time =  hours + ":" + min;
 
 
+
         var days = new Date($('#dateInf').val());
         var getday = days.getDay();
 
@@ -724,23 +738,62 @@
 
         var courtInf = $("#selectCourt option:selected").text();
 
+
+
         var date = $("#dateInf").val();
         var b = date.split("-");
         var timeInf = b[2] + '-' + b[1] + '-' + b[0];
 
 
+        //ResNextDayMember
+        function parseDate(str) {
+            var mdy = str.split('-');
+            return new Date(mdy[0], mdy[1] - 1, mdy[2]);
+        }
+
+        function datediff(first, second) {
+            // Take the difference between the dates and divide by milliseconds per day.
+            // Round to nearest whole number to deal with DST.
+            return Math.round((second - first) / (1000 * 60 * 60 * 24));
+        }
+
+        var x = today;
+        var y = $("#dateInf").val();
+
+        var diff = datediff(parseDate(x), parseDate(y));
+
+
+
+
         if ($("#dateInf").val() < today) {
 
-            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız." , "warning", {
                 button: "Tamam",
             });
 
             $("#dateInf").val(today)
-           
         }
 
-        else {
+        else if ($("#RoleName").val() == "Üye" && diff > 3 ) {
 
+
+                swal("Uyarı !", "En Fazla 3 Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
+                    button: "Tamam",
+                });
+
+                $("#dateInf").val(today)                      
+        }
+
+        else if ($("#RoleName").val() == "Antrenör" && diff > 6) {
+        
+                swal("Uyarı !", "En Fazla 6 Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
+                    button: "Tamam",
+                });
+
+                $("#dateInf").val(today)      
+        }
+
+        else
             $.ajax({
                 type: "POST",
                 url: '../Public/GetResTime',
@@ -825,7 +878,6 @@
                     console.log(textStatus);
                 }
             });
-        }
 
     }
 
@@ -929,7 +981,7 @@
                             icon: "success",
                             button: "Tamam",
                         }).then((value) => {
-                            
+
                             window.location.href = "Reservation?date=" + $('#timeNow').val();
 
                         });
@@ -1108,4 +1160,4 @@
     }
 
 
-</script>
+    </script>

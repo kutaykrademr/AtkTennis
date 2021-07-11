@@ -418,7 +418,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteSchoolType?id=" + id));
 
-                if (model.Code == null && model.Types == null && model.SchoolTypesId == null)
+                if (model.Code == null && model.Types == null)
 
                     return Json(false);
             }

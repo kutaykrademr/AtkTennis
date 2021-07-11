@@ -1,7 +1,5 @@
 ﻿using AtkTennisApp.Security;
 using AtkTennisApp.ViewModels;
-using Helpers.Dto.ViewDtos;
-using Helpers.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,18 +32,29 @@ namespace AtkTennisApp.Controllers
         Context db = new Context();
 
         [HttpGet("GetHome", Name = "GetHome")]
-        public HomeModelDto GetHome()
+        public HomeModelView GetHome()
         {
+            DateTime date1 = DateTime.Now;
+            var today = date1.ToString("yyyy-MM-dd");
 
-            HomeModelDto model = new HomeModelDto();
+            HomeModelView model = new HomeModelView();
+          
+
             try
             {
                 model.TotalUserCount = userManager.Users.Count();
                 model.TotalRoleCount = roleManager.Roles.Count();
+                var b = db.reservations.Where(x => x.ResDate == today).ToList();
+                var a = db.reservations.ToList();
+                model.TodayResCount = b.Count();
+                model.TotalResCount = a.Count();
+                model.toDoLists = db.toDoLists.ToList();
+
+                
             }
             catch (Exception ex)
             {
-                model = new HomeModelDto();
+                model = new HomeModelView();
                 Mutuals.monitizer.AddException(ex);
             }
 
@@ -320,6 +329,8 @@ namespace AtkTennisApp.Controllers
                 return Json(true);
             }
         }
+
+
     }
 
 }

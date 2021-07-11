@@ -71,8 +71,6 @@ namespace AtkTennisWeb.Controllers
             }
 
             return Json(model);
-
-
         }
 
         public IActionResult ListUser()
@@ -102,7 +100,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetMemberListInf?id=" + id));
 
-                if (model.Id == null)
+                if (model == null)
 
                     return Json(false);
             }
@@ -156,5 +154,7 @@ namespace AtkTennisWeb.Controllers
             return Json(true);
 
         }
+
+       
     }
 }

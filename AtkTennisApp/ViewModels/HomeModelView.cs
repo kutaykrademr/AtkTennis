@@ -1,15 +1,18 @@
-﻿using System;
+﻿using AtkTennisApp.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Helpers.Dto.ViewDtos
+namespace AtkTennisApp.ViewModels
 {
-    public class HomeModelDto
+    public class HomeModelView
     {
         public int? TotalUserCount { get; set; }
         public int? TotalRoleCount { get; set; }
         public int? TotalResCount { get; set; }
         public int? TodayResCount { get; set; }
-        public List<ToDoListDto> toDoLists { get; set; } = new List<ToDoListDto>();
+        public List<ToDoList> toDoLists { get; set; } = new List<ToDoList>();
+        
     }
 }

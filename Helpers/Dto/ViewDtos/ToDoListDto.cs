@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace AtkTennisApp.Models
+namespace Helpers.Dto.ViewDtos
 {
-    public class ToDoList
+    public class ToDoListDto
     {
-        [Key]
         public int ListId { get; set; }
         public string ToDo { get; set; }
         public string Date { get; set; }
-    
     }
 }
