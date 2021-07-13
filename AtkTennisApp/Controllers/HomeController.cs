@@ -49,6 +49,8 @@ namespace AtkTennisApp.Controllers
                 model.TodayResCount = b.Count();
                 model.TotalResCount = a.Count();
                 model.toDoLists = db.toDoLists.ToList();
+                model.reservations = db.reservations.ToList();
+                model.courts = db.courts.ToList();
 
                 
             }
@@ -318,6 +320,47 @@ namespace AtkTennisApp.Controllers
                         db.SaveChanges();
 
                         return Json(user2);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(true);
+            }
+        }
+
+        [HttpGet("AddToDo", Name = "AddToDo")]
+        public JsonResult AddToDo(string toDo , string today)
+        {
+            ToDoList model = new ToDoList();
+           
+
+            if (toDo == null || today == null)
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
+                    model.Date = today;
+                    model.ToDo = toDo;
+
+
+                    if (model != null)
+                    {
+                        db.Add(model);
+                        db.SaveChanges();
+
+                        return Json(model);
+                    }
+                    else
+                    {
+                        return Json(false);
                     }
                 }
 

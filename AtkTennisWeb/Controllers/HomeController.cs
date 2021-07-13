@@ -155,6 +155,32 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-       
+
+
+
+        public JsonResult AddToDo(string toDo , string today)
+        {
+            ToDoListDto model = new ToDoListDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ToDoListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/AddToDo?toDo=" + toDo + "&today=" + today));
+
+                if (model != null)
+
+                    return Json(true);
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ToDoListDto());
+            }
+
+        }
+
+
+
     }
 }

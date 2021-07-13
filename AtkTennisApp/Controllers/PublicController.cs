@@ -289,14 +289,15 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservation", Name = "NewReservation")]
-        public JsonResult NewReservation(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate)
+        public JsonResult NewReservation(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price , string PriceIds)
         {
 
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
 
-            if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null)
+
+            if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null || PriceIds == null)
             {
                 return Json(false);
             }
@@ -328,7 +329,8 @@ namespace AtkTennisApp.Controllers
                     res.ResTime = ResTime;
                     res.UserId = UserId;
                     res.ResNowDate = ResNowDate;
-
+                    res.Price = Price;
+                    res.PriceIds = PriceIds;
 
                     db.reservations.Add(res);
                     db.SaveChanges();
@@ -391,28 +393,29 @@ namespace AtkTennisApp.Controllers
         {
             MemberList mem = new MemberList();
             ReservationCourtViewModel model = new ReservationCourtViewModel();
-            ResSchemaModalDto model2 = new ResSchemaModalDto();
+            ResModalViewModel model2 = new ResModalViewModel();
 
             try
             {
-                var a = db.reservations.ToList();
-
+            
                 model.courts = db.courts.ToList();
                 model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
-
-
                 mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
 
-                model2.FullName = mem.FullName;
-                model2.NickName = mem.NickName;
-                model2.CourtName = model.reservations.Court.CourtName;
-                model2.ResDate = model.reservations.ResDate;
-                model2.ResEvent = model.reservations.ResEvent;
-                model2.ResFinishTime = model.reservations.ResFinishTime;
-                model2.ResId = id;
-                model2.ResStartTime = model.reservations.ResStartTime;
-                model2.ResTime = model.reservations.ResTime;
-                model2.ResNowDate = model.reservations.ResNowDate;
+                model2.courtPriceLists = db.courtPriceLists.ToList();
+                model2.resSchemaModal.FullName = mem.FullName;
+                model2.resSchemaModal.NickName = mem.NickName;
+                model2.resSchemaModal.CourtName = model.reservations.Court.CourtName;
+                model2.resSchemaModal.ResDate = model.reservations.ResDate;
+                model2.resSchemaModal.ResEvent = model.reservations.ResEvent;
+                model2.resSchemaModal.ResFinishTime = model.reservations.ResFinishTime;
+                model2.resSchemaModal.ResId = id;
+                model2.resSchemaModal.ResStartTime = model.reservations.ResStartTime;
+                model2.resSchemaModal.ResTime = model.reservations.ResTime;
+                model2.resSchemaModal.ResNowDate = model.reservations.ResNowDate;
+                model2.resSchemaModal.PriceInf = model.reservations.PriceInf;
+                model2.resSchemaModal.Price = model.reservations.Price;
+                model2.resSchemaModal.PriceIds = model.reservations.PriceIds;
 
 
             }

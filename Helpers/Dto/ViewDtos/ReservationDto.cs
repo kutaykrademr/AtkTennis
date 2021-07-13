@@ -16,6 +16,8 @@ namespace Helpers.Dto.ViewDtos
         public string CourtId { get; set; }
         public string ResNowDate { get; set; }
         public bool PriceInf { get; set; }
+        public int Price { get; set; }
+        public string PriceIds { get; set; }
 
 
         public CourtDto Court { get; set; }

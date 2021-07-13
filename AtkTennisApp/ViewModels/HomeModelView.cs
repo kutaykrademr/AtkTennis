@@ -13,6 +13,8 @@ namespace AtkTennisApp.ViewModels
         public int? TotalResCount { get; set; }
         public int? TodayResCount { get; set; }
         public List<ToDoList> toDoLists { get; set; } = new List<ToDoList>();
+        public List<Reservation> reservations { get; set; } = new List<Reservation>();
+        public List<Court> courts { get; set; } = new List<Court>();
         
     }
 }

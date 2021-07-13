@@ -113,7 +113,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate));
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds));
 
             }
             catch (Exception)
@@ -153,18 +153,18 @@ namespace AtkTennisWeb.Controllers
 
         public JsonResult GetResModalInf(int id)
         {
-            ResSchemaModalDto model = new ResSchemaModalDto();
+            ResModalViewDto model = new ResModalViewDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ResSchemaModalDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResModalInf?id=" + id ));
+                model = Helpers.Serializers.DeserializeJson<ResModalViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResModalInf?id=" + id ));
 
 
             }
             catch (Exception)
             {
-                return Json(new ResSchemaModalDto());
+                return Json(new ResModalViewDto());
             }
 
             return Json(model);

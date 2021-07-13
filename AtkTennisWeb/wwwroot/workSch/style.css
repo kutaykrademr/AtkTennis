@@ -3976,7 +3976,7 @@ a {
 
 .cd-schedule-modal__date,
 .cd-schedule__event a::before {
-    opacity: 0.7;
+    /*opacity: 0.7;*/
     margin-bottom: 0.25em;
     margin-bottom: var(--space-xxxs);
 }

@@ -18,7 +18,8 @@ namespace AtkTennisApp.Models
         public string UserId { get; set; }     
         public string ResNowDate { get; set; }
         public bool PriceInf { get; set; }
-      
+        public int Price { get; set; }
+        public string PriceIds { get; set; }
         
 
         public Court Court { get; set; }
