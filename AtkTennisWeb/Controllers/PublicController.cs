@@ -41,6 +41,7 @@ namespace AtkTennisWeb.Controllers
                         HttpContext.Session.SetString("FullName", model.custom_name);
                         HttpContext.Session.SetString("Role", model.custom_role);
                         HttpContext.Session.SetString("RoleId", model.custom_roleId);
+                        HttpContext.Session.SetString("NickName", model.custom_nickName);
 
                     }
                 }
@@ -76,6 +77,26 @@ namespace AtkTennisWeb.Controllers
             }
 
             ViewBag.date = date;
+
+            return View(model);
+        }
+
+        public IActionResult ReservationList()
+        {
+
+            ReservationListViewDto model = new ReservationListViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResList"));
+
+                if (model == null)
+
+                    model = new ReservationListViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationListViewDto();
+            }
 
             return View(model);
         }
@@ -130,27 +151,6 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult ChangeCurrentUserPass(string id, string currentPass, string newPass)
-        {
-            MemberListDto model = new MemberListDto();
-
-            try
-
-            {
-                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass));
-
-
-            }
-            catch (Exception)
-            {
-                return Json(new MemberListDto());
-            }
-
-            return Json(true);
-
-
-        }
-
         public JsonResult GetResModalInf(int id)
         {
             ResModalViewDto model = new ResModalViewDto();
@@ -158,7 +158,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ResModalViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResModalInf?id=" + id ));
+                model = Helpers.Serializers.DeserializeJson<ResModalViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResModalInf?id=" + id));
 
 
             }
@@ -194,7 +194,29 @@ namespace AtkTennisWeb.Controllers
             {
                 return Json(new ResSchemaModalDto());
             }
-       
+
+        }
+
+
+        public JsonResult ChangeCurrentUserPass(string id, string currentPass, string newPass)
+        {
+            MemberListDto model = new MemberListDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass));
+
+
+            }
+            catch (Exception)
+            {
+                return Json(new MemberListDto());
+            }
+
+            return Json(true);
+
+
         }
 
         public IActionResult Logout()

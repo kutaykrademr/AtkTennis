@@ -397,16 +397,16 @@
 
                                                     @{ if (item2.PriceType == "1")
                                                         {
-                                                            <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" name="@item2.CourtPrice" id="@item2.CourtPriceListId" checked="checked" disabled="">
+                                                            <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
                                                         }
 
                                                         else
                                                         {
-                                                            <input class="custom-control-input custom-control-input-danger" name="@item2.CourtPrice" type="checkbox" id="@item2.CourtPriceListId">
+                                                            <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
                                                         }
 
                                                     }
-                                                    <label for="@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                    <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
                                                 </div>
                                             </td>
                                         </tr>
@@ -933,7 +933,7 @@
 
         var priceId = [];
         $('#checkPriceTable input:checked').each(function () {
-            priceId.push(this.id);
+            priceId.push(this.value);
         });
 
         var strPriceId = "";

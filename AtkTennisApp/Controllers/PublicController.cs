@@ -64,12 +64,13 @@ namespace AtkTennisApp.Controllers
         {
 
             SignIn Model2 = new SignIn();
+            SignIn model = new SignIn();
+            MemberList mem = new MemberList();
 
             Model2.UserName = UserName;
             Model2.Password = Password;
 
-            SignIn model = new SignIn();
-
+           
             if (ModelState.IsValid)
             {
                 try
@@ -87,8 +88,9 @@ namespace AtkTennisApp.Controllers
                     return new SignIn();
                 }
 
+                var a = db.memberLists.Where(x => x.UserName == UserName).FirstOrDefault();
 
-
+                model.custom_nickName = a.NickName;
                 model.UserName = Model2.UserName;
                 model.Password = Model2.Password;
                 model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;
@@ -108,7 +110,6 @@ namespace AtkTennisApp.Controllers
 
             return model;
         }
-
 
 
         [HttpGet("GetRes", Name = "GetRes")]
@@ -350,6 +351,30 @@ namespace AtkTennisApp.Controllers
                 return Json("false");
         }
 
+        [HttpGet("GetResList", Name = "GetResList")]
+        public JsonResult GetResList()
+
+        {
+            ReservationListViewModel model = new ReservationListViewModel();
+
+
+            try
+            {
+                model.reservations = db.reservations.ToList();
+                model.courts = db.courts.ToList();
+               
+
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationListViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
 
 
         [HttpGet("ChangeCurrentUserPass", Name = "ChangeCurrentUserPass")]
@@ -470,7 +495,7 @@ namespace AtkTennisApp.Controllers
 
         {
             try
-            {
+            {    
                 await signInManager.SignOutAsync();
             }
 

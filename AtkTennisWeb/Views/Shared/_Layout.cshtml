@@ -168,7 +168,7 @@
 
                             <div style="margin-left:102px" class="col-md-2"><a style="color:white" id="@userId" onclick="changeCurrentPassModal(this.id)" class="fas fa-user-cog"></a></div>
 
-                            <div class="col-md-2"><a href="~/Public/Logout" style="color:#dc3545; font-size:21px ; margin-top:1px" class="fas fa-sign-out-alt"></a></div>
+                            <div class="col-md-2"><a onclick="logOut()"  style="color:#dc3545; font-size:21px ; margin-top:1px" class="fas fa-sign-out-alt"></a></div>
 
                         </div>
                     </div>
@@ -260,7 +260,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                    <a href="~/Public/ReservationList" class="nav-link">
                                         <i class="fas fa-table nav-icon"></i>
                                         <p>Rezervasyon Listem</p>
                                     </a>
@@ -555,6 +555,12 @@
             }
         }
 
+        function logOut() {
+
+            localStorage.clear();
+            window.location.href = "/Public/Logout";
+            
+        }
 
 
     </script>

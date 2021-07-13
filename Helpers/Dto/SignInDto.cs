@@ -15,6 +15,7 @@ namespace Helpers.Dto
         public string custom_name { get; set; }
         public string custom_role { get; set; }
         public string custom_roleId { get; set; }
+        public string custom_nickName { get; set; }
 
     }
 }

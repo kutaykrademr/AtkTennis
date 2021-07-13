@@ -307,7 +307,6 @@ namespace AtkTennisApp.Controllers
             }
 
             return model;
-
         }
 
 

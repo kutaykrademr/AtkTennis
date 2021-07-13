@@ -18,6 +18,8 @@ namespace Helpers.Dto.ViewDtos
         public bool PriceInf { get; set; }
         public int Price { get; set; }
         public string PriceIds { get; set; }
+        public bool CancelRes { get; set; }
+        public bool Procedure { get; set; }
 
 
         public CourtDto Court { get; set; }

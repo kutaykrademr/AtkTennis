@@ -4,17 +4,25 @@
 }
 
 @model Helpers.Dto.ViewDtos.HomeModelDto
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
-
+@{
+    var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
+    var nickname = HttpContextAccessor.HttpContext.Session.GetString("NickName");
+    var username = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+}
 
 <div class="content-wrapper">
 
-   
+
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard</h1>
+                    <h1 class="m-0">Yönetici Paneli</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -26,11 +34,36 @@
         </div>
     </div>
 
-   
     <section class="content">
-        <div class="container-fluid">      
+        <div class="container-fluid">
+            <div class="card" style="border-radius:40px">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                                <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4>@fullname - @nickname</h4>
+                                <span>@username</span>
+                            </div>
+
+
+
+                            <div class="align-self-center">
+                                <h3>@role<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-user-tag"></i></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-6">                   
+                <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>
@@ -52,9 +85,9 @@
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-              
+
                 <div class="col-lg-3 col-6">
-                 
+
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>
@@ -72,9 +105,9 @@
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-             
+
                 <div class="col-lg-3 col-6">
-                  
+
                     <div class="small-box bg-success">
                         <div class="inner">
                             @*<h3>53<sup style="font-size: 20px">%</sup></h3>*@
@@ -99,9 +132,9 @@
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-               
+
                 <div class="col-lg-3 col-6">
-                   
+
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>
@@ -125,12 +158,12 @@
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-               
+
             </div>
-          
-            <div class="row">              
+
+            <div class="row">
                 <section class="col-lg-7 connectedSortable">
-                   
+
                     <div class="card card-info">
                         <div class="card-header" style="background-color:darkmagenta">
                             <h3 class="card-title"><i style="margin-right:10px" class="fas fa-tasks"></i>Yapılacak Listesi </h3>
@@ -171,11 +204,11 @@
                         </div>
                         <div class="card-footer clearfix">
                             <button data-toggle="modal" data-target="#openToDoModal" style="background-color:darkmagenta; border-color:cornflowerblue" type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Ekle</button>
-                        </div>                      
+                        </div>
                     </div>
 
 
-                    
+
                     <div class="card bg-gradient-success">
                         <div class="card-header border-0">
 
@@ -183,8 +216,8 @@
                                 <i class="far fa-calendar-alt"></i>
                                 Calendar
                             </h3>
-                           
-                            <div class="card-tools">                               
+
+                            <div class="card-tools">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
                                         <i class="fas fa-bars"></i>
@@ -203,14 +236,14 @@
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
-                           
+
                         </div>
-                        
+
                         <div class="card-body pt-0">
-                           
+
                             <div id="calendar" style="width: 100%"></div>
-                        </div>                   
-                    </div>                    
+                        </div>
+                    </div>
                 </section>
 
 
@@ -227,7 +260,7 @@
                             </div>
                         </div>
                         <div class="card-body p-0">
-                            <table style="text-align:center" class="table">
+                            <table style="text-align:center" id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Kortlar</th>
@@ -263,10 +296,13 @@
 
                                 </tbody>
                             </table>
-                        </div>                    
-                    </div>                
-                </section>             
-            </div>            
+                        </div>
+
+
+
+                    </div>
+                </section>
+            </div>
         </div>
     </section>
 </div>
@@ -308,6 +344,24 @@
 
 
 <script>
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+    });
+
     function addToDo() {
 
         var d = new Date();
