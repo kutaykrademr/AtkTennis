@@ -264,6 +264,11 @@ namespace AtkTennisApp.Controllers
                         model2.Reservations = true;
                     else
                         model2.Reservations = false;
+                    
+                    if (activeAuth.Contains("Dashboard"))
+                        model2.Dashboard = true;
+                    else
+                        model2.Dashboard = false;
 
                     db.Update(model2);
                     db.SaveChanges();
@@ -280,6 +285,24 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+
+        [HttpGet("getAuthority", Name = "getAuthority")]
+        public UserSettings getAuthority(string RoleId)
+        {
+            UserSettings model = new UserSettings();
+
+            try
+            {
+                model = db.userSettings.Where(x => x.RoleId == RoleId).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+                return new UserSettings();
+            }
+
+            return model;
+        }
 
         #endregion
 

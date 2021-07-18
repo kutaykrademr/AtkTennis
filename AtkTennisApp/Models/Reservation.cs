@@ -20,6 +20,7 @@ namespace AtkTennisApp.Models
         public bool PriceInf { get; set; }
         public int Price { get; set; }
         public string PriceIds { get; set; }
+        public string NickName { get; set; }
         public bool CancelRes { get; set; }
         public bool Procedure { get; set; }
         

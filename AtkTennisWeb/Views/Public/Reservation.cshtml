@@ -144,19 +144,25 @@
                                                 {
                                                     if (item.CourtId == item2.Court.CourtId)
                                                     {
-                                                        <li class="cd-schedule__event ">
-
-                                                            @if (item2.UserId == userId)
+                                                        <li  class="cd-schedule__event ">
+                                                            @if (Role == "Yönetici")
                                                             {
-                                                                <a id="@item2.ResId" data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" onclick="openResInfModal(this.id)" style="background-color:#9a12b3; box-shadow: 0 10px 20px rgb(0, 0, 0.65), inset 0 -3px 0 rgba(0, 0, 0, 0.2); ">
-                                                                    <em style="font-size:12px" class="cd-schedule__name">KK1</em>
+                                                                <a id="@item2.ResId" data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" onclick="openResInfModal(this.id)" style="background-color:#9a12b3; box-shadow: 0 10px 20px rgb(0, 0, 0.65), inset 0 -3px 0 rgba(0, 0, 0, 0.2); cursor:pointer">
+                                                                    <em style="font-size:12px" class="cd-schedule__name">@item2.NickName</em>
+                                                                </a>
+                                                            }
+
+                                                            else if(item2.UserId == userId)
+                                                            { 
+                                                                <a id="@item2.ResId" data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" onclick="openResInfModal(this.id)" style="background-color:#9a12b3; box-shadow: 0 10px 20px rgb(0, 0, 0.65), inset 0 -3px 0 rgba(0, 0, 0, 0.2);cursor:pointer">
+                                                                    <em style="font-size:12px" class="cd-schedule__name">@item2.NickName</em>
                                                                 </a>
                                                             }
 
                                                             else
                                                             {
-                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" style="background-color:#9a12b3 ">
-                                                                    <em class="cd-schedule__name">KK</em>
+                                                                <a data-start="@item2.ResStartTime" data-end="@item2.ResFinishTime" style="background-color:#9a12b3; box-shadow: 0 10px 20px rgb(0, 0, 0.65), inset 0 -3px 0 rgba(0, 0, 0, 0.2);cursor:pointer">
+                                                                    <em style="font-size:12px" class="cd-schedule__name">@item2.NickName</em>
                                                                 </a>
                                                             }
 
@@ -258,14 +264,12 @@
                                             </thead>
 
                                             <tbody id="PriceNI">
-
-                                               
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
                                                     <th id="sumPrice" style="font-weight:bold" scope="col"></th>
-                                                    
+
                                                 </tr>
                                             </tfoot>
 
@@ -909,7 +913,7 @@
             price.push(this.name);
         });
 
-      
+
         var sum = 0;
 
         for (var i = 0; i < price.length; i++) {
@@ -945,7 +949,7 @@
             strPriceId = strPriceId + x;
         }
 
-       
+
         //saat  - tarih
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
@@ -1082,7 +1086,7 @@
             async: true,
             success: function (res) {
 
-                
+
 
                 $("#PriceInf").empty();
                 row = "";
@@ -1108,7 +1112,7 @@
                 $("#PriceNI").empty();
 
                 row = "";
-     
+
                 for (var i = 0; i < res.courtPriceLists.length; i++) {
                     for (var a = 0; a < IdsArray.length; a++) {
 
@@ -1120,7 +1124,7 @@
                         }
                     }
                 }
-                
+
                 $("#PriceNI").append(row);
 
                 $("#sumPrice").html(res.resSchemaModal.price);

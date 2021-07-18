@@ -38,7 +38,7 @@
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Roller </th>
-                                        <th>Güncelle</th>
+                                        @*<th>Güncelle</th>*@
                                     </tr>
                                 </thead>
 
@@ -47,10 +47,10 @@
                                     {
                                         <tr style="text-align:center" id="">
                                             <td>@Model.appIdentityRoles[i].Name</td>
-                                            <td>
+                                            @*<td>
                                                 <button class="btn btn-warning" id="@Model.appIdentityRoles[i].Id" onclick="openUpdateRoleModal(this.id)"><i class="fas fa-edit"></i></button>
                                                 <button class="btn btn-danger" id="@Model.appIdentityRoles[i].Id" onclick="deleteOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
+                                            </td>*@
 
                                         </tr>
                                     }
@@ -95,6 +95,22 @@
                                 </thead>
 
                                 <tbody>
+
+                                    <tr style="text-align:center">
+                                        <td>Yönetim Paneli </td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].Dashboard == true)
+                                            {
+                                                <td><input id="Dashboard_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+                                            else
+                                            {
+                                                <td><input id="Dashboard_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                            }
+
+                                        }
+                                    </tr>
 
                                     <tr style="text-align:center">
                                         <td>Danışma</td>

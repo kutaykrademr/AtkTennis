@@ -50,7 +50,7 @@ namespace AtkTennisWeb.Controllers
                     return Json("false");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return Json("false");
             }
@@ -100,6 +100,48 @@ namespace AtkTennisWeb.Controllers
 
             return View(model);
         }
+
+        public IActionResult MemberInf()
+        {
+
+            List<MemberListDto> model = new List<MemberListDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<MemberListDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetMemberInf"));
+
+                if (model == null)
+
+                    model = new List<MemberListDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<MemberListDto>();
+            }
+
+            return View(model);
+        }
+
+        public JsonResult GetUserListModal( string id)
+        {
+
+            ReservationListViewDto model = new ReservationListViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetUserListModal?id=" + id));
+
+                if (model == null)
+
+                    model = new ReservationListViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationListViewDto();
+            }
+
+            return Json(model);
+        }
+
+       
 
         public JsonResult GetResTime(string courtInf, string dateInf)
         {

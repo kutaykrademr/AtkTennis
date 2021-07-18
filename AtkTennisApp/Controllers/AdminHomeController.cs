@@ -14,13 +14,13 @@ namespace AtkTennisApp.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class HomeController : Controller
+    public class AdminHomeController : Controller
     {
         private readonly UserManager<AppIdentityUser> userManager;
         private readonly RoleManager<AppIdentityRole> roleManager;
         private readonly SignInManager<AppIdentityUser> signInManager;
 
-        public HomeController(UserManager<AppIdentityUser> userManager,
+        public AdminHomeController(UserManager<AppIdentityUser> userManager,
             RoleManager<AppIdentityRole> roleManager,
             SignInManager<AppIdentityUser> signInManager)
         {
@@ -64,7 +64,6 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-
         [HttpGet("GetRole", Name = "GetRole")]
         public List<AppIdentityRole> GetRole()
 
@@ -84,7 +83,6 @@ namespace AtkTennisApp.Controllers
 
             return model;
         }
-
 
         [HttpGet("NewRegister", Name = "NewRegister")]
         public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
@@ -142,8 +140,6 @@ namespace AtkTennisApp.Controllers
                 model2.Password = password;
 
                
-
-
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, role).Wait();

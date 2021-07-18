@@ -111,7 +111,6 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-
         [HttpGet("GetRes", Name = "GetRes")]
         public ReservationViewModel GetRes(string date)
 
@@ -132,6 +131,29 @@ namespace AtkTennisApp.Controllers
             catch (Exception ex)
             {
                 model = new ReservationViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+
+        }
+
+        [HttpGet("GetMemberInf", Name = "GetMemberInf")]
+        public List<MemberList> GetMemberInf(string date)
+
+        {
+            List<MemberList> model = new List<MemberList>();
+
+
+            try
+            {
+                model = db.memberLists.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new List<MemberList>();
 
                 Mutuals.monitizer.AddException(ex);
             }
@@ -296,6 +318,7 @@ namespace AtkTennisApp.Controllers
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
+            MemberList mem = new MemberList();
 
 
             if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null || PriceIds == null)
@@ -309,6 +332,9 @@ namespace AtkTennisApp.Controllers
                 {
                     model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate).FirstOrDefault();
                     court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
+                    mem.NickName = db.memberLists.FirstOrDefault(x => x.UserId == UserId).NickName;
+               
+
                 }
 
                 catch (Exception e)
@@ -322,6 +348,7 @@ namespace AtkTennisApp.Controllers
             {
                 try
                 {
+                    res.NickName = mem.NickName;
                     res.Court = court;
                     res.ResFinishTime = ResFinishTime;
                     res.ResStartTime = ResStartTime;
@@ -376,6 +403,36 @@ namespace AtkTennisApp.Controllers
 
         }
 
+        [HttpGet("GetUserListModal", Name = "GetUserListModal")]
+        public JsonResult GetUserListModal(string id)
+
+        {
+            ReservationListViewModel model = new ReservationListViewModel();
+
+
+            try
+            {
+                model.date = db.reservations.Where(x => x.UserId == id).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+                model.debtCount = db.reservations.Where(x => x.UserId == id && x.PriceInf == false).Count();
+                model.debtNotCount = db.reservations.Where(x => x.UserId == id && x.PriceInf == true).Count();
+                model.reservations = db.reservations.Where(x=>x.UserId == id).ToList();
+                model.courts = db.courts.ToList();
+                model.memberLists = db.memberLists.Where(x => x.UserId == id).ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationListViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+       
 
         [HttpGet("ChangeCurrentUserPass", Name = "ChangeCurrentUserPass")]
         public async Task<JsonResult> ChangeCurrentUserPass(string id, string currentPass, string newPass)

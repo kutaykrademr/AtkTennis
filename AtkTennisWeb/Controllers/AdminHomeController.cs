@@ -14,15 +14,16 @@ using System.Threading.Tasks;
 namespace AtkTennisWeb.Controllers
 {
     [AuthorizeUser]
-    public class HomeController : Controller
+    public class AdminHomeController : Controller
     {
 
         public IActionResult Index()
         {
+
             HomeModelDto model = new HomeModelDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetHome"));
+                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome"));
                 if(model == null)
                     model = new HomeModelDto();
             }
@@ -40,7 +41,7 @@ namespace AtkTennisWeb.Controllers
 
             try
             {
-                model = Helpers.Serializers.DeserializeJson<List<AppIdentityRoleDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetRole"));
+                model = Helpers.Serializers.DeserializeJson<List<AppIdentityRoleDto>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetRole"));
 
                 if (model == null)
 
@@ -58,7 +59,7 @@ namespace AtkTennisWeb.Controllers
             AppIdentityUserDto model = new AppIdentityUserDto();
             try
             {
-                 model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/NewRegister?name=" + name + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role + 
+                 model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewRegister?name=" + name + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role + 
                      "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation + 
                      "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName));
 
@@ -80,7 +81,7 @@ namespace AtkTennisWeb.Controllers
 
             try
             {
-                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetUser"));
+                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUser"));
 
                 if (model == null)
 
@@ -98,7 +99,7 @@ namespace AtkTennisWeb.Controllers
             MemberListDto model = new MemberListDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/GetMemberListInf?id=" + id));
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetMemberListInf?id=" + id));
 
                 if (model == null)
 
@@ -118,7 +119,7 @@ namespace AtkTennisWeb.Controllers
             AppIdentityRoleDto model = new AppIdentityRoleDto();
             try
             {
-               model =   Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/UpdateMemberList?name=" + name + "&username=" + username + "&id=" + id + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
+               model =   Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateMemberList?name=" + name + "&username=" + username + "&id=" + id + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
                      "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
                      "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&checkpass=" + checkpass));
 
@@ -140,7 +141,7 @@ namespace AtkTennisWeb.Controllers
             AppIdentityUserDto model = new AppIdentityUserDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/DeleteUser?id=" + id));
+                model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/DeleteUser?id=" + id));
 
                 if (model == null)
 
@@ -163,7 +164,7 @@ namespace AtkTennisWeb.Controllers
             ToDoListDto model = new ToDoListDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<ToDoListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Home/AddToDo?toDo=" + toDo + "&today=" + today));
+                model = Helpers.Serializers.DeserializeJson<ToDoListDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddToDo?toDo=" + toDo + "&today=" + today));
 
                 if (model != null)
 

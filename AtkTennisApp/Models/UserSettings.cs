@@ -13,6 +13,7 @@ namespace AtkTennisApp.Models
         public int UserSettingsId { get; set; }
         public string RoleId { get; set; }
         public string RoleName { get; set; }
+        public bool Dashboard { get; set; }
         public bool Advisory { get; set; }
         public bool Reservations { get; set; }
         public bool DebtandPayment { get; set; }

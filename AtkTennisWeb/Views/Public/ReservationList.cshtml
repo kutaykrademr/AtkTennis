@@ -16,9 +16,9 @@
 
     var newModel = Model.reservations.Where(x => x.UserId == userId).ToList();
 
-    var date = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x=>x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+    var date = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
 
-    
+
 
     for (int i = 0; i < newModel.Count; i++)
     {
@@ -145,11 +145,11 @@
                         <div class="card-title">
                             <h3>@date[i] Yılına Ait Rezervasyonlar</h3>
                         </div>
-                   
+
                     </div>
 
                     <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover">
+                        <table id="example2" style="border-collapse:inherit" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align:center">
                                     <th>Tarih</th>
@@ -167,30 +167,34 @@
 
                                 @foreach (var item in Model.reservations)
                                 {
-                                    if (item.ResDate.Split("-")[0] == date[i])
+                                    if (item.UserId == userId)
                                     {
-                                        <tr style="text-align:center" id="">
-                                            <td>@item.ResDate</td>
-                                            <td>@item.ResStartTime - @item.ResFinishTime</td>
-                                            <td>@item.Court.CourtName</td>
-                                            <td>@item.Price ₺</td>
-                                            @if (item.PriceInf == false)
-                                            {
-                                                <td>Ödenmedi</td>
-                                            }
-                                            else
-                                            {
-                                                <td>Ödendi</td>
-                                            }
+                                        if (item.ResDate.Split("-")[0] == date[i])
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.ResDate</td>
+                                                <td>@item.ResStartTime - @item.ResFinishTime</td>
+                                                <td>@item.Court.CourtName</td>
+                                                <td>@item.Price ₺</td>
 
-                                            <td>Aktif</td>
-                                            <td>
-                                                <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
-                                                <button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>
-                                            </td>
-                                        </tr>
+                                                @if (item.PriceInf == false)
+                                                {
+                                                    <td>Ödenmedi</td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+
+                                                <td>Aktif</td>
+                                                <td>
+                                                    <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
+                                                    <button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>
+                                                </td>
+                                            </tr>
+                                        }
                                     }
-
                                 }
 
                             </tbody>
@@ -203,7 +207,13 @@
     </section>
     <!-- /.content-wrapper -->
 </div>
+
+
+
+
+
 <script>
+
     $(document).ready(function () {
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -213,11 +223,13 @@
         $('#example2 , #example3 , #example4').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": true,
+            "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
-           
+        });
+
+
     });
 </script>

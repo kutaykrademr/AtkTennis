@@ -1,0 +1,250 @@
+﻿@model List<Helpers.Dto.ViewDtos.MemberListDto>;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Üyelik Bilgilerim</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card" style="border-radius:40px">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                                <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4>Kutay Karademir - kk1</h4>
+                                <span>kutaykrademr</span>
+                            </div>
+
+
+
+                            <div class="align-self-center">
+                                <h3>Toplam Bakiye: 375 ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            @foreach (var item in Model)
+            {
+                if (item.UserId == userId)
+                {
+
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">@item.StartDate</h3>
+
+                                    <p>Başlangıç Tarihi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">@item.FinishDate<sup style="font-size: 20px"></sup></h3>
+
+                                    <p>Bitiş Tarihi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">
+                                        @{ 
+                                            var a = item.Role.ToLower();
+                                            
+                                        }
+                                        @Char.ToUpperInvariant(a[0])@a.Substring(1)
+                                    </h3>
+
+                                    <p>Kullanıcı Yetkisi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">@item.Condition</h3>
+
+                                    <p>Kullanıcı Durumu</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                }
+
+            }
+            <!-- /.row -->
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    if (item.UserId == userId)
+                    {
+                        <div class="col-lg-6">
+                            <div class="card card-primary ">
+                                <div class="card-header" style="background-color:rebeccapurple;">
+                                    <h3 class="card-title">Kişisel Bilgileriniz</h3>
+                                </div>
+
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
+
+                                    <p class="text-muted">
+                                        @item.FullName
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
+
+                                    <p class="text-muted">
+                                        @item.IdentityNumber
+
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
+
+                                    <p class="text-muted">@item.BirthDate / @item.BirthPlace</p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
+
+                                    <p class="text-muted">
+                                        @item.Phone - @item.PhoneExp  / @item.Phone2 - @item.Phone2Exp
+
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
+
+                                    <p class="text-muted">
+                                        @item.Email -@item.EmailExp
+
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
+
+                                    <p class="text-muted">
+                                        @item.Job   
+
+                                    </p>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="card card-primary ">
+                                <div class="card-header" style="background-color:rebeccapurple;">
+                                    <h3 class="card-title">Bilgi Devam</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
+
+                                    <p class="text-muted">
+                                        @item.MotherName - @item.FatherName
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
+
+                                    <p class="text-muted">
+                                       @item.Phone2 - @item.Phone2Exp
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Şehir - İlçe</strong>
+
+                                    <p class="text-muted">@item.City - @item.District</p>
+
+                                    <hr>
+
+                                    <strong><i class="far fa-file-alt mr-1"></i> Notlar</strong>
+
+                                    <p class="text-muted">@item.Note</p>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    }
+
+                }
+
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
