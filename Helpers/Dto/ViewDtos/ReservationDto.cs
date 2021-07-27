@@ -20,6 +20,7 @@ namespace Helpers.Dto.ViewDtos
         public string PriceIds { get; set; }
         public string NickName { get; set; }
         public bool CancelRes { get; set; }
+        public string? CancelResUserId { get; set; }
         public bool Procedure { get; set; }
 
 

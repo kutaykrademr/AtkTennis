@@ -27,10 +27,10 @@ namespace AtkTennisWeb.Providers
                 {
                     control = false;
                 }
-                if (context.HttpContext.Session.GetString("Role") != "Yönetici")
-                {
-                    context.Result = new RedirectResult("../Public/Reservation?date=" + date);
-                }
+                //if (context.HttpContext.Session.GetString("Role") != "Yönetici")
+                //{
+                //    context.Result = new RedirectResult("../Public/Reservation?date=" + date);
+                //}
 
                 if (!control)
                 {

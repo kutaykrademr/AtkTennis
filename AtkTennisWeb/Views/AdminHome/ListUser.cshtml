@@ -625,7 +625,7 @@
                                                     <div class="col-lg-3 col-6">
                                                         <div class="small-box bg-warning">
                                                             <div class="inner">
-                                                                <h3>44</h3>
+                                                                <h3 id="cancelResCount"></h3>
 
                                                                 <p>İptal Edilen Rezervasyonlar</p>
                                                             </div>
@@ -764,6 +764,7 @@
                         $("#sp_user").text(res.memberLists[i].userName);
                         $("#debtCount").text(res.debtCount);
                         $("#debtNotCount").text(res.debtNotCount);
+                        $("#cancelResCount").text(res.cancelResCount);
 
                         var totalPrice = 0;
 
@@ -791,7 +792,7 @@
                         row += '<h3>' + res.date[i] + ' Yılına Ait Rezervasyonlar' + '</h3>';
                         row += '</div></div>';
                         row += '<div class="card-body">';
-                        row += '<table id="example2" style="border-collapse:inherit" class="table table-bordered table-hover">';
+                        row += '<table id="example2" class="table table-bordered table-hover">';
                         row += ' <thead>';
                         row += '<tr style="text-align:center">';
                         row += '<th>Tarih</th>';

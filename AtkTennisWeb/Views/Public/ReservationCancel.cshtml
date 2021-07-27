@@ -1,0 +1,256 @@
+﻿@model Helpers.Dto.PartialViewDtos.ReservationListViewDto
+
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+    var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
+    var nickname = HttpContextAccessor.HttpContext.Session.GetString("NickName");
+    var username = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+
+@{
+    var totalPrice = 0;
+
+    var newModel = Model.reservations.Where(x => x.UserId == userId).OrderByDescending(x => x.ResId).ToList();
+
+    var date = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+
+  
+    for (int i = 0; i < newModel.Count; i++)
+    {
+        if (newModel[i].PriceInf == false)
+        {
+            var firstPrice = newModel[i].Price;
+            totalPrice = firstPrice + totalPrice;
+        }
+
+    }
+
+    var debtCount = Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false).Count();
+    var debtNotCount = Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true).Count();
+    var cancelRes = Model.reservations.Where(x => x.UserId == userId && x.CancelRes == true).Count();
+
+}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Rezervasyon İptal</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">Reservation List</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display:none" class="modal-footer">
+        <textbox style="color:black; " id="userId">@userId</textbox>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card" style="border-radius:40px">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                                <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4>@fullname - @nickname</h4>
+                                <span>@username</span>
+                            </div>
+
+
+
+                            <div class="align-self-center">
+                                <h3>Toplam Borç: @totalPrice ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="content">
+        <div class="container-fluid">
+       
+            @for (int i = 0; i < date.Count; i++)
+            {
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">
+                            <h3>@date[i] Yılına Ait Rezervasyonlar</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example2" style="border-collapse:inherit" class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+                                    <th>Tarih</th>
+                                    <th>Saat</th>
+                                    <th>Kort Bilgisi</th>
+                                    <th>Ücret Detayı</th>
+                                    <th>Ücret Durumu</th>
+                                    <th>Durumu</th>
+                                    <th>İşlemler</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in newModel)
+                                {
+                                    if (item.UserId == userId)
+                                    {
+                                        if (item.ResDate.Split("-")[0] == date[i])
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.ResDate</td>
+                                                <td>@item.ResStartTime - @item.ResFinishTime</td>
+                                                <td>@item.Court.CourtName</td>
+                                                <td>@item.Price ₺</td>
+
+                                                @if (item.PriceInf == false)
+                                                {
+                                                    <td>Ödenmedi</td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+
+                                                <td>Aktif</td>
+                                                <td>
+
+                                                    @{
+                                                        DateTime date1 = DateTime.Now;
+                                                        var today = date1.ToString("yyyy-MM-dd");
+
+                                                        var y = today.Split("-");
+                                                        var currentToday = Convert.ToInt32(y[2] + y[1] + y[0]);
+
+
+                                                        var x = item.ResDate.Split("-");
+                                                        var resDate = Convert.ToInt32(x[2] + x[1] + x[0]);
+                                                    }
+
+                                                    @if (resDate >= currentToday)
+                                                    {
+                                                        <button id="@item.ResId" style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning" onclick="cancelRes(this.id)"><i style="margin-right:10px" class="fas fa-check"></i>İptal Et</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button style="color:black; cursor:text; background-color:white;" class="btn">-</button>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </section>
+    <!-- /.content-wrapper -->
+</div>
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+
+    });
+
+
+    function cancelRes(id) {
+        var userId = $("#userId").text();
+        $('#openResInf').modal('toggle');
+
+        swal({
+            title: "Emin Misiniz?",
+            text: "Rezervasyon  İptal Edilecek !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    $.ajax({
+                        type: "GET",
+                        url: '../Public/CancelRes',
+                        cache: false,
+                        data: { "id": id, "userId": userId },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+                            if (res != null) {
+
+                                swal({
+                                    title: "Rezervasyon İptal Edildi",
+                                    text: "Rezervasyon Kaydınız Başarılı Bir Şekilde İptal Edildi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
+
+                                    window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+                                });
+
+                            }
+                        },
+
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+
+                }
+                else
+                    swal({
+                        title: "Rezervasyon Korundu",
+                        text: "Rezervasyonu Silmekten Vazgeçtiniz!",
+                        icon: "success",
+                        button: "Tamam",
+                    });
+            });
+    }
+</script>

@@ -16,6 +16,7 @@ namespace AtkTennis.Models
         }
        
         public DbSet<Reservation>reservations { get; set; }
+        public DbSet<ReservationCancel>reservationCancels { get; set; }
         public DbSet<Court> courts { get; set; }
         public DbSet<ResTime> resTimes { get; set; }
         public DbSet<CourtPriceList> courtPriceLists { get; set; }

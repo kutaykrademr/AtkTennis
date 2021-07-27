@@ -101,6 +101,25 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+        public IActionResult ReservationCancel()
+        {
+            ReservationListViewDto model = new ReservationListViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ReservationCancel"));
+
+                if (model == null)
+
+                    model = new ReservationListViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationListViewDto();
+            }
+
+            return View(model);
+        }
+
         public IActionResult MemberInf()
         {
 
@@ -141,15 +160,35 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
-       
+        //public JsonResult PaymentOperations(int resId , string userId)
+        //{
 
-        public JsonResult GetResTime(string courtInf, string dateInf)
+        //    ReservationListViewDto model = new ReservationListViewDto();
+        //    try
+        //    {
+        //        model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/PaymentOperations?resId=" + resId + "&userId=" + userId));
+
+        //        if (model == null)
+
+        //            model = new ReservationListViewDto();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        model = new ReservationListViewDto();
+        //    }
+
+        //    return Json(model);
+        //}
+
+
+
+        public JsonResult GetResTime(int courtId, string dateInf)
         {
             List<court_reserved> model = new List<court_reserved>();
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<List<court_reserved>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResTime?courtInf=" + courtInf + "&dateInf=" + dateInf ));
+                model = Helpers.Serializers.DeserializeJson<List<court_reserved>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResTime?courtId=" + courtId + "&dateInf=" + dateInf ));
 
                 if (model == null)
 
@@ -171,7 +210,7 @@ namespace AtkTennisWeb.Controllers
         }
 
         public JsonResult NewReservation(ReservationDto res)
-        {
+            {
             var model = new ReservationViewDto();
             try
 
@@ -214,14 +253,14 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult CancelRes(int id)
+        public JsonResult CancelRes(int id , string userId)
         {
             ReservationDto model = new ReservationDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id));
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id + "&userId=" + userId));
 
                 if (model != null)
                 {
@@ -238,6 +277,8 @@ namespace AtkTennisWeb.Controllers
             }
 
         }
+
+
 
 
         public JsonResult ChangeCurrentUserPass(string id, string currentPass, string newPass)

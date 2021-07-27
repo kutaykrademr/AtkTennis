@@ -32,7 +32,8 @@
         <!-- /.login-logo -->
         <div class="card" style="background-color:transparent">
             <div class="card-body login-card-body" style="background-color:transparent">
-                <div>
+                <div id="loginButtons">
+
                     <div class="input-group mb-3">
                         <input type="text" id="username" class="form-control" placeholder="Kullanıcı Adı">
                         <div class="input-group-append">
@@ -62,7 +63,7 @@
                        
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn btn-warning btn-block" onclick="signIn()">Giriş Yap</button>
+                            <button  type="submit" class="btn btn-warning btn-block" onclick="signIn()">Giriş Yap</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -81,6 +82,17 @@
 
 
 <script>
+
+    var now = new Date();
+    var month = (now.getMonth() + 1);
+    var day = now.getDate();
+
+    if (month < 10)
+        month = "0" + month;
+    if (day < 10)
+        day = "0" + day;
+
+    var today = now.getFullYear() + '-' + month + '-' + day;
 
     $(document).ready(function () {
         $(function () {
@@ -121,7 +133,7 @@
                                 });
                             }
                             else {
-                                window.location.href = "../AdminHome/Index";
+                                window.location.href = "../AdminHome/Index?date=" + today;
                             }
                         }
                     });
@@ -132,9 +144,16 @@
         })
     });
 
-
+    $('#loginButtons').keypress(function (e) {
+        var key = e.which;
+        if (key == 13)  // the enter key code
+        {
+            signIn();
+        }
+    });   
 
     function signIn() {
+       
 
         try {
             $.ajax({
@@ -164,8 +183,8 @@
                        
                         localStorage.setItem("loginCheck", check);
                         
-                      
-                        window.location.href = "../AdminHome/Index";
+
+                        window.location.href = "../AdminHome/Index?date=" + today;
                     }
 
                     else

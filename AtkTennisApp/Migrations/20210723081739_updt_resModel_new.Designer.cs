@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210723081739_updt_resModel_new")]
+    partial class updt_resModel_new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,66 +426,6 @@ namespace AtkTennisApp.Migrations
                     b.HasIndex("CourtId");
 
                     b.ToTable("reservations");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.ReservationCancel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("CancelRes")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CancelResUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CourtId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NickName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PriceIds")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PriceInf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Procedure")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ResDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResEvent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResFinishTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ResId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ResNowDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResStartTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("reservationCancels");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.ReservationSettings", b =>

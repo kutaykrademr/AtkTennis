@@ -17,13 +17,13 @@ namespace AtkTennisWeb.Controllers
     public class AdminHomeController : Controller
     {
 
-        public IActionResult Index()
+        public IActionResult Index(string date)
         {
 
             HomeModelDto model = new HomeModelDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome"));
+                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome?date=" +date));
                 if(model == null)
                     model = new HomeModelDto();
             }
@@ -31,6 +31,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = new HomeModelDto();
             }
+            ViewBag.date = date;
             return View(model);
         }
 

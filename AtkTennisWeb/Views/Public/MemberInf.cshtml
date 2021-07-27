@@ -8,6 +8,7 @@
 
 @{
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+
 }
 
 
@@ -31,32 +32,37 @@
     </div>
     <!-- /.content-header -->
     <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card" style="border-radius:40px">
-                <div class="card-content">
-                    <div class="card-body cleartfix">
-                        <div class="media align-items-stretch">
-                            <div class="align-self-center">
-                                <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
-                            </div>
-                            <div class="media-body">
-                                <h4>Kutay Karademir - kk1</h4>
-                                <span>kutaykrademr</span>
-                            </div>
+    @foreach (var item in Model)
+    {
+        if (item.UserId == userId)
+        {
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="card" style="border-radius:40px">
+                        <div class="card-content">
+                            <div class="card-body cleartfix">
+                                <div class="media align-items-stretch">
+                                    <div class="align-self-center">
+                                        <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4>@item.FullName - @item.NickName</h4>
+                                        <span>@item.UserName</span>
+                                    </div>
 
 
 
-                            <div class="align-self-center">
-                                <h3>Toplam Bakiye: 375 ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                                    <div class="align-self-center">
+                                        <h3>Toplam Bakiye: 1375 ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
+            </section>
+        }
+    }
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
@@ -77,7 +83,7 @@
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <!-- ./col -->
@@ -92,7 +98,7 @@
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                               
+
                             </div>
                         </div>
                         <!-- ./col -->
@@ -101,9 +107,9 @@
                             <div class="small-box bg-warning">
                                 <div class="inner">
                                     <h3 style="font-size:1.2rem">
-                                        @{ 
+                                        @{
                                             var a = item.Role.ToLower();
-                                            
+
                                         }
                                         @Char.ToUpperInvariant(a[0])@a.Substring(1)
                                     </h3>
@@ -113,7 +119,7 @@
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <!-- ./col -->
@@ -128,7 +134,7 @@
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
                                 </div>
-                               
+
                             </div>
                         </div>
                         <!-- ./col -->
@@ -194,7 +200,7 @@
                                     <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
 
                                     <p class="text-muted">
-                                        @item.Job   
+                                        @item.Job
 
                                     </p>
                                 </div>
@@ -220,7 +226,7 @@
                                     <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
 
                                     <p class="text-muted">
-                                       @item.Phone2 - @item.Phone2Exp
+                                        @item.Phone2 - @item.Phone2Exp
                                     </p>
 
                                     <hr>

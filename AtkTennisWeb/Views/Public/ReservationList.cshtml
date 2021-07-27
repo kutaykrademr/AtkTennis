@@ -13,12 +13,33 @@
 
 @{
     var totalPrice = 0;
-
-    var newModel = Model.reservations.Where(x => x.UserId == userId).ToList();
-
-    var date = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+    var totPrice = 0;
 
 
+
+    var newModel = Model.reservations.Where(x => x.UserId == userId).OrderByDescending(x => x.ResId).ToList();
+    var newResCancelModel = Model.reservationCancels.Where(x => x.UserId == userId).OrderByDescending(x => x.ResId).ToList();
+
+    var newCount = newModel.Count();
+
+    var yx = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+
+    var dateCancel = Model.reservationCancels.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+
+    yx.AddRange(dateCancel);
+
+
+    var date = yx.Distinct().OrderByDescending(x => x).ToList();
+
+
+    for (int i = 0; i < newResCancelModel.Count; i++)
+    {
+        if (newResCancelModel[i].PriceInf == false && newResCancelModel[i].Procedure == false)
+        {
+            var firstPrice = newResCancelModel[i].Price;
+            totPrice = firstPrice + totPrice;
+        }
+    }
 
     for (int i = 0; i < newModel.Count; i++)
     {
@@ -30,8 +51,17 @@
 
     }
 
-    var debtCount = Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false).Count();
-    var debtNotCount = Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true).Count();
+    var generalTotalPrice = totPrice + totalPrice;
+
+    var debtCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false).Count());
+    var debtCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false).Count());
+    var debtNotCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true).Count());
+    var debtNotCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == true && x.Procedure == true).Count());
+
+    var totalDebt = debtCount + debtCountCancel;
+    var totalDebtNotCount = debtNotCount + debtNotCountCancel;
+
+    var cancelRes = Model.reservationCancels.Where(x => x.UserId == userId && x.CancelRes == true).Count();
 
 }
 <div class="content-wrapper">
@@ -67,7 +97,7 @@
 
 
                             <div class="align-self-center">
-                                <h3>Toplam Borç: @totalPrice ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                                <h3>Toplam Borç: @generalTotalPrice ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
                             </div>
                         </div>
                     </div>
@@ -82,7 +112,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>@debtCount</h3>
+                            <h3>@totalDebt</h3>
                             <p>Ödenmeyen Rezervasyonlar</p>
                         </div>
                         <div class="icon">
@@ -94,7 +124,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>@debtNotCount</h3>
+                            <h3>@totalDebtNotCount</h3>
 
                             <p>Ödeme Yapılan Rezervasyonlar</p>
                         </div>
@@ -107,7 +137,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
+                            <h3>@cancelRes</h3>
 
                             <p>İptal Edilen Rezervasyonlar</p>
                         </div>
@@ -120,7 +150,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>@totalPrice ₺</h3>
+                            <h3>@generalTotalPrice ₺</h3>
 
                             <p>Toplam Borç</p>
                         </div>
@@ -133,7 +163,16 @@
         </div>
     </section>
 
-
+    @if (newModel.Count == 0 && newResCancelModel.Count == 0)
+    {
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div style="text-align:center; margin-top:50px" class="col-sm-12">
+                    <h3 class="m-0">Rezervasyon Bilgisi Bulunamadı !! </h3>
+                </div>
+            </div>
+        </div>
+    }
 
     <section class="content">
         <div class="container-fluid">
@@ -165,9 +204,9 @@
                             </thead>
                             <tbody>
 
-                                @foreach (var item in Model.reservations)
+                                @if (newCount > 0 && newResCancelModel.Count() > 0)
                                 {
-                                    if (item.UserId == userId)
+                                    @foreach (var item in newModel)
                                     {
                                         if (item.ResDate.Split("-")[0] == date[i])
                                         {
@@ -188,13 +227,178 @@
                                                 }
 
                                                 <td>Aktif</td>
-                                                <td>
-                                                    <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
-                                                    <button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>
-                                                </td>
+
+                                                @if (item.PriceInf == false)
+                                                {
+                                                    <td>
+                                                        <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" id="@item.ResId,@item.UserId" class="btn btn-warning" onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
+                                                        @*<button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>*@
+                                                    </td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödeme Alındı</td>
+                                                }
+
+                                            </tr>
+                                        }
+
+
+                                    }
+
+
+
+                                    @foreach (var item2 in newResCancelModel)
+                                    {
+                                        if (item2.ResDate.Split("-")[0] == date[i])
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item2.ResDate</td>
+                                                <td>@item2.ResStartTime - @item2.ResFinishTime</td>
+                                                <td>@item2.CourtId</td>
+                                                <td>@item2.Price ₺</td>
+
+                                                @if (item2.PriceInf == false)
+                                                {
+                                                    <td>Ödenmedi</td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+
+                                                @{
+                                                    var x = Model.memberLists.FirstOrDefault(x => x.UserId == item2.CancelResUserId);
+                                                }
+                                                @if (x.UserId == userId)
+                                                {
+                                                    <td>İptal Edildi - Kendi</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>İptal Edildi - @x.UserName - @x.Role</td>
+                                                }
+
+                                                @if (item2.PriceInf == false && item2.Procedure == false)
+                                                {
+                                                    <td>
+                                                        <button style="color:white; background-color:#17a2b8 ;  border-color:#17a2b8" class="btn btn-warning" id="@item2.ResId,@item2.UserId" onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
+                                                        @*<button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>*@
+                                                    </td>
+                                                }
+
+                                                else if (item2.Procedure == true)
+                                                {
+                                                    <td>İptal Edildi / Borç Yok </td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödeme Alındı</td>
+                                                }
+
+                                            </tr>
+                                        }
+
+                                    }
+                                }
+                                else if (newCount > 0 && newResCancelModel.Count() <= 0)
+                                {
+                                    @foreach (var item in newModel)
+                                    {
+                                        if (item.ResDate.Split("-")[0] == date[i])
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.ResDate</td>
+                                                <td>@item.ResStartTime - @item.ResFinishTime</td>
+                                                <td>@item.Court.CourtName</td>
+                                                <td>@item.Price ₺</td>
+
+                                                @if (item.PriceInf == false)
+                                                {
+                                                    <td>Ödenmedi</td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+
+                                                <td>Aktif</td>
+
+                                                @if (item.PriceInf == false)
+                                                {
+                                                    <td>
+                                                        <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning" id="@item.ResId, @item.UserId " onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
+                                                        <button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>
+                                                    </td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödeme Alındı</td>
+                                                }
+
                                             </tr>
                                         }
                                     }
+                                }
+                                else if (newCount <= 0 && newResCancelModel.Count() > 0)
+                                {
+                                    @foreach (var item2 in newResCancelModel)
+                                    {
+                                        if (item2.ResDate.Split("-")[0] == date[i])
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item2.ResDate</td>
+                                                <td>@item2.ResStartTime - @item2.ResFinishTime</td>
+                                                <td>@item2.CourtId</td>
+                                                <td>@item2.Price ₺</td>
+
+                                                @if (item2.PriceInf == false)
+                                                {
+                                                    <td>Ödenmedi</td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+
+                                                @{
+                                                    var x = Model.memberLists.FirstOrDefault(x => x.UserId == item2.CancelResUserId);
+                                                }
+                                                @if (x.UserId == userId)
+                                                {
+                                                    <td>İptal Edildi - Kendi</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>İptal Edildi - @x.UserName - @x.Role</td>
+                                                }
+
+                                                @if (item2.PriceInf == false && item2.Procedure == false)
+                                                {
+                                                    <td>
+                                                        <button style="color:white; background-color:#17a2b8; border-color:#17a2b8" class="btn btn-warning" id="@item2.ResId , @item2.UserId " onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
+                                                        @*<button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>*@
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>İptal Edildi / Borç Yok </td>
+                                                }
+
+                                            </tr>
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+
                                 }
 
                             </tbody>
@@ -209,7 +413,25 @@
 </div>
 
 
-
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Ödeme Yap</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer" id="paymentOperation">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="doPayment(this.id)">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -224,12 +446,46 @@
             "paging": true,
             "lengthChange": false,
             "searching": false,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "autoWidth": false,
             "responsive": true,
         });
-
-
     });
+
+    function payment(id) {
+
+        
+
+        $("#paymentOperation button:nth-of-type(2)").attr("id", id);
+        $("#paymentModal").modal("toggle");
+
+    }
+    function doPayment(id) {
+
+        var x = id.split(",");
+        var resId = parseInt(x[0]);
+        var userId = x[1];
+        debugger;
+        
+            $.ajax({
+                type: "POST",
+                url: '../Public/PaymentOperations',
+                cache: false,
+                data: { "resId": resId, "userId": userId },
+                dataType: "json",
+                async: false,
+                success: function (res) {
+
+                   
+               
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+    }
 </script>

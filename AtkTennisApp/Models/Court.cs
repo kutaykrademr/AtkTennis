@@ -14,9 +14,6 @@ namespace AtkTennisApp.Models
         public string CourtType { get; set; }
         public int CourtConditions { get; set; }
         public int CourtWebConditions { get; set; }
-
       
-
-        
     }
 }

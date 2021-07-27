@@ -32,7 +32,7 @@ namespace AtkTennisApp.Controllers
         Context db = new Context();
 
         [HttpGet("GetHome", Name = "GetHome")]
-        public HomeModelView GetHome()
+        public HomeModelView GetHome( string date)
         {
             DateTime date1 = DateTime.Now;
             var today = date1.ToString("yyyy-MM-dd");
@@ -52,7 +52,16 @@ namespace AtkTennisApp.Controllers
                 model.reservations = db.reservations.ToList();
                 model.courts = db.courts.ToList();
 
-                
+                model.resTimes = db.resTimes.ToList();
+                model.courts = db.courts.ToList();
+                model.courtPriceLists = db.courtPriceLists.ToList();
+                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
+                model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
+                model.reservationSettings = db.reservationSettings.ToList();
+                model.memberLists = db.memberLists.ToList();
+                model.courtTimeInfs = db.courtTimeInfs.ToList();
+
+
             }
             catch (Exception ex)
             {

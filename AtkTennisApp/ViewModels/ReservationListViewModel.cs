@@ -10,9 +10,11 @@ namespace AtkTennisApp.ViewModels
     {
         public List<Court> courts { get; set; } = new List<Court>();
         public List<Reservation> reservations { get; set; } = new List<Reservation>();
+        public List<ReservationCancel> reservationCancels { get; set; } = new List<ReservationCancel>();
         public List<MemberList> memberLists { get; set; } = new List<MemberList>();
         public List<string> date { get; set; }
         public int debtCount { get; set; }
         public int debtNotCount { get; set; }
+        public int cancelResCount { get; set; }
     }
 }
