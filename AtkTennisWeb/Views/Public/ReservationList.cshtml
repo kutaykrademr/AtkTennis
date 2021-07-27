@@ -256,7 +256,10 @@
                                             <tr style="text-align:center" id="">
                                                 <td>@item2.ResDate</td>
                                                 <td>@item2.ResStartTime - @item2.ResFinishTime</td>
-                                                <td>@item2.CourtId</td>
+                                                @{
+                                                    var court = Model.courts.Where(x => x.CourtId == item2.CourtId).FirstOrDefault();
+                                                }
+                                                <td>@court.CourtName</td>
                                                 <td>@item2.Price ₺</td>
 
                                                 @if (item2.PriceInf == false)
@@ -354,7 +357,10 @@
                                             <tr style="text-align:center" id="">
                                                 <td>@item2.ResDate</td>
                                                 <td>@item2.ResStartTime - @item2.ResFinishTime</td>
-                                                <td>@item2.CourtId</td>
+                                                @{
+                                                    var court = Model.courts.Where(x => x.CourtId == item2.CourtId).FirstOrDefault();
+                                                }
+                                                <td>@court.CourtName</td>
                                                 <td>@item2.Price ₺</td>
 
                                                 @if (item2.PriceInf == false)
@@ -423,7 +429,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                ...
+
             </div>
             <div class="modal-footer" id="paymentOperation">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -454,38 +460,70 @@
     });
 
     function payment(id) {
-
-        
-
-        $("#paymentOperation button:nth-of-type(2)").attr("id", id);
-        $("#paymentModal").modal("toggle");
-
-    }
-    function doPayment(id) {
-
         var x = id.split(",");
         var resId = parseInt(x[0]);
         var userId = x[1];
-        debugger;
-        
-            $.ajax({
-                type: "POST",
-                url: '../Public/PaymentOperations',
-                cache: false,
-                data: { "resId": resId, "userId": userId },
-                dataType: "json",
-                async: false,
-                success: function (res) {
 
-                   
-               
-                },
+        $.ajax({
+            type: "POST",
+            url: '../Public/GetPaymentOperations',
+            cache: false,
+            data: { "resId": resId, "userId": userId },
+            dataType: "json",
+            async: false,
+            success: function (res) {
 
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
+                debugger;
+
+                if (res != null) {
+
+                    $("#PriceInf").empty();
+                    row = "";
+                    row += '';
+
+                    $("#PriceInf").append(row);
                 }
-            });
+
+
+                $("#paymentOperation button:nth-of-type(2)").attr("id", id);
+                $("#paymentModal").modal("toggle");
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
+    function doPayment(id) {
+        var x = id.split(",");
+        var resId = parseInt(x[0]);
+        var userId = x[1];
+
+        debugger;
+
+        $.ajax({
+            type: "POST",
+            url: '../Public/PaymentOperations',
+            cache: false,
+            data: { "resId": resId, "userId": userId },
+            dataType: "json",
+            async: false,
+            success: function (res) {
+
+
+                re
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
 
     }
 </script>

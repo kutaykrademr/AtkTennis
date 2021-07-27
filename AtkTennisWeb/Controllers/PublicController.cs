@@ -160,25 +160,44 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
-        //public JsonResult PaymentOperations(int resId , string userId)
-        //{
+        public JsonResult GetPaymentOperations(int resId, string userId)
+        {
 
-        //    ReservationListViewDto model = new ReservationListViewDto();
-        //    try
-        //    {
-        //        model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/PaymentOperations?resId=" + resId + "&userId=" + userId));
+            ReservationListViewDto model = new ReservationListViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetPaymentOperations?resId=" + resId + "&userId=" + userId));
 
-        //        if (model == null)
+                if (model == null)
 
-        //            model = new ReservationListViewDto();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        model = new ReservationListViewDto();
-        //    }
+                    model = new ReservationListViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationListViewDto();
+            }
 
-        //    return Json(model);
-        //}
+            return Json(model);
+        }
+        public JsonResult PaymentOperations(int resId, string userId)
+        {
+
+            ReservationListViewDto model = new ReservationListViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/PaymentOperations?resId=" + resId + "&userId=" + userId));
+
+                if (model == null)
+
+                    model = new ReservationListViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationListViewDto();
+            }
+
+            return Json(model);
+        }
 
 
 

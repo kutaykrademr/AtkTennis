@@ -34,6 +34,7 @@ namespace Helpers.Dto.ViewDtos
         public string Note { get; set; }
         public string Password { get; set; }
         public string NickName { get; set; }
+        public int Price { get; set; }
         
     }
 }

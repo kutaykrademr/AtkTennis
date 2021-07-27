@@ -36,6 +36,7 @@ namespace AtkTennisApp.Models
         public string Job { get; set; }
         public string Note { get; set; }
         public string Password { get; set; }
+        public int Price { get; set; }
       
         
     }

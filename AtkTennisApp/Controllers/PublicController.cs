@@ -459,6 +459,7 @@ namespace AtkTennisApp.Controllers
                     res.PriceIds = PriceIds;
 
                     
+                    
                     db.reservations.Add(res);
                     db.SaveChanges();
                 }
@@ -537,38 +538,102 @@ namespace AtkTennisApp.Controllers
 
         }
 
-        //[HttpGet("PaymentOperations", Name = "PaymentOperations")]
-        //public JsonResult PaymentOperations(string userId , int resId)
+        [HttpGet("PaymentOperations", Name = "PaymentOperations")]
+        public JsonResult PaymentOperations(string userId, int resId)
 
-        //{
-        //    MemberList model = new MemberList();
-        //    Reservation model2 = new Reservation();
-        //    ReservationCancel model3 = new ReservationCancel();
+        {
+            MemberList model = new MemberList();
+            Reservation model2 = new Reservation();
+            ReservationCancel model3 = new ReservationCancel();
 
 
-        //    try
-        //    {
-        //        model2 = db.reservations.Where(x => x.ResId == resId).FirstOrDefault();
-        //        if (model2 == null)
-        //        {
-        //            model3 = db.reservationCancels.Where(x => x.ResId == resId).FirstOrDefault();
-        //        }
-        //        model.Price = db.memberLists.First(x => x.UserId == userId).Price;
+            try
+            {
+                model3 = db.reservationCancels.Where(x => x.ResId == resId).FirstOrDefault();
+                model = db.memberLists.Where(x => x.UserId == userId).FirstOrDefault();
+                model2 = db.reservations.Where(x => x.ResId == resId).FirstOrDefault();
 
-                
+                if (model2 == null)
+                {
+                    if (model.Price - model3.Price >= 0)
+                    {
+                        var x = model.Price - model3.Price;
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-                
+                        model3.PriceInf = true;
+                        model.Price = x;
 
-        //        Mutuals.monitizer.AddException(ex);
-        //    }
+                        db.Update(model);
+                        db.Update(model3);
+                        db.SaveChanges();
+                    }    
+                    
+                }
 
-        //    return Json(model);
+                else
+                {
 
-        //}
+                    if (model.Price - model2.Price >= 0)
+                    {
+                        var y = model.Price - model2.Price;
 
+                        model2.PriceInf = true;
+                        model.Price = y;
+
+                        db.Update(model);
+                        db.Update(model2);
+                        db.SaveChanges();
+                    }
+                }
+
+               
+             
+
+               
+
+            }
+            catch (Exception ex)
+            {
+
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+        [HttpGet("GetPaymentOperations", Name = "GetPaymentOperations")]
+        public JsonResult GetPaymentOperations(string userId, int resId)
+
+        {
+            ReservationListViewModel model = new ReservationListViewModel();
+
+
+
+            try
+            {
+                model.courts = db.courts.ToList();
+                model.reservations = db.reservations.Where(x => x.ResId == resId).ToList();
+
+                if (model.reservations.Count == 0)
+                {
+                    model.reservationCancels = db.reservationCancels.Where(x => x.ResId == resId).ToList();
+                }
+                model.memberLists = db.memberLists.Where(x => x.UserId == userId).ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
 
         [HttpGet("ChangeCurrentUserPass", Name = "ChangeCurrentUserPass")]
         public async Task<JsonResult> ChangeCurrentUserPass(string id, string currentPass, string newPass)
