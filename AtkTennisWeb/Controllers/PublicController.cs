@@ -179,8 +179,11 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
+
         public JsonResult PaymentOperations(int resId, string userId)
         {
+
+             userId = userId.Trim();
 
             ReservationListViewDto model = new ReservationListViewDto();
             try
@@ -198,8 +201,6 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
-
-
 
         public JsonResult GetResTime(int courtId, string dateInf)
         {

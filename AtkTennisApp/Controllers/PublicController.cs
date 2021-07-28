@@ -172,7 +172,6 @@ namespace AtkTennisApp.Controllers
         }
 
 
-
         [HttpGet("GetMemberInf", Name = "GetMemberInf")]
         public List<MemberList> GetMemberInf(string date)
 
@@ -359,6 +358,7 @@ namespace AtkTennisApp.Controllers
             var m = Convert.ToInt32(x[1]);
             var per = Convert.ToInt16(time.CourtTimePeriod);
 
+
             if (per == 15)
             {
                 if (m == 45)
@@ -383,7 +383,6 @@ namespace AtkTennisApp.Controllers
                     ResFinishTime = h + ":" + m;
                 }    
             }
-
             else if (per == 30)
             {
                 if (m == 30)
@@ -430,7 +429,8 @@ namespace AtkTennisApp.Controllers
                 {
                     model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false).FirstOrDefault();
                     court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
-                    mem.NickName = db.memberLists.FirstOrDefault(x => x.UserId == UserId).NickName;
+                    mem = db.memberLists.FirstOrDefault(x => x.UserId == UserId);
+                   
 
 
                 }
@@ -444,24 +444,46 @@ namespace AtkTennisApp.Controllers
 
             if (model == null)
             {
+                //var memberPrice = db.memberLists.Where(x => x.UserId == UserId).FirstOrDefault().Price; // 1500
+
+                //var resDebt = Price;
+
+
+
                 try
                 {
-                    res.NickName = mem.NickName;
-                    res.Court = court;
-                    res.ResFinishTime = ResFinishTime;
-                    res.ResStartTime = ResStartTime;
-                    res.ResDate = ResDate;
-                    res.ResEvent = ResEvent;
-                    res.ResTime = ResTime;
-                    res.UserId = UserId;
-                    res.ResNowDate = ResNowDate;
-                    res.Price = Price;
-                    res.PriceIds = PriceIds;
+                    //if (memberPrice - resDebt >= 0)
+                    //{
+                    //    var newMemberPrice = memberPrice - resDebt;
+
+                    //    mem.Price = newMemberPrice;
+                    //    res.PriceInf = true;
+
+
+                        res.NickName = mem.NickName;
+                        res.Court = court;
+                        res.ResFinishTime = ResFinishTime;
+                        res.ResStartTime = ResStartTime;
+                        res.ResDate = ResDate;
+                        res.ResEvent = ResEvent;
+                        res.ResTime = ResTime;
+                        res.UserId = UserId;
+                        res.ResNowDate = ResNowDate;
+                        res.Price = Price;
+                        res.PriceIds = PriceIds;
+                       
+
+
+                        db.memberLists.Update(mem);
+                        db.reservations.Add(res);
+                        db.SaveChanges();
+                    //}
+                    //else
+                    //{
+                    //    return Json(false);
+                    //}
 
                     
-                    
-                    db.reservations.Add(res);
-                    db.SaveChanges();
                 }
 
                 catch (Exception e)
@@ -514,13 +536,30 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                model.date = db.reservations.Where(x => x.UserId == id).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
-                model.debtCount = db.reservations.Where(x => x.UserId == id && x.PriceInf == false).Count();
-                model.debtNotCount = db.reservations.Where(x => x.UserId == id && x.PriceInf == true).Count();
-                model.cancelResCount = db.reservations.Where(x => x.UserId == id && x.CancelRes == true).Count();
+                var activeReservation = db.reservations.Where(x => x.UserId == id).Count();
+                var x = db.reservations.Where(x => x.UserId == id && x.PriceInf == false).Count();
+                var y = db.reservations.Where(x => x.UserId == id && x.PriceInf == true).Count();
+                var xx = db.reservationCancels.Where(x => x.UserId == id && x.PriceInf == false).Count();
+                var yy = db.reservationCancels.Where(x => x.UserId == id && x.PriceInf == true).Count();
+
+                
+                var yx = db.reservations.Where(x => x.UserId == id).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+
+                var dateCancel = db.reservationCancels.Where(x => x.UserId == id).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+
+                yx.AddRange(dateCancel);
+
+                model.date = yx.Distinct().OrderByDescending(x => x).ToList();
 
 
 
+
+                model.debtCount = x + xx;
+                model.debtNotCount = y + yy;
+                model.cancelResCount = db.reservationCancels.Where(x => x.UserId == id && x.CancelRes == true).Count();
+                model.activeResCount = activeReservation;
+
+                model.reservationCancels = db.reservationCancels.Where(x => x.UserId == id).ToList();
                 model.reservations = db.reservations.Where(x => x.UserId == id).ToList();
                 model.courts = db.courts.ToList();
                 model.memberLists = db.memberLists.Where(x => x.UserId == id).ToList();
@@ -584,11 +623,7 @@ namespace AtkTennisApp.Controllers
                         db.SaveChanges();
                     }
                 }
-
-               
-             
-
-               
+           
 
             }
             catch (Exception ex)

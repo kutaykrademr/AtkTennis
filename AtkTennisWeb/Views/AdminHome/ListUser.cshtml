@@ -366,7 +366,7 @@
                                 <h3 class="card-title p-3">Kullanıcı Bilgileri</h3>
                                 <ul class="nav nav-pills ml-auto p-2">
                                     <li class="nav-item"><a class="nav-link active" style="background-color:darkmagenta; color:white; margin-right:10px" href="#tab_1" data-toggle="tab">Üyelik Bilgileri</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#tab_2" style="background-color:darkmagenta; color:white" data-toggle="tab">Rezervasyon Listesi</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#tab_2" style="background-color:darkmagenta; color:white; margin-right:10px" data-toggle="tab">Rezervasyon Listesi</a></li>
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -388,8 +388,8 @@
 
 
 
-                                                                <div class="align-self-center">
-                                                                    <h3>Toplam Bakiye: 375 ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                                                                <div class="align-self-center" id="addAndTotalPrice">
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -597,8 +597,33 @@
                                         <section class="content">
                                             <div class="container-fluid">
                                                 <div class="row">
-                                                    <div class="col-lg-3 col-6">
+                                                    <div class="col-lg-2 col-6">
                                                         <div class="small-box bg-info">
+                                                            <div class="inner">
+                                                                <h3 id="activeResCount"></h3>
+                                                                <p>Aktif Rezervasyonlar</p>
+                                                            </div>
+                                                            <div class="icon">
+                                                                <i class="far fa-window-close"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-3 col-6">
+                                                        <div class="small-box bg-warning">
+                                                            <div class="inner">
+                                                                <h3 id="cancelResCount"></h3>
+
+                                                                <p>İptal Edilen Rezervasyonlar</p>
+                                                            </div>
+                                                            <div class="icon">
+                                                                <i class="far fa-bell-slash"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-2 col-6">
+                                                        <div class="small-box" style="background-color:darkmagenta; color:white">
                                                             <div class="inner">
                                                                 <h3 id="debtCount"></h3>
                                                                 <p>Ödenmeyen Rezervasyonlar</p>
@@ -622,20 +647,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-lg-3 col-6">
-                                                        <div class="small-box bg-warning">
-                                                            <div class="inner">
-                                                                <h3 id="cancelResCount"></h3>
 
-                                                                <p>İptal Edilen Rezervasyonlar</p>
-                                                            </div>
-                                                            <div class="icon">
-                                                                <i class="far fa-bell-slash"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="col-lg-3 col-6">
+                                                    <div class="col-lg-2 col-6">
                                                         <div class="small-box bg-danger">
                                                             <div class="inner">
                                                                 <h3 id="totalPrice2"> </h3>
@@ -669,6 +683,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="addPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bakiye Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="money" placeholder="Bakiye Giriniz">
+            </div>
+            <div class="modal-footer" id="addPriceOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="AddPriceForMem(this.id)">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -707,6 +740,53 @@
         $("#openDeleteUserModal").modal("toggle");
 
     }
+
+    function openAddPriceForMem(id) {
+        $("#addPriceOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#addPrice").modal("toggle");
+    }
+
+    function AddPriceForMem(id) {
+
+        var money = $("#money").val();
+
+        debugger;
+
+        $.ajax({
+            type: "POST",
+            url: '../AdminHome/AddPrice',
+            cache: false,
+            data: { "id": id, "money": money },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    swal({
+                        title: "Yükleme Başarılı",
+                        text: "Bakiye Yükleme Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
+                        $("#addPrice").modal("toggle");
+                    });
+                }
+                else {
+                    swal("Uyarı !", "Yükleme Başarısız Tekrar Deneyiniz", "warning", {
+                        button: "Tamam",
+                    });
+                }
+
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
     function showUserInf(id) {
 
 
@@ -721,12 +801,10 @@
             success: function (res) {
 
 
-
                 if (res != null) {
 
-                  
+                    $("#identityCard").empty();
 
-                       $("#identityCard").empty();
                     for (var i = 0; i < res.memberLists.length; i++) {
                         row = "";
                         row += ' <h4>' + res.memberLists[i].fullName + '-' + res.memberLists[i].nickName + '</h4 > ';
@@ -734,6 +812,13 @@
 
                         $("#identityCard").append(row);
 
+                        $("#addAndTotalPrice").empty();
+
+                        row = "";
+                        row += '<h3>Toplam Bakiye:' + ' ' + res.memberLists[i].price + ' ' + '₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>';
+                        row += '<button style="color:white" type="button" class="btn btn-warning" id="' + res.memberLists[i].id + '" onclick="openAddPriceForMem(this.id)">Bakiye Ekle</button>'
+
+                        $("#addAndTotalPrice").append(row);
 
                         myString = res.memberLists[i].role;;
                         firstChar = myString.substring(0, 1);
@@ -759,32 +844,46 @@
 
 
                         //ResListModal
-                  
+
                         $("#full_nick").text(res.memberLists[i].fullName + '-' + res.memberLists[i].nickName);
                         $("#sp_user").text(res.memberLists[i].userName);
                         $("#debtCount").text(res.debtCount);
                         $("#debtNotCount").text(res.debtNotCount);
                         $("#cancelResCount").text(res.cancelResCount);
+                        $("#activeResCount").text(res.activeResCount);
 
                         var totalPrice = 0;
+                        var totPrice = 0;
 
                         for (var i = 0; i < res.reservations.length; i++) {
 
                             if (res.reservations[i].priceInf == false) {
-                                var firstPrice = parseInt(res.reservations[i].price);
-                                totalPrice = firstPrice + parseInt(totalPrice);
+                                var firstPrices = parseInt(res.reservations[i].price);
+                                totalPrice = firstPrices + parseInt(totPrice);
+                            }
+
+                            debugger;
+                        }
+
+                        for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                            if (res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false) {
+                                var firstPrice = parseInt(res.reservationCancels[i].price);
+                                totPrice = firstPrice + parseInt(totalPrice);
                             }
 
                         }
 
-                        $("#totalPrice").text("Toplam Borç :"+ ' ' +totalPrice + ' '+'₺');
-                        $("#totalPrice2").text(totalPrice +' '+'₺');
+                        var generalPrice = totalPrice + totPrice;
+
+                        $("#totalPrice").text("Toplam Borç :" + ' ' + generalPrice + ' ' + '₺');
+                        $("#totalPrice2").text(generalPrice + ' ' + '₺');
                     }
 
                     $("#resListModal").empty();
 
-                    for (var i = 0; i < res.date.length; i++)
-                    {
+                    for (var i = 0; i < res.date.length; i++) {
+
                         row = "";
                         row += ' <div class="card">';
                         row += '<div class="card-header d-flex justify-content-between">';
@@ -806,34 +905,187 @@
                         row += '</thead>';
                         row += '</tbody>';
 
-                        for (var a = 0; a < res.reservations.length; a++)
-                        {
-                         
-                            if (res.reservations[a].resDate.split("-")[0] == res.date[i])
-                            {
-                                row += '<tr style="text-align:center">';
-                                row += '<td>' + res.reservations[a].resDate + '</td>';
-                                row += '<td>' + res.reservations[a].resStartTime + "- " + res.reservations[a].resFinishTime + '</td>';
-                                row += '<td>' + res.reservations[a].court.courtName + '</td>';
-                                row += '<td>' + res.reservations[a].price + "₺" + '</td>';
+                        if (res.reservations.length > 0 && res.reservationCancels.length > 0) {
 
-                                if (res.reservations[a].priceInf == false)
-                                
-                                    row += '<td>' + "Ödenmedi" + '</td>';
-                                
-                                else
-                                
-                                    row += '<td>' + "Ödendi" + '</td>';
-                                
-                                row += '<td>Aktif</td>';
-                                row += '<td>';
-                                row += '<button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>';
-                                row += '<button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>TopluÖdeme</button>';
-                                row += '</td>';
-                                row += '</tr>';
 
+                            for (var a = 0; a < res.reservations.length; a++) {
+
+                                if (res.reservations[a].resDate.split("-")[0] == res.date[i]) {
+
+                                    row += '<tr style="text-align:center">';
+                                    row += '<td>' + res.reservations[a].resDate + '</td>';
+                                    row += '<td>' + res.reservations[a].resStartTime + "- " + res.reservations[a].resFinishTime + '</td>';
+                                    row += '<td>' + res.reservations[a].court.courtName + '</td>';
+                                    row += '<td>' + res.reservations[a].price + "₺" + '</td>';
+
+                                    if (res.reservations[a].priceInf == false)
+
+                                        row += '<td>' + "Ödenmedi" + '</td>';
+
+                                    else
+
+                                        row += '<td>' + "Ödendi" + '</td>';
+
+                                    row += '<td>Aktif</td>';
+                                    row += '<td>';
+                                    if (res.reservations[a].priceInf == true) {
+
+                                        row += 'Ödeme Alındı';
+                                    }
+                                    else {
+
+                                        row += '<button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>';
+                                    }
+
+                                    row += '</td>';
+                                    row += '</tr>';
+
+                                }
+                            }
+
+                            for (var a = 0; a < res.reservationCancels.length; a++) {
+
+                                if (res.reservationCancels[a].resDate.split("-")[0] == res.date[i]) {
+
+                                    row += '<tr style="text-align:center">';
+                                    row += '<td>' + res.reservationCancels[a].resDate + '</td>';
+                                    row += '<td>' + res.reservationCancels[a].resStartTime + "- " + res.reservationCancels[a].resFinishTime + '</td>';
+                                    row += '<td>' + res.reservationCancels[a].courtId + '</td>';
+                                    row += '<td>' + res.reservationCancels[a].price + "₺" + '</td>';
+
+                                    if (res.reservationCancels[a].priceInf == false) {
+
+                                        row += '<td>' + "Ödenmedi" + '</td>';
+                                    }
+                                    else
+
+                                        row += '<td>' + "Ödendi" + '</td>';
+
+
+                                    if (res.reservationCancels[a].cancelResUserId == id) {
+                                        row += '<td>İptal Edildi - Kendi</td>';
+                                    }
+                                    else {
+                                        row += '<td>İptal Edildi - Resepsiyon</td>';
+                                    }
+
+
+                                    row += '<td>';
+
+                                    if (res.reservationCancels[a].priceInf == false && res.reservationCancels[a].procedure == false) {
+
+                                        row += '<button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>';
+                                    }
+                                    else if (res.reservationCancels[a].priceInf == true) {
+
+                                        row += 'İptal Edildi - Borç Yok';
+                                    }
+
+                                    else
+                                        row += 'Ödeme Alındı';
+
+
+                                    row += '</td>';
+                                    row += '</tr>';
+
+                                }
                             }
                         }
+
+                        else if (res.reservations.length > 0 && res.reservationCancels.length <= 0) {
+                            for (var a = 0; a < res.reservations.length; a++) {
+
+                                if (res.reservations[a].resDate.split("-")[0] == res.date[i]) {
+
+                                    row += '<tr style="text-align:center">';
+                                    row += '<td>' + res.reservations[a].resDate + '</td>';
+                                    row += '<td>' + res.reservations[a].resStartTime + "- " + res.reservations[a].resFinishTime + '</td>';
+                                    row += '<td>' + res.reservations[a].court.courtName + '</td>';
+                                    row += '<td>' + res.reservations[a].price + "₺" + '</td>';
+
+                                    if (res.reservations[a].priceInf == false)
+
+                                        row += '<td>' + "Ödenmedi" + '</td>';
+
+                                    else
+
+                                        row += '<td>' + "Ödendi" + '</td>';
+
+                                    row += '<td>Aktif</td>';
+                                    row += '<td>';
+                                    if (res.reservations[a].priceInf == true) {
+
+                                        row += 'Ödeme Alındı';
+                                    }
+                                    else {
+
+                                        row += '<button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>';
+                                    }
+
+                                    row += '</td>';
+                                    row += '</tr>';
+
+                                }
+                            }
+                        }
+
+                        else if (res.reservations.length <= 0 && res.reservationCancels.length > 0) {
+                            for (var a = 0; a < res.reservationCancels.length; a++) {
+
+                                if (res.reservationCancels[a].resDate.split("-")[0] == res.date[i]) {
+
+                                    row += '<tr style="text-align:center">';
+                                    row += '<td>' + res.reservationCancels[a].resDate + '</td>';
+                                    row += '<td>' + res.reservationCancels[a].resStartTime + "- " + res.reservationCancels[a].resFinishTime + '</td>';
+                                    row += '<td>' + res.reservationCancels[a].courtId + '</td>';
+                                    row += '<td>' + res.reservationCancels[a].price + "₺" + '</td>';
+
+                                    if (res.reservationCancels[a].priceInf == false) {
+
+                                        row += '<td>' + "Ödenmedi" + '</td>';
+                                    }
+                                    else
+
+                                        row += '<td>' + "Ödendi" + '</td>';
+
+
+                                    if (res.reservationCancels[a].cancelResUserId == id) {
+                                        row += '<td>İptal Edildi - Kendi</td>';
+                                    }
+                                    else {
+                                        row += '<td>İptal Edildi - Resepsiyon</td>';
+                                    }
+
+
+                                    row += '<td>';
+
+                                    if (res.reservationCancels[a].priceInf == false && res.reservationCancels[a].procedure == false) {
+
+                                        row += '<button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>';
+                                    }
+                                    else if (res.reservationCancels[a].priceInf == true) {
+
+                                        row += 'Ödeme Alındı';
+                                    }
+
+                                    else
+                                        row += 'İptal Edildi - Borç Yok';
+
+
+                                    row += '</td>';
+                                    row += '</tr>';
+
+                                }
+                            }
+                        }
+
+                        else
+                            alert("reservasyon bulunamadı");
+
+                        
+
+                        
+
                         row += '</tbody>';
                         row += '</table>';
                         row += '</div>';
@@ -841,12 +1093,6 @@
 
                         $("#resListModal").append(row);
                     }
-
-                    
-                   
-
-
-
 
                     $("#showUserModal").modal("toggle");
                 }

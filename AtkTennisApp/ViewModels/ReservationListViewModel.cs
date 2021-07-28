@@ -16,5 +16,6 @@ namespace AtkTennisApp.ViewModels
         public int debtCount { get; set; }
         public int debtNotCount { get; set; }
         public int cancelResCount { get; set; }
+        public int activeResCount { get; set; }
     }
 }

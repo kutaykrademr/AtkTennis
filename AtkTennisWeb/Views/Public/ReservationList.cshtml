@@ -57,10 +57,8 @@
     var debtCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false).Count());
     var debtNotCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true).Count());
     var debtNotCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == true && x.Procedure == true).Count());
-
     var totalDebt = debtCount + debtCountCancel;
     var totalDebtNotCount = debtNotCount + debtNotCountCancel;
-
     var cancelRes = Model.reservationCancels.Where(x => x.UserId == userId && x.CancelRes == true).Count();
 
 }
@@ -460,15 +458,18 @@
     });
 
     function payment(id) {
+
         var x = id.split(",");
         var resId = parseInt(x[0]);
         var userId = x[1];
+
+        debugger;
 
         $.ajax({
             type: "POST",
             url: '../Public/GetPaymentOperations',
             cache: false,
-            data: { "resId": resId, "userId": userId },
+            data: { "resId":resId, "userId":userId },
             dataType: "json",
             async: false,
             success: function (res) {

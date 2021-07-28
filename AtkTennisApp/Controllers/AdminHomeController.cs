@@ -32,13 +32,13 @@ namespace AtkTennisApp.Controllers
         Context db = new Context();
 
         [HttpGet("GetHome", Name = "GetHome")]
-        public HomeModelView GetHome( string date)
+        public HomeModelView GetHome(string date)
         {
             DateTime date1 = DateTime.Now;
             var today = date1.ToString("yyyy-MM-dd");
 
             HomeModelView model = new HomeModelView();
-          
+
 
             try
             {
@@ -148,7 +148,7 @@ namespace AtkTennisApp.Controllers
                 model2.Note = note;
                 model2.Password = password;
 
-               
+
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, role).Wait();
@@ -282,7 +282,7 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetMemberListInf", Name = "GetMemberListInf")]
         public JsonResult GetMemberListInf(string id)
 
-        { 
+        {
             MemberList model = new MemberList();
 
             try
@@ -337,11 +337,46 @@ namespace AtkTennisApp.Controllers
             }
         }
 
+        [HttpGet("AddPrice", Name = "AddPrice")]
+        public JsonResult AddPrice(int id, int money)
+        {
+            MemberList model = new MemberList();
+
+            model = db.memberLists.Where(x => x.Id == id).FirstOrDefault();
+           
+            if (model != null)
+            {
+                try
+                {
+
+                    var currentPrice = model.Price;
+                    var newPrice = currentPrice + money;
+
+                    model.Price = newPrice;
+
+                    db.Update(model);
+                    db.SaveChanges();
+
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(model);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
+
         [HttpGet("AddToDo", Name = "AddToDo")]
-        public JsonResult AddToDo(string toDo , string today)
+        public JsonResult AddToDo(string toDo, string today)
         {
             ToDoList model = new ToDoList();
-           
+
 
             if (toDo == null || today == null)
             {
@@ -377,8 +412,7 @@ namespace AtkTennisApp.Controllers
                 return Json(true);
             }
         }
-
-
     }
-
 }
+
+

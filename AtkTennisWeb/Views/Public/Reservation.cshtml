@@ -845,7 +845,6 @@
 
                                     NewRow += '<input class="custom-control-input custom-control-input-primary custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
 
-
                                 else
 
                                 NewRow += '<input class="custom-control-input custom-control-input-danger" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
@@ -901,7 +900,8 @@
             times.push(this.name);
         });
 
-
+        
+        debugger;
 
         var priceId = [];
         $('#checkPriceTable input:checked').each(function () {
@@ -956,45 +956,77 @@
         resobject.ResEvent = "event-1"
         resobject.CourtId = id;
 
+        if (times.length == 0) {
 
-        try {
+            swal({
+                title: "Rezervasyon Onaylanmadı",
+                text: "Lütfen Saat Seçiniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
 
-            $.ajax({
-                type: "POST",
-                url: '../Public/NewReservation',
-                cache: false,
-                data: resobject,
-                dataType: "json",
-                async: true,
-                success: function (res) {
+               
 
-                    if (res == true) {
-
-                        $('#rsvModal').modal('toggle');
-
-                        swal({
-                            title: "Rezervasyon Başarılı",
-                            text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
-                            icon: "success",
-                            button: "Tamam",
-                        }).then((value) => {
-
-                            window.location.href = "Reservation?date=" + $('#timeNow').val();
-
-                        });
-                    }
-
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
-                }
             });
-        } catch (e) {
-            console.log(e.message);
         }
 
+        else {
+            try {
+
+                $.ajax({
+                    type: "POST",
+                    url: '../Public/NewReservation',
+                    cache: false,
+                    data: resobject,
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+                        if (res == true) {
+
+                            $('#rsvModal').modal('toggle');
+
+                            swal({
+                                title: "Rezervasyon Başarılı",
+                                text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                                icon: "success",
+                                button: "Tamam",
+                            }).then((value) => {
+
+                                window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+                            });
+                        }
+
+                        else {
+
+                            $('#rsvModal').modal('toggle');
+
+                            swal({
+                                title: "Rezervasyon Onaylanmadı",
+                                text: "Bakiye Yetersiz Lütfen Bakiye Yükleyiniz !",
+                                icon: "error",
+                                button: "Tamam",
+                            }).then((value) => {
+
+                               
+
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            } catch (e) {
+                console.log(e.message);
+            }
+
         }
+    }
+
 
     function WebReservation() {
 

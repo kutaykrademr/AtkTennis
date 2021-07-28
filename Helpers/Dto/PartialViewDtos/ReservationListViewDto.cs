@@ -15,5 +15,6 @@ namespace Helpers.Dto.PartialViewDtos
         public int debtCount { get; set; }
         public int debtNotCount { get; set; }
         public int cancelResCount { get; set; }
+        public int activeResCount { get; set; }
     }
 }

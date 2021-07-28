@@ -157,7 +157,27 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult AddPrice(int id, int money)
+        {
+            MemberListDto model = new MemberListDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddPrice?id=" + id + "&money=" + money));
 
+                if (model != null)
+
+                    return Json(true);
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ToDoListDto());
+            }
+
+        }
 
 
         public JsonResult AddToDo(string toDo , string today)
