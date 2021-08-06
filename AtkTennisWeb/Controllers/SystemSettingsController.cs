@@ -175,8 +175,6 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-
-
         //Kort Ayarları
         public JsonResult AddNewCourt(string courtName , string courtType , int AddcourtCondition, int AddcourtWebCondition)
         {
@@ -219,12 +217,52 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult GetCourtTimeInf(int id)
+        {
+            CourtResTimeViewDto model = new CourtResTimeViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtResTimeViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetCourtTimeInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(model);
+
+        }
+
         public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition)
         {
             CourtDto model = new CourtDto();
             try
             {
                 model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + courtCondition + "&courtWebCondition=" + courtWebCondition + "&id=" + id));
+
+                if (model.CourtName == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(true);
+
+        }
+
+        public JsonResult UpdateCourtTime(int id, string courtPeriod, string courtTimeStart, string courtTimeFinish)
+        {
+            CourtDto model = new CourtDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourtTime?id=" + id + "&courtPeriod=" + courtPeriod + "&courtTimeStart=" + courtTimeStart + "&courtTimeFinish=" + courtTimeFinish ));
 
                 if (model.CourtName == null)
 

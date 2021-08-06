@@ -15,6 +15,5 @@ namespace AtkTennisApp.Models
         public string CourtFinishTime { get; set; }
         public string CourtTimePeriod { get; set; }
 
-       
     }
 }

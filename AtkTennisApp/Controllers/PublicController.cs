@@ -59,6 +59,30 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("GetUsers", Name = "GetUsers")]
+        public IdentityPartialClass GetUsers()
+
+        {
+            IdentityPartialClass model = new IdentityPartialClass();
+
+            try
+            {
+                model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
+                model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
+                model.memberLists = db.memberLists.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model.AppIdentityRoles = new List<AppIdentityRole>();
+                model.AppIdentityUsers = new List<AppIdentityUser>();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
         [HttpGet("SignIn", Name = "SignIn")]
         public async Task<SignIn> SignIn(string UserName, string Password)
         {
@@ -147,7 +171,7 @@ namespace AtkTennisApp.Controllers
         {
             ReservationListViewModel model = new ReservationListViewModel();
 
-            
+
 
             try
             {
@@ -167,10 +191,9 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
             }
 
-            return Json (model);
+            return Json(model);
 
         }
-
 
         [HttpGet("GetMemberInf", Name = "GetMemberInf")]
         public List<MemberList> GetMemberInf(string date)
@@ -364,12 +387,12 @@ namespace AtkTennisApp.Controllers
                 if (m == 45)
                 {
                     h = h + 1;
-                    if (h<10)
+                    if (h < 10)
                     {
-                        ResFinishTime = "0"+ h + ":" + "00";
+                        ResFinishTime = "0" + h + ":" + "00";
                     }
                     else
-                    ResFinishTime = h + ":" + "00";
+                        ResFinishTime = h + ":" + "00";
                 }
                 else
                 {
@@ -380,8 +403,8 @@ namespace AtkTennisApp.Controllers
                         ResFinishTime = "0" + h + ":" + m;
                     }
                     else
-                    ResFinishTime = h + ":" + m;
-                }    
+                        ResFinishTime = h + ":" + m;
+                }
             }
             else if (per == 30)
             {
@@ -393,7 +416,7 @@ namespace AtkTennisApp.Controllers
                         ResFinishTime = "0" + h + ":" + "00";
                     }
                     else
-                    ResFinishTime = h + ":" + "00";
+                        ResFinishTime = h + ":" + "00";
                 }
                 else
                 {
@@ -403,9 +426,9 @@ namespace AtkTennisApp.Controllers
                         ResFinishTime = "0" + h + ":" + m;
                     }
                     else
-                    ResFinishTime = h + ":" + "00";
+                        ResFinishTime = h + ":" + "00";
                 }
-               
+
             }
             else
             {
@@ -416,7 +439,7 @@ namespace AtkTennisApp.Controllers
                 }
                 ResFinishTime = h + ":" + "00";
             }
-              
+
 
             if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null || PriceIds == null)
             {
@@ -430,8 +453,6 @@ namespace AtkTennisApp.Controllers
                     model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false).FirstOrDefault();
                     court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
                     mem = db.memberLists.FirstOrDefault(x => x.UserId == UserId);
-                   
-
 
                 }
 
@@ -460,30 +481,31 @@ namespace AtkTennisApp.Controllers
                     //    res.PriceInf = true;
 
 
-                        res.NickName = mem.NickName;
-                        res.Court = court;
-                        res.ResFinishTime = ResFinishTime;
-                        res.ResStartTime = ResStartTime;
-                        res.ResDate = ResDate;
-                        res.ResEvent = ResEvent;
-                        res.ResTime = ResTime;
-                        res.UserId = UserId;
-                        res.ResNowDate = ResNowDate;
-                        res.Price = Price;
-                        res.PriceIds = PriceIds;
-                       
+                    res.NickName = mem.NickName;
+                    res.Court = court;
+                    res.ResFinishTime = ResFinishTime;
+                    res.ResStartTime = ResStartTime;
+                    res.ResDate = ResDate;
+                    res.ResEvent = ResEvent;
+                    res.ResTime = ResTime;
+                    res.UserId = UserId;
+                    res.doResUserId = UserId;
+                    res.ResNowDate = ResNowDate;
+                    res.Price = Price;
+                    res.PriceIds = PriceIds;
 
 
-                        db.memberLists.Update(mem);
-                        db.reservations.Add(res);
-                        db.SaveChanges();
+
+                    db.memberLists.Update(mem);
+                    db.reservations.Add(res);
+                    db.SaveChanges();
                     //}
                     //else
                     //{
                     //    return Json(false);
                     //}
 
-                    
+
                 }
 
                 catch (Exception e)
@@ -542,7 +564,7 @@ namespace AtkTennisApp.Controllers
                 var xx = db.reservationCancels.Where(x => x.UserId == id && x.PriceInf == false).Count();
                 var yy = db.reservationCancels.Where(x => x.UserId == id && x.PriceInf == true).Count();
 
-                
+
                 var yx = db.reservations.Where(x => x.UserId == id).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
 
                 var dateCancel = db.reservationCancels.Where(x => x.UserId == id).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
@@ -604,8 +626,8 @@ namespace AtkTennisApp.Controllers
                         db.Update(model);
                         db.Update(model3);
                         db.SaveChanges();
-                    }    
-                    
+                    }
+
                 }
 
                 else
@@ -623,7 +645,7 @@ namespace AtkTennisApp.Controllers
                         db.SaveChanges();
                     }
                 }
-           
+
 
             }
             catch (Exception ex)
@@ -749,23 +771,24 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("CancelRes", Name = "CancelRes")]
-        public JsonResult CancelRes(int id , string userId)
+        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons)
 
         {
             Reservation model = new Reservation();
-            ReservationCancel model2 = new ReservationCancel();           
+            ReservationCancel model2 = new ReservationCancel();
             List<Court> model3 = new List<Court>();
-            
+            ReservationSettings set = new ReservationSettings();
 
             try
             {
-                
+                set = db.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İptal Süresi (Saat)").FirstOrDefault();
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 model3 = db.courts.ToList();
-          
+
+
                 if (model != null)
                 {
-                 
+
                     model2.CancelRes = true;
                     model2.CancelResUserId = userId;
                     model2.CourtId = model.Court.CourtId;
@@ -773,7 +796,7 @@ namespace AtkTennisApp.Controllers
                     model2.Price = model.Price;
                     model2.PriceIds = model.PriceIds;
                     model2.PriceInf = model.PriceInf;
-                    model2.Procedure = model.Procedure;
+                    model2.Procedure = procedure;
                     model2.ResDate = model.ResDate;
                     model2.ResEvent = model.ResEvent;
                     model2.ResFinishTime = model.ResFinishTime;
@@ -782,8 +805,9 @@ namespace AtkTennisApp.Controllers
                     model2.ResStartTime = model.ResStartTime;
                     model2.ResTime = model.ResTime;
                     model2.UserId = model.UserId;
+                    model2.CancelReasons = cancelReasons;
 
-                   
+
 
                     db.Remove(model);
                     db.Add(model2);
@@ -791,12 +815,64 @@ namespace AtkTennisApp.Controllers
 
                     return Json(model);
                 }
+
                 else
                 {
                     return Json(false);
                 }
 
             }
+            catch (Exception ex)
+            {
+                model = new Reservation();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+        [HttpGet("CancelResProcedure", Name = "CancelResProcedure")]
+        public JsonResult CancelResProcedure(int id, string userId, bool procedure, string cancelReasons)
+
+        {
+            Reservation model = new Reservation();
+            ReservationCancel model2 = new ReservationCancel();
+            List<Court> model3 = new List<Court>();
+            ReservationSettings set = new ReservationSettings();
+
+            try
+            {
+                set = db.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İptal Süresi (Saat)").FirstOrDefault();
+                model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                model3 = db.courts.ToList();
+
+
+                var strDate = (model.ResDate + " " + model.ResStartTime + ":" + "00");
+
+                DateTime myDate = DateTime.ParseExact(strDate, "yyyy-MM-dd HH:mm:ss",
+                                       CultureInfo.InvariantCulture);
+
+                var dateTimeNow = (myDate - DateTime.Now).TotalHours;
+
+                if (dateTimeNow < Convert.ToInt16(set.ReservationValue))
+                {
+                    return Json(false);
+                }
+
+                else if (dateTimeNow < 0 )
+                {
+                    return Json(false);
+                }
+
+                else
+                {
+                    return Json(model);
+                }
+
+            }
+
             catch (Exception ex)
             {
                 model = new Reservation();
@@ -840,7 +916,5 @@ namespace AtkTennisApp.Controllers
         public string Times { get; set; }
 
     }
-
-
 
 }

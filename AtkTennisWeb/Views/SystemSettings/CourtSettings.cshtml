@@ -114,7 +114,7 @@
 
                                     @foreach (var item in Model.courtTimeInfs)
                                     {
-                                        <tr style="text-align:center" id="">
+                                        <tr style="text-align:center" >
                                                                    
                                             @{
                                                 var Court = Model.Courts.Where(x => x.CourtId == item.CourtId).FirstOrDefault();
@@ -125,10 +125,9 @@
                                             <td>@item.CourtFinishTime</td>
                                             <td>@item.CourtTimePeriod</td>
                                           
-
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteOpenCourtModal(this.id) "><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-success" id="@item.CourtTimeInfId" onclick="openUpdateTimeModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtTimeInfId" onclick="deleteCourtTime(this.id) "><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -264,9 +263,6 @@
     </div>
 </div>
 
-
-
-
 <div class="modal fade" id="addCourt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -321,8 +317,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="updateCourtModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -380,7 +374,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="updatePriceModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -483,6 +476,73 @@
     </div>
 </div>
 
+<div class="modal fade" id="updateCourtTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row ">
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Kort Adı</label>
+                        <input disabled id="timeCourtName" type="text" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Zaman Dilimi</label>
+
+                        <select id="courtTimePer" class="form-control">
+
+                            <option>15</option>
+                            <option>30</option>
+                            <option>60</option>
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Zaman Dilimi</label>
+
+                        <select id="courtTimeStart" class="form-control">
+                            @foreach (var item in Model.resTimes)
+                            {
+                                <option value="@item.ResTimeId">@item.ResTimes</option>
+                            }
+
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Zaman Dilimi</label>
+
+                        <select id="courtTimeFinish" class="form-control">
+                            @foreach (var item in Model.resTimes)
+                            {
+                                <option  value="@item.ResTimeId">@item.ResTimes</option>
+                            }
+
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer" id="updateCourtTimeModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateCourtTime(this.id)">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -511,8 +571,6 @@
 
 
     function saveAddCourt() {
-
-
 
         if ($("#courtName").val() == "" || $("#courtType").val() == "" || $("#AddcourtCondition option:selected").val() == "" || $("#AddcourtWebCondition option:selected").val() == "") {
             $.confirm({
@@ -605,6 +663,100 @@
                     $.confirm({
                         title: "Uyarı",
                         content: "Kort Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function openUpdateTimeModal(id) {
+
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetCourtTimeInf',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res != null) {
+
+             
+                    $("#timeCourtName").val(res.courts.courtName);
+                    $("#courtTimeFinish option:selected").text(res.courtTimeInf.courtFinishTime);
+                    $("#courtTimeStart option:selected").text(res.courtTimeInf.courtStartTime);
+                    $("#courtTimePer option:selected").text(res.courtTimeInf.courtTimePeriod);
+
+                    $("#updateCourtTimeModel button:nth-of-type(2)").attr("id", id);
+                    $('#updateCourtTimeModal').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kort Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateCourtTime(id) {
+
+        var courtPeriod = $("#courtTimePer option:selected").val();
+        var courtTimeStart = $("#courtTimeStart option:selected").text();
+        var courtTimeFinish = $("#courtTimeFinish option:selected").text();
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/UpdateCourtTime',
+            cache: false,
+            data: { "id": id, "courtPeriod": courtPeriod, "courtTimeStart": courtTimeStart, "courtTimeFinish": courtTimeFinish },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+
+                    swal({
+                        title: "Kort Saat Güncellendi",
+                        text: "Kort Saat Güncelleme Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
+
+                        window.location.href = "CourtSettings"
+                    });
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kort Saati Bulunamadı.",
                         buttons: {
                             TAMAM: function () {
 

@@ -31,6 +31,33 @@
 
 }
 
+<style>
+
+
+
+    .ui-autocomplete {
+        font-size: 17px;
+        cursor: pointer;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1510 !important;
+        float: left;
+        /*display: none;*/
+        min-width: 160px;
+        width: 160px;
+        padding: 4px 0;
+        margin: 2px 0 0 0;
+        list-style: circle;
+        background-color: #ffffff;
+        border-color: #ccc;
+        border-color: rgba(0, 0, 0, 0.2);
+        border-style: solid;
+        border-width: 1px;
+    }
+</style>
+
 
 <div class="content-wrapper">
 
@@ -57,7 +84,7 @@
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @*<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>*@
                     </div>
                 </div>
 
@@ -77,7 +104,7 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @*<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>*@
                     </div>
                 </div>
 
@@ -104,7 +131,7 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @*<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>*@
                     </div>
                 </div>
 
@@ -130,464 +157,258 @@
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        @*<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>*@
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <section class="col-lg-9 connectedSortable">
-
-                    <style>
-                        .tdHover:hover {
-                            background-color: #131da882;
-                        }
-
-                        .reservationForm {
-                            padding: 1rem 0 0.3rem 0 !important;
-                            border: 1px solid #dedede !important;
-                            margin: 0.2rem !important;
-                        }
-
-                        .custom-control2 {
-                            padding: 0.2rem !important;
-                        }
-
-                        .custom-control-label2::before {
-                            top: -0.75rem !important;
-                            left: 0.8rem !important;
-                        }
-
-                        .custom-control-label2::after {
-                            top: -0.75rem !important;
-                            left: 0.8rem !important;
-                        }
-                    </style>
-
-                    <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
-                    <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
-
-
+                <div class="col-lg-9">
                     <section class="content">
                         <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
+                            <style>
+                                .tdHover:hover {
+                                    background-color: #131da882;
+                                }
 
-                                        <div class="card-header d-flex justify-content-between">
+                                .reservationForm {
+                                    padding: 1rem 0 0.3rem 0 !important;
+                                    border: 1px solid #dedede !important;
+                                    margin: 0.2rem !important;
+                                }
 
-                                            <div style="margin:8px" id="TimeInf">
+                                .custom-control2 {
+                                    padding: 0.2rem !important;
+                                }
 
-                                            </div>
+                                .custom-control-label2::before {
+                                    top: -0.75rem !important;
+                                    left: 0.8rem !important;
+                                }
 
-                                            <div style="margin-top:8px">
-                                                <nav aria-label="Page navigation example">
-                                                    <ul class="pagination">
+                                .custom-control-label2::after {
+                                    top: -0.75rem !important;
+                                    left: 0.8rem !important;
+                                }
+                            </style>
 
-                                                        @{
-                                                            DateTime date1 = DateTime.Now;
-                                                            var date2 = date1.AddDays(1);
-                                                            var today = date1.ToString("yyyy-MM-dd");
-                                                            var tomorrow = date2.ToString("yyyy-MM-dd");
-                                                        }
+                            <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
+                            <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
 
-                                                        <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
-                                                        <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
-                                                        <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
-                                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
-                                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
 
-                                                    </ul>
-                                                </nav>
-                                            </div>
+                            <div class="col-12">
+                                <div class="card">
+
+                                    <div class="card-header d-flex justify-content-between">
+
+                                        <div style="margin:8px" id="TimeInf">
+
                                         </div>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <table style="text-align:center" class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="background-color:#f5f8fd" scope="col">
-                                                                <div class="row">
-                                                                    <div class="col-md-7">Kortlar</div>
 
-                                                                    <div style="background-color:royalblue; color:white ; cursor:pointer" class="col-md-2">
-                                                                        <i class="fas fa-print"></i>
-                                                                    </div>
+                                        <div style="margin-top:8px">
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination">
 
-                                                                    <div class="col-md-2" style="background-color: #e7505a; color:white">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </div>
+                                                    @{
+                                                        DateTime date1 = DateTime.Now;
+                                                        var date2 = date1.AddDays(1);
+                                                        var today = date1.ToString("yyyy-MM-dd");
+                                                        var tomorrow = date2.ToString("yyyy-MM-dd");
+                                                    }
 
+                                                    <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
+                                                    <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
+                                                    <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
+                                                    <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                                    <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
 
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <table style="text-align:center" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="background-color:#f5f8fd" scope="col">
+                                                            <div class="row">
+                                                                <div class="col-md-7">Kortlar</div>
+
+                                                                <div style="background-color:royalblue; color:white ; cursor:pointer" class="col-md-2">
+                                                                    <i class="fas fa-print"></i>
                                                                 </div>
-                                                            </th>
 
-                                                            @for (int i = 0; i < times.Count; i++)
+                                                                <div class="col-md-2" style="background-color: #e7505a; color:white">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </div>
 
-                                                            {
-                                                                <th style="background-color:#f5f8fd" colspan="4" scope="col">@times[i].ResTimes</th>
 
-                                                            }
+                                                            </div>
+                                                        </th>
 
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                        @foreach (var item in Model.courts)
+                                                        @for (int i = 0; i < times.Count; i++)
 
                                                         {
-                                                            <tr>
+                                                            <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
 
-                                                                <th style="background-color:#f5f8fd" scope="row">@item.CourtName</th>
+                                                        }
 
-                                                                @for (int i = 0; i < Model.resTimes.Count; i++)
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @foreach (var item in Model.courts)
+
+                                                    {
+                                                        <tr>
+
+                                                            <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
+
+                                                            @for (int i = 0; i < Model.resTimes.Count; i++)
+                                                            {
+
+                                                                var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
+
+                                                                var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
+
+                                                                var court = Model.courtTimeInfs.SingleOrDefault(x => x.CourtId == item.CourtId);
+
+                                                                var period = (60 / Convert.ToInt32(court.CourtTimePeriod));
+
+                                                                if (res != null && resCancel != null)
                                                                 {
+                                                                    <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                        <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                            <a style="padding:0;color:#fff;">
+                                                                                @res.NickName
 
-                                                                    var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
+                                                                            </a>
+                                                                        </div>
+                                                                        <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                    </td>
 
-                                                                    var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
+                                                                    i = i + 3;
+                                                                }
 
-                                                                    var court = Model.courtTimeInfs.SingleOrDefault(x => x.CourtId == item.CourtId);
+                                                                else if (res != null)
+                                                                {
+                                                                    <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                        <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                            <a style="padding:0;color:#fff;">
+                                                                                @res.NickName
 
-                                                                    var period = (60 / Convert.ToInt32(court.CourtTimePeriod));
 
-                                                                    if (res != null && resCancel != null)
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    i = i + 3;
+                                                                }
+
+
+
+                                                                else if (resCancel != null)
+                                                                {
+                                                                    var time = Model.resTimes[i].ResTimes;
+
+                                                                    for (var t = 0; t < 4; t++)
                                                                     {
-                                                                        <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                                <a style="padding:0;color:#fff;">
-                                                                                    @res.NickName
-
-                                                                                </a>
-                                                                            </div>
-                                                                            <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                        </td>
-
-                                                                        i = i + 3;
-                                                                    }
-
-                                                                    else if (res != null)
-                                                                    {
-                                                                        <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                                <a style="padding:0;color:#fff;">
-                                                                                    @res.NickName
-
-
-                                                                                </a>
-                                                                            </div>
-                                                                        </td>
-
-                                                                        i = i + 3;
-                                                                    }
-
-
-
-                                                                    else if (resCancel != null)
-                                                                    {
-                                                                        var time = Model.resTimes[i].ResTimes;
-
-                                                                        for (var t = 0; t < 4; t++)
+                                                                        if (period == 1)
                                                                         {
-                                                                            if (period == 1)
+                                                                            <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                                <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                            </td>
+
+
+                                                                            t = t + 3;
+
+                                                                        }
+                                                                        else if (period == 2)
+                                                                        {
+                                                                            <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                                <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                            </td>
+
+                                                                            var c = time.Split(":");
+                                                                            var hour = Convert.ToInt32(c[0]);
+                                                                            var min = Convert.ToInt32(c[1]);
+                                                                            if (min == 30)
                                                                             {
-                                                                                <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                                </td>
-
-
-                                                                                t = t + 3;
-
-                                                                            }
-                                                                            else if (period == 2)
-                                                                            {
-                                                                                <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                                </td>
-
-                                                                                var c = time.Split(":");
-                                                                                var hour = Convert.ToInt32(c[0]);
-                                                                                var min = Convert.ToInt32(c[1]);
-                                                                                if (min == 30)
-                                                                                {
-                                                                                    time = (hour + 1) + ":" + "00";
-                                                                                }
-                                                                                else
-                                                                                {
-
-                                                                                    time = hour + ":" + (min + 30);
-                                                                                }
-                                                                                t = t + 1;
+                                                                                time = (hour + 1) + ":" + "00";
                                                                             }
                                                                             else
                                                                             {
-                                                                                <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                                </td>
 
-
-                                                                                var c = time.Split(":");
-                                                                                var hour = Convert.ToInt32(c[0]);
-                                                                                var min = Convert.ToInt32(c[1]);
-                                                                                if (min == 45)
-                                                                                {
-                                                                                    time = (hour + 1) + ":" + "00";
-                                                                                }
-                                                                                else
-                                                                                {
-
-                                                                                    time = hour + ":" + (min + 15);
-                                                                                }
+                                                                                time = hour + ":" + (min + 30);
                                                                             }
-
+                                                                            t = t + 1;
                                                                         }
-                                                                        i = i + 3;
+                                                                        else
+                                                                        {
+                                                                            <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                                <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                            </td>
+
+
+                                                                            var c = time.Split(":");
+                                                                            var hour = Convert.ToInt32(c[0]);
+                                                                            var min = Convert.ToInt32(c[1]);
+                                                                            if (min == 45)
+                                                                            {
+                                                                                time = (hour + 1) + ":" + "00";
+                                                                            }
+                                                                            else
+                                                                            {
+
+                                                                                time = hour + ":" + (min + 15);
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                    i = i + 3;
+                                                                }
+
+
+                                                                else
+
+                                                                {
+                                                                    if (period == 4)
+                                                                    {
+                                                                        <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                                     }
 
-
-                                                                    else
-
+                                                                    else if (period == 2)
                                                                     {
-                                                                        if (period == 4)
-                                                                        {
-                                                                            <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                        }
-
-                                                                        else if (period == 2)
-                                                                        {
-                                                                            <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                            i = i + 1;
-                                                                        }
-                                                                        else if (period == 1)
-                                                                        {
-                                                                            <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                            i = i + 3;
-                                                                        }
-
+                                                                        <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                        i = i + 1;
+                                                                    }
+                                                                    else if (period == 1)
+                                                                    {
+                                                                        <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                        i = i + 3;
                                                                     }
 
                                                                 }
 
-                                                            </tr>
-                                                        }
+                                                            }
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-
-
-                    <div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #004e6c;">
-                                    <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
-                                    <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="card">
-                                        <div class="card-body row" style="background-color: #f7f7f7f7;">
-
-                                            <h5 class="col-md-9" id="nickAndFullName"></h5>
-                                            <div id="cancelRes" class="col-md-0">
-                                                <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelRes(this.id)">İptal Et</button>
-                                            </div>
-                                            <div class="col-md">
-                                                <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="card">
-                                                <div class="card-body" style="background-color:#f7f7f7">
-                                                    <ul style="font-size:20px" class="list-group list-group-flush">
-                                                        <li id="courtName" class="list-group-item"></li>
-                                                        <li id="resDate" class="list-group-item"></li>
-                                                        <li id="resTime" class="list-group-item"></li>
-                                                        <li id="resNowDate" class="list-group-item"></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="card">
-                                                <div class="card-body">
-
-                                                    <div id="PriceInf" class="info-box shadow-lg">
-
-                                                    </div>
-
-                                                    <div class="info-box shadow-lg">
-
-                                                        <div class="info-box-content">
-                                                            <table style="text-align:center" class="table table-bordered">
-
-
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th style="font-weight:bold" scope="col">Ücret Bilgisi</th>
-                                                                        <th style="font-weight:bold" scope="col">Ücret </th>
-
-                                                                    </tr>
-                                                                </thead>
-
-                                                                <tbody id="PriceNI">
-                                                                </tbody>
-                                                                <tfoot>
-                                                                    <tr>
-                                                                        <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
-                                                                        <th id="sumPrice" style="font-weight:bold" scope="col"></th>
-
-                                                                    </tr>
-                                                                </tfoot>
-
-                                                            </table>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="info-box shadow-lg">
-                                                        <div class="info-box-content">
-                                                            <div class="row">
-                                                                <div class="col-md-3">
-                                                                    <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
-                                                                </div>
-                                                                <div class="col-md-5">
-                                                                    <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
-                                                                </div>
-                                                                <div class="col-md-1">
-                                                                    <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #004e6c;">
-                                    <h4 style="margin:auto; color:white">Rezervasyon Yap</h4>
-                                </div>
-
-                                <div class="modal-header">
-                                    <div class="col-sm-4">
-                                        <h4>Sayın , @fullname</h4>
-                                    </div>
-                                </div>
-
-
-
-                                <div id="CourtandTime">
-
-                                </div>
-
-                                <div class="modal-header">
-                                    <div class="row" id="court_select">
-                                        <div id="ResModal" style="display: contents;">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal-header" style="background-color: #004e6c;">
-                                    <h4 style="margin:auto; color:white">Ücretlendirme</h4>
-                                </div>
-
-
-                                <div class="modal-header">
-                                    <div class="col-sm-12">
-                                        <div class="form-group" style="text-align:center">
-                                            <table class="table table-bordered ">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="font-weight:bold" scope="col">Adı</th>
-                                                        <th style="font-weight:bold" scope="col">Fiyatı</th>
-                                                        <th style="font-weight:bold" scope="col">Seç</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var item2 in Model.courtPriceLists)
-                                                    {
-                                                        if (item2.Condition == "1")
-                                                        {
-                                                            <tr>
-                                                                <td>@item2.Name</td>
-                                                                <td>@item2.CourtPrice ₺ </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox " id="checkPriceTables">
-
-                                                                        @{ if (item2.PriceType == "1")
-                                                                            {
-                                                                                <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
-                                                                            }
-
-                                                                            else
-                                                                            {
-                                                                                <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
-                                                                            }
-
-                                                                        }
-                                                                        <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        }
+                                                        </tr>
                                                     }
+
                                                 </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
-                                                        <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
-                                                        <th scope="col"></th>
-                                                    </tr>
-                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div style="display:none" class="modal-footer">
-                                    <textbox style="color:black; " id="userId">@userId</textbox>
-                                </div>
-
-
-
-                                <div class="modal-footer" id="forApproveId">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                                    <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
 
-                <section class="col-lg-3 connectedSortable">
+                    </section>
+                </div>
 
+                <div class="col-lg-3">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
@@ -600,24 +421,239 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div style="padding: 0px;">
-                                <style>
-                                    .feeds li {
-                                        background-color: #fafafa;
-                                        color: #82949a;
-                                        margin: 7px;
-                                        border-bottom: 1px solid #eef1f5;
-                                    }
-                                </style>
-                                <div id="gunozeti" style="max-height: 505px; min-height: 505px; padding: 0px; background-color: #f5f8fd; overflow: scroll;"><ul class="list-group"><li class="list-group-item list-group-item-success bg-grey-mint bg-font-grey-mint" style="color: #fff; background-color:#19c140; font-size: 16px;">24.07.2021 Cumartesi</li><li class="list-group-item list-group-item-info">Antuka 1</li><li class="list-group-item"><span class="label label-sm label-primary">14:15</span><span style="">EMİN TALİP ÖNAL</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="eo34 | EMİN TALİP ÖNAL" data-content="14:15 - Antuka 1" href="/Rezervasyon/Detay/8BCfexoq6pw%3d?dt=24_07_2021">eo34</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">16:15</span><span style="">EYÜP HÜRMEYDAN</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="eh2 | EYÜP HÜRMEYDAN" data-content="16:15 - Antuka 1" href="/Rezervasyon/Detay/xZLewvOjhlY%3d?dt=24_07_2021">eh2</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">17:15</span><span style="">CİHAN HÜRMEYDAN</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="ch3 | CİHAN HÜRMEYDAN" data-content="17:15 - Antuka 1" href="/Rezervasyon/Detay/pFxn-czZGGw%3d?dt=24_07_2021">ch3</a></span></li><li class="list-group-item list-group-item-info">Antuka 4</li><li class="list-group-item"><span class="label label-sm label-primary">19:15</span><span style="">YUSUF USLU</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="yu9 | YUSUF USLU" data-content="19:15 - Antuka 4" href="/Rezervasyon/Detay/zvl5hc3I5Ms%3d?dt=24_07_2021">yu9</a></span></li><li class="list-group-item list-group-item-info">Antuka 5</li><li class="list-group-item"><span class="label label-sm label-primary">16:15</span><span style="">YALÇIN ERGİR</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="ye7 | YALÇIN ERGİR" data-content="16:15 - Antuka 5" href="/Rezervasyon/Detay/OcofRcmlld8%3d?dt=24_07_2021">ye7</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">18:15</span><span style="">NURİ ÇELİK</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="nc9 | NURİ ÇELİK" data-content="18:15 - Antuka 5" href="/Rezervasyon/Detay/SVmQAM2JKAk%3d?dt=24_07_2021">nc9</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">19:15</span><span style="">İLHAN KARADUMAN</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="ik19 | İLHAN KARADUMAN" data-content="19:15 - Antuka 5" href="/Rezervasyon/Detay/LcA9GDcVI5g%3d?dt=24_07_2021">ik19</a></span></li><li class="list-group-item list-group-item-info">Antuka 6</li><li class="list-group-item"><span class="label label-sm label-primary">11:15</span><span style="">OĞUZHAN KALAYCI</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="ok32 | OĞUZHAN KALAYCI" data-content="11:15 - Antuka 6" href="/Rezervasyon/Detay/EcIo0DdG4ac%3d?dt=24_07_2021">ok32</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">12:15</span><span style="">EMİN TALİP ÖNAL</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="eo34 | EMİN TALİP ÖNAL" data-content="12:15 - Antuka 6" href="/Rezervasyon/Detay/OgKBXihJuj8%3d?dt=24_07_2021">eo34</a></span></li><li class="list-group-item list-group-item-info">Kapalı C</li><li class="list-group-item"><span class="label label-sm label-primary">16:15</span><span style="">AYBİKE  AKSOY KALAYCI</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="aa84 | AYBİKE  AKSOY KALAYCI" data-content="16:15 - Kapalı C" href="/Rezervasyon/Detay/gBc0-9PFlSQ%3d?dt=24_07_2021">aa84</a></span></li><li class="list-group-item list-group-item-info">Kapalı D</li><li class="list-group-item"><span class="label label-sm label-primary">14:15</span><span style="">DAMLA YAVUZ</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="dy6 | DAMLA YAVUZ" data-content="14:15 - Kapalı D" href="/Rezervasyon/Detay/RLIzMT8uOY0%3d?dt=24_07_2021">DY6</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">15:15</span><span style="">DAMLA YAVUZ</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="dy6 | DAMLA YAVUZ" data-content="15:15 - Kapalı D" href="/Rezervasyon/Detay/zl_T-isuBsA%3d?dt=24_07_2021">DY6</a></span></li><li class="list-group-item list-group-item-info">Merkez Kapalı</li><li class="list-group-item"><span class="label label-sm label-primary">08:15</span><span style="">FAHRİYE AYTÜL KAPLAN</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="fk9 | FAHRİYE AYTÜL KAPLAN" data-content="08:15 - Merkez Kapalı" href="/Rezervasyon/Detay/KAxYMp1MheU%3d?dt=24_07_2021">fk9</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">09:15</span><span style="">ÜMİT GÜLSEVEN</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="ug6 | ÜMİT GÜLSEVEN" data-content="09:15 - Merkez Kapalı" href="/Rezervasyon/Detay/LMYUL6umT3g%3d?dt=24_07_2021">ug6</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">10:15</span><span style="">SELAHATTİN KÜKNER</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="sk49 | SELAHATTİN KÜKNER" data-content="10:15 - Merkez Kapalı" href="/Rezervasyon/Detay/tnsdoIKw3zU%3d?dt=24_07_2021">SK49</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">15:15</span><span style="">VEDAT KOÇKAR</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="vk8 | VEDAT KOÇKAR" data-content="15:15 - Merkez Kapalı" href="/Rezervasyon/Detay/1nDMif5_kVw%3d?dt=24_07_2021">vk8</a></span></li><li class="list-group-item"><span class="label label-sm label-primary">17:15</span><span style="">BURHAN SEZGİN</span><span class="label label-sm pull-right" style="border: 0;background-color: #50b454!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="bs25 | BURHAN SEZGİN" data-content="17:15 - Merkez Kapalı" href="/Rezervasyon/Detay/xNhcY8YbRJE%3d?dt=24_07_2021">bs25</a></span></li><li class="list-group-item list-group-item-info">Toprak Kapalı</li><li class="list-group-item"><span class="label label-sm label-primary">10:15</span><span style="">BURHAN SEZGİN</span><span class="label label-sm pull-right" style="border: 0;background-color: #32c5d2!important;color: #000;font-size: 13px;font-weight: 300; padding: 2px 2px;"><a style="color:#fff;padding:0;" class="krtGG popovers" data-trigger="hover" data-placement="top" data-container="body" data-original-title="bs14 | BURHAN SEZGİN" data-content="10:15 - Toprak Kapalı" href="/Rezervasyon/Detay/q7kBY_w-724%3d?dt=24_07_2021">bs14</a></span></li></ul></div>
+
+                                <div id="resSchemaDetail" style="max-height: 505px; min-height: 617px; padding: 0px; background-color: #f5f8fd; overflow: scroll;">
+
+                                </div>
+
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <section class="col-lg-7 connectedSortable">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Area Chart</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart">
+                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                        <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-danger">
+                                <div class="card-header">
+                                    <h3 class="card-title">Donut Chart</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                    <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="card card-info">
+                                <div class="card-header" style="background-color:rebeccapurple">
+                                    <h3 class="card-title">Line Chart</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart">
+                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-success">
+                                <div class="card-header">
+                                    <h3 class="card-title">Bar Chart</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart">
+                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card bg-gradient-success">
+                        <div class="card-header border-0">
+
+                            <h3 class="card-title">
+                                <i class="far fa-calendar-alt"></i>
+                                Calendar
+                            </h3>
+
+                            <div class="card-tools">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a href="#" class="dropdown-item">Add new event</a>
+                                        <a href="#" class="dropdown-item">Clear events</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item">View calendar</a>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body pt-0">
+
+                            <div id="calendar" style="width: 100%"></div>
                         </div>
                     </div>
                 </section>
 
-                <!-- right col -->
+
+
+                <section class="col-lg-5 connectedSortable">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Kort Doluluk Oranları </h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <table style="text-align:center" id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Kortlar</th>
+                                        <th>Doluluk Oranı</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+                                    @foreach (var item2 in Model.courts)
+                                    {
+
+                                        var a = Model.reservations.Where(x => x.Court.CourtId == item2.CourtId && x.ResDate == today).ToList();
+                                        var count = a.Count();
+                                        var percent = (count * 100) / 17;
+                                        <tr>
+                                            <td>@item2.CourtName</td>
+                                            <td>
+
+                                                <div class="progress1">
+                                                    <div class="progress-value1" style="width: @percent%"><span>@percent%</span></div>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card card-info">
+                        <div class="card-header" style="background-color:darkmagenta">
+                            <h3 class="card-title"><i style="margin-right:10px" class="fas fa-tasks"></i>Yapılacak Listesi </h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="todo-list" data-widget="todo-list">
+
+                                @foreach (var item in Model.toDoLists)
+                                {
+                                    <li>
+                                        <span class="handle">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </span>
+
+                                        <div class="icheck-primary d-inline ml-2">
+                                            <input type="checkbox" name="to_@item.ListId" id="to_@item.ListId">
+                                            <label for="to_@item.ListId"></label>
+                                        </div>
+
+                                        <span class="text">@item.ToDo</span>
+                                        <small class="badge badge-secondary"><i class="far fa-clock"></i>@item.Date</small>
+                                        <div class="tools">
+                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-trash"></i>
+                                        </div>
+                                    </li>
+                                }
+
+
+                            </ul>
+                        </div>
+                        <div class="card-footer clearfix">
+                            <button data-toggle="modal" data-target="#openToDoModal" style="background-color:darkmagenta; border-color:cornflowerblue" type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Ekle</button>
+                        </div>
+                    </div>
+                </section>
             </div>
-            <!-- /.row (main row) -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 </div>
 
@@ -638,7 +674,7 @@
 
                         <h5 class="col-md-9" id="nickAndFullName"></h5>
                         <div id="cancelRes" class="col-md-0">
-                            <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelRes(this.id)">İptal Et</button>
+                            <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelResProcedureModal(this.id)">İptal Et</button>
                         </div>
                         <div class="col-md">
                             <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
@@ -724,18 +760,40 @@
     </div>
 </div>
 
-
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="max-width:1000px; ">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #004e6c;">
                 <h4 style="margin:auto; color:white">Rezervasyon Yap</h4>
             </div>
 
             <div class="modal-header">
-                <div class="col-sm-4">
-                    <h4>Sayın , @fullname</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Sayın , @fullname</h4>
+                    </div>
+
+                    <form autocomplete="off">
+                        <div class="form-inline">
+                            <input type="text" class="form-control " id="findMember" placeholder="Üye Ara">
+                        </div>
+                    </form>
+
+                    <div class="col-md-2">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+
+                                <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
+                                <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
+                                <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer; background-color:#e7505a; color:white"></li>
+                                <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
+
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
+
             </div>
 
 
@@ -777,7 +835,7 @@
                                             <td>@item2.Name</td>
                                             <td>@item2.CourtPrice ₺ </td>
                                             <td>
-                                                <div class="custom-control custom-checkbox " id="checkPriceTable">
+                                                <div class="custom-control custom-checkbox " id="checkPriceTables">
 
                                                     @{ if (item2.PriceType == "1")
                                                         {
@@ -823,32 +881,172 @@
     </div>
 </div>
 
+<div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #004e6c;">
+                <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
+                <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
-<!-- Modal -->
-<div class="modal fade" id="openToDoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="card">
+                    <div class="card-body row" style="background-color: #f7f7f7f7;">
+
+                        <h5 class="col-md-9" id="nickAndFullName"></h5>
+                        <div id="cancelRes" class="col-md-0">
+                            <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelResAuthorized(this.id)">İptal Et</button>
+                        </div>
+                        <div class="col-md">
+                            <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body" style="background-color:#f7f7f7">
+                                <ul style="font-size:20px" class="list-group list-group-flush">
+                                    <li id="courtName" class="list-group-item"></li>
+                                    <li id="resDate" class="list-group-item"></li>
+                                    <li id="resTime" class="list-group-item"></li>
+                                    <li id="resNowDate" class="list-group-item"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div id="PriceInf" class="info-box shadow-lg">
+
+                                </div>
+
+                                <div class="info-box shadow-lg">
+
+                                    <div class="info-box-content">
+                                        <table style="text-align:center" class="table table-bordered">
+
+
+                                            <thead>
+                                                <tr>
+                                                    <th style="font-weight:bold" scope="col">Ücret Bilgisi</th>
+                                                    <th style="font-weight:bold" scope="col">Ücret </th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="PriceNI">
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
+                                                    <th id="sumPrice" style="font-weight:bold" scope="col"></th>
+
+                                                </tr>
+                                            </tfoot>
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="info-box shadow-lg">
+                                    <div class="info-box-content">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="openResProcedureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Yapılacak Listesi</h5>
+            <div class="modal-header" style="background-color:darkgreen; color:white">
+                <h5 class="modal-title" id="exampleModalLongTitle">Uyarı !!! - Rezervasyon İptal Edilecek</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="col-md-12 form-group">
-                    <input type="text" id="toDo" class="form-control" autocomplete="new-password">
+
+                <div class="callout callout-info">
+                    <h5 id="resUserInfo"></h5>
+                    <p id="resCourtInfo"></p>
+                    <p id="resInfo"></p>
+
                 </div>
+
+                <div class="callout callout-danger">
+                    <h5>Dikkat</h5>
+
+                    <p>
+                        Dikkat ! Prosedür gereği rezervasyon iptal saati geçmiş olduğu için yapılan iptallerde borçlandırma prosedürü uygulanır.
+                    </p>
+                </div>
+
+                <div class="callout callout-warning">
+                    <div class="form-check">
+                        <input id="checkProcedure" class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Prosedürü Dikkate Alma</label>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>İptal Nedeni Seçiniz</label>
+                    <select id="reasonCancel" class="form-control">
+                        <option>Turnuva</option>
+                        <option>Sağlık</option>
+                        <option>Ulaşım</option>
+                        <option>Partner</option>
+                        <option>Kişisel Sebepler</option>
+                        <option>Kort Problemleri</option>
+                        <option>Hava Durumu</option>
+                    </select>
+                </div>
+
+
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="addToDo()">Ekle</button>
+            <div class="modal-footer" id="cancelResProModal">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="cancelResAuthorized(this.id)">İptal Et</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-@*reservationscript*@
+
+
+
 <script>
 
     var picker = "@ViewBag.Date";
@@ -896,16 +1094,20 @@
 
             window.location.href = "Index?date=" + $('#timeNow').val();
 
-         });
+        });
 
 
+
+        resSchemaDetail()
         getPrice();
 
         $('#checkPriceTables input').click(function () {
             if ($(this).is(':checked'))
                 getPrice();
+
             else {
                 getPrice();
+
             }
         });
 
@@ -948,11 +1150,133 @@
         row = "";
         row += '<h4 style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i>' + ' ' + timeNow + ' ' + ' - ' + ' ' + day + ' ' + '</h4>';
         $("#TimeInf").append(row);
+
+
+        findMember();
+
+
     });
 
+    function findMember() {
 
+
+        $.ajax({
+            type: "Get",
+            url: '../Public/UserList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                var mem = [];
+
+                for (var i = 0; i < res.memberLists.length; i++) {
+                    mem.push(res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName + ' - ' + res.memberLists[i].userName);
+                }
+
+                $("#findMember").autocomplete({
+                    source: mem
+                });
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function resSchemaDetail() {
+
+        var date = $("#timeNow").val();
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetResSchemaDetail',
+            cache: false,
+            data: { "date": date },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                var days = new Date(date);
+                var getday = days.getDay();
+
+                switch (getday) {
+                    case 0:
+                        day = "Pazar";
+                        break;
+                    case 1:
+                        day = "Pazartesi";
+                        break;
+                    case 2:
+                        day = "Salı";
+                        break;
+                    case 3:
+                        day = "Çarşamba";
+                        break;
+                    case 4:
+                        day = "Perşembe";
+                        break;
+                    case 5:
+                        day = "Cuma";
+                        break;
+                    case 6:
+                        day = "Cumartesi";
+                }
+
+                $("#resSchemaDetail").empty();
+
+                NewRow = "";
+
+
+                NewRow += '<ul class="list-group">';
+                NewRow += '<li class="list-group-item list-group-item-success bg-grey-mint bg-font-grey-mint" style="color: #fff; text-align:center; background-color:#525e64; font-size: 16px;">' + date + "  " + "  " + day + '</li>';
+
+                for (var i = 0; i < res.courts.length; i++) {
+
+                    NewRow += '<li style="background-color:black; color:white; text-align:center;" class="list-group-item list-group-item-info">'+ res.courts[i].courtName + '</li>';
+
+                    for (var a = 0; a < res.reservations.length; a++) {
+
+                        if (res.reservations[a].court.courtId == res.courts[i].courtId) {
+
+                            NewRow += '<li class="list-group-item">';
+                            NewRow += '<span class="label label-sm label-primary">' + res.reservations[a].resStartTime + " - " + res.reservations[a].resFinishTime + '</span>';
+                            for (var x = 0; x < res.memberLists.length; x++) {
+                                if (res.reservations[a].userId == res.memberLists[x].userId) {
+                                    NewRow += '<span style="margin-left:25px">' + res.memberLists[x].fullName + '</span>';
+                                    NewRow += '<span style="margin-left:25px;border: inset;border-color:#19c140; background:#19c140; color:white;">' + res.memberLists[x].nickName + '</span>';
+                                }
+                            }
+
+                            NewRow += ' </li> </ul>';
+                        }
+                    }
+
+
+                }
+
+
+                $("#resSchemaDetail").append(NewRow);
+
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
 
     // Rezervasyon Şema Tarih
+
     function nextDate() {
 
         var date = $("#timeNow").val();
@@ -996,15 +1320,19 @@
     }
 
     //Rezervasyon Yap
+
     function openResModal(id ) {
 
 
-        debugger;
+
+        var modalDate = $("#timeNow").val();
+        $("#timeNowModal").val(modalDate);
+        var timePickerModal = modalDate;
 
         var a = id.split(",");
         var courtId = a[0];
         var courtName = a[1];
-        var checkTime = a[2];
+
 
         var resStartTime = $('#doRes').attr('start');
         var resFinishTime = $('#doRes').attr('finish');
@@ -1035,10 +1363,18 @@
         var sTime = b[0] + b[1];
         var fTime = c[0] + c[1];
 
+        $('#timeNowModal').change(function () {
+
+            getCourtTime(courtId, courtName, $('#timeNowModal').val());
+
+        });
+
 
         if (sTime < nowTime && fTime > nowTime) {
 
-            getCourtTime(courtId, courtName , checkTime);
+            getCourtTime(courtId, courtName, timePickerModal);
+
+            $('#rsvModal').modal('toggle');
         }
 
         else {
@@ -1049,8 +1385,9 @@
         }
     }
 
+    function getCourtTime(courtId, courtName, timePickerModal ) {
 
-    function getCourtTime(courtId , courtName , checkTime) {
+
 
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
 
@@ -1074,7 +1411,7 @@
 
 
 
-        var days = new Date($('#timeNow').val());
+        var days = new Date(timePickerModal);
         var getday = days.getDay();
 
         var dd = String(dt.getDate()).padStart(2, '0');
@@ -1084,7 +1421,7 @@
         var today = yyyy + '-' + mm + '-' + dd;
 
 
-        var date = $("#timeNow").val();
+        var date = timePickerModal;
         var b = date.split("-");
         var timeInf = b[2] + '-' + b[1] + '-' + b[0];
 
@@ -1102,17 +1439,17 @@
         }
 
         var x = today;
-        var y = $("#timeNow").val();
+        var y = timePickerModal;
 
         var diff = datediff(parseDate(x), parseDate(y));
 
-        if ($("#timeNow").val() < today) {
+        if (timePickerModal < today) {
 
             swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız." , "warning", {
                 button: "Tamam",
             });
 
-            $("#timeNow").val(today)
+            $("#timeNowModal").val(today)
         }
 
         else if ($("#RoleName").val() == "Üye" && diff > 3 ) {
@@ -1139,14 +1476,14 @@
                 type: "POST",
                 url: '../Public/GetResTime',
                 cache: false,
-                data: { "dateInf": $("#timeNow").val(), courtId },
+                data: { "dateInf": timePickerModal , courtId },
                 dataType: "json",
                 async: false,
                 success: function (res) {
 
-                    debugger;
 
-                    $('#rsvModal').modal('toggle');
+
+
 
 
                     switch (getday) {
@@ -1220,13 +1557,10 @@
 
     }
 
-
-
-
     function getPrice() {
 
         var price = [];
-        $('#checkPriceTable input:checked').each(function () {
+        $('#checkPriceTables input:checked').each(function () {
             price.push(this.name);
         });
 
@@ -1244,8 +1578,6 @@
 
     }
 
-
-
     function Approve(id) {
 
         // seçilen saatler
@@ -1254,12 +1586,15 @@
             times.push(this.name);
         });
 
-        debugger;
 
         var priceId = [];
-        $('#checkPriceTable input:checked').each(function () {
+        $('#checkPriceTables input:checked').each(function () {
             priceId.push(this.value);
         });
+
+
+        var memberUserName = $("#findMember").val().split("-");
+
 
         var strPriceId = "";
 
@@ -1281,7 +1616,7 @@
 
         var today = yyyy + '-' + mm + '-' + dd;
 
-
+        var userName = memberUserName[2];
 
         var resobject = {
 
@@ -1294,20 +1629,23 @@
             ResTime: '',
             ResNowDate: '',
             Price: '',
-            PriceIds:'',
+            PriceIds: '',
+            UserName:'',
+
         }
 
         resobject.ResNowDate = today;
         resobject.ResStartTime = times[0];
         resobject.ResFinishTime = times[(times.length - 1)];
-
+        resobject.UserName = userName;
         resobject.Price = $("#sumOfPrice").html();
-        resobject.ResDate = $("#timeNow").val();
+        resobject.ResDate = $("#timeNowModal").val();
         resobject.ResTime = time;
         resobject.PriceIds = strPriceId;
         resobject.userId = $("#userId").text();
         resobject.ResEvent = "event-1"
         resobject.CourtId = id;
+
 
         if (times.length == 0) {
 
@@ -1321,14 +1659,29 @@
 
 
             });
+
         }
 
-        else {
+        else if ($("#findMember").val() == "") {
+
+            swal({
+                title: "Uyarı",
+                text: "Lütfen Üye Seçiniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+
+
+            });
+        }
+
+        else
             try {
 
                 $.ajax({
                     type: "POST",
-                    url: '../Public/NewReservation',
+                    url: '../AdminHome/NewReservationAdmin',
                     cache: false,
                     data: resobject,
                     dataType: "json",
@@ -1377,9 +1730,8 @@
                 console.log(e.message);
             }
 
-        }
-    }
 
+    }
 
     function WebReservation() {
 
@@ -1387,10 +1739,6 @@
             button: "Tamam",
         });
     }
-
-
-
-
 
     //RezervasyonBilgiModal
 
@@ -1513,13 +1861,58 @@
 
     }
 
-    function cancelRes(id) {
-        var  userId = $("#userId").text();
-        $('#openResInf').modal('toggle');
+    function cancelResProcedureModal(id) {
 
-        if (true) {
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/CancelResProcedureModal',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
 
+
+
+                if (res != true) {
+
+                    $('#openResProcedureModal').modal('toggle')
+
+                    $('#resUserInfo').text(res.resSchemaModal.fullName + " - " + res.resSchemaModal.nickName);
+                    $('#resCourtInfo').text("Kort: " + " " + res.resSchemaModal.courtName + " " + " " + "Tarih:" + " " + res.resSchemaModal.resDate);
+                    $('#resInfo').text("Rezervasyon Saatleri:" + " " + res.resSchemaModal.resStartTime + "-" + res.resSchemaModal.resFinishTime);
+
+
+                    $("#cancelResProModal button:nth-of-type(2)").attr("id", id);
+
+                    $('#openResInf').modal('toggle')
+                }
+                else {
+
+                    cancelResAuthorized(id)
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function cancelResAuthorized(id) {
+
+        var userId = $("#userId").text();
+        var procedure = false;
+        var cancelReasons = $("#reasonCancel option:selected").text();
+
+
+        if ($("#checkProcedure").is(":checked")) {
+             procedure = true;
         }
+
         swal({
             title: "Emin Misiniz?",
             text: "Rezervasyon  İptal Edilecek !",
@@ -1532,9 +1925,9 @@
 
                     $.ajax({
                         type: "GET",
-                        url: '../Public/CancelRes',
+                        url: '../AdminHome/CancelResAdmin',
                         cache: false,
-                        data: { "id": id , "userId":userId},
+                        data: { "id": id, "userId": userId, "procedure": procedure, "cancelReasons": cancelReasons },
                         dataType: "json",
                         async: true,
                         success: function (res) {
@@ -1548,7 +1941,7 @@
                                     button: "Tamam",
                                 }).then((value) => {
 
-                                    window.location.href = "Reservation?date=" + $('#timeNow').val();
+                                    window.location.href = "Index?date=" + $('#timeNow').val();
 
                                 });
 
@@ -1572,7 +1965,151 @@
             });
     }
 
-
 </script>
 
 
+<script>
+    $(function () {
+        /* ChartJS
+         * -------
+         * Here we will create a few charts using ChartJS
+         */
+
+        //--------------
+        //- AREA CHART -
+        //--------------
+
+        // Get context with jQuery - using jQuery's .get() method.
+        var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+
+        var areaChartData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'Digital Goods',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                },
+                {
+                    label: 'Electronics',
+                    backgroundColor: 'rgba(210, 214, 222, 1)',
+                    borderColor: 'rgba(210, 214, 222, 1)',
+                    pointRadius: false,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+            ]
+        }
+
+        var areaChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }]
+            }
+        }
+
+        // This will get the first returned node in the jQuery collection.
+        var areaChart = new Chart(areaChartCanvas, {
+            type: 'line',
+            data: areaChartData,
+            options: areaChartOptions
+        })
+
+        //-------------
+        //- LINE CHART -
+        //--------------
+        var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+        var lineChartOptions = $.extend(true, {}, areaChartOptions)
+        var lineChartData = $.extend(true, {}, areaChartData)
+        lineChartData.datasets[0].fill = false;
+        lineChartData.datasets[1].fill = false;
+        lineChartOptions.datasetFill = false
+
+        var lineChart = new Chart(lineChartCanvas, {
+            type: 'line',
+            data: lineChartData,
+            options: lineChartOptions
+        })
+
+        //-------------
+        //- DONUT CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+        var donutData = {
+            labels: [
+                'Chrome',
+                'IE',
+                'FireFox',
+                'Safari',
+                'Opera',
+                'Navigator',
+            ],
+            datasets: [
+                {
+                    data: [700, 500, 400, 600, 300, 100],
+                    backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                }
+            ]
+        }
+        var donutOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        var donutChart = new Chart(donutChartCanvas, {
+            type: 'doughnut',
+            data: donutData,
+            options: donutOptions
+        })
+
+
+
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+        var barChartData = $.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        var temp1 = areaChartData.datasets[1]
+        barChartData.datasets[0] = temp1
+        barChartData.datasets[1] = temp0
+
+        var barChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            datasetFill: false
+        }
+
+        var barChart = new Chart(barChartCanvas, {
+            type: 'bar',
+            data: barChartData,
+            options: barChartOptions
+        })
+
+
+    })
+</script>

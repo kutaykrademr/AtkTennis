@@ -95,6 +95,81 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+        public JsonResult NewReservationAdmin(ReservationDto res)
+        {
+            var model = new ReservationViewDto();
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewReservationAdmin?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&UserName=" + res.UserName));
+
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            if (model == null)
+            {
+                return Json(false);
+            }
+
+            return Json(true);
+
+        }
+
+        public JsonResult CancelResAdmin(int id, string userId, bool procedure, string cancelReasons)
+        {
+            ReservationDto model = new ReservationDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/CancelRes?id=" + id + "&userId=" + userId + "&procedure=" + procedure + "&cancelReasons=" + cancelReasons));
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ResSchemaModalDto());
+            }
+
+        }
+
+        public JsonResult CancelResProcedureModal(int id)
+        {
+
+
+            ResModalViewDto model = new ResModalViewDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ResModalViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/cancelResProcedureModal?id=" + id));
+
+                if (model == null)
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(model);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ResModalViewDto());
+            }
+
+        }
+
         public JsonResult GetMemberList(string id)
         {
             MemberListDto model = new MemberListDto();
@@ -109,6 +184,26 @@ namespace AtkTennisWeb.Controllers
             catch (Exception)
             {
                 return Json(new MemberListDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult GetResSchemaDetail(string date)
+        {
+            ResSchemaViewDto model = new ResSchemaViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ResSchemaViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetResSchemaDetail?date=" + date));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new ResSchemaViewDto());
             }
 
             return Json(model);
@@ -178,7 +273,6 @@ namespace AtkTennisWeb.Controllers
             }
 
         }
-
 
         public JsonResult AddToDo(string toDo , string today)
         {

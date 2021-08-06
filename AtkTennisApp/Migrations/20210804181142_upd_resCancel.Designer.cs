@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210804181142_upd_resCancel")]
+    partial class upd_resCancel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,21 +127,6 @@ namespace AtkTennisApp.Migrations
                     b.HasKey("CourtTimeInfId");
 
                     b.ToTable("courtTimeInfs");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.CourtTypes", b =>
-                {
-                    b.Property<int>("CourtTypesId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Types")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CourtTypesId");
-
-                    b.ToTable("courtTypes");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.ErrorLog", b =>

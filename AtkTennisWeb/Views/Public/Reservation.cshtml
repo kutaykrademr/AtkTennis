@@ -2,180 +2,182 @@
 
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
-    @*<script>
-            document.getElementsByTagName("html")[0].className += " js";
-        </script>*@
+@*<script>
+        document.getElementsByTagName("html")[0].className += " js";
+    </script>*@
 
 
-    @{
+@{
 
-        var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
-        var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-        var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
-        var times = Model.resTimes.Where(x => x.Restimes60 == 60).ToList();
-        var x = times.Count * 4;
+    var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    var times = Model.resTimes.Where(x => x.Restimes60 == 60).ToList();
+    var x = times.Count * 4;
 
-        var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
-        var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
-        var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
+    var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
+    var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
+    var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
 
-        var startTime = start.ReservationValue;
-        var finishTime = finish.ReservationValue;
-        var resSetTime = resSettingsTime.ReservationValue;
+    var startTime = start.ReservationValue;
+    var finishTime = finish.ReservationValue;
+    var resSetTime = resSettingsTime.ReservationValue;
 
+}
+
+
+
+<style>
+    .tdHover:hover {
+        background-color: #131da882;
     }
 
+    .reservationForm {
+        padding: 1rem 0 0.3rem 0 !important;
+        border: 1px solid #dedede !important;
+        margin: 0.2rem !important;
+    }
 
+    .custom-control2 {
+        padding: 0.2rem !important;
+    }
 
-    <style>
-        .tdHover:hover {
-            background-color: #131da882;
-        }
+    .custom-control-label2::before {
+        top: -0.75rem !important;
+        left: 0.8rem !important;
+    }
 
-        .reservationForm {
-            padding: 1rem 0 0.3rem 0 !important;
-            border: 1px solid #dedede !important;
-            margin: 0.2rem !important;
-        }
+    .custom-control-label2::after {
+        top: -0.75rem !important;
+        left: 0.8rem !important;
+    }
+</style>
 
-        .custom-control2 {
-            padding: 0.2rem !important;
-        }
-
-        .custom-control-label2::before {
-            top: -0.75rem !important;
-            left: 0.8rem !important;
-        }
-
-        .custom-control-label2::after {
-            top: -0.75rem !important;
-            left: 0.8rem !important;
-        }
-    </style>
-
-    <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
-    <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
+<div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
+<div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
 
 
 
 
-    <div class="content-wrapper">
+<div class="content-wrapper">
 
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Rezervasyon Genel Durum</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">DataTables</li>
-                        </ol>
-                    </div>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Rezervasyon Genel Durum</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
 
-                            <div class="card-header d-flex justify-content-between">
+                        <div class="card-header d-flex justify-content-between">
 
-                                <div style="margin:8px" id="TimeInf">
+                            <div style="margin:8px" id="TimeInf">
 
-                                </div>
-
-                                <div style="margin-top:8px">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-
-                                            @{
-                                                DateTime date1 = DateTime.Now;
-                                                var date2 = date1.AddDays(1);
-                                                var today = date1.ToString("yyyy-MM-dd");
-                                                var tomorrow = date2.ToString("yyyy-MM-dd");
-                                            }
-
-                                            <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
-                                            <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</a></li>
-                                            <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
-                                            <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
-                                            <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
-
-                                        </ul>
-                                    </nav>
-                                </div>
                             </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <table style="text-align:center" class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="background-color:#f5f8fd" scope="col">
-                                                    <div class="row">
-                                                        <div class="col-md-7">Kortlar</div>
 
-                                                        <div style="background-color:royalblue; color:white ; cursor:pointer" class="col-md-2">
-                                                            <i class="fas fa-print"></i>
-                                                        </div>
+                            <div style="margin-top:8px">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
 
-                                                        <div class="col-md-2" style="background-color: #e7505a; color:white">
-                                                            <i class="fas fa-trash"></i>
-                                                        </div>
+                                        @{
+                                            DateTime date1 = DateTime.Now;
+                                            var date2 = date1.AddDays(1);
+                                            var today = date1.ToString("yyyy-MM-dd");
+                                            var tomorrow = date2.ToString("yyyy-MM-dd");
+                                        }
 
+                                        <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
+                                        <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/Public/Reservation?date=@tomorrow">Yarın</a></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
+                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
 
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <table style="text-align:center" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color:#f5f8fd" scope="col">
+                                                <div class="row">
+                                                    <div class="col-md-7">Kortlar</div>
+
+                                                    <div style="background-color:royalblue; color:white ; cursor:pointer" class="col-md-2">
+                                                        <i class="fas fa-print"></i>
                                                     </div>
-                                                </th>
 
-                                                @for (int i = 0; i < times.Count; i++)
+                                                    <div class="col-md-2" style="background-color: #e7505a; color:white">
+                                                        <i class="fas fa-trash"></i>
+                                                    </div>
 
-                                                {
-                                                    <th style="background-color:#f5f8fd" colspan="4" scope="col">@times[i].ResTimes</th>
 
-                                                }
+                                                </div>
+                                            </th>
 
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @foreach (var item in Model.courts)
+                                            @for (int i = 0; i < times.Count; i++)
 
                                             {
-                                                <tr>
+                                                <th style="background-color:#f5f8fd" colspan="4" scope="col">@times[i].ResTimes</th>
 
-                                                    <th style="background-color:#f5f8fd" scope="row">@item.CourtName</th>
+                                            }
 
-                                                    @for (int i = 0; i < Model.resTimes.Count; i++)
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (var item in Model.courts)
+
+                                        {
+                                            <tr>
+
+                                                <th style="background-color:#f5f8fd" scope="row">@item.CourtName</th>
+
+                                                @for (int i = 0; i < Model.resTimes.Count; i++)
+                                                {
+
+                                                    var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
+
+                                                    var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
+
+                                                    var court = Model.courtTimeInfs.SingleOrDefault(x => x.CourtId == item.CourtId);
+
+                                                    var period = (60 / Convert.ToInt32(court.CourtTimePeriod));
+
+                                                    if (res != null && resCancel != null)
                                                     {
+                                                        <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
+                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                <a style="padding:0;color:#fff;">
+                                                                    @res.NickName
 
-                                                        var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
+                                                                </a>
+                                                            </div>
+                                                            <div style="position: relative;height:2px;background-color:#e61a1a"></div>
+                                                        </td>
 
-                                                        var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
+                                                        i = i + 3;
+                                                    }
 
-                                                        var court = Model.courtTimeInfs.SingleOrDefault(x => x.CourtId == item.CourtId);
-
-                                                        var period = (60 / Convert.ToInt32(court.CourtTimePeriod));
-
-                                                        if (res != null && resCancel != null)
-                                                        {
-                                                            <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                    <a style="padding:0;color:#fff;">
-                                                                        @res.NickName
-
-                                                                    </a>
-                                                                </div>
-                                                                <div style="position: relative;height:2px;background-color:#e61a1a"></div>
-                                                            </td>
-
-                                                            i = i + 3;
-                                                        }
-
-                                                        else if (res != null)
+                                                    else if (res != null)
+                                                    {
+                                                        if (res.UserId == userId)
                                                         {
                                                             <td data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <div style="background-color:#1bbc27!important;color:#ffffff!important;">
@@ -187,202 +189,213 @@
                                                                 </div>
                                                             </td>
 
-                                                            i = i + 3;
                                                         }
 
-
-
-                                                        else if (resCancel != null)
+                                                        else
                                                         {
-                                                            var time = Model.resTimes[i].ResTimes;
+                                                            <td colspan="4" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <a style="padding:0;color:#fff;">
+                                                                        @res.NickName
 
-                                                            for (var t = 0; t < 4; t++)
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        }
+
+                                                        i = i + 3;
+                                                    }
+
+                                                    else if (resCancel != null)
+                                                    {
+                                                        var time = Model.resTimes[i].ResTimes;
+
+                                                        for (var t = 0; t < 4; t++)
+                                                        {
+                                                            if (period == 1)
                                                             {
-                                                                if (period == 1)
+                                                                <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                </td>
+
+
+                                                                t = t + 3;
+
+                                                            }
+                                                            else if (period == 2)
+                                                            {
+                                                                <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                </td>
+
+                                                                var c = time.Split(":");
+                                                                var hour = Convert.ToInt32(c[0]);
+                                                                var min = Convert.ToInt32(c[1]);
+                                                                if (min == 30)
                                                                 {
-                                                                    <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                        <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                    </td>
-
-
-                                                                    t = t + 3;
-
-                                                                }
-                                                                else if (period == 2)
-                                                                {
-                                                                    <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                        <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                    </td>
-
-                                                                    var c = time.Split(":");
-                                                                    var hour = Convert.ToInt32(c[0]);
-                                                                    var min = Convert.ToInt32(c[1]);
-                                                                    if (min == 30)
-                                                                    {
-                                                                        time = (hour + 1) + ":" + "00";
-                                                                    }
-                                                                    else
-                                                                    {
-
-                                                                        time = hour + ":" + (min + 30);
-                                                                    }
-                                                                    t = t + 1;
+                                                                    time = (hour + 1) + ":" + "00";
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                        <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                                    </td>
 
-
-                                                                    var c = time.Split(":");
-                                                                    var hour = Convert.ToInt32(c[0]);
-                                                                    var min = Convert.ToInt32(c[1]);
-                                                                    if (min == 45)
-                                                                    {
-                                                                        time = (hour + 1) + ":" + "00";
-                                                                    }
-                                                                    else
-                                                                    {
-
-                                                                        time = hour + ":" + (min + 15);
-                                                                    }
+                                                                    time = hour + ":" + (min + 30);
                                                                 }
-
+                                                                t = t + 1;
                                                             }
-                                                            i = i + 3;
+                                                            else
+                                                            {
+                                                                <td id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                </td>
+
+
+                                                                var c = time.Split(":");
+                                                                var hour = Convert.ToInt32(c[0]);
+                                                                var min = Convert.ToInt32(c[1]);
+                                                                if (min == 45)
+                                                                {
+                                                                    time = (hour + 1) + ":" + "00";
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    time = hour + ":" + (min + 15);
+                                                                }
+                                                            }
+
+                                                        }
+                                                        i = i + 3;
+                                                    }
+
+
+                                                    else
+
+                                                    {
+                                                        if (period == 4)
+                                                        {
+                                                            <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                         }
 
-
-                                                        else
-
+                                                        else if (period == 2)
                                                         {
-                                                            if (period == 4)
-                                                            {
-                                                                <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                            }
-
-                                                            else if (period == 2)
-                                                            {
-                                                                <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                i = i + 1;
-                                                            }
-                                                            else if (period == 1)
-                                                            {
-                                                                <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                i = i + 3;
-                                                            }
-
+                                                            <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            i = i + 1;
+                                                        }
+                                                        else if (period == 1)
+                                                        {
+                                                            <td class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            i = i + 3;
                                                         }
 
                                                     }
 
-                                                </tr>
-                                            }
+                                                }
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
 
-    <div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #004e6c;">
-                    <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
-                    <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+<div class="modal fade" id="openResInf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #004e6c;">
+                <h5 class="modal-title" style="color:white;" id="exampleModalLabel">Rezervasyon Bilgileri</h5>
+                <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
-                    <div class="card">
-                        <div class="card-body row" style="background-color: #f7f7f7f7;">
+                <div class="card">
+                    <div class="card-body row" style="background-color: #f7f7f7f7;">
 
-                            <h5 class="col-md-9" id="nickAndFullName"></h5>
-                            <div id="cancelRes" class="col-md-0">
-                                <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelRes(this.id)">İptal Et</button>
-                            </div>
-                            <div class="col-md">
-                                <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
-                            </div>
+                        <h5 class="col-md-9" id="nickAndFullName"></h5>
+                        <div id="cancelRes" class="col-md-0">
+                            <button style="background-color:#dc3545; color:white" class="btn btn-danger" type="button" onclick="cancelResProcedure(this.id)">İptal Et</button>
                         </div>
-
+                        <div class="col-md">
+                            <button style="background-color:#ffc107; color:white" class="btn btn-warning" type="button" id="">Düzenle</button>
+                        </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="card">
-                                <div class="card-body" style="background-color:#f7f7f7">
-                                    <ul style="font-size:20px" class="list-group list-group-flush">
-                                        <li id="courtName" class="list-group-item"></li>
-                                        <li id="resDate" class="list-group-item"></li>
-                                        <li id="resTime" class="list-group-item"></li>
-                                        <li id="resNowDate" class="list-group-item"></li>
-                                    </ul>
-                                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body" style="background-color:#f7f7f7">
+                                <ul style="font-size:20px" class="list-group list-group-flush">
+                                    <li id="courtName" class="list-group-item"></li>
+                                    <li id="resDate" class="list-group-item"></li>
+                                    <li id="resTime" class="list-group-item"></li>
+                                    <li id="resNowDate" class="list-group-item"></li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-sm-6">
-                            <div class="card">
-                                <div class="card-body">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
 
-                                    <div id="PriceInf" class="info-box shadow-lg">
+                                <div id="PriceInf" class="info-box shadow-lg">
 
+                                </div>
+
+                                <div class="info-box shadow-lg">
+
+                                    <div class="info-box-content">
+                                        <table style="text-align:center" class="table table-bordered">
+
+
+                                            <thead>
+                                                <tr>
+                                                    <th style="font-weight:bold" scope="col">Ücret Bilgisi</th>
+                                                    <th style="font-weight:bold" scope="col">Ücret </th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="PriceNI">
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
+                                                    <th id="sumPrice" style="font-weight:bold" scope="col"></th>
+
+                                                </tr>
+                                            </tfoot>
+
+                                        </table>
                                     </div>
+                                </div>
 
-                                    <div class="info-box shadow-lg">
-
-                                        <div class="info-box-content">
-                                            <table style="text-align:center" class="table table-bordered">
-
-
-                                                <thead>
-                                                    <tr>
-                                                        <th style="font-weight:bold" scope="col">Ücret Bilgisi</th>
-                                                        <th style="font-weight:bold" scope="col">Ücret </th>
-
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody id="PriceNI">
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
-                                                        <th id="sumPrice" style="font-weight:bold" scope="col"></th>
-
-                                                    </tr>
-                                                </tfoot>
-
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="info-box shadow-lg">
-                                        <div class="info-box-content">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
-                                                </div>
+                                <div class="info-box shadow-lg">
+                                    <div class="info-box-content">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-danger courtbutton">Ödeme</button>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <button type="button" class="btn btn-danger courtbutton">Toplu Ödeme</button>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-print"></i> </button>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-danger courtbutton"><i class="fas fa-edit"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -394,109 +407,108 @@
             </div>
         </div>
     </div>
+</div>
 
 
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #004e6c;">
-                    <h4 style="margin:auto; color:white">Rezervasyon Yap</h4>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #004e6c;">
+                <h4 style="margin:auto; color:white">Rezervasyon Yap</h4>
+            </div>
+
+            <div class="modal-header">
+                <div class="col-sm-4">
+                    <h4>Sayın , @fullname</h4>
                 </div>
+            </div>
 
-                <div class="modal-header">
-                    <div class="col-sm-4">
-                        <h4>Sayın , @fullname</h4>
+            <div id="CourtandTime">
+
+            </div>
+
+            <div class="modal-header">
+                <div class="row" id="court_select">
+                    <div id="ResModal" style="display: contents;">
+
                     </div>
                 </div>
+            </div>
+
+            <div class="modal-header" style="background-color: #004e6c;">
+                <h4 style="margin:auto; color:white">Ücretlendirme</h4>
+            </div>
 
 
-
-                <div id="CourtandTime">
-
-                </div>
-
-                <div class="modal-header">
-                    <div class="row" id="court_select">
-                        <div id="ResModal" style="display: contents;">
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-header" style="background-color: #004e6c;">
-                    <h4 style="margin:auto; color:white">Ücretlendirme</h4>
-                </div>
-
-
-                <div class="modal-header">
-                    <div class="col-sm-12">
-                        <div class="form-group" style="text-align:center">
-                            <table class="table table-bordered ">
-                                <thead>
-                                    <tr>
-                                        <th style="font-weight:bold" scope="col">Adı</th>
-                                        <th style="font-weight:bold" scope="col">Fiyatı</th>
-                                        <th style="font-weight:bold" scope="col">Seç</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item2 in Model.courtPriceLists)
+            <div class="modal-header">
+                <div class="col-sm-12">
+                    <div class="form-group" style="text-align:center">
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th style="font-weight:bold" scope="col">Adı</th>
+                                    <th style="font-weight:bold" scope="col">Fiyatı</th>
+                                    <th style="font-weight:bold" scope="col">Seç</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item2 in Model.courtPriceLists)
+                                {
+                                    if (item2.Condition == "1")
                                     {
-                                        if (item2.Condition == "1")
-                                        {
-                                            <tr>
-                                                <td>@item2.Name</td>
-                                                <td>@item2.CourtPrice ₺ </td>
-                                                <td>
-                                                    <div class="custom-control custom-checkbox " id="checkPriceTable">
+                                        <tr>
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice ₺ </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox " id="checkPriceTable">
 
-                                                        @{ if (item2.PriceType == "1")
-                                                            {
-                                                                <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
-                                                            }
-
-                                                            else
-                                                            {
-                                                                <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
-                                                            }
-
+                                                    @{ if (item2.PriceType == "1")
+                                                        {
+                                                            <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
                                                         }
-                                                        <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
+
+                                                        else
+                                                        {
+                                                            <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                        }
+
+                                                    }
+                                                    <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     }
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
-                                        <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
+                                    <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
+            </div>
 
-                <div style="display:none" class="modal-footer">
-                    <textbox style="color:black; " id="userId">@userId</textbox>
-                </div>
+            <div style="display:none" class="modal-footer">
+                <textbox style="color:black; " id="userId">@userId</textbox>
+            </div>
 
 
 
-                <div class="modal-footer" id="forApproveId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
-                </div>
+            <div class="modal-footer" id="forApproveId">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
             </div>
         </div>
     </div>
+</div>
 
 
 
-    <script>
+<script>
 
     var picker = "@ViewBag.Date";
 
@@ -696,7 +708,6 @@
         }
     }
 
-
     function getCourtTime(courtId , courtName , checkTime) {
 
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
@@ -866,9 +877,6 @@
 
     }
 
-
-
-
     function getPrice() {
 
         var price = [];
@@ -890,8 +898,6 @@
 
     }
 
-
-
     function Approve(id) {
 
         // seçilen saatler
@@ -900,7 +906,7 @@
             times.push(this.name);
         });
 
-        
+
         debugger;
 
         var priceId = [];
@@ -965,7 +971,7 @@
                 button: "Tamam",
             }).then((value) => {
 
-               
+
 
             });
         }
@@ -1009,7 +1015,7 @@
                                 button: "Tamam",
                             }).then((value) => {
 
-                               
+
 
                             });
                         }
@@ -1026,7 +1032,6 @@
 
         }
     }
-
 
     function WebReservation() {
 
@@ -1160,9 +1165,67 @@
 
     }
 
-    function cancelRes(id) {
+    function cancelRes(id , procedure) {
+
+        debugger;
+
         var  userId = $("#userId").text();
         $('#openResInf').modal('toggle');
+
+        if (procedure == true) {
+            swal({
+                title: "Emin Misiniz?",
+                text: "Rezervasyon İptal Süresi Geçtiği için Ücret Yansıtılarak İptal Edilecektir. Ücret Yansımadan İptal Etmek için Yetkili ile Görüşünüz !",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        $.ajax({
+                            type: "GET",
+                            url: '../Public/CancelRes',
+                            cache: false,
+                            data: { "id": id, "userId": userId, "procedure": procedure },
+                            dataType: "json",
+                            async: true,
+                            success: function (res) {
+
+                                if (res != null) {
+
+                                    swal({
+                                        title: "Rezervasyon İptal Edildi",
+                                        text: "Rezervasyon Kaydınız Başarılı Bir Şekilde İptal Edildi !",
+                                        icon: "success",
+                                        button: "Tamam",
+                                    }).then((value) => {
+
+                                        window.location.href = "Reservation?date=" + $('#timeNow').val();
+
+                                    });
+
+                                }
+                            },
+
+                            error: function (textStatus, errorThrown) {
+                                console.log(JSON.stringify(textStatus));
+                                console.log(textStatus);
+                            }
+                        });
+
+                    }
+                    else
+                        swal({
+                            title: "Rezervasyon Korundu",
+                            text: "Rezervasyonu Silmekten Vazgeçtiniz!",
+                            icon: "success",
+                            button: "Tamam",
+                        });
+                });
+        }
+
+        else {
 
         swal({
             title: "Emin Misiniz?",
@@ -1214,7 +1277,43 @@
                         button: "Tamam",
                     });
             });
+        }
     }
 
+    function cancelResProcedure(id) {
 
-    </script>
+        $.ajax({
+            type: "GET",
+            url: '../Public/CancelResProcedure',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                if (res == false) {
+
+                    var procedure = true;
+
+                    cancelRes(id , procedure)
+
+                }
+
+                else {
+
+                    var procedure = false;
+
+                    cancelRes(id)
+                }
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+</script>

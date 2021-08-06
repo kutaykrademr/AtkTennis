@@ -17,7 +17,7 @@ namespace AtkTennisWeb.Controllers
 
             return View();
         }
-
+      
         [HttpGet]
         public JsonResult SignInReq(string UserName, string Password)
         {
@@ -140,6 +140,26 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+        public JsonResult UserList()
+        {
+
+            IdentityPartialViewDto model = new IdentityPartialViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetUsers"));
+
+                if (model == null)
+
+                    model = new IdentityPartialViewDto();
+            }
+            catch (Exception)
+            {
+                model = new IdentityPartialViewDto();
+            }
+            return Json(model);
+        }
+
         public JsonResult GetUserListModal( string id)
         {
 
@@ -235,7 +255,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds));
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds ));
 
             }
             catch (Exception)
@@ -273,14 +293,14 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult CancelRes(int id , string userId)
+        public JsonResult CancelRes(int id , string userId , bool procedure , string cancelReasons)
         {
             ReservationDto model = new ReservationDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id + "&userId=" + userId));
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id + "&userId=" + userId + "&procedure=" + procedure + "&cancelReasons=" + cancelReasons));
 
                 if (model != null)
                 {
@@ -297,6 +317,32 @@ namespace AtkTennisWeb.Controllers
             }
 
         }
+
+        public JsonResult CancelResProcedure(int id)
+        {
+            ReservationDto model = new ReservationDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelResProcedure?id=" + id ));
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ResSchemaModalDto());
+            }
+
+        }
+
 
 
 

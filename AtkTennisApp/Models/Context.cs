@@ -20,6 +20,7 @@ namespace AtkTennis.Models
         public DbSet<Court> courts { get; set; }
         public DbSet<ResTime> resTimes { get; set; }
         public DbSet<CourtPriceList> courtPriceLists { get; set; }
+        public DbSet<CourtTypes> courtTypes { get; set; }
 
         public DbSet<ErrorLog> errorLogs { get; set; }
         public DbSet<ApplicationLog> applicationLogs { get; set; }

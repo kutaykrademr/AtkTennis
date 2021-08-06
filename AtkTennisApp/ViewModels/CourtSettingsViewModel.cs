@@ -11,6 +11,7 @@ namespace AtkTennisApp.ViewModels
         public List<Court> Courts { get; set; } = new List<Court>();
         public List<CourtPriceList> courtPriceLists { get; set; } = new List<CourtPriceList>();
         public List<CourtTimeInf> courtTimeInfs { get; set; } = new List<CourtTimeInf>();
+        public List<ResTime> resTimes { get; set; } = new List<ResTime>();
 
     }
 }

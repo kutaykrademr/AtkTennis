@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AtkTennisApp.Models;
 using AtkTennis.Models;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace AtkTennisApp.Controllers
 {
@@ -73,6 +74,32 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("GetResSchemaDetail", Name = "GetResSchemaDetail")]
+        public JsonResult GetResSchemaDetail(string date)
+        {
+            DateTime date1 = DateTime.Now;
+            var today = date1.ToString("yyyy-MM-dd");
+
+            ResSchemaViewModel model = new ResSchemaViewModel();
+
+            try
+            {
+                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
+                model.memberLists = db.memberLists.ToList();
+                model.courts = db.courts.ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+                model = new ResSchemaViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+
+            return Json(model);
+        }
+       
         [HttpGet("GetRole", Name = "GetRole")]
         public List<AppIdentityRole> GetRole()
 
@@ -192,6 +219,295 @@ namespace AtkTennisApp.Controllers
             }
 
             return model;
+        }
+
+        [HttpGet("NewReservationAdmin", Name = "NewReservationAdmin")]
+        public JsonResult NewReservationAdmin(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName)
+        {
+
+            var model = new Reservation();
+            Reservation res = new Reservation();
+            Court court = new Court();
+            MemberList mem = new MemberList();
+            CourtTimeInf time = new CourtTimeInf();
+            ReservationTotal model4 = new ReservationTotal();
+
+            time.CourtTimePeriod = db.courtTimeInfs.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+            var x = ResFinishTime.Split(":");
+            var h = Convert.ToInt32(x[0]);
+            var m = Convert.ToInt32(x[1]);
+            var per = Convert.ToInt16(time.CourtTimePeriod);
+
+
+            if (per == 15)
+            {
+                if (m == 45)
+                {
+                    h = h + 1;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + "00";
+                    }
+                    else
+                        ResFinishTime = h + ":" + "00";
+                }
+                else
+                {
+
+                    m = m + 15;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+                    else
+                        ResFinishTime = h + ":" + m;
+                }
+            }
+            else if (per == 30)
+            {
+                if (m == 30)
+                {
+                    h = h + 1;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + "00";
+                    }
+                    else
+                        ResFinishTime = h + ":" + "00";
+                }
+                else
+                {
+                    m = m + 30;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+                    else
+                        ResFinishTime = h + ":" + "00";
+                }
+
+            }
+            else
+            {
+                h = h + 1;
+                if (h < 10)
+                {
+                    ResFinishTime = "0" + h + ":" + "00";
+                }
+                ResFinishTime = h + ":" + "00";
+            }
+
+
+            if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null || PriceIds == null)
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
+                    model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false).FirstOrDefault();
+                    court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
+                    mem = db.memberLists.FirstOrDefault(x => x.UserName == UserName.Trim());
+
+                }
+
+                catch (Exception e)
+                {
+                    return Json("false");
+
+                }
+            }
+
+            if (model == null)
+            {
+                //var memberPrice = db.memberLists.Where(x => x.UserId == UserId).FirstOrDefault().Price; // 1500
+
+                //var resDebt = Price;
+
+                try
+                {
+                    //if (memberPrice - resDebt >= 0)
+                    //{
+                    //    var newMemberPrice = memberPrice - resDebt;
+
+                    //    mem.Price = newMemberPrice;
+                    //    res.PriceInf = true;
+
+
+                    res.NickName = mem.NickName;
+                    res.Court = court;
+                    res.ResFinishTime = ResFinishTime;
+                    res.ResStartTime = ResStartTime;
+                    res.ResDate = ResDate;
+                    res.ResEvent = ResEvent;
+                    res.ResTime = ResTime;
+                    res.UserId = mem.UserId;
+                    res.doResUserId = UserId;
+                    res.ResNowDate = ResNowDate;
+                    res.Price = Price;
+                    res.PriceIds = PriceIds;
+
+
+
+                    db.memberLists.Update(mem);
+                    db.reservations.Add(res);
+                    db.SaveChanges();
+                    //}
+                    //else
+                    //{
+                    //    return Json(false);
+                    //}
+
+
+                }
+
+                catch (Exception e)
+                {
+
+                    return Json("false");
+
+                }
+
+                return Json(res);
+            }
+            else
+
+                return Json("false");
+        }
+
+        [HttpGet("CancelResProcedureModal", Name = "CancelResProcedureModal")]
+        public JsonResult CancelResProcedureModal(int id)
+
+        {
+
+            MemberList mem = new MemberList();
+            ReservationCourtViewModel model = new ReservationCourtViewModel();
+            ResModalViewModel model2 = new ResModalViewModel();
+            ReservationSettings set = new ReservationSettings();
+
+            try
+            {
+
+
+                model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
+                model.courts = db.courts.ToList();
+
+                set = db.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İptal Süresi (Saat)").FirstOrDefault();
+
+
+                if (model != null && set != null)
+                {
+                    model2.courtPriceLists = db.courtPriceLists.ToList();
+                    model2.resSchemaModal.FullName = mem.FullName;
+                    model2.resSchemaModal.NickName = mem.NickName;
+                    model2.resSchemaModal.CourtName = model.reservations.Court.CourtName;
+                    model2.resSchemaModal.ResDate = model.reservations.ResDate;
+                    model2.resSchemaModal.ResEvent = model.reservations.ResEvent;
+                    model2.resSchemaModal.ResFinishTime = model.reservations.ResFinishTime;
+                    model2.resSchemaModal.ResId = id;
+                    model2.resSchemaModal.ResStartTime = model.reservations.ResStartTime;
+                    model2.resSchemaModal.ResTime = model.reservations.ResTime;
+                    model2.resSchemaModal.ResNowDate = model.reservations.ResNowDate;
+                    model2.resSchemaModal.PriceInf = model.reservations.PriceInf;
+                    model2.resSchemaModal.Price = model.reservations.Price;
+                    model2.resSchemaModal.PriceIds = model.reservations.PriceIds;
+
+
+                    var strDate = (model.reservations.ResDate + " " + model.reservations.ResStartTime + ":" + "00");
+
+                    DateTime myDate = DateTime.ParseExact(strDate, "yyyy-MM-dd HH:mm:ss",
+                                           CultureInfo.InvariantCulture);
+
+                    var dateTimeNow = (myDate - DateTime.Now).TotalHours;
+
+                    if (dateTimeNow > Convert.ToInt16(set.ReservationValue))
+                    {
+                        return Json(true);
+                    }
+                    else
+                    {
+                        return Json(model2);
+                    }
+                }
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationCourtViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+        [HttpGet("CancelResAdmin", Name = "CancelResAdmin")]
+        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons)
+
+        {
+            Reservation model = new Reservation();
+            ReservationCancel model2 = new ReservationCancel();
+            List<Court> model3 = new List<Court>();
+
+
+            try
+            {
+
+                model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                model3 = db.courts.ToList();
+
+                if (model != null)
+                {
+
+                    model2.CancelRes = true;
+                    model2.CancelResUserId = userId;
+                    model2.CourtId = model.Court.CourtId;
+                    model2.NickName = model.NickName;
+                    model2.Price = model.Price;
+                    model2.PriceIds = model.PriceIds;
+                    model2.PriceInf = model.PriceInf;
+                    model2.Procedure = procedure;
+                    model2.ResDate = model.ResDate;
+                    model2.ResEvent = model.ResEvent;
+                    model2.ResFinishTime = model.ResFinishTime;
+                    model2.ResId = model.ResId;
+                    model2.ResNowDate = model.ResNowDate;
+                    model2.ResStartTime = model.ResStartTime;
+                    model2.ResTime = model.ResTime;
+                    model2.UserId = model.UserId;
+                    model2.CancelReasons = cancelReasons;
+
+
+
+                    db.Remove(model);
+                    db.Add(model2);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new Reservation();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
         }
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
