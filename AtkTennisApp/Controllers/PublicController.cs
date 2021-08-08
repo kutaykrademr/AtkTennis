@@ -233,21 +233,13 @@ namespace AtkTennisApp.Controllers
                 return Json(false);
             }
 
-            string startTime = courtTime.CourtStartTime;
-            string finishTime = courtTime.CourtFinishTime;
+            var startTime = Convert.ToDateTime(courtTime.CourtStartTime);
+            var finishTime = Convert.ToDateTime(courtTime.CourtFinishTime);
             string period = courtTime.CourtTimePeriod;
             var periodTime = Convert.ToDouble(period);
+            var sTime = startTime.AddMinutes(-periodTime);
 
-            var mStartTime = startTime.Split(":");
-            var sTime = mStartTime[0] + mStartTime[1];
-
-            var mFinishTime = finishTime.Split(":");
-            var fTime = mFinishTime[0] + mFinishTime[1];
-
-            var mf = Convert.ToInt32(fTime);
-            var ms = Convert.ToInt32(sTime);
-
-            var miles = ((mf - ms) / 100);
+            var miles = (finishTime - sTime).TotalHours;
 
             List<res_time> res_Times = new List<res_time>();
 
@@ -258,15 +250,12 @@ namespace AtkTennisApp.Controllers
 
                 for (int i = 0; i < count; i++)
                 {
-                    var a = Convert.ToDateTime(startTime);
-                    var b = a.AddMinutes(periodTime);
-                    var c = b.ToString("HH:mm");
 
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
                     var d = Convert.ToString(c);
 
-                    startTime = d;
-
-
+                    sTime = Convert.ToDateTime(d);
 
                     res_Times.Add(new res_time
                     {
@@ -277,21 +266,19 @@ namespace AtkTennisApp.Controllers
                 }
 
             }
+
+
             else if (periodTime == 30)
             {
                 var count = miles * 2;
 
                 for (int i = 0; i < count; i++)
                 {
-                    var a = Convert.ToDateTime(startTime);
-                    var b = a.AddMinutes(periodTime);
+                    var b = sTime.AddMinutes(periodTime);
                     var c = b.ToString("HH:mm");
-
                     var d = Convert.ToString(c);
 
-                    startTime = d;
-
-
+                    sTime = Convert.ToDateTime(d);
 
                     res_Times.Add(new res_time
                     {
@@ -307,15 +294,11 @@ namespace AtkTennisApp.Controllers
 
                 for (int i = 0; i < count; i++)
                 {
-                    var a = Convert.ToDateTime(startTime);
-                    var b = a.AddMinutes(periodTime);
+                    var b = sTime.AddMinutes(periodTime);
                     var c = b.ToString("HH:mm");
-
                     var d = Convert.ToString(c);
 
-                    startTime = d;
-
-
+                    sTime = Convert.ToDateTime(d);
 
                     res_Times.Add(new res_time
                     {
@@ -465,23 +448,23 @@ namespace AtkTennisApp.Controllers
 
             if (model == null)
             {
-                //var memberPrice = db.memberLists.Where(x => x.UserId == UserId).FirstOrDefault().Price; // 1500
+                var memberPrice = db.memberLists.Where(x => x.UserId == UserId).FirstOrDefault().Price; // 1500
 
-                //var resDebt = Price;
+                var resDebt = Price;
 
 
 
                 try
                 {
-                    //if (memberPrice - resDebt >= 0)
-                    //{
-                    //    var newMemberPrice = memberPrice - resDebt;
+                    if (memberPrice - resDebt >= 0)
+                    {
+                        var newMemberPrice = memberPrice - resDebt;
 
-                    //    mem.Price = newMemberPrice;
-                    //    res.PriceInf = true;
+                        mem.Price = newMemberPrice;
+                        res.PriceInf = true;
 
 
-                    res.NickName = mem.NickName;
+                        res.NickName = mem.NickName;
                     res.Court = court;
                     res.ResFinishTime = ResFinishTime;
                     res.ResStartTime = ResStartTime;
@@ -499,11 +482,11 @@ namespace AtkTennisApp.Controllers
                     db.memberLists.Update(mem);
                     db.reservations.Add(res);
                     db.SaveChanges();
-                    //}
-                    //else
-                    //{
-                    //    return Json(false);
-                    //}
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
 
 
                 }
@@ -861,7 +844,7 @@ namespace AtkTennisApp.Controllers
                     return Json(false);
                 }
 
-                else if (dateTimeNow < 0 )
+                else if (dateTimeNow < 0)
                 {
                     return Json(false);
                 }

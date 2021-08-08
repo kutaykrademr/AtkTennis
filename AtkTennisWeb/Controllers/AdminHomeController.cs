@@ -120,12 +120,12 @@ namespace AtkTennisWeb.Controllers
 
         public JsonResult CancelResAdmin(int id, string userId, bool procedure, string cancelReasons)
         {
-            ReservationDto model = new ReservationDto();
+            ReservationCourtViewDto model = new ReservationCourtViewDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/CancelRes?id=" + id + "&userId=" + userId + "&procedure=" + procedure + "&cancelReasons=" + cancelReasons));
+                model = Helpers.Serializers.DeserializeJson<ReservationCourtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/CancelResAdmin?id=" + id + "&userId=" + userId + "&procedure=" + procedure + "&cancelReasons=" + cancelReasons));
 
                 if (model != null)
                 {
@@ -142,6 +142,57 @@ namespace AtkTennisWeb.Controllers
             }
 
         }
+
+        public JsonResult GetUpdateResAdmin(int id)
+        {
+            ReservationCourtViewDto model = new ReservationCourtViewDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationCourtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUpdateResAdmin?id=" + id ));
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationCourtViewDto());
+            }
+
+        }
+
+        public JsonResult UpdateResAdmin(int id , string startTime , string finishTime , string time , int cId)
+        {
+            ReservationCourtViewDto model = new ReservationCourtViewDto();
+
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationCourtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateResAdmin?id=" + id + "&startTime=" + startTime + "&finishTime=" + finishTime + "&time=" + time + "&cId=" + cId));
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationCourtViewDto());
+            }
+
+        }
+
 
         public JsonResult CancelResProcedureModal(int id)
         {

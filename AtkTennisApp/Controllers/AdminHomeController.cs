@@ -294,7 +294,11 @@ namespace AtkTennisApp.Controllers
                 {
                     ResFinishTime = "0" + h + ":" + "00";
                 }
-                ResFinishTime = h + ":" + "00";
+                else
+                {
+                    ResFinishTime = h + ":" + "00";
+                }
+               
             }
 
 
@@ -509,6 +513,158 @@ namespace AtkTennisApp.Controllers
             return Json(model);
 
         }
+
+
+        [HttpGet("GetUpdateResAdmin", Name = "GetUpdateResAdmin")]
+        public JsonResult GetUpdateResAdmin(int id)
+
+        {
+            ReservationCourtViewModel model = new ReservationCourtViewModel();
+ 
+            try
+            {
+
+                model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                model.courts = db.courts.ToList();
+               
+
+                if (model != null)
+                { 
+                    return Json(model);
+                }
+
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationCourtViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+        [HttpGet("UpdateResAdmin", Name = "UpdateResAdmin")]
+        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time , int cId)
+
+        {
+            Reservation model = new Reservation();
+            Court court = new Court();
+          
+            try
+            {
+                model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                court = db.courts.SingleOrDefault(x => x.CourtId == cId);
+                CourtTimeInf timeInf = new CourtTimeInf();
+
+
+                timeInf.CourtTimePeriod = db.courtTimeInfs.SingleOrDefault(x => x.CourtId == cId).CourtTimePeriod;
+
+
+                var x = finishTime.Split(":");
+                var h = Convert.ToInt32(x[0]);
+                var m = Convert.ToInt32(x[1]);
+                var per = Convert.ToInt16(timeInf.CourtTimePeriod);
+
+                if (per == 15)
+                {
+                    if (m == 45)
+                    {
+                        h = h + 1;
+                        if (h < 10)
+                        {
+                            finishTime = "0" + h + ":" + "00";
+                        }
+                        else
+                            finishTime = h + ":" + "00";
+                    }
+                    else
+                    {
+
+                        m = m + 15;
+                        if (h < 10)
+                        {
+                            finishTime = "0" + h + ":" + m;
+                        }
+                        else
+                            finishTime = h + ":" + m;
+                    }
+                }
+                else if (per == 30)
+                {
+                    if (m == 30)
+                    {
+                        h = h + 1;
+                        if (h < 10)
+                        {
+                            finishTime = "0" + h + ":" + "00";
+                        }
+                        else
+                            finishTime = h + ":" + "00";
+                    }
+                    else
+                    {
+                        m = m + 30;
+                        if (h < 10)
+                        {
+                            finishTime = "0" + h + ":" + m;
+                        }
+                        else
+                            finishTime = h + ":" + "00";
+                    }
+
+                }
+                else
+                {
+                    h = h + 1;
+                    if (h < 10)
+                    {
+                        finishTime = "0" + h + ":" + "00";
+                    }
+                    else
+                    {
+                        finishTime = h + ":" + "00";
+                    }
+
+                }
+
+                model.Court = court;
+                model.ResStartTime = startTime;
+                model.ResFinishTime = finishTime;
+                model.ResDate = time;
+
+                db.Update(model);
+                db.SaveChanges();
+
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                model = new Reservation();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
         public async Task<JsonResult> UpdateMemberList(string id, string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
