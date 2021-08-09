@@ -31,23 +31,30 @@
 
 }
 
-
-
-
-
 <style>
+
+    table th {
+        border: 1px solid #dee2e6 !important;
+    }
+
 
 
     .table-bordered2 {
-        border: 1px solid #dee2e6 !important;
+        border: 1px solid #dee2e6;
     }
 
         .table-bordered2 th {
             border: 1px solid #dee2e6;
         }
 
+        .table-bordered2 thead th {
+            border-bottom-width: 2px;
+        }
+
+
     .hourborder {
-        border-right: 1px solid #dee2e6;
+        border-left: 1px solid #dee2e6;
+        border-bottom: 1px solid #dee2e6;
     }
 
 
@@ -240,7 +247,7 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <table id="tablecount" style="text-align:center" class=" table table-bordered2 ">
+                                <table id="tablecount" style="text-align:center;" class=" table table-bordered2 ">
                                     <thead>
                                         <tr>
                                             <th style="background-color:#f5f8fd" scope="col">
@@ -262,10 +269,8 @@
                                             @for (int i = 0; i < times.Count; i++)
 
                                             {
-                                                
-                                                    <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
 
-                                                
+                                                <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
 
                                             }
 
@@ -297,14 +302,14 @@
 
                                                     if (res != null && resCancel != null && res.UserId == res.doResUserId)
                                                     {
-                                                        <td data-toggle="tooltip" borderRes="@res.ResStartTime , @period" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6;">
+                                                        <td draggable="true" class="ui-draggable" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
 
                                                                 </a>
 
-                                                                <small style="right: -8px; color:black; top: -13px;position: relative;">
+                                                                <small style="right: -3px;top: -10px;position: relative; color:inherit">
                                                                     w
                                                                 </small>
 
@@ -317,7 +322,7 @@
 
                                                     else if (res != null && resCancel != null)
                                                     {
-                                                        <td data-toggle="tooltip" borderRes="@res.ResStartTime , @period" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6;">
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -332,13 +337,12 @@
 
                                                     else if (res != null && res.UserId == res.doResUserId)
                                                     {
-                                                        <td borderRes="@res.ResStartTime , @period" data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
                                                                 </a>
-
-                                                                <small style="right: -8px; color:black; top: -13px;position: relative;">
+                                                                <small style="right: -3px;top: -10px;position: relative; color:inherit">
                                                                     w
                                                                 </small>
 
@@ -351,7 +355,7 @@
 
                                                     else if (res != null)
                                                     {
-                                                        <td borderRes="@res.ResStartTime , @period" data-toggle="tooltip" data-placement="top" title="@res.ResStartTime - @res.ResFinishTime - @res.Court.CourtName - @res.ResDate" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -433,17 +437,17 @@
                                                     {
                                                         if (period == 4)
                                                         {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                         }
 
                                                         else if (period == 2)
                                                         {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                             i = i + 1;
                                                         }
                                                         else if (period == 1)
                                                         {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                             i = i + 3;
                                                         }
 
@@ -461,237 +465,29 @@
                     </div>
 
                 </div>
+                <div class="card col-lg-3">
+                    <div class="card-header ">
 
-                <div class="col-lg-3">
-                    <div style="padding: 0px;">
-                        <div id="resSchemaDetail" style="max-height: 505px; min-height: 706px; padding: 0px; background-color: #f5f8fd; overflow: scroll;">
+                        <div>
+                            <h5 id="demo" style="text-align:center;">Rezervasyon Detay Şema</h5>
+                        </div>
+                    </div>
 
+                    <div class="card-body">
+                        <div>
+                            <div style="padding: 0px;">
+                                <div id="resSchemaDetail" style="max-height: 505px; min-height: 586px; padding: 0px; background-color: #f5f8fd; overflow: scroll;">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+
             </div>
 
-            <div class="row">
-                <section class="col-lg-7 connectedSortable">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">Area Chart</h3>
 
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart">
-                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                        <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card card-danger">
-                                <div class="card-header">
-                                    <h3 class="card-title">Donut Chart</h3>
-
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                    <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-
-                            <div class="card card-info">
-                                <div class="card-header" style="background-color:rebeccapurple">
-                                    <h3 class="card-title">Line Chart</h3>
-
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart">
-                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card card-success">
-                                <div class="card-header">
-                                    <h3 class="card-title">Bar Chart</h3>
-
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart">
-                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="card bg-gradient-success">
-                        <div class="card-header border-0">
-
-                            <h3 class="card-title">
-                                <i class="far fa-calendar-alt"></i>
-                                Calendar
-                            </h3>
-
-                            <div class="card-tools">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                                        <i class="fas fa-bars"></i>
-                                    </button>
-                                    <div class="dropdown-menu" role="menu">
-                                        <a href="#" class="dropdown-item">Add new event</a>
-                                        <a href="#" class="dropdown-item">Clear events</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" class="dropdown-item">View calendar</a>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <div class="card-body pt-0">
-
-                            <div id="calendar" style="width: 100%"></div>
-                        </div>
-                    </div>
-                </section>
-
-
-
-                <section class="col-lg-5 connectedSortable">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Kort Doluluk Oranları </h3>
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <table style="text-align:center" id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Kortlar</th>
-                                        <th>Doluluk Oranı</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-
-
-                                    @foreach (var item2 in Model.courts)
-                                    {
-
-                                        var a = Model.reservations.Where(x => x.Court.CourtId == item2.CourtId && x.ResDate == today).ToList();
-                                        var count = a.Count();
-                                        var percent = (count * 100) / 17;
-                                        <tr>
-                                            <td>@item2.CourtName</td>
-                                            <td>
-
-                                                <div class="progress1">
-                                                    <div class="progress-value1" style="width: @percent%"><span>@percent%</span></div>
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card card-info">
-                        <div class="card-header" style="background-color:darkmagenta">
-                            <h3 class="card-title"><i style="margin-right:10px" class="fas fa-tasks"></i>Yapılacak Listesi </h3>
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <ul class="todo-list" data-widget="todo-list">
-
-                                @foreach (var item in Model.toDoLists)
-                                {
-                                    <li>
-                                        <span class="handle">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </span>
-
-                                        <div class="icheck-primary d-inline ml-2">
-                                            <input type="checkbox" name="to_@item.ListId" id="to_@item.ListId">
-                                            <label for="to_@item.ListId"></label>
-                                        </div>
-
-                                        <span class="text">@item.ToDo</span>
-                                        <small class="badge badge-secondary"><i class="far fa-clock"></i>@item.Date</small>
-                                        <div class="tools">
-                                            <i class="fas fa-edit"></i>
-                                            <i class="fas fa-trash"></i>
-                                        </div>
-                                    </li>
-                                }
-
-
-                            </ul>
-                        </div>
-                        <div class="card-footer clearfix">
-                            <button data-toggle="modal" data-target="#openToDoModal" style="background-color:darkmagenta; border-color:cornflowerblue" type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Ekle</button>
-                        </div>
-                    </div>
-                </section>
-            </div>
         </div>
     </section>
 </div>
@@ -781,7 +577,7 @@
                                                 <button style="font-size:15px; background-color:#ffc107" type="button" class="btn btn-dark">Ödeme</button>
                                             </div>
                                             <div style="margin-right:7px">
-                                                <button style="font-size:15px;" type="button" class="btn btn-danger">Toplu Ödeme</i></button>
+                                                <button style="font-size:15px;" type="button" class="btn btn-danger">Toplu Ödeme</button>
                                             </div>
                                             <div style="margin-right:7px">
                                                 <button style="font-size:15px; background-color:#17a2b8" type="button" class="btn btn-dark"><i class="fas fa-print"></i> </button>
@@ -845,7 +641,7 @@
                         </nav>
                     </div>
 
-                    <div style="display:none" id="updButton" >
+                    <div style="display:none" id="updButton">
                         <button type="button" class="btn btn-primary" onclick="updateReservation(this.id)">Güncelle</button>
                     </div>
 
@@ -1000,10 +796,11 @@
 </div>
 
 <script src="~/adminRoot/js/loading.js"></script>
-
 <script>
 
     $("#tablecount td").each(function () {
+
+        $(this).css("width" , "15px");
 
         var abc = $(this).attr('borderRes');
         var time = abc.split(",")[0].split(":")[1].trim();
@@ -1013,11 +810,11 @@
 
             $(this).addClass("hourborder");
 
-        else if (time == "30" && per == "2") {
+        else if (time == "00" && per == "2") {
             $(this).addClass("hourborder");
         }
 
-        else if (time == "45" && per == "4") {
+        else if (time == "00" && per == "4") {
 
             $(this).addClass("hourborder");
         }
@@ -1053,6 +850,10 @@
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
         })
 
             var now = new Date();
@@ -1195,7 +996,7 @@
         var ResFinishTime = times[(times.length - 1)];
 
         var time = $('#timeNow').val();
-       
+
 
         $.ajax({
             type: "GET",
@@ -1217,7 +1018,7 @@
                         button: "Tamam",
                     }).then((value) => {
 
-                       
+
                         window.location.href = "Index?date=" + $('#timeNow').val();
 
                     });
@@ -1335,7 +1136,7 @@
 
                             for (var x = 0; x < res.memberLists.length; x++) {
                                 if (res.reservations[a].userId == res.memberLists[x].userId) {
-                                    NewRow += '<span style="background:#e0ebf9; color:black;">' + res.memberLists[x].nickName + '</span>';
+                                    NewRow += '<span style="background:#337ab7 ; color:white;">' + res.memberLists[x].nickName + '</span>';
                                     NewRow += '<span style="margin-left:25px">' + res.memberLists[x].fullName + '</span>';
                                 }
                             }
@@ -1409,7 +1210,7 @@
 
     function openResModal(id) {
 
-       
+
         var modalDate = $("#timeNow").val();
         $("#timeNowModal").val(modalDate);
 
@@ -1489,10 +1290,10 @@
                 $('#selCourt').removeClass().addClass('col-lg-4');
                 $('#selTime').removeClass().addClass('col-lg-4');
                 $('#updButton').removeClass().addClass('col-lg-4');
-                
+
 
                 $("#findMem").css("display", "none");
-                $("#updButton").css("padding-left", "286px");   
+                $("#updButton").css("padding-left", "286px");
                 $("#updButton").css("display", "block");
 
 
@@ -1504,7 +1305,7 @@
 
                 $('#rsvModal').modal('toggle');
             }
-            
+
         }
 
         else {
@@ -2114,146 +1915,47 @@
 
 <script>
     $(function () {
-        /* ChartJS
-         * -------
-         * Here we will create a few charts using ChartJS
-         */
 
-        //--------------
-        //- AREA CHART -
-        //--------------
+        $(".ui-draggable").draggable({ revert: true });
+     
+        $(".ui-draggable").draggable({
 
-        // Get context with jQuery - using jQuery's .get() method.
-        var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+            start: function (event, ui) {
+                // nesne sürüklenmeye başladığı anda yapılacak işlemler.
 
-        var areaChartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'Digital Goods',
-                    backgroundColor: 'rgba(60,141,188,0.9)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    pointRadius: false,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                },
-                {
-                    label: 'Electronics',
-                    backgroundColor: 'rgba(210, 214, 222, 1)',
-                    borderColor: 'rgba(210, 214, 222, 1)',
-                    pointRadius: false,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-            ]
-        }
-
-        var areaChartOptions = {
-            maintainAspectRatio: false,
-            responsive: true,
-            legend: {
-                display: false
+                console.log(event);
+                console.log(ui);
             },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        display: false,
-                    }
-                }]
+            drag: function (event, ui) {
+
+                //Sürüklenme anında yapılacak işlemler.
+                console.log(event);
+                console.log(ui);
+            },
+            stop: function (event, ui) {
+            
+                console.log(event);
+                console.log(ui);
             }
-        }
+        });
 
-        // This will get the first returned node in the jQuery collection.
-        var areaChart = new Chart(areaChartCanvas, {
-            type: 'line',
-            data: areaChartData,
-            options: areaChartOptions
-        })
+        $(".droppable").droppable({
 
-        //-------------
-        //- LINE CHART -
-        //--------------
-        var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-        var lineChartOptions = $.extend(true, {}, areaChartOptions)
-        var lineChartData = $.extend(true, {}, areaChartData)
-        lineChartData.datasets[0].fill = false;
-        lineChartData.datasets[1].fill = false;
-        lineChartOptions.datasetFill = false
+           
 
-        var lineChart = new Chart(lineChartCanvas, {
-            type: 'line',
-            data: lineChartData,
-            options: lineChartOptions
-        })
+            drop: function (event, ui) {
+                $(this)
+              
+              
 
-        //-------------
-        //- DONUT CHART -
-        //-------------
-        // Get context with jQuery - using jQuery's .get() method.
-        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
-        var donutData = {
-            labels: [
-                'Chrome',
-                'IE',
-                'FireFox',
-                'Safari',
-                'Opera',
-                'Navigator',
-            ],
-            datasets: [
-                {
-                    data: [700, 500, 400, 600, 300, 100],
-                    backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-                }
-            ]
-        }
-        var donutOptions = {
-            maintainAspectRatio: false,
-            responsive: true,
-        }
-        //Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
-        var donutChart = new Chart(donutChartCanvas, {
-            type: 'doughnut',
-            data: donutData,
-            options: donutOptions
-        })
+            }
+
+             
+        });
+
+       
+    });
 
 
 
-        //-------------
-        //- BAR CHART -
-        //-------------
-        var barChartCanvas = $('#barChart').get(0).getContext('2d')
-        var barChartData = $.extend(true, {}, areaChartData)
-        var temp0 = areaChartData.datasets[0]
-        var temp1 = areaChartData.datasets[1]
-        barChartData.datasets[0] = temp1
-        barChartData.datasets[1] = temp0
-
-        var barChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            datasetFill: false
-        }
-
-        var barChart = new Chart(barChartCanvas, {
-            type: 'bar',
-            data: barChartData,
-            options: barChartOptions
-        })
-
-
-    })
 </script>
