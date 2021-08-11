@@ -103,16 +103,16 @@
                     </div>
 
 
-                    @*<button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[0].Code', this, 'gray')" id="defaultOpen">@Model.schoolTypes[0].Types</button>
+                    <button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[0].Code', this, 'gray')" id="defaultOpen">@Model.schoolTypes[0].Types</button>
 
                     @for (int i = 1; i < Model.schoolTypes.Count; i++)
                     {
                         <button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[i].Code', this, 'gray')">@Model.schoolTypes[i].Types</button>
-                    }*@
+                    }
 
 
 
-                    @*<div id="@Model.schoolTypes[0].Code" class="tabcontent">
+                    <div id="@Model.schoolTypes[0].Code" class="tabcontent">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="card-title">
@@ -283,7 +283,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>*@
+                    </div>
                 </div>
             </div>
         </div>

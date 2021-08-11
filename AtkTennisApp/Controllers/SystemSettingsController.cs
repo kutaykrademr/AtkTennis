@@ -317,6 +317,7 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model.courtPriceLists = db.courtPriceLists.ToList();
+                model.courtRecipeTypes = db.courtRecipeTypes.ToList();
                 model.Courts = db.courts.ToList();
                 model.courtTimeInfs = db.courtTimeInfs.ToList();
                 model.resTimes = db.resTimes.ToList();

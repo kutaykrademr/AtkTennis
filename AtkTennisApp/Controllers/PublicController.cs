@@ -226,7 +226,7 @@ namespace AtkTennisApp.Controllers
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
             var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).ToList();
             var courtTime = db.courtTimeInfs.Where(x => x.CourtId == court.CourtId).FirstOrDefault();
-
+           
 
             if (courtTime == null)
             {
@@ -260,7 +260,9 @@ namespace AtkTennisApp.Controllers
                     res_Times.Add(new res_time
                     {
                         TimesId = i,
+                        Period = periodTime,
                         Times = d
+
                     });
 
                 }
@@ -283,6 +285,7 @@ namespace AtkTennisApp.Controllers
                     res_Times.Add(new res_time
                     {
                         TimesId = i,
+                        Period = periodTime,
                         Times = d
                     });
 
@@ -303,6 +306,7 @@ namespace AtkTennisApp.Controllers
                     res_Times.Add(new res_time
                     {
                         TimesId = i,
+                        Period = periodTime,
                         Times = d
                     });
 
@@ -329,6 +333,7 @@ namespace AtkTennisApp.Controllers
                     daily_reservations.Add(new court_reserve
                     {
                         start = day_routine[i].Times,
+                        Period = day_routine[i].Period,
                         isTaken = _isTaken,
                         timeId = day_routine[i].TimesId
                     }
@@ -891,12 +896,14 @@ namespace AtkTennisApp.Controllers
         public int timeId { get; set; }
         public string start { get; set; }
         public bool isTaken { get; set; }
+        public double Period { get; set; }
     }
 
     public class res_time
     {
         public int TimesId { get; set; }
         public string Times { get; set; }
+        public double Period { get; set; }
 
     }
 

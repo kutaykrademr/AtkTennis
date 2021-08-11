@@ -392,6 +392,7 @@ namespace AtkTennisWeb.Controllers
     public class court_reserved
     {
         public int timeId { get; set; }
+        public double Period { get; set; }
         public string start { get; set; }
         public bool isTaken { get; set; }
     }

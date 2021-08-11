@@ -24,6 +24,52 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kort Türleri</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt"><i class="fas fa-plus-square"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        
+                                        <th>Kort Türü</th>
+                                        <th>İşlemler</th>
+                                     
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.courtRecipeTypes)
+                                    {
+                                        <tr style="text-align:center" id="">
+                                            <td>@item.CourtRecipeTypes</td>
+                                        
+
+                                        
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item.CourtRecipeTypeId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
+                                            </td>
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
@@ -114,8 +160,8 @@
 
                                     @foreach (var item in Model.courtTimeInfs)
                                     {
-                                        <tr style="text-align:center" >
-                                                                   
+                                        <tr style="text-align:center">
+
                                             @{
                                                 var Court = Model.Courts.Where(x => x.CourtId == item.CourtId).FirstOrDefault();
                                             }
@@ -124,7 +170,7 @@
                                             <td>@item.CourtStartTime</td>
                                             <td>@item.CourtFinishTime</td>
                                             <td>@item.CourtTimePeriod</td>
-                                          
+
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.CourtTimeInfId" onclick="openUpdateTimeModal(this.id)"><i class="fas fa-edit"></i></button>
                                                 <button class="btn btn-outline-danger" id="@item.CourtTimeInfId" onclick="deleteCourtTime(this.id) "><i class="fas fa-trash"></i></button>
@@ -202,6 +248,7 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -223,7 +270,7 @@
                         <label for="recipient-name" class="col-form-label">Kort Adı:</label>
                         <div class="input-group">
                             <select id="addCourtName" class="form-control">
-                               
+
                                 @foreach (var item in Model.Courts)
                                 {
                                     <option value="@item.CourtId">@item.CourtName</option>
@@ -233,23 +280,43 @@
                             </select>
                         </div>
                     </div>
+
+
                     <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Başlangıç Saati:</label>
-                        <input type="text" class="form-control" id="courtStartTime">
+                        <label for="recipient-name" class="col-form-label">Zaman Dilimi:</label>
+                        <div class="input-group">
+                            <select id="courtStartTime" class="form-control">
+                                @foreach (var item in Model.resTimes)
+                                {
+                                    <option>@item.ResTimes</option>
+                                }
+
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Bitiş Saati:</label>
-                        <input type="text" class="form-control" id="courtFinishTime">
+                        <label for="recipient-name" class="col-form-label">Zaman Dilimi:</label>
+                        <div class="input-group">
+                            <select id="courtFinishTime" class="form-control">
+
+                                @foreach (var item in Model.resTimes)
+                                {
+                                    <option>@item.ResTimes</option>
+                                }
+
+
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Zaman Dilimi:</label>
                         <div class="input-group">
                             <select id="courtPeriod" class="form-control">
-                                                           
-                                    <option>15</option>
-                                    <option>30</option>
-                                    <option>60</option>
-                                
+
+                                <option>15</option>
+                                <option>30</option>
+                                <option>60</option>
+
                             </select>
                         </div>
                     </div>
@@ -279,8 +346,19 @@
                         <input type="text" class="form-control" id="courtName">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Kort Türü:</label>
-                        <input type="text" class="form-control" id="courtType">
+                        <label for="recipient-name" class="col-form-label">Kort Durumu:</label>
+                        <div class="input-group">
+                            <select id="courtType" class="form-control">
+                                <option disabled="disabled" selected="selected">Kort Türü</option>
+
+                                @foreach (var item in Model.courtRecipeTypes)
+                                {
+                                    <option > @item.CourtRecipeTypes</option>
+                                }
+
+
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group col-md-6">
@@ -336,9 +414,19 @@
                     </div>
                     <div class="col-md-6 form-group">
 
-                        <label class="col-form-label">Türü</label>
-                        <input type="text" id="type" class="form-control">
+                        <label for="recipient-name" class="col-form-label">Kort Durumu:</label>
+                        <div class="input-group">
+                            <select id="type" class="form-control">
+                                <option disabled="disabled" selected="selected">Kort Türü</option>
 
+                                @foreach (var item in Model.courtRecipeTypes)
+                                {
+                                    <option> @item.CourtRecipeTypes</option>
+                                }
+
+
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -454,6 +542,7 @@
                         <label for="recipient-name" class="col-form-label">Tarife Fiyatı:</label>
                         <input type="text" class="form-control" id="recipePrice">
                     </div>
+
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Ücret Tipi:</label>
                         <input type="text" class="form-control" id="recipePriceType">
@@ -480,7 +569,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Kort Rezervasyon Saati Düzenle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -509,7 +598,7 @@
                 <div class="row">
 
                     <div class="col-md-6 form-group">
-                        <label class="col-form-label">Zaman Dilimi</label>
+                        <label class="col-form-label">Başlangıç Saati</label>
 
                         <select id="courtTimeStart" class="form-control">
                             @foreach (var item in Model.resTimes)
@@ -522,7 +611,7 @@
                     </div>
 
                     <div class="col-md-6 form-group">
-                        <label class="col-form-label">Zaman Dilimi</label>
+                        <label class="col-form-label">Bitiş Saati</label>
 
                         <select id="courtTimeFinish" class="form-control">
                             @foreach (var item in Model.resTimes)
@@ -551,6 +640,7 @@
 <script>
 
     $(document).ready(function () {
+
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -572,7 +662,7 @@
 
     function saveAddCourt() {
 
-        if ($("#courtName").val() == "" || $("#courtType").val() == "" || $("#AddcourtCondition option:selected").val() == "" || $("#AddcourtWebCondition option:selected").val() == "") {
+        if ($("#courtName").val() == "" || $("#courtType option:selected").val() == "" || $("#AddcourtCondition option:selected").val() == "" || $("#AddcourtWebCondition option:selected").val() == "") {
             $.confirm({
                 title: "Bilgilendirme",
                 content: "Lütfen Kort Bilgilerini Eksizsiz Doldurunuz.",
@@ -593,7 +683,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddNewCourt',
                 cache: false,
-                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType").val(), AddcourtCondition, AddcourtWebCondition },
+                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType option:selected").val() , AddcourtCondition, AddcourtWebCondition },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -652,7 +742,7 @@
                 if (res != null) {
 
                     $("#name").val(res.courtName);
-                    $("#type").val(res.courtType);
+                    $("#type option:selected").text(res.courtType);
                     $("#courtCondition option:selected").text(res.courtConditions);
                     $("#courtWebCondition option:selected").text(res.courtWebConditions);
                     $("#updateModel button:nth-of-type(2)").attr("id", ID);
@@ -782,7 +872,7 @@
             type: "POST",
             url: '../SystemSettings/UpdateCourt',
             cache: false,
-            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type").val(), courtCondition, courtWebCondition },
+            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type option:selected").text(), courtCondition, courtWebCondition },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -1087,7 +1177,7 @@
 
 
 
-        if ($("#courtStartTime").val() == "" || $("#courtFinishTime").val() == "" || $("#addCourtName option:selected").val() == "" || $("#courtPeriod option:selected").val() == "") {
+        if ($("#courtStartTime option:selected").val() == "" || $("#courtFinishTime").val() == "" || $("#addCourtName option:selected").val() == "" || $("#courtPeriod option:selected").val() == "") {
 
             swal({
                 title: "Uyarı",
@@ -1110,7 +1200,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddNewCourtTimeInf',
                 cache: false,
-                data: { "courtStartTime": $("#courtStartTime").val(), "courtFinishTime": $("#courtFinishTime").val(), "courtId": courtId, "courtPeriod": courtPeriod },
+                data: { "courtStartTime": $("#courtStartTime option:selected").val(), "courtFinishTime": $("#courtFinishTime option:selected").val(), "courtId": courtId, "courtPeriod": courtPeriod },
                 dataType: "json",
                 async: true,
                 success: function (res) {

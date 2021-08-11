@@ -4,6 +4,8 @@
 }
 
 @model Helpers.Dto.ViewDtos.HomeModelDto
+
+
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
 
@@ -33,11 +35,6 @@
 
 <style>
 
-    table th {
-        border: 1px solid #dee2e6 !important;
-    }
-
-
 
     .table-bordered2 {
         border: 1px solid #dee2e6;
@@ -50,6 +47,10 @@
         .table-bordered2 thead th {
             border-bottom-width: 2px;
         }
+
+    .table td {
+        position: inherit !important;
+    }
 
 
     .hourborder {
@@ -217,70 +218,63 @@
 
 
 
+
+
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between">
+                        <div class="card-body">
 
-                            <div style="margin:8px" id="TimeInf">
+                            <div class="d-flex justify-content-between">
 
-                            </div>
+                                <div style="margin:8px" id="TimeInf">
 
-                            <div style="margin-top:8px">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
+                                </div>
 
-                                        @{
-                                            DateTime date1 = DateTime.Now;
-                                            var date2 = date1.AddDays(1);
-                                            var today = date1.ToString("yyyy-MM-dd");
-                                            var tomorrow = date2.ToString("yyyy-MM-dd");
-                                        }
+                                <div style="margin-top:8px">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
 
-                                        <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
-                                        <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
-                                        <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
-                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
-                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
-
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <table id="tablecount" style="text-align:center;" class=" table table-bordered2 ">
-                                    <thead>
-                                        <tr>
-                                            <th style="background-color:#f5f8fd" scope="col">
-                                                <div class="row">
-                                                    <div class="col-md-7">Kortlar</div>
-
-                                                    <div style="background-color:royalblue; color:white ; cursor:pointer" class="col-md-2">
-                                                        <i class="fas fa-print"></i>
-                                                    </div>
-
-                                                    <div class="col-md-2" style="background-color: #e7505a; color:white">
-                                                        <i class="fas fa-trash"></i>
-                                                    </div>
-
-
-                                                </div>
-                                            </th>
-
-                                            @for (int i = 0; i < times.Count; i++)
-
-                                            {
-
-                                                <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
-
+                                            @{
+                                                DateTime date1 = DateTime.Now;
+                                                var date2 = date1.AddDays(1);
+                                                var today = date1.ToString("yyyy-MM-dd");
+                                                var tomorrow = date2.ToString("yyyy-MM-dd");
                                             }
 
-                                        </tr>
-                                    </thead>
+                                            <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
+                                            <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
+                                            <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
+                                            <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                            <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
 
-                                    <tbody>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
 
-                                        @foreach (var item in Model.courts)
+                            <table id="tablecount" style="text-align:center; " class=" table table-bordered2 ">
+                                <thead>
+                                    <tr>
+                                        <th style="background-color:#f5f8fd; min-width:100px" scope="col">
 
+                                        </th>
+
+                                        @for (int i = 0; i < times.Count; i++)
+
+                                        {
+
+                                            <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+
+                                        }
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var item in Model.courts)
+
+                                    {
+                                        if (item.CourtConditions == 1)
                                         {
 
                                             <tr>
@@ -300,13 +294,19 @@
 
                                                     var period = (60 / Convert.ToInt32(court.CourtTimePeriod));
 
+
+
+
+
                                                     if (res != null && resCancel != null && res.UserId == res.doResUserId)
                                                     {
-                                                        <td draggable="true" class="ui-draggable" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6;">
+
+                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                        <td draggable="true" class="ui-draggable" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
-
                                                                 </a>
 
                                                                 <small style="right: -3px;top: -10px;position: relative; color:inherit">
@@ -322,7 +322,9 @@
 
                                                     else if (res != null && resCancel != null)
                                                     {
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6;">
+                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -337,7 +339,10 @@
 
                                                     else if (res != null && res.UserId == res.doResUserId)
                                                     {
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+
+                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6; ">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -355,7 +360,10 @@
 
                                                     else if (res != null)
                                                     {
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @res.UserName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+
+                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -379,7 +387,7 @@
                                                             if (period == 1)
                                                             {
                                                                 <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover " data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                    <div style="height:3px;background-color:#e61a1a"></div>
                                                                 </td>
 
 
@@ -389,7 +397,7 @@
                                                             else if (period == 2)
                                                             {
                                                                 <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                    <div style="height:3px;background-color:#e61a1a"></div>
                                                                 </td>
 
                                                                 var c = time.Split(":");
@@ -409,7 +417,7 @@
                                                             else
                                                             {
                                                                 <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                    <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                                    <div style="height:3px;background-color:#e61a1a"></div>
                                                                 </td>
 
 
@@ -437,17 +445,17 @@
                                                     {
                                                         if (period == 4)
                                                         {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                         }
 
                                                         else if (period == 2)
                                                         {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                             i = i + 1;
                                                         }
                                                         else if (period == 1)
                                                         {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                             i = i + 3;
                                                         }
 
@@ -457,37 +465,25 @@
 
                                             </tr>
                                         }
+                                    }
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="card col-lg-3">
-                    <div class="card-header ">
-
-                        <div>
-                            <h5 id="demo" style="text-align:center;">Rezervasyon Detay Şema</h5>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div>
-                            <div style="padding: 0px;">
-                                <div id="resSchemaDetail" style="max-height: 505px; min-height: 586px; padding: 0px; background-color: #f5f8fd; overflow: scroll;">
-
-                                </div>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
+                <div class="col-lg-3">
 
+                    <div>
+                        <div style="padding: 0px;">
+                            <div id="resSchemaDetail" style="max-height: 505px; min-height: 661px; padding: 0px; background-color: #f5f8fd; overflow: scroll;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
         </div>
     </section>
 </div>
@@ -798,33 +794,6 @@
 <script src="~/adminRoot/js/loading.js"></script>
 <script>
 
-    $("#tablecount td").each(function () {
-
-        $(this).css("width" , "15px");
-
-        var abc = $(this).attr('borderRes');
-        var time = abc.split(",")[0].split(":")[1].trim();
-        var per = abc.split(",")[1].trim();
-
-        if (time == "00" && per =="1")
-
-            $(this).addClass("hourborder");
-
-        else if (time == "00" && per == "2") {
-            $(this).addClass("hourborder");
-        }
-
-        else if (time == "00" && per == "4") {
-
-            $(this).addClass("hourborder");
-        }
-
-        else {
-            $(this).addClass("");
-        }
-
-    });
-
 
 
 
@@ -849,23 +818,19 @@
         });
 
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-
-        $(function () {
             $('[data-toggle="popover"]').popover()
         })
 
-            var now = new Date();
-            var month = (now.getMonth() + 1);
-            var day = now.getDate();
+        //    var now = new Date();
+        //    var month = (now.getMonth() + 1);
+        //    var day = now.getDate();
 
-        if (month < 10)
-            month = "0" + month;
-        if (day < 10)
-            day = "0" + day;
+        //if (month < 10)
+        //    month = "0" + month;
+        //if (day < 10)
+        //    day = "0" + day;
 
-        var today = now.getFullYear() + '-' + month + '-' + day;
+        //var today = now.getFullYear() + '-' + month + '-' + day;
 
 
 
@@ -938,6 +903,37 @@
 
     });
 
+
+
+    $("#tablecount td").each(function () {
+
+
+        var abc = $(this).attr('borderRes');
+        var time = abc.split(",")[0].split(":")[1].trim();
+        var per = abc.split(",")[1].trim();
+
+        if (time == "00" && per == "1")
+
+            $(this).addClass("hourborder");
+
+        else if (time == "00" && per == "2") {
+            $(this).addClass("hourborder");
+        }
+
+        else if (time == "00" && per == "4") {
+
+            $(this).addClass("hourborder");
+        }
+
+        else {
+            $(this).addClass("");
+        }
+
+        $(this).css("width", "15px");
+
+
+    });
+
     function openUpdateResModal(id) {
         $.ajax({
             type: "GET",
@@ -985,7 +981,6 @@
 
         var courtId = $("#selectCourt option:selected").val();
 
-        debugger;
 
         var times = [];
         $('#checkTimeTable input:checked:not(:disabled)').each(function () {
@@ -1412,10 +1407,7 @@
                 async: false,
                 success: function (res) {
 
-
-
-
-
+                    debugger;
 
                     switch (getday) {
                         case 0:
@@ -1478,13 +1470,11 @@
 
                             else {
                                 NewRow += '<div  class="form-group reservationForm">';
-                                NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeTable">';
-                                NewRow += '<input class="custom-control-input custom-control-input-primary" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '">';
+                                NewRow += '<div class="custom-control custom-checkbox custom-control2 " id="checkTimeTable">';
+                                NewRow += '<input onclick="checkMe(this.id)" class="custom-control-input custom-control-input-primary" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '" per= "' + res[i].period + '">';
                                 NewRow += '<label style="font-weight:inherit;" for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
                                 NewRow += '</div></div>';
                             }
-
-
 
 
                                 $("#ResModal").append(NewRow);
@@ -1910,6 +1900,145 @@
             });
     }
 
+    function checkMe(id) {
+
+        debugger;
+
+        var per = $("#" + id).attr("per");
+        var checkID = parseInt(id.split("_")[1]);
+
+        var checkList = [];
+        var checkTrueList = [];
+
+
+
+        $('#checkTimeTable input:checked:not(:disabled)').each(function () {
+            checkTrueList.push(this.id);
+        });
+
+        if (per == 15) {
+
+            if (checkTrueList.length < 4 && checkTrueList.length == 3) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+            }
+
+
+        else if (checkTrueList.length < 4 && checkTrueList.length != 1 ) {
+
+            for (var i = 0; i < checkTrueList.length; i++) {
+
+                $("#t_" + i).prop('checked', false);
+            }
+
+        }
+
+        else if (checkTrueList.length > 4) {
+
+            for (var i = 0; i < checkTrueList.length; i++) {
+                var checkedTime = checkTrueList[i];
+
+                $('#' + checkedTime).prop('checked', false);
+            }
+
+
+            for (var i = checkID; i < (checkID + 4); i++) {
+
+                $("#t_" + i).prop('checked', true);
+
+                checkList.push("t_" + i);
+
+            }
+        }
+
+
+        else
+            for (var i = checkID; i < (checkID + 4); i++) {
+
+                $("#t_" + i).prop('checked', true);
+
+                checkList.push("t_" + i);
+
+
+
+            }
+
+        }
+
+        else if (per == 30) {
+
+            if (checkTrueList.length > 2) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 2); i++) {
+
+                $("#t_" + i).prop('checked', true);
+
+                checkList.push("t_" + i);
+
+
+                }
+            }
+
+            else if (checkTrueList.length == 1) {
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 2); i++) {
+
+                    $("#t_" + i).prop('checked', true);
+
+                    checkList.push("t_" + i);
+
+
+                }
+            }
+
+        }
+
+        else  
+
+            if (checkTrueList.length > 1) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 1); i++) {
+
+                    $("#t_" + i).prop('checked', true);
+
+                    checkList.push("t_" + i);
+
+
+                }
+            }
+
+        
+
+    }
+
 </script>
 
 
@@ -1917,7 +2046,7 @@
     $(function () {
 
         $(".ui-draggable").draggable({ revert: true });
-     
+
         $(".ui-draggable").draggable({
 
             start: function (event, ui) {
@@ -1933,7 +2062,7 @@
                 console.log(ui);
             },
             stop: function (event, ui) {
-            
+
                 console.log(event);
                 console.log(ui);
             }
@@ -1941,19 +2070,19 @@
 
         $(".droppable").droppable({
 
-           
+
 
             drop: function (event, ui) {
                 $(this)
-              
-              
+
+
 
             }
 
-             
+
         });
 
-       
+
     });
 
 
