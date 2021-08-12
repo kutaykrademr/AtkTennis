@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210811211321_updcourtModel")]
+    partial class updcourtModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,6 +127,45 @@ namespace AtkTennisApp.Migrations
                     b.HasKey("CourtRecipeTypeId");
 
                     b.ToTable("courtRecipeTypes");
+                });
+
+            modelBuilder.Entity("AtkTennisApp.Models.CourtTimeInf", b =>
+                {
+                    b.Property<int>("CourtTimeInfId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CourtFinishTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CourtId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CourtStartTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourtTimePeriod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourtTimeInfId");
+
+                    b.ToTable("courtTimeInfs");
+                });
+
+            modelBuilder.Entity("AtkTennisApp.Models.CourtTypes", b =>
+                {
+                    b.Property<int>("CourtTypesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Types")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourtTypesId");
+
+                    b.ToTable("courtTypes");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.ErrorLog", b =>

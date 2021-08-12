@@ -151,7 +151,7 @@ namespace AtkTennisApp.Controllers
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
-                model.courtTimeInfs = db.courtTimeInfs.ToList();
+                
 
             }
             catch (Exception ex)
@@ -222,23 +222,15 @@ namespace AtkTennisApp.Controllers
         public JsonResult GetResTime(int courtId, string dateInf)
         {
 
-
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
             var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).ToList();
-            var courtTime = db.courtTimeInfs.Where(x => x.CourtId == court.CourtId).FirstOrDefault();
-           
-
-            if (courtTime == null)
-            {
-                return Json(false);
-            }
-
-            var startTime = Convert.ToDateTime(courtTime.CourtStartTime);
-            var finishTime = Convert.ToDateTime(courtTime.CourtFinishTime);
-            string period = courtTime.CourtTimePeriod;
+                        
+            var startTime = Convert.ToDateTime(court.CourtStartTime);
+            var finishTime = Convert.ToDateTime(court.CourtFinishTime);
+            string period = court.CourtTimePeriod;
             var periodTime = Convert.ToDouble(period);
             var sTime = startTime.AddMinutes(-periodTime);
-
+            
             var miles = (finishTime - sTime).TotalHours;
 
             List<res_time> res_Times = new List<res_time>();
@@ -291,6 +283,8 @@ namespace AtkTennisApp.Controllers
 
                 }
             }
+
+
             else
             {
                 var count = miles;
@@ -360,14 +354,14 @@ namespace AtkTennisApp.Controllers
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
-            CourtTimeInf time = new CourtTimeInf();
             ReservationTotal model4 = new ReservationTotal();
 
-            time.CourtTimePeriod = db.courtTimeInfs.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+            court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+
             var x = ResFinishTime.Split(":");
             var h = Convert.ToInt32(x[0]);
             var m = Convert.ToInt32(x[1]);
-            var per = Convert.ToInt16(time.CourtTimePeriod);
+            var per = Convert.ToInt16(court.CourtTimePeriod);
 
 
             if (per == 15)
@@ -421,11 +415,16 @@ namespace AtkTennisApp.Controllers
             else
             {
                 h = h + 1;
+
                 if (h < 10)
                 {
                     ResFinishTime = "0" + h + ":" + "00";
                 }
-                ResFinishTime = h + ":" + "00";
+                else
+                {
+                    ResFinishTime = h + ":" + "00";
+                }
+               
             }
 
 

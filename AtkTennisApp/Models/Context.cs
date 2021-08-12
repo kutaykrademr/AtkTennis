@@ -20,7 +20,6 @@ namespace AtkTennis.Models
         public DbSet<Court> courts { get; set; }
         public DbSet<ResTime> resTimes { get; set; }
         public DbSet<CourtPriceList> courtPriceLists { get; set; }
-        public DbSet<CourtTypes> courtTypes { get; set; }
         public DbSet<CourtRecipeType> courtRecipeTypes { get; set; }
 
         public DbSet<ErrorLog> errorLogs { get; set; }
@@ -45,9 +44,7 @@ namespace AtkTennis.Models
         public DbSet<ReservationSettings> reservationSettings { get; set; }
 
         public DbSet<MemberList> memberLists { get; set; }
-
-        public DbSet<CourtTimeInf> courtTimeInfs { get; set; }
-
+  
         public DbSet<ToDoList> toDoLists { get; set; }
 
 

@@ -60,7 +60,7 @@ namespace AtkTennisApp.Controllers
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
-                model.courtTimeInfs = db.courtTimeInfs.ToList();
+             
 
 
             }
@@ -229,14 +229,15 @@ namespace AtkTennisApp.Controllers
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
-            CourtTimeInf time = new CourtTimeInf();
+          
             ReservationTotal model4 = new ReservationTotal();
 
-            time.CourtTimePeriod = db.courtTimeInfs.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+            court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+
             var x = ResFinishTime.Split(":");
             var h = Convert.ToInt32(x[0]);
             var m = Convert.ToInt32(x[1]);
-            var per = Convert.ToInt16(time.CourtTimePeriod);
+            var per = Convert.ToInt16(court.CourtTimePeriod);
 
 
             if (per == 15)
@@ -292,7 +293,7 @@ namespace AtkTennisApp.Controllers
                 h = h + 1;
                 if (h < 10)
                 {
-                    ResFinishTime = "0" + h + ":" + "00";
+                    ResFinishTime = "0" + h + ":" + m;
                 }
                 else
                 {
@@ -561,16 +562,16 @@ namespace AtkTennisApp.Controllers
             {
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 court = db.courts.SingleOrDefault(x => x.CourtId == cId);
-                CourtTimeInf timeInf = new CourtTimeInf();
+                
 
 
-                timeInf.CourtTimePeriod = db.courtTimeInfs.SingleOrDefault(x => x.CourtId == cId).CourtTimePeriod;
+                court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == cId).CourtTimePeriod;
 
 
                 var x = finishTime.Split(":");
                 var h = Convert.ToInt32(x[0]);
                 var m = Convert.ToInt32(x[1]);
-                var per = Convert.ToInt16(timeInf.CourtTimePeriod);
+                var per = Convert.ToInt16(court.CourtTimePeriod);
 
                 if (per == 15)
                 {
@@ -623,6 +624,7 @@ namespace AtkTennisApp.Controllers
                 else
                 {
                     h = h + 1;
+
                     if (h < 10)
                     {
                         finishTime = "0" + h + ":" + "00";

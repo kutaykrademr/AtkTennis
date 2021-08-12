@@ -318,8 +318,7 @@ namespace AtkTennisApp.Controllers
             {
                 model.courtPriceLists = db.courtPriceLists.ToList();
                 model.courtRecipeTypes = db.courtRecipeTypes.ToList();
-                model.Courts = db.courts.ToList();
-                model.courtTimeInfs = db.courtTimeInfs.ToList();
+                model.Courts = db.courts.ToList();   
                 model.resTimes = db.resTimes.ToList();
 
             }
@@ -384,27 +383,7 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
-        [HttpGet("GetCourtTimeInf", Name = "GetCourtTimeInf")]
-        public JsonResult GetCourtTimeInf(int id)
-        {
-         
-            CourtResTimeViewModel model = new CourtResTimeViewModel();
-
-            try
-            {
-
-                model.CourtTimeInf = db.courtTimeInfs.Where(x => x.CourtTimeInfId == id).FirstOrDefault();
-                model.Courts = db.courts.Where(x => x.CourtId == model.CourtTimeInf.CourtId).FirstOrDefault();
-                
-            }
-            catch (Exception ex)
-            {
-                Mutuals.monitizer.AddException(ex);
-
-            }
-
-            return Json(model);
-        }
+      
 
         //kontrol eksiği var
         [HttpGet("UpdateCourt", Name = "UpdateCourt")]
@@ -436,35 +415,7 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
-        [HttpGet("UpdateCourtTime", Name = "UpdateCourtTime")]
-        public JsonResult UpdateCourtTime(int id, string courtPeriod, string courtTimeStart, string courtTimeFinish)
-        {
-            CourtTimeInf model = new CourtTimeInf();
-            
-
-            try
-            {
-
-                model = db.courtTimeInfs.Where(x => x.CourtTimeInfId == id).SingleOrDefault();
-
-               
-                model.CourtTimePeriod = courtPeriod;
-                model.CourtStartTime = courtTimeStart;
-                model.CourtFinishTime = courtTimeFinish;
-
-                db.Update(model);
-                db.SaveChanges();
-
-
-            }
-            catch (Exception ex)
-            {
-                Mutuals.monitizer.AddException(ex);
-
-            }
-
-            return Json(model);
-        }
+       
 
         //Modal eksiği var
         [HttpGet("DeleteCourt", Name = "DeleteCourt")]
@@ -493,49 +444,6 @@ namespace AtkTennisApp.Controllers
             return Json(true);
         }
 
-        [HttpGet("AddNewCourtTimeInf", Name = "AddNewCourtTimeInf")]
-        public JsonResult AddNewCourtTimeInf(int courtId, string courtStartTime, string courtFinishTime, string courtPeriod)
-        {
-
-
-            CourtTimeInf model = new CourtTimeInf();
-
-
-            try
-            {
-                if (courtId != null || courtStartTime != null || courtFinishTime != null || courtPeriod != null)
-                {
-
-                    var a = db.courtTimeInfs.Where(x => x.CourtId == courtId).FirstOrDefault();
-
-                    if (a == null)
-                    {
-                        model.CourtId = courtId;
-                        model.CourtStartTime = courtStartTime;
-                        model.CourtFinishTime = courtFinishTime;
-                        model.CourtTimePeriod = courtPeriod;
-
-                        db.Add(model);
-                        db.SaveChanges();
-                    }
-
-
-                    else
-                    {
-                        return Json(false);
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-
-                Mutuals.monitizer.AddException(ex);
-            }
-
-            return Json(model);
-        }
 
         [HttpGet("NewCourtPriceList", Name = "NewCourtPriceList")]
         public CourtPriceList NewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition)

@@ -39,10 +39,10 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align:center">
-                                        
+
                                         <th>Kort Türü</th>
                                         <th>İşlemler</th>
-                                     
+
 
 
                                     </tr>
@@ -53,9 +53,9 @@
                                     {
                                         <tr style="text-align:center" id="">
                                             <td>@item.CourtRecipeTypes</td>
-                                        
 
-                                        
+
+
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
                                                 <button class="btn btn-outline-danger" id="@item.CourtRecipeTypeId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
@@ -88,6 +88,9 @@
                                         <th>Türü</th>
                                         <th>Web Durumu</th>
                                         <th>Durumu</th>
+                                        <th>Başlangıç Tarihi</th>
+                                        <th>Bitiş Tarihi</th>
+                                        <th>Period</th>
                                         <th>İşlemler</th>
 
 
@@ -119,6 +122,10 @@
                                                 <td>Pasif </td>
                                             }
 
+                                            <td>@item.CourtStartTime </td>
+                                            <td>@item.CourtFinishTime </td>
+                                            <td>@item.CourtTimePeriod </td>
+
                                             <td>
                                                 <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
                                                 <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
@@ -133,56 +140,56 @@
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Kort Rezervasyon Saatleri</h3>
+                    @*<div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Kort Rezervasyon Saatleri</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtTimeModal"><i class="fas fa-plus-square"></i></button>
+                                </div>
                             </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtTimeModal"><i class="fas fa-plus-square"></i></button>
-                            </div>
-                        </div>
 
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Adı </th>
-                                        <th>Başlangıç Saati</th>
-                                        <th>Bitiş Saati</th>
-                                        <th>Zaman Dilimi</th>
-                                        <th>İşlemler</th>
-
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach (var item in Model.courtTimeInfs)
-                                    {
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
                                         <tr style="text-align:center">
+                                            <th>Adı </th>
+                                            <th>Başlangıç Saati</th>
+                                            <th>Bitiş Saati</th>
+                                            <th>Zaman Dilimi</th>
+                                            <th>İşlemler</th>
 
-                                            @{
-                                                var Court = Model.Courts.Where(x => x.CourtId == item.CourtId).FirstOrDefault();
-                                            }
-
-                                            <td>@Court.CourtName</td>
-                                            <td>@item.CourtStartTime</td>
-                                            <td>@item.CourtFinishTime</td>
-                                            <td>@item.CourtTimePeriod</td>
-
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item.CourtTimeInfId" onclick="openUpdateTimeModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.CourtTimeInfId" onclick="deleteCourtTime(this.id) "><i class="fas fa-trash"></i></button>
-                                            </td>
 
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                        @foreach (var item in Model.courtTimeInfs)
+                                        {
+                                            <tr style="text-align:center">
+
+                                                @{
+                                                    var Court = Model.Courts.Where(x => x.CourtId == item.CourtId).FirstOrDefault();
+                                                }
+
+                                                <td>@Court.CourtName</td>
+                                                <td>@item.CourtStartTime</td>
+                                                <td>@item.CourtFinishTime</td>
+                                                <td>@item.CourtTimePeriod</td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.CourtTimeInfId" onclick="openUpdateTimeModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.CourtTimeInfId" onclick="deleteCourtTime(this.id) "><i class="fas fa-trash"></i></button>
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>*@
 
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
@@ -353,7 +360,7 @@
 
                                 @foreach (var item in Model.courtRecipeTypes)
                                 {
-                                    <option > @item.CourtRecipeTypes</option>
+                                    <option> @item.CourtRecipeTypes</option>
                                 }
 
 
@@ -443,14 +450,14 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6 form-group" >                
-                            <label class="col-form-label">Web Durumu</label>
-                            <select id="courtWebCondition" class="form-control">
-                                <option disabled="disabled" selected="selected"> Durumu</option>
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Web Durumu</label>
+                        <select id="courtWebCondition" class="form-control">
+                            <option disabled="disabled" selected="selected"> Durumu</option>
 
-                                <option value="1">Web Aktif</option>
-                                <option value="0">Web Pasif</option>
-                            </select>         
+                            <option value="1">Web Aktif</option>
+                            <option value="0">Web Pasif</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -474,13 +481,13 @@
             </div>
             <div class="modal-body">
                 <div class="row ">
-                    <div class="col-md-6 form-group">                  
-                            <label class="col-form-label">Adı</label>
-                            <input type="text" id="courtPriceName" class="form-control">                      
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Adı</label>
+                        <input type="text" id="courtPriceName" class="form-control">
                     </div>
-                    <div class="col-md-6 form-group">           
-                            <label class="col-form-label">Fiyatı</label>
-                            <input type="text" id="price" class="form-control">         
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Fiyatı</label>
+                        <input type="text" id="price" class="form-control">
                     </div>
                 </div>
 
@@ -494,9 +501,9 @@
                             <option value="0"> Ek Ücret</option>
                         </select>
                     </div>
-                    <div class="col-md-6 form-group">                     
-                            <label class="col-form-label">Tarife Tipi</label>
-                            <input type="text" id="recipeType" class="form-control">                
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Tarife Tipi</label>
+                        <input type="text" id="recipeType" class="form-control">
                     </div>
                 </div>
 
@@ -616,7 +623,7 @@
                         <select id="courtTimeFinish" class="form-control">
                             @foreach (var item in Model.resTimes)
                             {
-                                <option  value="@item.ResTimeId">@item.ResTimes</option>
+                                <option value="@item.ResTimeId">@item.ResTimes</option>
                             }
 
                         </select>
@@ -683,7 +690,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddNewCourt',
                 cache: false,
-                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType option:selected").val() , AddcourtCondition, AddcourtWebCondition },
+                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType option:selected").val(), AddcourtCondition, AddcourtWebCondition },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -701,7 +708,7 @@
                             window.location.href = "CourtSettings"
                         });
 
-                        
+
 
                     }
                     else {
@@ -784,7 +791,7 @@
 
                 if (res != null) {
 
-             
+
                     $("#timeCourtName").val(res.courts.courtName);
                     $("#courtTimeFinish option:selected").text(res.courtTimeInf.courtFinishTime);
                     $("#courtTimeStart option:selected").text(res.courtTimeInf.courtStartTime);
@@ -961,7 +968,7 @@
                         icon: "success",
                         button: "Tamam",
                     });
-            });   
+            });
     }
 
 
@@ -1121,10 +1128,10 @@
                         icon: "success",
                         button: "Tamam",
                     });
-            });   
+            });
 
 
-        
+
     }
 
     function saveAddCourtPrice() {
@@ -1189,12 +1196,12 @@
 
         else {
 
-           
+
 
             var courtId = $("#addCourtName option:selected").val()
             var courtPeriod = $("#courtPeriod option:selected").val()
 
-            
+
 
             $.ajax({
                 type: "POST",
@@ -1206,8 +1213,7 @@
                 success: function (res) {
 
 
-                    if (res == true)
-                    {
+                    if (res == true) {
                         swal({
                             title: "Kort Saati Eklendi",
                             text: "Kort Saat Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
@@ -1221,8 +1227,7 @@
 
                     }
 
-                    else
-                    {
+                    else {
                         $.confirm({
                             title: "Uyarı",
                             content: "Kayıt sırasında bir hata oluştu. Önceden Eklenmiş Olabilir.",
@@ -1231,7 +1236,7 @@
 
                                     window.location.href = "CourtSettings"
                                 }
-                                
+
                             }
                         });
                     }
