@@ -60,7 +60,7 @@ namespace AtkTennisApp.Controllers
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
-             
+
 
 
             }
@@ -99,7 +99,7 @@ namespace AtkTennisApp.Controllers
 
             return Json(model);
         }
-       
+
         [HttpGet("GetRole", Name = "GetRole")]
         public List<AppIdentityRole> GetRole()
 
@@ -121,7 +121,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role , int memberNumber)
         {
             MemberList model2 = new MemberList();
 
@@ -148,6 +148,7 @@ namespace AtkTennisApp.Controllers
 
                 var id = user.Id;
 
+                model2.MemberNumber = memberNumber;
                 model2.UserId = id;
                 model2.FullName = name;
                 model2.NickName = nickName;
@@ -207,7 +208,31 @@ namespace AtkTennisApp.Controllers
             {
                 model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
                 model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
-                model.memberLists = db.memberLists.ToList();
+                model.memberLists = db.memberLists.Where(x => x.Role != "Üye").ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model.AppIdentityRoles = new List<AppIdentityRole>();
+                model.AppIdentityUsers = new List<AppIdentityUser>();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("GetMember", Name = "GetMember")]
+        public IdentityPartialClass GetMember()
+
+        {
+            IdentityPartialClass model = new IdentityPartialClass();
+
+            try
+            {
+                model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
+                model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
+                model.memberLists = db.memberLists.Where(x => x.Role == "ÜYE").ToList();
 
             }
             catch (Exception ex)
@@ -222,14 +247,14 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservationAdmin", Name = "NewReservationAdmin")]
-        public JsonResult NewReservationAdmin(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName)
+        public JsonResult NewReservationAdmin(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName , bool PrivRes)
         {
 
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
-          
+
             ReservationTotal model4 = new ReservationTotal();
 
             court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
@@ -284,7 +309,7 @@ namespace AtkTennisApp.Controllers
                         ResFinishTime = "0" + h + ":" + m;
                     }
                     else
-                        ResFinishTime = h + ":" + "00";
+                        ResFinishTime = h + ":" + m;
                 }
 
             }
@@ -293,13 +318,21 @@ namespace AtkTennisApp.Controllers
                 h = h + 1;
                 if (h < 10)
                 {
-                    ResFinishTime = "0" + h + ":" + m;
+                    if (m == 0)
+                    {
+                        ResFinishTime = "0" + h + ":" + m + "0";
+                    }
+                    else
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+                    
                 }
                 else
                 {
                     ResFinishTime = h + ":" + "00";
                 }
-               
+
             }
 
 
@@ -314,7 +347,7 @@ namespace AtkTennisApp.Controllers
                 {
                     model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false).FirstOrDefault();
                     court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
-                    mem = db.memberLists.FirstOrDefault(x => x.UserName == UserName.Trim());
+                    mem = db.memberLists.FirstOrDefault(x => x.NickName == UserName.Trim());
 
                 }
 
@@ -340,7 +373,7 @@ namespace AtkTennisApp.Controllers
                     //    mem.Price = newMemberPrice;
                     //    res.PriceInf = true;
 
-
+                    res.PrivRes = PrivRes;
                     res.NickName = mem.NickName;
                     res.Court = court;
                     res.ResFinishTime = ResFinishTime;
@@ -380,6 +413,136 @@ namespace AtkTennisApp.Controllers
             else
 
                 return Json("false");
+        }
+
+        [HttpGet("GetResTimeUpd", Name = "GetResTimeUpd")]
+        public JsonResult GetResTimeUpd(int courtId, string dateInf , int resId)
+        {
+            var res = db.reservations.Where(x => x.ResId == resId).FirstOrDefault();
+            var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
+            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).ToList();
+
+            var startTime = Convert.ToDateTime(court.CourtStartTime);
+            var finishTime = Convert.ToDateTime(court.CourtFinishTime);
+            string period = court.CourtTimePeriod;
+            var periodTime = Convert.ToDouble(period);
+            var sTime = startTime.AddMinutes(-periodTime);
+
+            var miles = (finishTime - sTime).TotalHours;
+
+            List<res_time> res_Times = new List<res_time>();
+
+            if (periodTime == 15)
+            {
+                var count = (miles * 4);
+
+
+                for (int i = 0; i < count; i++)
+                {
+
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+                    var d = Convert.ToString(c);
+
+                    sTime = Convert.ToDateTime(d);
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Period = periodTime,
+                        Times = d
+
+                    });
+
+                }
+
+            }
+
+
+            else if (periodTime == 30)
+            {
+                var count = miles * 2;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+                    var d = Convert.ToString(c);
+
+                    sTime = Convert.ToDateTime(d);
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Period = periodTime,
+                        Times = d
+                    });
+
+                }
+            }
+
+
+            else
+            {
+                var count = miles;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+                    var d = Convert.ToString(c);
+
+                    sTime = Convert.ToDateTime(d);
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Period = periodTime,
+                        Times = d
+                    });
+
+                }
+
+            }
+
+
+            var day_routine = res_Times;
+            List<court_reserve> daily_reservations = new List<court_reserve>();
+
+            try
+            {
+
+                bool _isTaken = false;
+
+                for (int i = 0; i < day_routine.Count(); i++)
+                {
+                    foreach (var item in model)
+                    {
+                        if (day_routine[i].Times == res.ResStartTime) _isTaken = false;
+                        else if (day_routine[i].Times == item.ResStartTime ) _isTaken = true;
+                        if (day_routine[i].Times == item.ResFinishTime ) _isTaken = false;
+                    }
+
+                    daily_reservations.Add(new court_reserve
+                    {
+                        start = day_routine[i].Times,
+                        Period = day_routine[i].Period,
+                        isTaken = _isTaken,
+                        timeId = day_routine[i].TimesId
+                    }
+                    );
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                model = new List<Reservation>();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(daily_reservations);
+
         }
 
         [HttpGet("CancelResProcedureModal", Name = "CancelResProcedureModal")]
@@ -521,16 +684,16 @@ namespace AtkTennisApp.Controllers
 
         {
             ReservationCourtViewModel model = new ReservationCourtViewModel();
- 
+
             try
             {
 
                 model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 model.courts = db.courts.ToList();
-               
+
 
                 if (model != null)
-                { 
+                {
                     return Json(model);
                 }
 
@@ -552,19 +715,16 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateResAdmin", Name = "UpdateResAdmin")]
-        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time , int cId)
+        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId)
 
         {
             Reservation model = new Reservation();
             Court court = new Court();
-          
+
             try
             {
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 court = db.courts.SingleOrDefault(x => x.CourtId == cId);
-                
-
-
                 court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == cId).CourtTimePeriod;
 
 
@@ -617,7 +777,7 @@ namespace AtkTennisApp.Controllers
                             finishTime = "0" + h + ":" + m;
                         }
                         else
-                            finishTime = h + ":" + "00";
+                            finishTime = h + ":" + m;
                     }
 
                 }
@@ -817,7 +977,7 @@ namespace AtkTennisApp.Controllers
             MemberList model = new MemberList();
 
             model = db.memberLists.Where(x => x.Id == id).FirstOrDefault();
-           
+
             if (model != null)
             {
                 try
@@ -886,7 +1046,126 @@ namespace AtkTennisApp.Controllers
                 return Json(true);
             }
         }
+
+        [HttpGet("ControlNickName", Name = "ControlNickName")]
+        public JsonResult ControlNickName(string nickName)
+        {
+            MemberList model = new MemberList();
+
+            try
+            {
+                if (nickName != "")
+                {
+                    model = db.memberLists.Where(x => x.NickName == nickName).FirstOrDefault();
+
+                    if (model == null)
+                    {
+                        return Json(true);
+                    }
+
+                    else
+                    {
+                        return Json(model);
+                    }
+                }
+
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+
+        }
+
+        [HttpGet("ControlUserName", Name = "ControlUserName")]
+        public JsonResult ControlUserName(string userName)
+        {
+            MemberList model = new MemberList();
+
+            try
+            {
+                if (userName != "")
+                {
+                    model = db.memberLists.Where(x => x.UserName == userName).FirstOrDefault();
+
+                    if (model == null)
+                    {
+                        return Json(true);
+                    }
+
+                    else
+                    {
+                        return Json(model);
+                    }
+                }
+
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+
+        }
+
+        [HttpGet("ControlMemberNumber", Name = "ControlMemberNumber")]
+        public JsonResult ControlMemberNumber(int memberNumber)
+        {
+            MemberList model = new MemberList();
+
+            try
+            {
+                if (memberNumber != null)
+                {
+                    model = db.memberLists.Where(x => x.MemberNumber == memberNumber).FirstOrDefault();
+
+                    if (model == null)
+                    {
+                        return Json(true);
+                    }
+
+                    else
+                    {
+                        return Json(model);
+                    }
+                }
+
+                else
+                {
+                    return Json(false);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+
+        }
     }
+
+
 }
 
 

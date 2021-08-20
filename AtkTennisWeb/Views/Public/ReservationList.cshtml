@@ -463,7 +463,7 @@
         var resId = parseInt(x[0]);
         var userId = x[1];
 
-        debugger;
+     
 
         $.ajax({
             type: "POST",
@@ -474,8 +474,7 @@
             async: false,
             success: function (res) {
 
-                debugger;
-
+              
                 if (res != null) {
 
                     $("#PriceInf").empty();
@@ -503,8 +502,6 @@
         var x = id.split(",");
         var resId = parseInt(x[0]);
         var userId = x[1];
-
-        debugger;
 
         $.ajax({
             type: "POST",

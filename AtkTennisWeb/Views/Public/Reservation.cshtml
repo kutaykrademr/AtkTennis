@@ -2,9 +2,6 @@
 
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
-@*<script>
-        document.getElementsByTagName("html")[0].className += " js";
-    </script>*@
 
 
 @{
@@ -120,9 +117,15 @@
 
                                         @{
                                             DateTime date1 = DateTime.Now;
+
+                                            var currentTime = date1.ToString("HH:mm");
+                                            var cTimePriv = currentTime.Split(":")[0] + currentTime.Split(":")[1];
+                                            var sTimePriv = startTime.Split(":")[0] + startTime.Split(":")[1];
                                             var date2 = date1.AddDays(1);
                                             var today = date1.ToString("yyyy-MM-dd");
                                             var tomorrow = date2.ToString("yyyy-MM-dd");
+
+
                                         }
 
                                         <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
@@ -156,6 +159,8 @@
 
                                     <tbody>
 
+
+
                                         @foreach (var item in Model.courts)
 
                                         {
@@ -171,6 +176,7 @@
                                                     var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
 
                                                     var period = (60 / Convert.ToInt32(item.CourtTimePeriod));
+
 
                                                     if (res != null && resCancel != null)
                                                     {
@@ -216,28 +222,60 @@
 
                                                             var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
 
-                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="border-right:1px solid #dee2e6; text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                    <a style="padding:0;color:#fff;">
-                                                                        @res.NickName
+
+                                                            if (res.PrivRes == true && Convert.ToInt16(sTimePriv) <= Convert.ToInt16(cTimePriv))
+                                                            {
+                                                                <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="border-right:1px solid #dee2e6; text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                        <a style="padding:0;color:#fff;">
+                                                                            @res.NickName
 
 
-                                                                    </a>
-                                                                </div>
-                                                            </td>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            }
 
+                                                            else if (res.PrivRes == false)
+
+                                                            {
+                                                                <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="border-right:1px solid #dee2e6; text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                        <a style="padding:0;color:#fff;">
+                                                                            @res.NickName
+
+
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            }
                                                         }
 
                                                         else
                                                         {
-                                                            <td borderRes="@res.ResStartTime , @period" colspan="4" style="text-align:center; border-right:1px solid #dee2e6; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                    <a style="padding:0;color:#fff;">
-                                                                        @res.NickName
+                                                            if (res.PrivRes == true && Convert.ToInt16(sTimePriv) <= Convert.ToInt16(cTimePriv))
+                                                            {
+                                                                <td borderRes="@res.ResStartTime , @period" colspan="4" style="text-align:center; border-right:1px solid #dee2e6; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                        <a style="padding:0;color:#fff;">
+                                                                            @res.NickName
 
-                                                                    </a>
-                                                                </div>
-                                                            </td>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            }
+
+                                                            else if (res.PrivRes == false)
+                                                            {
+                                                                <td borderRes="@res.ResStartTime , @period" colspan="4" style="text-align:center; border-right:1px solid #dee2e6; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                        <a style="padding:0;color:#fff;">
+                                                                            @res.NickName
+
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            }
                                                         }
 
                                                         i = i + 3;
@@ -303,7 +341,6 @@
                                                         }
                                                         i = i + 3;
                                                     }
-
 
                                                     else
 
@@ -378,6 +415,7 @@
                                     <li id="resDate" class="list-group-item"></li>
                                     <li id="resTime" class="list-group-item"></li>
                                     <li id="resNowDate" class="list-group-item"></li>
+                                    <li id="doResInf" class="list-group-item"></li>
                                 </ul>
                             </div>
                         </div>
@@ -450,15 +488,6 @@
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #004e6c;">
-                <h4 style="margin:auto; color:white">Rezervasyon Yap</h4>
-            </div>
-
-            <div class="modal-header">
-                <div class="col-sm-4">
-                    <h4>Sayın , @fullname</h4>
-                </div>
-            </div>
 
             <div id="CourtandTime">
 
@@ -686,7 +715,6 @@
     function openResModal(id ) {
 
 
-        debugger;
 
         var a = id.split(",");
         var courtId = a[0];
@@ -723,7 +751,7 @@
         var fTime = c[0] + c[1];
 
 
-        if (sTime < nowTime && fTime > nowTime) {
+        if (sTime <= nowTime && fTime >= nowTime) {
 
             getCourtTime(courtId, courtName , checkTime);
         }
@@ -830,7 +858,7 @@
                 async: false,
                 success: function (res) {
 
-                    debugger;
+
 
                     $('#rsvModal').modal('toggle');
 
@@ -947,7 +975,7 @@
         });
 
 
-        debugger;
+
 
         var priceId = [];
         $('#checkPriceTable input:checked').each(function () {
@@ -1174,12 +1202,15 @@
 
                 if (res != null) {
 
+                    debugger;
+
                     $("#nickAndFullName").text(res.resSchemaModal.nickName + ' - ' + res.resSchemaModal.fullName);
                     $("#courtName").text('Kort Adı:' + ' ' + res.resSchemaModal.courtName);
                     $("#resDate").text('Tarih-Gün:' + ' ' + date + ' - ' + day);
                     $("#resTime").text('Saat:' + ' ' + res.resSchemaModal.resStartTime + ' - ' + res.resSchemaModal.resFinishTime);
                     $("#resNowDate").text('Oluşturulma' + ':' + ' ' + nowDate + ' - ' + res.resSchemaModal.resTime);
-
+                    $("#doResInf").text('İşlem Yapan' + ':' + ' ' + res.resSchemaModal.doResInf);
+                  
                     $("#cancelRes button:nth-of-type(1)").attr("id", id);
                     $('#openResInf').modal('toggle');
 
@@ -1206,8 +1237,6 @@
     }
 
     function cancelRes(id , procedure) {
-
-        debugger;
 
         var  userId = $("#userId").text();
         $('#openResInf').modal('toggle');

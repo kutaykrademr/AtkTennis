@@ -728,6 +728,8 @@ namespace AtkTennisApp.Controllers
                 model.courts = db.courts.ToList();
                 model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
+                
+                var whoRes = db.memberLists.Where(x => x.UserId == model.reservations.doResUserId).FirstOrDefault().FullName;
 
                 model2.courtPriceLists = db.courtPriceLists.ToList();
                 model2.resSchemaModal.FullName = mem.FullName;
@@ -743,6 +745,7 @@ namespace AtkTennisApp.Controllers
                 model2.resSchemaModal.PriceInf = model.reservations.PriceInf;
                 model2.resSchemaModal.Price = model.reservations.Price;
                 model2.resSchemaModal.PriceIds = model.reservations.PriceIds;
+                model2.resSchemaModal.DoResInf = whoRes;
 
 
             }

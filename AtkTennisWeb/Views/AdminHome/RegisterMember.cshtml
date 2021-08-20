@@ -7,7 +7,7 @@
                 <div class="col-12">
                     <div style="padding-right:25%; padding-left:25%" class="card">
                         <div class="card-body register-card-body">
-                            <p class="login-box-msg">Kullanıcı Kayıt Formu </p>
+                            <p class="login-box-msg">Üye Kayıt Formu </p>
 
                             <div class="card" style="margin-bottom:20px; box-shadow: 0 0 1px rgba(255, 0, 0, 0.53), 0 1px 3px rgba(255, 0, 0, 0.42)">
                                 <div class="card-body">
@@ -33,7 +33,7 @@
                                             <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
-                                                    <a style="cursor:pointer" onclick="GetNickName()" class="fas fa-sync-alt"></a>
+                                                    <a style="cursor:pointer" onclick="getNickName()" class="fas fa-sync-alt"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -42,7 +42,7 @@
 
                                     <div class="row">
 
-                                        <div class="input-group mb-3 col-md-4">
+                                        <div class="input-group mb-3 col-md-6">
                                             <input type="text" class="form-control" id="memberNum" placeholder="Üye Numarası" autocomplete="new-password">
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
@@ -50,18 +50,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    
 
-                                        <div class="form-group col-md-4">
-                                            <select id="RegistersRole" class="form-control">
-                                                <option disabled="disabled" selected>Türü</option>
-                                                @for (int i = 0; i < Model.Count(); i++)
-                                                {
-                                                    <option>@Model[i].NormalizedName</option>
-                                                }
 
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-6">
                                             <select id="webReservation" class="form-control">
                                                 <option disabled="disabled" selected>Web Rezervasyon</option>
 
@@ -70,6 +62,7 @@
 
                                             </select>
                                         </div>
+
                                     </div>
 
                                     <div class="input-group mb-3">
@@ -81,7 +74,7 @@
                                         </div>
                                     </div>
 
-                                    <p class="login-box-msg">Not: Şifre en az bir Büyük , Bir Küçük Harf , Sayı ve Karakter Gerektirir ve En az "7" Haneli Olmalıdır. </p>
+                                    <p class="login-box-msg">Not: Şifre en az bir Büyük , Bir Küçük Harf , Sayı ve Karakter Gerektirir ve En az "6" Haneli Olmalıdır. </p>
                                 </div>
                             </div>
 
@@ -287,7 +280,7 @@
     })
 
     userObj = {
-        
+
         name: null,
         username: null,
         startDate: null,
@@ -313,20 +306,19 @@
         password: null,
         gender: null,
         nickName: null,
-        memberNumber: null,
+        privRes: null,
 
     };
 
     function register() {
 
-        
 
         userObj.name = $("#name").val();
         userObj.username = $("#username").val();
         userObj.nickName = $("#nickname").val();
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
-        userObj.role = $("#RegistersRole option:selected").text();
+        userObj.role = "ÜYE";
         userObj.condition = $("#condition option:selected").text();
         userObj.identificationNumber = $("#identificationNumber").val();
         userObj.webReservation = $("#webReservation option:selected").val();
@@ -348,6 +340,8 @@
         userObj.gender = "Male";
         userObj.memberNumber = $("#memberNum").val();
 
+
+
         try {
             $.ajax({
                 type: "Post",
@@ -357,7 +351,6 @@
                 dataType: "json",
                 async: true,
                 success: function (res) {
-
 
                     if (res != null)
 
@@ -397,14 +390,11 @@
     }
 
 
-    function GetNickName() {
+    function getNickName() {
 
         var name = $("#name").val();
 
-
-        
         var ad = name.split(" ");
-
 
         var ad1 = ad[0][0];
         var soyad1 = ad[1][0];
@@ -412,7 +402,7 @@
         var text = "";
         var possible = "0123456789";
 
-        for (var i = 0; i < 2; i++)
+        for (var i = 0; i < 3; i++)
 
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
@@ -434,7 +424,7 @@
                 }
                 else {
 
-                    GetNickName()
+                    getNickName()
 
                 }
 
@@ -445,65 +435,6 @@
                 console.log(textStatus);
             }
         });
-
-    }
-
-    function getUserName() {
-
-
-        var text = "";
-        var possible = "0123456789";
-
-        for (var i = 0; i < 4; i++)
-
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-        var userName = text;
-
-        $.ajax({
-            type: "GET",
-            url: '../AdminHome/ControlUserName',
-            cache: false,
-            data: { "userName": userName },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res == true) {
-
-                    $("#username").val(userName);
-                }
-                else {
-
-                    getUserName()
-
-                }
-
-            },
-
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-
-    }
-
-    function getPassword() {
-
-        var name = $("#name").val();
-
-        var ad = name.split(" ");
-
-        var ad1 = (ad[0][0]).toUpperCase();
-        var soyad1 = (ad[1][0]).toLowerCase();
-
-        var text = "123";
-        var char = ".";
-
-        var password = (ad1 + soyad1 + text + char);
-
-        $("#password").val(password);
 
     }
 
@@ -535,6 +466,65 @@
                 else {
 
                     getMemberNumber()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getPassword() {
+
+        var name = $("#name").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = (ad[0][0]).toUpperCase();
+        var soyad1 = (ad[1][0]).toLowerCase();
+
+        var text = "123";
+        var char = ".";
+
+        var password = (ad1 + soyad1 + text + char);
+
+        $("#password").val(password);
+
+    }
+
+    function getUserName() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var userName = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlUserName',
+            cache: false,
+            data: { "userName": userName },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#username").val(userName);
+                }
+                else {
+
+                    getUserName()
 
                 }
 

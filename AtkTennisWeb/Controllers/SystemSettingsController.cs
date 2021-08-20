@@ -176,12 +176,13 @@ namespace AtkTennisWeb.Controllers
         }
 
         //Kort Ayarları
-        public JsonResult AddNewCourt(string courtName , string courtType , int AddcourtCondition, int AddcourtWebCondition)
+        public JsonResult AddNewCourt(string courtName , string courtType , int AddcourtCondition, int AddcourtWebCondition , string courtStartTime , string courtFinishTime , string courtTimePeriod)
         {
             CourtDto model = new CourtDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + AddcourtCondition + "&courtWebCondition=" + AddcourtWebCondition));
+                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + AddcourtCondition + "&courtWebCondition=" + AddcourtWebCondition
+                    + "&courtStartTime=" + courtStartTime + "&courtFinishTime=" + courtFinishTime + "&courtTimePeriod=" + courtTimePeriod));
 
                 if (model.CourtName == null)
 
@@ -217,52 +218,13 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult GetCourtTimeInf(int id)
-        {
-            CourtResTimeViewDto model = new CourtResTimeViewDto();
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<CourtResTimeViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetCourtTimeInf?id=" + id));
-
-                if (model == null)
-
-                    return Json(false);
-            }
-            catch (Exception)
-            {
-                return Json(new CourtDto());
-            }
-
-            return Json(model);
-
-        }
-
-        public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition)
+        public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition , string courtTimeStart, string courtTimeFinish, string courtPeriodTime)
         {
             CourtDto model = new CourtDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + courtCondition + "&courtWebCondition=" + courtWebCondition + "&id=" + id));
-
-                if (model.CourtName == null)
-
-                    return Json(false);
-            }
-            catch (Exception)
-            {
-                return Json(new CourtDto());
-            }
-
-            return Json(true);
-
-        }
-
-        public JsonResult UpdateCourtTime(int id, string courtPeriod, string courtTimeStart, string courtTimeFinish)
-        {
-            CourtDto model = new CourtDto();
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourtTime?id=" + id + "&courtPeriod=" + courtPeriod + "&courtTimeStart=" + courtTimeStart + "&courtTimeFinish=" + courtTimeFinish ));
+                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + courtCondition + "&courtWebCondition=" + courtWebCondition + "&id=" + id
+                    + "&courtTimeStart=" + courtTimeStart + "&courtTimeFinish=" + courtTimeFinish + "&courtPeriodTime=" + courtPeriodTime));
 
                 if (model.CourtName == null)
 
@@ -297,26 +259,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult AddNewCourtTimeInf(string courtStartTime, int courtId, string courtFinishTime, string courtPeriod)
-        {
-            CourtTimeInfDto model = new CourtTimeInfDto();
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<CourtTimeInfDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddNewCourtTimeInf?courtId=" + courtId + "&courtStartTime=" + courtStartTime + "&courtFinishTime=" + courtFinishTime + "&courtPeriod=" + courtPeriod ));
-
-                if ( model == null)
-
-                    return Json(false);
-            }
-            catch (Exception)
-            {
-                return Json(new CourtTimeInfDto());
-            }
-
-            return Json(true);
-
-
-        }
+      
 
 
         //Kort Ücret Ayarları

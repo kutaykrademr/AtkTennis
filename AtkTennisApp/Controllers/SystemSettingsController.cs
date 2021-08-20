@@ -333,20 +333,22 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewCourt", Name = "NewCourt")]
-        public Court NewCourt(string courtName, string courtType, int courtCondition, int courtWebCondition)
+        public Court NewCourt(string courtName, string courtType, int courtCondition, int courtWebCondition , string courtTimePeriod , string courtStartTime , string courtFinishTime)
         {
 
             var Court = new Court();
 
             try
             {
-                if (courtName != null || courtType != null || courtCondition != null || courtWebCondition != null)
+                if (courtName != null || courtType != null )
                 {
                     Court.CourtName = courtName;
                     Court.CourtType = courtType;
                     Court.CourtConditions = courtCondition;
                     Court.CourtWebConditions = courtWebCondition;
-
+                    Court.CourtStartTime = courtStartTime;
+                    Court.CourtFinishTime = courtFinishTime;
+                    Court.CourtTimePeriod = courtTimePeriod;
 
                     db.Add(Court);
                     db.SaveChanges();
@@ -387,7 +389,7 @@ namespace AtkTennisApp.Controllers
 
         //kontrol eksiği var
         [HttpGet("UpdateCourt", Name = "UpdateCourt")]
-        public JsonResult UpdateCourt(int id, string courtName, string courtType, int courtCondition, int courtWebCondition)
+        public JsonResult UpdateCourt(int id, string courtName, string courtType, int courtCondition, int courtWebCondition , string courtPeriodTime, string courtTimeStart, string courtTimeFinish)
         {
             Court model = new Court();
 
@@ -400,6 +402,9 @@ namespace AtkTennisApp.Controllers
                 model.CourtType = courtType;
                 model.CourtConditions = courtCondition;
                 model.CourtWebConditions = courtWebCondition;
+                model.CourtStartTime = courtTimeStart;
+                model.CourtFinishTime = courtTimeFinish;
+                model.CourtTimePeriod = courtPeriodTime;
 
                 db.Update(model);
                 db.SaveChanges();

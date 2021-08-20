@@ -42,6 +42,7 @@
 @{
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var roleName = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
 
 @{
@@ -183,7 +184,7 @@
                         }
 
                         <li class="nav-item">
-                            <a href="/Public/MemberInf" class="nav-link">
+                            <a style="background-color:#625e5e" href="/Public/MemberInf" class="nav-link">
                                 <i class="fas fa-id-card nav-icon"></i>
                                 <p>Kullanıcı Bilgilerim </p>
                             </a>
@@ -192,8 +193,8 @@
                         @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Advisory)
 
                         {
-                            <li class="nav-item menu-is-opening ">
-                                <a href="#" class="nav-link">
+                            <li class="nav-item  ">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
                                     <i class="nav-icon fas fa-user-circle"></i>
                                     <p>
                                         Danışma
@@ -201,6 +202,7 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
+
                                     <li class="nav-item">
                                         <a href="~/AdminHome/NewRegister" class="nav-link">
                                             <i class="fas fa-plus nav-icon"></i>
@@ -208,21 +210,49 @@
                                         </a>
                                     </li>
 
-
                                     <li class="nav-item">
                                         <a href="~/AdminHome/ListUser" class="nav-link">
                                             <i class="fas fa-list-ol nav-icon"></i>
                                             <p>Kullanıcılar Genel Liste</p>
                                         </a>
                                     </li>
+
+                                    <li class="nav-item">
+                                        <a href="~/AdminHome/RegisterMember" class="nav-link">
+                                            <i class="fas fa-plus nav-icon"></i>
+                                            <p>Üye Kaydı</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="~/AdminHome/ListMember" class="nav-link">
+                                            <i class="fas fa-list-ol nav-icon"></i>
+                                            <p>Üye Genel Liste</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="fas fa-plus nav-icon"></i>
+                                            <p>Öğrenci Kaydı</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="fas fa-list-ol nav-icon"></i>
+                                            <p>Öğrenci Genel Liste</p>
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </li>
                         }
 
                         @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reservations)
                         {
-                            <li class="nav-item  menu-is-opening">
-                                <a href="#" class="nav-link">
+                            <li class="nav-item ">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
                                     <i class="nav-icon fas fa-bell"></i>
                                     <p>
                                         Rezervasyonlar
@@ -233,14 +263,19 @@
 
                                 <ul class="nav nav-treeview">
 
+                                    @{
+                                        if (roleName != "Yönetici")
+                                        {
+                                            <li class="nav-item">
+                                                <a href="~/Public/Reservation?date=@date" class="nav-link">
+                                                    <i class="fas fa-calendar-check nav-icon"></i>
+                                                    <p>Rezervasyon Yap</p>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
 
 
-                                    <li class="nav-item">
-                                        <a href="~/Public/Reservation?date=@date" class="nav-link">
-                                            <i class="fas fa-calendar-check nav-icon"></i>
-                                            <p>Rezervasyon Yap</p>
-                                        </a>
-                                    </li>
 
                                     <li class="nav-item">
                                         <a href="~/Public/ReservationList" class="nav-link">
@@ -267,10 +302,54 @@
                         }
 
 
+                        <li  class="nav-item ">
+                            <a style="background-color:#625e5e" href="#" class="nav-link">
+                                <i class="nav-icon fas fa-bell"></i>
+                                <p>
+                                    Üyeler
+                                    <i class="fas fa-angle-left right"></i>
+
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+
+                                <li class="nav-item">
+                                    <a href="~/Public/ReservationCancel" class="nav-link">
+                                        <i class="far fa-window-close nav-icon"></i>
+                                        <p>Dolap İşlemleri</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-wallet nav-icon"></i>
+                                        <p>Aidat Ödemeleri</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-wallet nav-icon"></i>
+                                        <p>Üye Borçlandırma</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <i class="fas fa-wallet nav-icon"></i>
+                                        <p>Potansiyel Üye</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
                         @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
                         {
                             <li class="nav-item ">
-                                <a href="#" class="nav-link">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
                                     <i class="nav-icon fas fa-cog"></i>
                                     <p>
                                         Sistem Ayarları
@@ -548,7 +627,7 @@
 
     </script>
 
-    
+
     <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/adminRoot/js/Chart.min.js"></script>

@@ -216,10 +216,6 @@
                     <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
                     <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
 
-
-
-
-
                     <div class="card">
                         <div class="card-body">
 
@@ -292,16 +288,16 @@
 
                                                     var period = (60 / Convert.ToInt32(item.CourtTimePeriod));
 
-
-
-
+                         
+                                                    
 
                                                     if (res != null && resCancel != null && res.UserId == res.doResUserId)
                                                     {
+                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
 
                                                         var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
 
-                                                        <td draggable="true" class="ui-draggable" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">
+                                                        <td data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -315,14 +311,15 @@
                                                             <div style="position: relative;height:3px;background-color:#e61a1a"></div>
                                                         </td>
 
-                                                        i = i + 3;
+                                                        i = i + Convert.ToInt32(colspanVal) - 1;
                                                     }
 
                                                     else if (res != null && resCancel != null)
                                                     {
+                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
                                                         var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
 
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ;">
+                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -332,15 +329,15 @@
                                                             <div style="position: relative;height:3px;background-color:#e61a1a"></div>
                                                         </td>
 
-                                                        i = i + 3;
+                                                        i = i + Convert.ToInt32(colspanVal) - 1;
                                                     }
 
                                                     else if (res != null && res.UserId == res.doResUserId)
                                                     {
-
+                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
                                                         var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
 
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6; ">
+                                                        <td  borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6; ">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -353,15 +350,16 @@
 
                                                         </td>
 
-                                                        i = i + 3;
+                                                        i = i + Convert.ToInt32(colspanVal) - 1;
                                                     }
 
                                                     else if (res != null)
                                                     {
 
+                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
                                                         var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
 
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="4" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                        <td  borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
                                                             <div style="background-color:#1bbc27!important;color:#ffffff!important;">
                                                                 <a style="padding:0;color:#fff;">
                                                                     @res.NickName
@@ -371,16 +369,17 @@
 
                                                         </td>
 
-                                                        i = i + 3;
+                                                        i = i + Convert.ToInt32(colspanVal) - 1;
                                                     }
-
-
 
                                                     else if (resCancel != null)
                                                     {
-                                                        var time = Model.resTimes[i].ResTimes;
+                                                        var time = resCancel.ResStartTime;
+                                                        var time2 = resCancel.ResFinishTime;
 
-                                                        for (var t = 0; t < 4; t++)
+                                                        var colspanVal = (Convert.ToDateTime(resCancel.ResFinishTime) - Convert.ToDateTime(resCancel.ResStartTime)).TotalHours * 4;
+
+                                                        for (var t = 0; t < colspanVal; t++)
                                                         {
                                                             if (period == 1)
                                                             {
@@ -392,6 +391,7 @@
                                                                 t = t + 3;
 
                                                             }
+
                                                             else if (period == 2)
                                                             {
                                                                 <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
@@ -410,8 +410,10 @@
 
                                                                     time = hour + ":" + (min + 30);
                                                                 }
+
                                                                 t = t + 1;
                                                             }
+
                                                             else
                                                             {
                                                                 <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
@@ -422,10 +424,13 @@
                                                                 var c = time.Split(":");
                                                                 var hour = Convert.ToInt32(c[0]);
                                                                 var min = Convert.ToInt32(c[1]);
+
                                                                 if (min == 45)
+
                                                                 {
                                                                     time = (hour + 1) + ":" + "00";
                                                                 }
+
                                                                 else
                                                                 {
 
@@ -434,9 +439,9 @@
                                                             }
 
                                                         }
-                                                        i = i + 3;
-                                                    }
 
+                                                        i = i + Convert.ToInt16(colspanVal - 1);
+                                                    }
 
                                                     else
 
@@ -522,6 +527,7 @@
                                     <li id="resDate" class="list-group-item"></li>
                                     <li id="resTime" class="list-group-item"></li>
                                     <li id="resNowDate" class="list-group-item"></li>
+                                    <li id="doResInf" class="list-group-item"></li>
                                 </ul>
                             </div>
                         </div>
@@ -634,11 +640,6 @@
                             </ul>
                         </nav>
                     </div>
-
-                    <div style="display:none" id="updButton">
-                        <button type="button" class="btn btn-primary" onclick="updateReservation(this.id)">Güncelle</button>
-                    </div>
-
                 </div>
 
             </div>
@@ -657,60 +658,95 @@
                 </div>
             </div>
 
-            <div id="priceList" style="display:none">
+            <div id="priceList" style="display:block">
+
                 <div class="modal-header" style="background-color: #004e6c;">
                     <h4 style="margin:auto; color:white">Ücretlendirme</h4>
                 </div>
 
-
-                <div class="modal-header">
-                    <div class="col-sm-12">
-                        <div class="form-group" style="text-align:center">
-                            <table class="table table-bordered ">
-                                <thead>
-                                    <tr>
-                                        <th style="font-weight:bold" scope="col">Adı</th>
-                                        <th style="font-weight:bold" scope="col">Fiyatı</th>
-                                        <th style="font-weight:bold" scope="col">Seç</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item2 in Model.courtPriceLists)
-                                    {
-                                        if (item2.Condition == "1")
+                <div class="row">
+                    <div class="modal-header col-md-9">
+                        <div class="col-sm-12">
+                            <div class="form-group" style="text-align:center">
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-weight:bold" scope="col">Adı</th>
+                                            <th style="font-weight:bold" scope="col">Fiyatı</th>
+                                            <th style="font-weight:bold" scope="col">Seç</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item2 in Model.courtPriceLists)
                                         {
-                                            <tr>
-                                                <td>@item2.Name</td>
-                                                <td>@item2.CourtPrice ₺ </td>
-                                                <td>
-                                                    <div class="custom-control custom-checkbox " id="checkPriceTables">
+                                            if (item2.Condition == "1")
+                                            {
+                                                <tr>
+                                                    <td>@item2.Name</td>
+                                                    <td>@item2.CourtPrice ₺ </td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox " id="checkPriceTables">
 
-                                                        @{ if (item2.PriceType == "1")
-                                                            {
-                                                                <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                            @{ if (item2.PriceType == "1")
+                                                                {
+                                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                                }
+
                                                             }
-
-                                                            else
-                                                            {
-                                                                <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
-                                                            }
-
-                                                        }
-                                                        <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                            <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
-                                    }
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
-                                        <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
+                                            <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-header col-md-3">
+                        <div class="col-sm-12">
+                            <div class="form-group" style="text-align:center">
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-weight:bold" scope="col">Rezervasyon Görevi</th>
+                                            <th style="font-weight:bold" scope="col">Tanımla</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td>Görev</td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox" id="privResCheck">
+
+                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="privChecked">
+                                                    <label for="privChecked" class="custom-control-label"></label>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -721,11 +757,174 @@
                 </div>
 
 
-
                 <div class="modal-footer" id="forApproveId">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
                     <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
                 </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModalUpd">
+    <div class="modal-dialog modal-lg" style="max-width:1000px; ">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#efefef;">
+                <h5 style="margin:auto; font-family:sans-serif; color:inherit">Rezervasyon Yap</h5>
+            </div>
+
+            <div class="modal-header">
+                <div class="row">
+
+                    <div id="selCourt" class="col-md-6">
+
+                        <select id="selectedCourt" class="form-control">
+
+                            @foreach (var item in Model.courts)
+                            {
+                                <option value="@item.CourtId">@item.CourtName</option>
+
+                            }
+
+                        </select>
+                    </div>
+
+
+                    <div id="selTime" class="col-md-6">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+
+                                <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
+                                <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
+                                <li class="page-item"><input class="form-control" type="date" id="timeNowUpdModal" style="cursor:pointer; background-color:#e7505a; color:white"></li>
+                                <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="CourtandTimes">
+
+            </div>
+
+            <div class="modal-header">
+                <div class="row" id="court_select">
+                    <div id="ResUpdModal" style="display: contents;">
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="priceList" style="display:block">
+
+                <div class="modal-header" style="background-color: #004e6c;">
+                    <h4 style="margin:auto; color:white">Ücretlendirme</h4>
+                </div>
+
+                <div class="row">
+                    <div class="modal-header col-md-9">
+                        <div class="col-sm-12">
+                            <div class="form-group" style="text-align:center">
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-weight:bold" scope="col">Adı</th>
+                                            <th style="font-weight:bold" scope="col">Fiyatı</th>
+                                            <th style="font-weight:bold" scope="col">Seç</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item2 in Model.courtPriceLists)
+                                        {
+                                            if (item2.Condition == "1")
+                                            {
+                                                <tr>
+                                                    <td>@item2.Name</td>
+                                                    <td>@item2.CourtPrice ₺ </td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox " id="checkPriceTables">
+
+                                                            @{ if (item2.PriceType == "1")
+                                                                {
+                                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                                }
+
+                                                            }
+                                                            <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
+                                            <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-header col-md-3">
+                        <div class="col-sm-12">
+                            <div class="form-group" style="text-align:center">
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-weight:bold" scope="col">Rezervasyon Görevi</th>
+                                            <th style="font-weight:bold" scope="col">Tanımla</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td>Görev</td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox" id="privResCheck">
+
+                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="privChecked">
+                                                    <label for="privChecked" class="custom-control-label"></label>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div style="display:none" class="modal-footer">
+                    <textbox style="color:black; " id="userId">@userId</textbox>
+                </div>
+
+
+                <div class="modal-footer" id="forApproveUpdId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updateReservation(this.id)">Güncelle</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -819,19 +1018,6 @@
             $('[data-toggle="popover"]').popover()
         })
 
-        //    var now = new Date();
-        //    var month = (now.getMonth() + 1);
-        //    var day = now.getDate();
-
-        //if (month < 10)
-        //    month = "0" + month;
-        //if (day < 10)
-        //    day = "0" + day;
-
-        //var today = now.getFullYear() + '-' + month + '-' + day;
-
-
-
         //Rezervasyon Şema Tarih
 
         $('#timeNow').val(picker);
@@ -864,7 +1050,6 @@
 
         var days = new Date(time);
         var getday = days.getDay();
-
 
 
         switch (getday) {
@@ -932,6 +1117,7 @@
 
     });
 
+
     function openUpdateResModal(id) {
         $.ajax({
             type: "GET",
@@ -942,79 +1128,17 @@
             async: true,
             success: function (res) {
 
-                debugger;
+
 
                 if (res != null) {
 
-                    var xid = res.reservations.court.courtId + "," + res.reservations.court.courtName + "," + "upd";
+                    var xid = res.reservations.court.courtId + "," + res.reservations.court.courtName + "," + id;
 
                     $("#updButton button:nth-of-type(1)").attr("id", id);
 
                     $('#openResInf').modal('toggle');
 
-                    openResModal(xid);
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Üye Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function updateReservation(id) {
-
-        var courtId = $("#selectCourt option:selected").val();
-
-
-        var times = [];
-        $('#checkTimeTable input:checked:not(:disabled)').each(function () {
-            times.push(this.name);
-        });
-
-        var ResStartTime = times[0];
-        var ResFinishTime = times[(times.length - 1)];
-
-        var time = $('#timeNow').val();
-
-
-        $.ajax({
-            type: "GET",
-            url: '../AdminHome/UpdateResAdmin',
-            cache: false,
-            data: { "id": id, "startTime": ResStartTime, "finishTime": ResFinishTime, "time": time, "cId": courtId },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                debugger;
-
-                if (res != null) {
-
-                    swal({
-                        title: "Rezervasyon Düzenlendi",
-                        text: "Rezervasyon  Başarılı Bir Şekilde Düzenlendi !",
-                        icon: "success",
-                        button: "Tamam",
-                    }).then((value) => {
-
-
-                        window.location.href = "Index?date=" + $('#timeNow').val();
-
-                    });
+                    openResModalUpd(xid);
                 }
 
                 else {
@@ -1053,7 +1177,7 @@
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName + ' - ' + res.memberLists[i].userName);
+                    mem.push(res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName );
                 }
 
                 $("#findMember").autocomplete({
@@ -1203,7 +1327,6 @@
 
     function openResModal(id) {
 
-
         var modalDate = $("#timeNow").val();
         $("#timeNowModal").val(modalDate);
 
@@ -1213,12 +1336,12 @@
         var courtId = a[0];
         var courtName = a[1];
 
-
         var resStartTime = $('#doRes').attr('start');
         var resFinishTime = $('#doRes').attr('finish');
-        var dt = new Date();
-        var hours = dt.getHours();
-        var min = dt.getMinutes();
+
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var min = currentTime.getMinutes();
 
         if (hours < 10)
         {
@@ -1233,8 +1356,6 @@
         else
             var time =  hours + ":" + min;
 
-
-
         var a = time.split(":");
         var b = resStartTime.split(":");
         var c = resFinishTime.split(":");
@@ -1243,16 +1364,35 @@
         var sTime = b[0] + b[1];
         var fTime = c[0] + c[1];
 
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        var asdz = ($('#timeNowModal').val() < today);
+
+
+
+        if ($('#timeNowModal').val() < today) {
+
+            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+                button: "Tamam",
+            });
+
+        }
+
+        else {
+
+            getCourtTime(courtId, courtName, timePickerModal);
+
+                $('#rsvModal').modal('toggle');
+        }
+
 
 
         $("#selectCourt option:selected").text(courtName);
-
-        $('#findMember').change(function () {
-
-            $("#priceList").css("display", "block");
-
-        });
-
 
         $('#selectCourt').on('change', function () {
 
@@ -1263,7 +1403,6 @@
 
         });
 
-
         $('#timeNowModal').change(function () {
 
             var courtNameOption = $("#selectCourt option:selected").text();
@@ -1273,47 +1412,12 @@
 
         });
 
-        if (sTime < nowTime && fTime > nowTime) {
-
-            getCourtTime(courtId, courtName, timePickerModal);
-
-            if (id.split(",")[2] == "upd") {
-                debugger;
-
-                $('#selCourt').removeClass().addClass('col-lg-4');
-                $('#selTime').removeClass().addClass('col-lg-4');
-                $('#updButton').removeClass().addClass('col-lg-4');
-
-
-                $("#findMem").css("display", "none");
-                $("#updButton").css("padding-left", "286px");
-                $("#updButton").css("display", "block");
-
-
-
-                $('#rsvModal').modal('toggle');
-            }
-
-            else {
-
-                $('#rsvModal').modal('toggle');
-            }
-
-        }
-
-        else {
-
-            swal("Rezervasyon Saatleri Dışındasınız !", "Rezervasyon Saatleri: " + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.", "warning", {
-                button: "Tamam",
-            });
-        }
     }
 
     function getCourtTime(courtId, courtName, timePickerModal ) {
 
-
-
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
+
 
         var dt = new Date();
 
@@ -1349,50 +1453,13 @@
         var b = date.split("-");
         var timeInf = b[2] + '-' + b[1] + '-' + b[0];
 
-
-        //ResNextDayMember
-        function parseDate(str) {
-            var mdy = str.split('-');
-            return new Date(mdy[0], mdy[1] - 1, mdy[2]);
-        }
-
-        function datediff(first, second) {
-            // Take the difference between the dates and divide by milliseconds per day.
-            // Round to nearest whole number to deal with DST.
-            return Math.round((second - first) / (1000 * 60 * 60 * 24));
-        }
-
-        var x = today;
-        var y = timePickerModal;
-
-        var diff = datediff(parseDate(x), parseDate(y));
-
         if (timePickerModal < today) {
 
-            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız." , "warning", {
+            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
                 button: "Tamam",
             });
 
-            $("#timeNowModal").val(today)
-        }
-
-        else if ($("#RoleName").val() == "Üye" && diff > 3 ) {
-
-
-                swal("Uyarı !", "En Fazla 3 Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
-                    button: "Tamam",
-                });
-
-                $("#dateInf").val(today)
-        }
-
-        else if ($("#RoleName").val() == "Antrenör" && diff > 6) {
-
-                swal("Uyarı !", "En Fazla 6 Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
-                    button: "Tamam",
-                });
-
-                $("#dateInf").val(today)
+            $("#timeNowModal").val(today);
         }
 
         else
@@ -1400,12 +1467,11 @@
                 type: "POST",
                 url: '../Public/GetResTime',
                 cache: false,
-                data: { "dateInf": timePickerModal , courtId },
+                data: { "dateInf": timePickerModal, courtId },
                 dataType: "json",
                 async: false,
                 success: function (res) {
 
-                    debugger;
 
                     switch (getday) {
                         case 0:
@@ -1440,11 +1506,11 @@
 
                     if (res.length > 0) {
 
-                            $("#ResModal").empty();
+                        $("#ResModal").empty();
 
                         for (var i = 0; i < res.length; i++) {
 
-                                NewRow = "";
+                            NewRow = "";
 
 
                             if (res[i].isTaken == true) {
@@ -1475,7 +1541,7 @@
                             }
 
 
-                                $("#ResModal").append(NewRow);
+                            $("#ResModal").append(NewRow);
                         }
 
                     }
@@ -1488,6 +1554,273 @@
             });
 
     }
+
+
+
+    function openResModalUpd(id) {
+
+            var modalDate = $("#timeNow").val();
+            $("#timeNowUpdModal").val(modalDate);
+
+            var timePickerModal = modalDate;
+
+            var a = id.split(",");
+            var courtId = a[0];
+            var courtName = a[1];
+            var resId = a[2];
+
+
+            var dt = new Date();
+            var dd = String(dt.getDate()).padStart(2, '0');
+            var mm = String(dt.getMonth() + 1).padStart(2, '0');
+            var yyyy = dt.getFullYear();
+
+            var today = yyyy + '-' + mm + '-' + dd;
+
+            if ($('#timeNowUpdModal').val() < today) {
+
+                swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+                    button: "Tamam",
+                });
+
+            }
+
+            else {
+
+                getCourtTimeUpd(courtId, courtName, timePickerModal, resId);
+
+                $('#rsvModalUpd').modal('toggle');
+
+            }
+
+            $("#selectedCourt option:selected").text(courtName);
+
+            $('#selectedCourt').on('change', function () {
+
+                var courtNameOption = $("#selectedCourt option:selected").text();
+                var courtIdOption = $("#selectedCourt option:selected").val();
+
+                getCourtTimeUpd(courtIdOption, courtNameOption, $('#timeNowUpdModal').val(), resId);
+
+            });
+
+            $('#timeNowUpdModal').change(function () {
+
+                var courtNameOption = $("#selectedCourt option:selected").text();
+                var courtIdOption = $("#selectedCourt option:selected").val();
+
+                getCourtTimeUpd(courtIdOption, courtNameOption, $('#timeNowUpdModal').val(), resId);
+
+            });
+
+    }
+
+    function getCourtTimeUpd(courtId, courtName, timePickerModal , resId) {
+
+        debugger;
+
+            $("#forApproveUpdId button:nth-of-type(2)").attr("id", resId);
+
+
+            var dt = new Date();
+
+            var hours = dt.getHours();
+            var min = dt.getMinutes();
+
+            if (hours < 10) {
+                var time = "0" + hours + ":" + min;
+            }
+            else if (min < 10) {
+                var time = hours + ":" + "0" + min;
+            }
+            else if (hours < 10 && min < 10) {
+                var time = "0" + hours + ":" + "0" + min;
+            }
+            else
+                var time = hours + ":" + min;
+
+
+
+            var days = new Date(timePickerModal);
+            var getday = days.getDay();
+
+            var dd = String(dt.getDate()).padStart(2, '0');
+            var mm = String(dt.getMonth() + 1).padStart(2, '0');
+            var yyyy = dt.getFullYear();
+
+            var today = yyyy + '-' + mm + '-' + dd;
+
+
+            var date = timePickerModal;
+            var b = date.split("-");
+            var timeInf = b[2] + '-' + b[1] + '-' + b[0];
+
+            if (timePickerModal < today) {
+
+                swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+                    button: "Tamam",
+                });
+
+                $("#timeNowUpdModal").val(today);
+            }
+
+            else
+                $.ajax({
+                    type: "POST",
+                    url: '../AdminHome/GetResUpdTime',
+                    cache: false,
+                    data: { "dateInf": timePickerModal, courtId, resId },
+                    dataType: "json",
+                    async: false,
+                    success: function (res) {
+
+
+                        switch (getday) {
+                            case 0:
+                                day = "Pazar";
+                                break;
+                            case 1:
+                                day = "Pazartesi";
+                                break;
+                            case 2:
+                                day = "Salı";
+                                break;
+                            case 3:
+                                day = "Çarşamba";
+                                break;
+                            case 4:
+                                day = "Perşembe";
+                                break;
+                            case 5:
+                                day = "Cuma";
+                                break;
+                            case 6:
+                                day = "Cumartesi";
+                        }
+
+                        $("#CourtandTimes").empty();
+                        row = "";
+                        row += '<div class="modal-header" style="background-color: #004e6c;">';
+                        row += '<h4 style=" margin:auto; color:white"><i class="fas fa-flag nav-icon"></i>' + ' ' + courtName + ' ' + ' - ' + ' ' + timeInf + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
+                        row += '</div>';
+                        $("#CourtandTimes").append(row);
+
+
+                        if (res.length > 0) {
+
+                            $("#ResUpdModal").empty();
+
+                            for (var i = 0; i < res.length; i++) {
+
+                                NewRow = "";
+
+
+                                if (res[i].isTaken == true) {
+                                    NewRow += '<div style="background-color:rgb(236, 0, 18);" class="form-group reservationForm">';
+                                    NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeUpdTable">';
+                                    NewRow += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+                                    NewRow += '<label style="color:white; font-weight:inherit;" for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
+                                    NewRow += '</div></div>';
+                                }
+
+
+
+                                else if (res[i].start <= time && date == today) {
+                                    NewRow += '<div style="background-color:rgb(236, 0, 18);" class="form-group reservationForm">';
+                                    NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeUpdTable">';
+                                    NewRow += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+                                    NewRow += '<label style="color:white; font-weight:inherit; for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
+                                    NewRow += '</div></div>';
+                                }
+
+
+                                else {
+                                    NewRow += '<div  class="form-group reservationForm">';
+                                    NewRow += '<div class="custom-control custom-checkbox custom-control2 " id="checkTimeUpdTable">';
+                                    NewRow += '<input onclick="checkMeUpd(this.id)" class="custom-control-input custom-control-input-primary" type="checkbox" id= "ti_' + res[i].timeId + '" name= "' + res[i].start + '" per= "' + res[i].period + '">';
+                                    NewRow += '<label style="font-weight:inherit;" for="ti_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
+                                    NewRow += '</div></div>';
+                                }
+
+
+                                $("#ResUpdModal").append(NewRow);
+                            }
+
+                        }
+                    },
+
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+
+    }
+
+    function updateReservation(id) {
+
+        var courtId = $("#selectedCourt option:selected").val();
+
+
+        var times = [];
+        $('#checkTimeUpdTable input:checked:not(:disabled)').each(function () {
+            times.push(this.name);
+        });
+
+        var ResStartTime = times[0];
+        var ResFinishTime = times[(times.length - 1)];
+
+        var time = $('#timeNow').val();
+
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/UpdateResAdmin',
+            cache: false,
+            data: { "id": id, "startTime": ResStartTime, "finishTime": ResFinishTime, "time": time, "cId": courtId },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                if (res != null) {
+
+                    swal({
+                        title: "Rezervasyon Düzenlendi",
+                        text: "Rezervasyon  Başarılı Bir Şekilde Düzenlendi !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
+
+
+                        window.location.href = "Index?date=" + $('#timeNow').val();
+
+                    });
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Üye Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
+
 
     function getPrice() {
 
@@ -1548,7 +1881,7 @@
 
         var today = yyyy + '-' + mm + '-' + dd;
 
-        var userName = memberUserName[2];
+        var userName = memberUserName[1];
 
         var resobject = {
 
@@ -1562,8 +1895,18 @@
             ResNowDate: '',
             Price: '',
             PriceIds: '',
-            UserName:'',
+            UserName: '',
+            PrivRes: '',
 
+        }
+
+
+        var x = $("#privResCheck input:checkbox").is(":checked")
+        if (x == true) {
+            resobject.PrivRes = true;
+        }
+        else {
+            resobject.PrivRes = false;
         }
 
         resobject.ResNowDate = today;
@@ -1767,6 +2110,7 @@
                     $("#resDate").text('Tarih-Gün:' + ' ' + date + ' - ' + day);
                     $("#resTime").text('Saat:' + ' ' + res.resSchemaModal.resStartTime + ' - ' + res.resSchemaModal.resFinishTime);
                     $("#resNowDate").text('Oluşturulma' + ':' + ' ' + nowDate + ' - ' + res.resSchemaModal.resTime);
+                    $("#doResInf").text('İşlem Yapan' + ':' + ' ' + res.resSchemaModal.doResInf);
 
                     $("#cancelRes button:nth-of-type(1)").attr("id", id);
                     $("#updateRes button:nth-of-type(1)").attr("id", id);
@@ -1900,19 +2244,30 @@
 
     function checkMe(id) {
 
-       
-
         var per = $("#" + id).attr("per");
         var checkID = parseInt(id.split("_")[1]);
 
         var checkList = [];
         var checkTrueList = [];
+        
 
         $('#checkTimeTable input:checked:not(:disabled)').each(function () {
             checkTrueList.push(this.id);
         });
 
- 
+        for (var i = 0; i < checkTrueList.length; i++) {
+
+            var x = checkTrueList[i];
+
+            if (x != id) {
+
+                checkList.push(x);
+            }
+
+        }
+        checkList.push(id);
+
+
 
         if (per == 15) {
 
@@ -1938,15 +2293,15 @@
 
 
 
-            //else if (checkTrueList.length > 4 && checkTrueList[(checkTrueList.length - 1)].split("_")[1] - checkTrueList[(checkTrueList.length - 2)].split("_")[1] == 1 ) {
+            else if (checkTrueList.length > 4 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
 
-            //    for (var i = 0; i < checkTrueList.length; i++) {
-            //        var checkedTime = checkTrueList[i];
+                for (var i = 0; i < checkTrueList.length; i++) {
+                    var checkedTime = checkTrueList[i];
 
-            //        $('#' + checkedTime).prop('checked', true);
-            //    }
+                    $('#' + checkedTime).prop('checked', true);
+                }
 
-            //}
+            }
 
 
             else if (checkTrueList.length > 4) {
@@ -1979,7 +2334,17 @@
 
         else if (per == 30) {
 
-            if (checkTrueList.length > 2) {
+            if (checkTrueList.length > 2 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', true);
+                }
+
+            }
+
+            else if (checkTrueList.length > 2) {
 
                 for (var i = 0; i < checkTrueList.length; i++) {
 
@@ -2000,6 +2365,8 @@
             }
 
             else if (checkTrueList.length == 1) {
+
+
                 for (var i = 0; i < checkTrueList.length; i++) {
 
                     var checkedTime = checkTrueList[i];
@@ -2041,57 +2408,176 @@
 
                 }
             }
+    }
+
+    function checkMeUpd(id) {
+
+        var per = $("#" + id).attr("per");
+        var checkID = parseInt(id.split("_")[1]);
+
+        var checkList = [];
+        var checkTrueList = [];
+
+
+        $('#checkTimeUpdTable input:checked:not(:disabled)').each(function () {
+            checkTrueList.push(this.id);
+        });
+
+        for (var i = 0; i < checkTrueList.length; i++) {
+
+            var x = checkTrueList[i];
+
+            if (x != id) {
+
+                checkList.push(x);
+            }
+
+        }
+        checkList.push(id);
 
 
 
+        if (per == 15) {
+
+            if (checkTrueList.length < 4 && checkTrueList.length == 3) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+            }
+
+
+            else if (checkTrueList.length < 4 && checkTrueList.length != 1) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    $("#ti_" + i).prop('checked', false);
+                }
+
+            }
+
+
+
+            else if (checkTrueList.length > 4 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', true);
+                }
+
+            }
+
+
+            else if (checkTrueList.length > 4) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 4); i++) {
+
+                    $("#ti_" + i).prop('checked', true);
+
+                    checkList.push("ti_" + i);
+
+                }
+            }
+
+            else
+                for (var i = checkID; i < (checkID + 4); i++) {
+
+                    $("#ti_" + i).prop('checked', true);
+
+                    checkList.push("ti_" + i);
+
+                }
+        }
+
+        else if (per == 30) {
+
+            if (checkTrueList.length > 2 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', true);
+                }
+
+            }
+
+            else if (checkTrueList.length > 2) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 2); i++) {
+
+                    $("#ti_" + i).prop('checked', true);
+
+                    checkList.push("ti_" + i);
+
+
+                }
+            }
+
+            else if (checkTrueList.length == 1) {
+
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 2); i++) {
+
+                    $("#ti_" + i).prop('checked', true);
+
+                    checkList.push("ti_" + i);
+
+
+                }
+            }
+
+        }
+
+        else
+
+            if (checkTrueList.length > 1) {
+
+                for (var i = 0; i < checkTrueList.length; i++) {
+
+                    var checkedTime = checkTrueList[i];
+
+                    $('#' + checkedTime).prop('checked', false);
+                }
+
+
+                for (var i = checkID; i < (checkID + 1); i++) {
+
+                    $("#ti_" + i).prop('checked', true);
+
+                    checkList.push("ti_" + i);
+
+
+                }
+            }
     }
 
 </script>
 
 
-<script>
-    $(function () {
-
-        $(".ui-draggable").draggable({ revert: true });
-
-        $(".ui-draggable").draggable({
-
-            start: function (event, ui) {
-                // nesne sürüklenmeye başladığı anda yapılacak işlemler.
-
-                console.log(event);
-                console.log(ui);
-            },
-            drag: function (event, ui) {
-
-                //Sürüklenme anında yapılacak işlemler.
-                console.log(event);
-                console.log(ui);
-            },
-            stop: function (event, ui) {
-
-                console.log(event);
-                console.log(ui);
-            }
-        });
-
-        $(".droppable").droppable({
-
-
-
-            drop: function (event, ui) {
-                $(this)
-
-
-
-            }
-
-
-        });
-
-
-    });
-
-
-
-</script>
