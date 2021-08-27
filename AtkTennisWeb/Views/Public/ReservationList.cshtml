@@ -195,7 +195,8 @@
                                     <th>Ücret Detayı</th>
                                     <th>Ücret Durumu</th>
                                     <th>Durumu</th>
-                                    <th>İşlemler</th>
+                                    <th>Açıklama</th>
+
 
 
                                 </tr>
@@ -214,30 +215,15 @@
                                                 <td>@item.Court.CourtName</td>
                                                 <td>@item.Price ₺</td>
 
-                                                @if (item.PriceInf == false)
-                                                {
-                                                    <td>Ödenmedi</td>
-                                                }
-
-                                                else
+                                                @if (item.PriceInf == true)
                                                 {
                                                     <td>Ödendi</td>
                                                 }
 
                                                 <td>Aktif</td>
 
-                                                @if (item.PriceInf == false)
-                                                {
-                                                    <td>
-                                                        <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" id="@item.ResId,@item.UserId" class="btn btn-warning" onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
-                                                        @*<button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>*@
-                                                    </td>
-                                                }
+                                                <td>Ödendi</td>
 
-                                                else
-                                                {
-                                                    <td>Ödeme Alındı</td>
-                                                }
 
                                             </tr>
                                         }
@@ -254,25 +240,29 @@
                                             <tr style="text-align:center" id="">
                                                 <td>@item2.ResDate</td>
                                                 <td>@item2.ResStartTime - @item2.ResFinishTime</td>
+
                                                 @{
                                                     var court = Model.courts.Where(x => x.CourtId == item2.CourtId).FirstOrDefault();
                                                 }
+
                                                 <td>@court.CourtName</td>
                                                 <td>@item2.Price ₺</td>
 
-                                                @if (item2.PriceInf == false)
-                                                {
-                                                    <td>Ödenmedi</td>
-                                                }
 
+                                                @if (item2.Procedure == true)
+                                                {
+                                                    <td>İade</td>
+                                                }
                                                 else
                                                 {
                                                     <td>Ödendi</td>
                                                 }
 
+
                                                 @{
                                                     var x = Model.memberLists.FirstOrDefault(x => x.UserId == item2.CancelResUserId);
                                                 }
+
                                                 @if (x.UserId == userId)
                                                 {
                                                     <td>İptal Edildi - Kendi</td>
@@ -282,17 +272,10 @@
                                                     <td>İptal Edildi - @x.UserName - @x.Role</td>
                                                 }
 
-                                                @if (item2.PriceInf == false && item2.Procedure == false)
-                                                {
-                                                    <td>
-                                                        <button style="color:white; background-color:#17a2b8 ;  border-color:#17a2b8" class="btn btn-warning" id="@item2.ResId,@item2.UserId" onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
-                                                        @*<button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>*@
-                                                    </td>
-                                                }
 
-                                                else if (item2.Procedure == true)
+                                                @if (item2.Procedure == true)
                                                 {
-                                                    <td>İptal Edildi / Borç Yok </td>
+                                                    <td>İptal Edildi / Para İade / Borç Yok </td>
                                                 }
 
                                                 else
@@ -305,6 +288,7 @@
 
                                     }
                                 }
+
                                 else if (newCount > 0 && newResCancelModel.Count() <= 0)
                                 {
                                     @foreach (var item in newModel)
@@ -317,35 +301,19 @@
                                                 <td>@item.Court.CourtName</td>
                                                 <td>@item.Price ₺</td>
 
-                                                @if (item.PriceInf == false)
-                                                {
-                                                    <td>Ödenmedi</td>
-                                                }
 
-                                                else
-                                                {
-                                                    <td>Ödendi</td>
-                                                }
+                                                <td>Ödendi</td>
 
                                                 <td>Aktif</td>
 
-                                                @if (item.PriceInf == false)
-                                                {
-                                                    <td>
-                                                        <button style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning" id="@item.ResId, @item.UserId " onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
-                                                        <button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>
-                                                    </td>
-                                                }
+                                                <td>Ödeme Alındı</td>
 
-                                                else
-                                                {
-                                                    <td>Ödeme Alındı</td>
-                                                }
 
                                             </tr>
                                         }
                                     }
                                 }
+
                                 else if (newCount <= 0 && newResCancelModel.Count() > 0)
                                 {
                                     @foreach (var item2 in newResCancelModel)
@@ -361,11 +329,10 @@
                                                 <td>@court.CourtName</td>
                                                 <td>@item2.Price ₺</td>
 
-                                                @if (item2.PriceInf == false)
+                                                @if (item2.Procedure == true)
                                                 {
-                                                    <td>Ödenmedi</td>
+                                                    <td>İade</td>
                                                 }
-
                                                 else
                                                 {
                                                     <td>Ödendi</td>
@@ -374,25 +341,26 @@
                                                 @{
                                                     var x = Model.memberLists.FirstOrDefault(x => x.UserId == item2.CancelResUserId);
                                                 }
+
                                                 @if (x.UserId == userId)
                                                 {
+
                                                     <td>İptal Edildi - Kendi</td>
                                                 }
+
                                                 else
                                                 {
                                                     <td>İptal Edildi - @x.UserName - @x.Role</td>
                                                 }
 
-                                                @if (item2.PriceInf == false && item2.Procedure == false)
+                                                @if (item2.Procedure == true)
                                                 {
-                                                    <td>
-                                                        <button style="color:white; background-color:#17a2b8; border-color:#17a2b8" class="btn btn-warning" id="@item2.ResId , @item2.UserId " onclick="payment(this.id)"><i style="margin-right:6px" class="far fa-credit-card"></i>Ödeme</button>
-                                                        @*<button style="color:white" class="btn btn-warning"><i style="margin-right:6px" class="far fa-credit-card"></i>Toplu Ödeme</button>*@
-                                                    </td>
+                                                    <td>İptal Edildi / Para İade / Borç Yok </td>
                                                 }
+
                                                 else
                                                 {
-                                                    <td>İptal Edildi / Borç Yok </td>
+                                                    <td>Ödeme Alındı</td>
                                                 }
 
                                             </tr>
@@ -450,7 +418,7 @@
             "paging": true,
             "lengthChange": false,
             "searching": false,
-            "ordering": false,
+            "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
@@ -463,18 +431,18 @@
         var resId = parseInt(x[0]);
         var userId = x[1];
 
-     
+
 
         $.ajax({
             type: "POST",
             url: '../Public/GetPaymentOperations',
             cache: false,
-            data: { "resId":resId, "userId":userId },
+            data: { "resId": resId, "userId": userId },
             dataType: "json",
             async: false,
             success: function (res) {
 
-              
+
                 if (res != null) {
 
                     $("#PriceInf").empty();

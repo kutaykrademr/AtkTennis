@@ -6,15 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="linq.js" Version="2.2.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\adminRoot\dragula\" />
   </ItemGroup>
 
 </Project>

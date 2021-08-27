@@ -53,7 +53,6 @@ namespace AtkTennisApp.Controllers
             model.CompanyName = MutualConstants.CompanyName;
             model.ExpirationDate = MutualConstants.ExpirationDate;
 
-
             model.UserSettingsList = Mapping.AutoMapperBase._mapper.Map<List<Helpers.Dto.ViewDtos.UserSettingsDto>>(db.userSettings.ToList());
 
             return model;

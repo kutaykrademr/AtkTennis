@@ -1,0 +1,332 @@
+﻿@model List<Helpers.Dto.ViewDtos.MemberListDto>;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+
+}
+
+
+<div class="content-wrapper">
+
+    @foreach (var item in Model)
+    {
+        if (item.UserId == userId)
+        {
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="card" style="border-radius:40px">
+                        <div class="card-content">
+                            <div class="card-body cleartfix">
+                                <div class="media align-items-stretch">
+                                    <div class="align-self-center">
+                                        <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4>@item.FullName - @item.NickName</h4>
+                                        <span>@item.UserName</span>
+                                    </div>
+
+
+
+                                    <div class="align-self-center">
+                                        <h3>Toplam Bakiye: @item.Price ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+    }
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            @foreach (var item in Model)
+            {
+                if (item.UserId == userId)
+                {
+
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">@item.StartDate</h3>
+
+                                    <p>Başlangıç Tarihi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">@item.FinishDate<sup style="font-size: 20px"></sup></h3>
+
+                                    <p>Bitiş Tarihi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">
+                                        @{
+                                            var a = item.Role.ToLower();
+
+                                        }
+                                        @Char.ToUpperInvariant(a[0])@a.Substring(1)
+                                    </h3>
+
+                                    <p>Kullanıcı Yetkisi</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3 style="font-size:1.2rem">@item.Condition</h3>
+
+                                    <p>Kullanıcı Durumu</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                }
+
+            }
+            <!-- /.row -->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                if (item.UserId == userId)
+                {
+                    <div class="col-lg-6">
+                        <div class="card card-primary ">
+                            <div class="card-header" style="background-color:rebeccapurple;">
+                                <h3 class="card-title">Kişisel Bilgileriniz</h3>
+                            </div>
+
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
+
+                                <p class="text-muted">
+                                    @item.FullName
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
+
+                                <p class="text-muted">
+                                    @item.IdentityNumber
+
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
+
+                                <p class="text-muted">@item.BirthDate / @item.BirthPlace</p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
+
+                                <p class="text-muted">
+                                    @item.Phone - @item.PhoneExp  / @item.Phone2 - @item.Phone2Exp
+
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
+
+                                <p class="text-muted">
+                                    @item.Email -@item.EmailExp
+
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
+
+                                <p class="text-muted">
+                                    @item.Job
+
+                                </p>
+
+
+                            </div>
+
+                            <div class="card card-primary ">
+                                <div class="card-header" style="background-color:rebeccapurple;">
+                                    <h3 class="card-title">Bilgi Devam</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
+
+                                    <p class="text-muted">
+                                        @item.MotherName - @item.FatherName
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
+
+                                    <p class="text-muted">
+                                        @item.Phone2 - @item.Phone2Exp
+                                    </p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Şehir - İlçe</strong>
+
+                                    <p class="text-muted">@item.City - @item.District</p>
+
+                                    <hr>
+
+                                    <strong><i class="far fa-file-alt mr-1"></i> Notlar</strong>
+
+                                    <p class="text-muted">@item.Note</p>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                 
+                    <div class="col-lg-6">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Rezervasyon Borcu Yok</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:0;text-align:center;">Ödenmeyen</td>
+                                            <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
+                                            <td style="padding:0;text-align:center;">İptal Edilen</td>
+                                            <td style="padding:0;text-align:center;">Genel</td>
+                                        </tr>
+                                        <tr class="info" style="color:#000;">
+                                            <td style="padding:0;text-align:center;">0 Adet</td>
+                                            <td style="padding:0;text-align:center;">14 Adet</td>
+                                            <td style="padding:0;text-align:center;">3 Adet</td>
+                                            <td style="padding:0;text-align:center;">17 Adet</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Aidat Borcu Yok</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:0;text-align:center;">Ödenmeyen</td>
+                                            <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
+                                            <td style="padding:0;text-align:center;">İptal Edilen</td>
+                                            <td style="padding:0;text-align:center;">Genel</td>
+                                        </tr>
+                                        <tr class="info" style="color:#000;">
+                                            <td style="padding:0;text-align:center;">0 Adet</td>
+                                            <td style="padding:0;text-align:center;">14 Adet</td>
+                                            <td style="padding:0;text-align:center;">3 Adet</td>
+                                            <td style="padding:0;text-align:center;">17 Adet</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Dolap Bilgileri</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:0;text-align:center;">Ödenmeyen</td>
+                                            <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
+                                            <td style="padding:0;text-align:center;">İptal Edilen</td>
+                                            <td style="padding:0;text-align:center;">Genel</td>
+                                        </tr>
+                                        <tr class="info" style="color:#000;">
+                                            <td style="padding:0;text-align:center;">0 Adet</td>
+                                            <td style="padding:0;text-align:center;">14 Adet</td>
+                                            <td style="padding:0;text-align:center;">3 Adet</td>
+                                            <td style="padding:0;text-align:center;">17 Adet</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                }
+
+            }
+
+        </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

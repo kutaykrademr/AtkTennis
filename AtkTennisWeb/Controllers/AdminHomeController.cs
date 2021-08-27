@@ -17,13 +17,13 @@ namespace AtkTennisWeb.Controllers
     public class AdminHomeController : Controller
     {
 
-        public IActionResult Index(string date)
+        public IActionResult Index()
         {
 
             HomeModelDto model = new HomeModelDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome?date=" +date));
+                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome"));
                 if(model == null)
                     model = new HomeModelDto();
             }
@@ -31,10 +31,9 @@ namespace AtkTennisWeb.Controllers
             {
                 model = new HomeModelDto();
             }
-            ViewBag.date = date;
+
             return View(model);
         }
-
         public IActionResult NewRegister()
         {
 
@@ -54,7 +53,44 @@ namespace AtkTennisWeb.Controllers
             }
             return View(model);
         }
+        public IActionResult ListUser()
+        {
 
+            IdentityPartialViewDto model = new IdentityPartialViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUser"));
+
+                if (model == null)
+
+                    model = new IdentityPartialViewDto();
+            }
+            catch (Exception)
+            {
+                model = new IdentityPartialViewDto();
+            }
+            return View(model);
+        }
+        public IActionResult ListMember()
+        {
+
+            IdentityPartialViewDto model = new IdentityPartialViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetMember"));
+
+                if (model == null)
+
+                    model = new IdentityPartialViewDto();
+            }
+            catch (Exception)
+            {
+                model = new IdentityPartialViewDto();
+            }
+            return View(model);
+        }
         public IActionResult RegisterMember()
         {
 
@@ -73,6 +109,67 @@ namespace AtkTennisWeb.Controllers
                 model = new List<AppIdentityRoleDto>();
             }
             return View(model);
+        }
+        public IActionResult RegisterStudent()
+        {
+
+            RegisterStudentViewDto model = new RegisterStudentViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<RegisterStudentViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetStudentRegister"));
+
+                if (model == null)
+
+                    model = new RegisterStudentViewDto();
+            }
+            catch (Exception)
+            {
+                model = new RegisterStudentViewDto();
+            }
+            return View(model);
+        }
+        public IActionResult MemberDetailPage(int memberNumber)
+        {
+            List<MemberListDto> model = new List<MemberListDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<MemberListDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetMemberInf"));
+
+                if (model == null)
+
+                    model = new List<MemberListDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<MemberListDto>();
+            }
+
+            return View(model);
+
+            
+        }
+
+
+
+        public JsonResult GetResTable(string date)
+        {
+
+            HomeModelDto model = new HomeModelDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetResTable?date=" + date));
+                if (model == null)
+                    model = new HomeModelDto();
+            }
+            catch (Exception)
+            {
+                model = new HomeModelDto();
+            }
+
+            ViewBag.date = date;
+
+            return Json(model);
         }
 
         public JsonResult Register(string name,string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation , string phoneExp, string phone2, string phone2Exp , string email, string emailExp, string birthPlace, string motherName, string fatherName , string city, string district , string job , string note, string phone, string password, string birthdate, string gender, string role , string nickName , int memberNumber)
@@ -93,46 +190,6 @@ namespace AtkTennisWeb.Controllers
             }
 
             return Json(model);
-        }
-
-        public IActionResult ListUser()
-        {
-
-            IdentityPartialViewDto model = new IdentityPartialViewDto();
-
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUser"));
-
-                if (model == null)
-
-                    model = new IdentityPartialViewDto();
-            }
-            catch (Exception)
-            {
-                model = new IdentityPartialViewDto();
-            }
-            return View(model);
-        }
-
-        public IActionResult ListMember()
-        {
-
-            IdentityPartialViewDto model = new IdentityPartialViewDto();
-
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<IdentityPartialViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetMember"));
-
-                if (model == null)
-
-                    model = new IdentityPartialViewDto();
-            }
-            catch (Exception)
-            {
-                model = new IdentityPartialViewDto();
-            }
-            return View(model);
         }
 
         public JsonResult NewReservationAdmin(ReservationDto res)

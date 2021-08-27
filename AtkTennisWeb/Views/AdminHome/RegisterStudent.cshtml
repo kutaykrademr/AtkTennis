@@ -1,0 +1,587 @@
+﻿@model Helpers.Dto.PartialViewDtos.RegisterStudentViewDto;
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div style="padding-right:25%; padding-left:25%" class="card">
+                        <div class="card-body register-card-body">
+                            <p class="login-box-msg">Üye Kayıt Formu </p>
+
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-secondary">Left</button>
+                                <button type="button" class="btn btn-secondary">Middle</button>
+                                <button type="button" class="btn btn-secondary">Right</button>
+                                <button type="button" class="btn btn-secondary">Right</button>
+                            </div>
+
+                            <div class="card" style="margin-bottom:20px; box-shadow: 0 0 1px rgba(255, 0, 0, 0.53), 0 1px 3px rgba(255, 0, 0, 0.42)">
+                                <div class="card-body">
+                                    <p class="login-box-msg">Zorunlu Alan </p>
+                                    <div class="row">
+                                        <div class="input-group mb-3 col-md-4">
+                                            <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-user"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3 col-md-4">
+                                            <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <a style="cursor:pointer" onclick="getUserName()" class="fas fa-sync-alt"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3 col-md-4">
+                                            <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <a style="cursor:pointer" onclick="getNickName()" class="fas fa-sync-alt"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="form-group col-md-6">
+                                            <select id="webReservation" class="form-control">
+                                                <option disabled="disabled" selected>Türü</option>
+
+                                                @foreach (var item in Model.schoolTypes)
+                                                {
+                                                    <option value="1">@item.Types</option>
+
+                                                }
+                                                @foreach (var item2 in Model.performanceTypes)
+                                                {
+                                                    <option value="1">@item2.PerformanceTypes</option>
+
+                                                }
+
+
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <select id="webReservation" class="form-control">
+                                                <option disabled="disabled" selected>Seviye</option>
+
+                                                <   @foreach (var item in Model.schoolLevels)
+                                                {
+                                                    <option value="1">@item.Levels</option>
+
+                                                }
+                                                @foreach (var item2 in Model.performanceLevels)
+                                                {
+                                                    <option value="1">@item2.PerLevel</option>
+
+                                                }
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="input-group mb-3 col-md-6">
+                                            <input type="text" class="form-control" id="memberNum" placeholder="Öğrenci Numarası" autocomplete="new-password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <a style="cursor:pointer" onclick="getMemberNumber()" class="fas fa-sync-alt"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group col-md-6">
+                                            <select id="webReservation" class="form-control">
+                                                <option disabled="disabled" selected>Web Rezervasyon</option>
+
+                                                <option value="1">Yapabilir</option>
+                                                <option value="2">Yapamaz</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="password" placeholder="Şifre" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p class="login-box-msg">Not: Şifre en az bir Büyük , Bir Küçük Harf , Sayı ve Karakter Gerektirir ve En az "6" Haneli Olmalıdır. </p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Bitiş Tarihi" type="text" class="form-control" id="finishDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="email" class="form-control" placeholder="T.C Kimlik" id="identificationNumber" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <select id="condition" class="form-control">
+                                        <option disabled="disabled" selected>Durumu</option>
+                                        <option>Faal</option>
+                                        <option>Çıkan</option>
+                                        <option>Dondurulmuş</option>
+                                        <option>Fahri</option>
+                                        <option>İstifa</option>
+                                        <option>Onur</option>
+                                        <option>Vefat</option>
+                                        <option>Belirtilmemiş</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Telefon No" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="phone2Exp" placeholder="Tel Açıklama" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="birthPlace" placeholder="Doğum Yeri" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="job" placeholder="Meslek" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="note" placeholder="Not" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row" style="justify-content:end">
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-success btn-block" onclick="register()"><i class="fas fa-save"></i>Kaydet</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<script>
+
+
+    $(function () {
+
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        $('[data-mask]').inputmask()
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+    })
+
+    userObj = {
+
+        name: null,
+        username: null,
+        startDate: null,
+        finishDate: null,
+        role: null,
+        condition: null,
+        identificationNumber: null,
+        webReservation: null,
+        phone: null,
+        phoneExp: null,
+        phone2: null,
+        phone2Exp: null,
+        email: null,
+        emailExp: null,
+        birthdate: null,
+        birthPlace: null,
+        motherName: null,
+        fatherName: null,
+        city: null,
+        district: null,
+        job: null,
+        note: null,
+        password: null,
+        gender: null,
+        nickName: null,
+        privRes: null,
+
+    };
+
+    function register() {
+
+
+        userObj.name = $("#name").val();
+        userObj.username = $("#username").val();
+        userObj.nickName = $("#nickname").val();
+        userObj.startDate = $("#startDate").val();
+        userObj.finishDate = $("#finishDate").val();
+        userObj.role = "ÜYE";
+        userObj.condition = $("#condition option:selected").text();
+        userObj.identificationNumber = $("#identificationNumber").val();
+        userObj.webReservation = $("#webReservation option:selected").val();
+        userObj.phone = $("#phone").val();
+        userObj.phoneExp = $("#phoneExp").val();
+        userObj.phone2 = $("#phone2").val();
+        userObj.phone2Exp = $("#phone2Exp").val();
+        userObj.email = $("#email").val();
+        userObj.emailExp = $("#emailExp").val();
+        userObj.birthdate = $("#birthdate").val();
+        userObj.birthPlace = $("#birthPlace").val();
+        userObj.motherName = $("#motherName").val();
+        userObj.fatherName = $("#fatherName").val();
+        userObj.city = $("#city").val();
+        userObj.district = $("#district").val();
+        userObj.job = $("#job").val();
+        userObj.note = $("#note").val();
+        userObj.password = $("#password").val();
+        userObj.gender = "Male";
+        userObj.memberNumber = $("#memberNum").val();
+
+
+
+        try {
+            $.ajax({
+                type: "Post",
+                url: '../AdminHome/Register',
+                cache: false,
+                data: userObj,
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res != null)
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Kullanıcı Başarıyla Kaydedildi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "NewRegister"
+                                }
+                            }
+                        });
+
+
+                    else
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kullanıcı Kaydedilirken Hata Oluştu.",
+                            buttons: {
+                                TAMAM: function () {
+
+
+                                }
+                            }
+                        });
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+
+
+    function getNickName() {
+
+        var name = $("#name").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = ad[0][0];
+        var soyad1 = ad[1][0];
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 3; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var nick = (ad1 + soyad1 + text).toLowerCase();
+
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlNickName',
+            cache: false,
+            data: { "nickName": nick },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#nickname").val(nick);
+                }
+                else {
+
+                    getNickName()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getMemberNumber() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var memberNumber = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlMemberNumber',
+            cache: false,
+            data: { "memberNumber": memberNumber },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#memberNum").val(memberNumber);
+                }
+                else {
+
+                    getMemberNumber()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getPassword() {
+
+        var name = $("#name").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = (ad[0][0]).toUpperCase();
+        var soyad1 = (ad[1][0]).toLowerCase();
+
+        var text = "123";
+        var char = ".";
+
+        var password = (ad1 + soyad1 + text + char);
+
+        $("#password").val(password);
+
+    }
+
+    function getUserName() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var userName = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlUserName',
+            cache: false,
+            data: { "userName": userName },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#username").val(userName);
+                }
+                else {
+
+                    getUserName()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+</script>

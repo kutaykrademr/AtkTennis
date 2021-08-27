@@ -52,12 +52,8 @@ namespace AtkTennisApp.Controllers
                 model.toDoLists = db.toDoLists.ToList();
                 model.reservations = db.reservations.ToList();
                 model.courts = db.courts.ToList();
-
                 model.resTimes = db.resTimes.ToList();
-                model.courts = db.courts.ToList();
                 model.courtPriceLists = db.courtPriceLists.ToList();
-                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
-                model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
 
@@ -72,6 +68,49 @@ namespace AtkTennisApp.Controllers
 
 
             return model;
+        }
+
+        [HttpGet("GetResTable", Name = "GetResTable")]
+        public JsonResult GetResTable(string date)
+        {
+            HomeModelView model = new HomeModelView();
+
+            try
+            {
+                model.courts = db.courts.ToList();
+                model.resTimes = db.resTimes.ToList();
+                model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
+                model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
+                model.memberLists = db.memberLists.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new HomeModelView();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+
+            return Json(model);
+        }
+
+        [HttpGet("GetMemberDetail", Name = "GetMemberDetail")]
+        public JsonResult GetMemberDetail(int memberNumber)
+        {
+            HomeModelView model = new HomeModelView();
+
+            try
+            {
+           
+            }
+            catch (Exception ex)
+            {
+                model = new HomeModelView();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+
+            return Json(model);
         }
 
         [HttpGet("GetResSchemaDetail", Name = "GetResSchemaDetail")]
@@ -99,7 +138,7 @@ namespace AtkTennisApp.Controllers
 
             return Json(model);
         }
-
+      
         [HttpGet("GetRole", Name = "GetRole")]
         public List<AppIdentityRole> GetRole()
 
@@ -120,8 +159,31 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("GetStudentRegister", Name = "GetStudentRegister")]
+        public RegisterStudentViewModel GetStudentRegister()
+
+        {
+            RegisterStudentViewModel model = new RegisterStudentViewModel();
+
+            try
+            {
+                model.performanceTypes = db.performanceTypes.ToList();
+                model.performanceLevels = db.performanceLevels.ToList();
+                model.schoolLevels = db.schoolLevels.ToList();
+                model.schoolTypes = db.schoolTypes.ToList();
+
+            }
+            catch (Exception ex)
+            {
+               
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role , int memberNumber)
+        public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, int memberNumber)
         {
             MemberList model2 = new MemberList();
 
@@ -247,7 +309,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservationAdmin", Name = "NewReservationAdmin")]
-        public JsonResult NewReservationAdmin(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName , bool PrivRes)
+        public JsonResult NewReservationAdmin(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName, bool PrivRes)
         {
 
             var model = new Reservation();
@@ -326,7 +388,7 @@ namespace AtkTennisApp.Controllers
                     {
                         ResFinishTime = "0" + h + ":" + m;
                     }
-                    
+
                 }
                 else
                 {
@@ -360,44 +422,43 @@ namespace AtkTennisApp.Controllers
 
             if (model == null)
             {
-                //var memberPrice = db.memberLists.Where(x => x.UserId == UserId).FirstOrDefault().Price; // 1500
+                var memberPrice = mem.Price;
 
-                //var resDebt = Price;
+                var resDebt = Price;
 
                 try
                 {
-                    //if (memberPrice - resDebt >= 0)
-                    //{
-                    //    var newMemberPrice = memberPrice - resDebt;
+                    if (memberPrice - resDebt >= 0)
+                    {
 
-                    //    mem.Price = newMemberPrice;
-                    //    res.PriceInf = true;
+                        var newMemberPrice = memberPrice - resDebt;
+                        mem.Price = newMemberPrice;
+                        res.PriceInf = true;
 
-                    res.PrivRes = PrivRes;
-                    res.NickName = mem.NickName;
-                    res.Court = court;
-                    res.ResFinishTime = ResFinishTime;
-                    res.ResStartTime = ResStartTime;
-                    res.ResDate = ResDate;
-                    res.ResEvent = ResEvent;
-                    res.ResTime = ResTime;
-                    res.UserId = mem.UserId;
-                    res.doResUserId = UserId;
-                    res.ResNowDate = ResNowDate;
-                    res.Price = Price;
-                    res.PriceIds = PriceIds;
+                        res.PrivRes = PrivRes;
+                        res.NickName = mem.NickName;
+                        res.Court = court;
+                        res.ResFinishTime = ResFinishTime;
+                        res.ResStartTime = ResStartTime;
+                        res.ResDate = ResDate;
+                        res.ResEvent = ResEvent;
+                        res.ResTime = ResTime;
+                        res.UserId = mem.UserId;
+                        res.doResUserId = UserId;
+                        res.ResNowDate = ResNowDate;
+                        res.Price = Price;
+                        res.PriceIds = PriceIds;
 
+                        db.memberLists.Update(mem);
+                        db.reservations.Add(res);
+                        db.SaveChanges();
 
+                    }
 
-                    db.memberLists.Update(mem);
-                    db.reservations.Add(res);
-                    db.SaveChanges();
-                    //}
-                    //else
-                    //{
-                    //    return Json(false);
-                    //}
-
+                    else
+                    {
+                        return Json(false);
+                    }
 
                 }
 
@@ -416,7 +477,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetResTimeUpd", Name = "GetResTimeUpd")]
-        public JsonResult GetResTimeUpd(int courtId, string dateInf , int resId)
+        public JsonResult GetResTimeUpd(int courtId, string dateInf, int resId)
         {
             var res = db.reservations.Where(x => x.ResId == resId).FirstOrDefault();
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
@@ -519,8 +580,8 @@ namespace AtkTennisApp.Controllers
                     foreach (var item in model)
                     {
                         if (day_routine[i].Times == res.ResStartTime) _isTaken = false;
-                        else if (day_routine[i].Times == item.ResStartTime ) _isTaken = true;
-                        if (day_routine[i].Times == item.ResFinishTime ) _isTaken = false;
+                        else if (day_routine[i].Times == item.ResStartTime) _isTaken = true;
+                        if (day_routine[i].Times == item.ResFinishTime) _isTaken = false;
                     }
 
                     daily_reservations.Add(new court_reserve
@@ -621,6 +682,7 @@ namespace AtkTennisApp.Controllers
         public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons)
 
         {
+            MemberList mem = new MemberList();
             Reservation model = new Reservation();
             ReservationCancel model2 = new ReservationCancel();
             List<Court> model3 = new List<Court>();
@@ -628,9 +690,20 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-
+                mem = db.memberLists.Where(x => x.UserId == userId).FirstOrDefault();
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 model3 = db.courts.ToList();
+
+                if (procedure == true)
+                {
+                    var memberPrice = mem.Price;
+                    var newPrice = memberPrice + model.Price;
+
+                    mem.Price = newPrice;
+
+                    db.Update(mem);
+                    db.SaveChanges();
+                }
 
                 if (model != null)
                 {
@@ -677,7 +750,6 @@ namespace AtkTennisApp.Controllers
             return Json(model);
 
         }
-
 
         [HttpGet("GetUpdateResAdmin", Name = "GetUpdateResAdmin")]
         public JsonResult GetUpdateResAdmin(int id)
@@ -825,8 +897,6 @@ namespace AtkTennisApp.Controllers
             return Json(model);
 
         }
-
-
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
         public async Task<JsonResult> UpdateMemberList(string id, string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)

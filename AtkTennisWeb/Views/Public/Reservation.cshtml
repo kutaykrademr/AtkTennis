@@ -26,7 +26,6 @@
 
 <style>
 
-
     .table-bordered2 {
         border: 1px solid #dee2e6;
     }
@@ -143,15 +142,14 @@
                                 <table id="tablecount" style="text-align:center" class="table table-bordered2">
                                     <thead>
                                         <tr>
-                                            <th style="background-color:#f5f8fd" scope="col">
+                                            <th  style="background-color:#f5f8fd; font-weight:" scope="col">
 
                                             </th>
 
                                             @for (int i = 0; i < times.Count; i++)
 
                                             {
-                                                <th style="background-color:#f5f8fd" colspan="4" scope="col">@times[i].ResTimes</th>
-
+                                                <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
                                             }
 
                                         </tr>
@@ -165,8 +163,7 @@
 
                                         {
                                             <tr>
-
-                                                <th style="background-color:#f5f8fd" scope="row">@item.CourtName</th>
+                                                <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
 
                                                 @for (int i = 0; i < Model.resTimes.Count; i++)
                                                 {
@@ -194,6 +191,7 @@
                                                                 </div>
 
                                                                 <div style="position: relative;height:2px;background-color:#e61a1a"></div>
+
                                                             </td>
                                                         }
 
@@ -756,6 +754,7 @@
             getCourtTime(courtId, courtName , checkTime);
         }
 
+
         else {
 
             swal("Rezervasyon Saatleri Dışındasınız !", "Rezervasyon Saatleri: " + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.", "warning", {
@@ -1241,7 +1240,7 @@
         var  userId = $("#userId").text();
         $('#openResInf').modal('toggle');
 
-        if (procedure == true) {
+        if (procedure == false) {
             swal({
                 title: "Emin Misiniz?",
                 text: "Rezervasyon İptal Süresi Geçtiği için Ücret Yansıtılarak İptal Edilecektir. Ücret Yansımadan İptal Etmek için Yetkili ile Görüşünüz !",
@@ -1310,7 +1309,7 @@
                         type: "GET",
                         url: '../Public/CancelRes',
                         cache: false,
-                        data: { "id": id , "userId":userId},
+                        data: { "id": id, "userId": userId, "procedure": procedure},
                         dataType: "json",
                         async: true,
                         success: function (res) {
@@ -1363,7 +1362,7 @@
 
                 if (res == false) {
 
-                    var procedure = true;
+                    var procedure = false;
 
                     cancelRes(id , procedure)
 
@@ -1371,9 +1370,9 @@
 
                 else {
 
-                    var procedure = false;
+                    var procedure = true;
 
-                    cancelRes(id)
+                    cancelRes(id, procedure)
                 }
             },
 
@@ -1409,7 +1408,7 @@
             $(this).addClass("");
         }
 
-        $(this).css("width", "20px");
+       /* $(this).css("width", "15px");*/
 
 
     });

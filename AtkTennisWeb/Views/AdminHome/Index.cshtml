@@ -59,27 +59,6 @@
     }
 
 
-    .ui-autocomplete {
-        font-size: 17px;
-        cursor: pointer;
-        text-align: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1510 !important;
-        float: left;
-        /*display: none;*/
-        min-width: 160px;
-        width: 160px;
-        padding: 4px 0;
-        margin: 2px 0 0 0;
-        list-style: circle;
-        background-color: #ffffff;
-        border-color: #ccc;
-        border-color: rgba(0, 0, 0, 0.2);
-        border-style: solid;
-        border-width: 1px;
-    }
 </style>
 <style>
     .tdHover:hover {
@@ -208,10 +187,8 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div id="resTableGeneral" class="row">
                 <div class="col-lg-9">
-
-
 
                     <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
                     <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
@@ -236,8 +213,8 @@
                                                 var tomorrow = date2.ToString("yyyy-MM-dd");
                                             }
 
-                                            <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/AdminHome/Index?date=@today">Bugün</a></li>
-                                            <li class="page-item"><a style="color:white; background-color:#337ab7" class="page-link" href="~/AdminHome/Index?date=@tomorrow">Yarın</a></li>
+                                            <li class="page-item"><a style="color:white; cursor:pointer; background-color:#3fc9d5 !important" class="page-link" id="@today" onclick="getResTable(this.id)">Bugün</a></li>
+                                            <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" id="@tomorrow" onclick="getResTable(this.id)">Yarın</a></li>
                                             <li class="page-item"><input class="form-control" type="date" id="timeNow" style="cursor:pointer; background-color:#e7505a; color:white"></li>
                                             <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
                                             <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
@@ -251,7 +228,10 @@
                                 <thead>
                                     <tr>
                                         <th style="background-color:#f5f8fd; min-width:100px" scope="col">
-
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button id="submit" type="button" class="btn btn-warning"><i class="fas fa-print"></i></button>
+                                                <button type="button" class="btn btn-danger"><i style="color:white" class="fas fa-trash"></i></button>
+                                            </div>
                                         </th>
 
                                         @for (int i = 0; i < times.Count; i++)
@@ -265,210 +245,209 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="xyz">
 
-                                    @foreach (var item in Model.courts)
+                                    @*@foreach (var item in Model.courts)
 
-                                    {
-                                        if (item.CourtConditions == 1)
                                         {
+                                            if (item.CourtConditions == 1)
+                                            {
 
-                                            <tr>
+                                                <tr>
 
-                                                <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
+                                                    <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
 
-                                                @for (int i = 0; i < Model.resTimes.Count; i++)
-                                                {
-
-
-
-                                                    var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
-
-                                                    var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
-
-                                                    var period = (60 / Convert.ToInt32(item.CourtTimePeriod));
-
-                         
-                                                    
-
-                                                    if (res != null && resCancel != null && res.UserId == res.doResUserId)
-                                                    {
-                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
-
-                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
-
-                                                        <td data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">
-                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <a style="padding:0;color:#fff;">
-                                                                    @res.NickName
-                                                                </a>
-
-                                                                <small style="right: -3px;top: -10px;position: relative; color:inherit">
-                                                                    w
-                                                                </small>
-
-                                                            </div>
-                                                            <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                        </td>
-
-                                                        i = i + Convert.ToInt32(colspanVal) - 1;
-                                                    }
-
-                                                    else if (res != null && resCancel != null)
-                                                    {
-                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
-                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
-
-                                                        <td draggable="true" class="ui-draggable" borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ;">
-                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <a style="padding:0;color:#fff;">
-                                                                    @res.NickName
-
-                                                                </a>
-                                                            </div>
-                                                            <div style="position: relative;height:3px;background-color:#e61a1a"></div>
-                                                        </td>
-
-                                                        i = i + Convert.ToInt32(colspanVal) - 1;
-                                                    }
-
-                                                    else if (res != null && res.UserId == res.doResUserId)
-                                                    {
-                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
-                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
-
-                                                        <td  borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6; ">
-                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <a style="padding:0;color:#fff;">
-                                                                    @res.NickName
-                                                                </a>
-                                                                <small style="right: -3px;top: -10px;position: relative; color:inherit">
-                                                                    w
-                                                                </small>
-
-                                                            </div>
-
-                                                        </td>
-
-                                                        i = i + Convert.ToInt32(colspanVal) - 1;
-                                                    }
-
-                                                    else if (res != null)
+                                                    @for (int i = 0; i < Model.resTimes.Count; i++)
                                                     {
 
-                                                        var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
-                                                        var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
 
-                                                        <td  borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                <a style="padding:0;color:#fff;">
-                                                                    @res.NickName
-                                                                </a>
 
-                                                            </div>
+                                                        var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
 
-                                                        </td>
+                                                        var resCancel = Model.reservationCancels.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.CourtId == item.CourtId).FirstOrDefault();
 
-                                                        i = i + Convert.ToInt32(colspanVal) - 1;
-                                                    }
+                                                        var period = (60 / Convert.ToInt32(item.CourtTimePeriod));
 
-                                                    else if (resCancel != null)
-                                                    {
-                                                        var time = resCancel.ResStartTime;
-                                                        var time2 = resCancel.ResFinishTime;
 
-                                                        var colspanVal = (Convert.ToDateTime(resCancel.ResFinishTime) - Convert.ToDateTime(resCancel.ResStartTime)).TotalHours * 4;
 
-                                                        for (var t = 0; t < colspanVal; t++)
+
+                                                        if (res != null && resCancel != null && res.UserId == res.doResUserId)
                                                         {
-                                                            if (period == 1)
+                                                            var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+
+                                                            var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">
+                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <a style="padding:0;color:#fff;">
+                                                                        @res.NickName
+                                                                    </a>
+
+                                                                    <small style="right: -3px;top: -10px;position: relative; color:inherit">
+                                                                        w
+                                                                    </small>
+
+                                                                </div>
+                                                                <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                            </td>
+
+                                                            i = i + Convert.ToInt32(colspanVal) - 1;
+                                                        }
+
+                                                        else if (res != null && resCancel != null)
+                                                        {
+                                                            var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+                                                            var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ;">
+                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <a style="padding:0;color:#fff;">
+                                                                        @res.NickName
+
+                                                                    </a>
+                                                                </div>
+                                                                <div style="position: relative;height:3px;background-color:#e61a1a"></div>
+                                                            </td>
+
+                                                            i = i + Convert.ToInt32(colspanVal) - 1;
+                                                        }
+
+                                                        else if (res != null && res.UserId == res.doResUserId)
+                                                        {
+                                                            var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+                                                            var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6; ">
+                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <a style="padding:0;color:#fff;">
+                                                                        @res.NickName
+                                                                    </a>
+                                                                    <small style="right: -3px;top: -10px;position: relative; color:inherit">
+                                                                        w
+                                                                    </small>
+
+                                                                </div>
+
+                                                            </td>
+
+                                                            i = i + Convert.ToInt32(colspanVal) - 1;
+                                                        }
+
+                                                        else if (res != null)
+                                                        {
+
+                                                            var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+                                                            var mem = Model.memberLists.First(x => x.UserId == res.UserId).FullName;
+
+                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                    <a style="padding:0;color:#fff;">
+                                                                        @res.NickName
+                                                                    </a>
+
+                                                                </div>
+                                                            </td>
+
+                                                            i = i + Convert.ToInt32(colspanVal) - 1;
+                                                        }
+
+                                                        else if (resCancel != null)
+                                                        {
+                                                            var time = resCancel.ResStartTime;
+                                                            var time2 = resCancel.ResFinishTime;
+
+                                                            var colspanVal = (Convert.ToDateTime(resCancel.ResFinishTime) - Convert.ToDateTime(resCancel.ResStartTime)).TotalHours * 4;
+
+                                                            for (var t = 0; t < colspanVal; t++)
                                                             {
-                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover " data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                    <div style="height:3px;background-color:#e61a1a"></div>
-                                                                </td>
+                                                                if (period == 1)
+                                                                {
+                                                                    <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover " data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="4" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                        <div style="height:3px;background-color:#e61a1a"></div>
+                                                                    </td>
 
 
-                                                                t = t + 3;
+                                                                    t = t + 3;
 
+                                                                }
+
+                                                                else if (period == 2)
+                                                                {
+                                                                    <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                        <div style="height:3px;background-color:#e61a1a"></div>
+                                                                    </td>
+
+                                                                    var c = time.Split(":");
+                                                                    var hour = Convert.ToInt32(c[0]);
+                                                                    var min = Convert.ToInt32(c[1]);
+                                                                    if (min == 30)
+                                                                    {
+                                                                        time = (hour + 1) + ":" + "00";
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                        time = hour + ":" + (min + 30);
+                                                                    }
+
+                                                                    t = t + 1;
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
+                                                                        <div style="height:3px;background-color:#e61a1a"></div>
+                                                                    </td>
+
+
+                                                                    var c = time.Split(":");
+                                                                    var hour = Convert.ToInt32(c[0]);
+                                                                    var min = Convert.ToInt32(c[1]);
+
+                                                                    if (min == 45)
+
+                                                                    {
+                                                                        time = (hour + 1) + ":" + "00";
+                                                                    }
+
+                                                                    else
+                                                                    {
+
+                                                                        time = hour + ":" + (min + 15);
+                                                                    }
+                                                                }
+
+                                                            }
+
+                                                            i = i + Convert.ToInt16(colspanVal - 1);
+                                                        }
+
+                                                        else
+
+                                                        {
+                                                            if (period == 4)
+                                                            {
+                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                             }
 
                                                             else if (period == 2)
                                                             {
-                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" colspan="2" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                    <div style="height:3px;background-color:#e61a1a"></div>
-                                                                </td>
-
-                                                                var c = time.Split(":");
-                                                                var hour = Convert.ToInt32(c[0]);
-                                                                var min = Convert.ToInt32(c[1]);
-                                                                if (min == 30)
-                                                                {
-                                                                    time = (hour + 1) + ":" + "00";
-                                                                }
-                                                                else
-                                                                {
-
-                                                                    time = hour + ":" + (min + 30);
-                                                                }
-
-                                                                t = t + 1;
+                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                i = i + 1;
                                                             }
-
-                                                            else
+                                                            else if (period == 1)
                                                             {
-                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" id="@item.CourtId , @item.CourtName" class="tdHover" data-toggle="tooltip" data-placement="top" title="@item.CourtName - @time" onclick="openResModal(this.id)" style="vertical-align:bottom; padding: 0px; border: 1px solid #dadee2; cursor:pointer">
-                                                                    <div style="height:3px;background-color:#e61a1a"></div>
-                                                                </td>
-
-
-                                                                var c = time.Split(":");
-                                                                var hour = Convert.ToInt32(c[0]);
-                                                                var min = Convert.ToInt32(c[1]);
-
-                                                                if (min == 45)
-
-                                                                {
-                                                                    time = (hour + 1) + ":" + "00";
-                                                                }
-
-                                                                else
-                                                                {
-
-                                                                    time = hour + ":" + (min + 15);
-                                                                }
+                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                i = i + 3;
                                                             }
 
                                                         }
 
-                                                        i = i + Convert.ToInt16(colspanVal - 1);
                                                     }
 
-                                                    else
-
-                                                    {
-                                                        if (period == 4)
-                                                        {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                        }
-
-                                                        else if (period == 2)
-                                                        {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                            i = i + 1;
-                                                        }
-                                                        else if (period == 1)
-                                                        {
-                                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                            i = i + 3;
-                                                        }
-
-                                                    }
-
-                                                }
-
-                                            </tr>
-                                        }
-                                    }
+                                                </tr>
+                                            }
+                                        }*@
 
                                 </tbody>
                             </table>
@@ -487,6 +466,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </section>
 </div>
@@ -831,7 +812,8 @@
                     <div class="modal-header col-md-9">
                         <div class="col-sm-12">
                             <div class="form-group" style="text-align:center">
-                                <table class="table table-bordered ">
+                                <table class="table table-bordered">
+
                                     <thead>
                                         <tr>
                                             <th style="font-weight:bold" scope="col">Adı</th>
@@ -839,7 +821,9 @@
                                             <th style="font-weight:bold" scope="col">Seç</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
+
                                         @foreach (var item2 in Model.courtPriceLists)
                                         {
                                             if (item2.Condition == "1")
@@ -848,9 +832,10 @@
                                                     <td>@item2.Name</td>
                                                     <td>@item2.CourtPrice ₺ </td>
                                                     <td>
-                                                        <div class="custom-control custom-checkbox " id="checkPriceTables">
+                                                        <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
 
-                                                            @{ if (item2.PriceType == "1")
+                                                            @{
+                                                                if (item2.PriceType == "1")
                                                                 {
                                                                     <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
                                                                 }
@@ -861,13 +846,16 @@
                                                                 }
 
                                                             }
+
                                                             <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
                                                         </div>
                                                     </td>
                                                 </tr>
                                             }
                                         }
+
                                     </tbody>
+
                                     <tfoot>
                                         <tr>
                                             <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
@@ -875,6 +863,7 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </tfoot>
+
                                 </table>
                             </div>
                         </div>
@@ -893,7 +882,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         <tr>
                                             <td>Görev</td>
                                             <td>
@@ -907,7 +895,6 @@
                                         </tr>
 
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -929,7 +916,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="openResProcedureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -988,13 +974,13 @@
     </div>
 </div>
 
+
+
 <script src="~/adminRoot/js/loading.js"></script>
+<script src="~/lib/jquery/dist/linq.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js" integrity="sha512-OqcrADJLG261FZjar4Z6c4CfLqd861A3yPNMb+vRQ2JwzFT49WT4lozrh3bcKxHxtDTgNiqgYbEUStzvZQRfgQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
-
-
-
-
-    var picker = "@ViewBag.Date";
 
     $(document).ready(function () {
 
@@ -1014,22 +1000,30 @@
             "responsive": true,
         });
 
-        $(function () {
-            $('[data-toggle="popover"]').popover()
-        })
+
+
+        getPrice();
+
 
         //Rezervasyon Şema Tarih
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
 
-        $('#timeNow').val(picker);
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $('#timeNow').val(today);
+
+        getResTable(today);
 
         $('#timeNow').change(function () {
 
-            window.location.href = "Index?date=" + $('#timeNow').val();
+            getResTable($('#timeNow').val());
+            resSchemaDetail();
 
         });
 
-        resSchemaDetail()
-        getPrice();
 
         $('#checkPriceTables input').click(function () {
             if ($(this).is(':checked'))
@@ -1041,9 +1035,11 @@
             }
         });
 
+    });
 
+    //TimeInf
+    function timeInf() {
 
-        //TimeInf
         var time = $('#timeNow').val();
         var b = time.split("-");
         var timeNow = b[2] + '-' + b[1] + '-' + b[0];
@@ -1077,46 +1073,12 @@
 
         $("#TimeInf").empty();
         row = "";
-        row += '<h4 style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i>' + ' ' + timeNow + ' ' + ' - ' + ' ' + day + ' ' + '</h4>';
+        row += '<h4 id="timeInfH4" style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i>' + ' ' + timeNow + ' ' + ' - ' + ' ' + day + ' ' + '</h4>';
         $("#TimeInf").append(row);
-
 
         findMember();
 
-
-    });
-
-
-
-    $("#tablecount td").each(function () {
-
-
-        var abc = $(this).attr('borderRes');
-        var time = abc.split(",")[0].split(":")[1].trim();
-        var per = abc.split(",")[1].trim();
-
-        if (time == "00" && per == "1")
-
-            $(this).addClass("hourborder");
-
-        else if (time == "00" && per == "2") {
-            $(this).addClass("hourborder");
-        }
-
-        else if (time == "00" && per == "4") {
-
-            $(this).addClass("hourborder");
-        }
-
-        else {
-            $(this).addClass("");
-        }
-
-        $(this).css("width", "15px");
-
-
-    });
-
+    }
 
     function openUpdateResModal(id) {
         $.ajax({
@@ -1177,7 +1139,7 @@
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName );
+                    mem.push(res.memberLists[i].memberNumber + ' - ' +  res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
                 }
 
                 $("#findMember").autocomplete({
@@ -1243,7 +1205,7 @@
 
                 for (var i = 0; i < res.courts.length; i++) {
 
-                    NewRow += '<li style="background-color:#e0ebf9; padding: 0.1rem 1.25rem; color:black; text-align:center;" class="list-group-item list-group-item-info">'+ res.courts[i].courtName + '</li>';
+                    NewRow += '<li style="background-color:#e0ebf9; padding: 0.1rem 1.25rem; color:black; text-align:center;" class="list-group-item list-group-item-info">' + res.courts[i].courtName + '</li>';
 
                     for (var a = 0; a < res.reservations.length; a++) {
 
@@ -1283,6 +1245,8 @@
 
     function nextDate() {
 
+        debugger;
+
         var date = $("#timeNow").val();
 
         const d = new Date(date);
@@ -1297,9 +1261,9 @@
 
         var date3 = d.getFullYear() + '-' + month + '-' + day;
 
-
-
-        window.location.href = "Index?date=" + date3;
+        $("#timeNowUpdModal").val(date3);
+        $("#timeNowModal").val(date3);
+        getResTable(date3);
     }
 
     function preDate() {
@@ -1318,8 +1282,9 @@
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
 
-
-        window.location.href = "Index?date=" + date4;
+        $("#timeNowUpdModal").val(date4);
+        $("#timeNowModal").val(date4);
+        getResTable(date4);
 
     }
 
@@ -1343,26 +1308,22 @@
         var hours = currentTime.getHours();
         var min = currentTime.getMinutes();
 
-        if (hours < 10)
-        {
-            var time = "0" +  hours + ":" + min;
+        if (hours < 10) {
+            var time = "0" + hours + ":" + min;
         }
         else if (min < 10) {
-            var time = hours + ":" + "0" +  min;
+            var time = hours + ":" + "0" + min;
         }
-        else if (hours < 10 && min <10) {
+        else if (hours < 10 && min < 10) {
             var time = "0" + hours + ":" + "0" + min;
         }
         else
-            var time =  hours + ":" + min;
+            var time = hours + ":" + min;
 
         var a = time.split(":");
         var b = resStartTime.split(":");
         var c = resFinishTime.split(":");
 
-        var nowTime = a[0] + a[1];
-        var sTime = b[0] + b[1];
-        var fTime = c[0] + c[1];
 
         var dt = new Date();
         var dd = String(dt.getDate()).padStart(2, '0');
@@ -1370,8 +1331,6 @@
         var yyyy = dt.getFullYear();
 
         var today = yyyy + '-' + mm + '-' + dd;
-
-        var asdz = ($('#timeNowModal').val() < today);
 
 
 
@@ -1387,7 +1346,7 @@
 
             getCourtTime(courtId, courtName, timePickerModal);
 
-                $('#rsvModal').modal('toggle');
+            $('#rsvModal').modal('toggle');
         }
 
 
@@ -1414,7 +1373,7 @@
 
     }
 
-    function getCourtTime(courtId, courtName, timePickerModal ) {
+    function getCourtTime(courtId, courtName, timePickerModal) {
 
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
 
@@ -1424,18 +1383,17 @@
         var hours = dt.getHours();
         var min = dt.getMinutes();
 
-        if (hours < 10)
-        {
-            var time = "0" +  hours + ":" + min;
+        if (hours < 10) {
+            var time = "0" + hours + ":" + min;
         }
         else if (min < 10) {
-            var time = hours + ":" + "0" +  min;
+            var time = hours + ":" + "0" + min;
         }
-        else if (hours < 10 && min <10) {
+        else if (hours < 10 && min < 10) {
             var time = "0" + hours + ":" + "0" + min;
         }
         else
-            var time =  hours + ":" + min;
+            var time = hours + ":" + min;
 
 
 
@@ -1555,205 +1513,203 @@
 
     }
 
-
-
     function openResModalUpd(id) {
 
-            var modalDate = $("#timeNow").val();
-            $("#timeNowUpdModal").val(modalDate);
+        var modalDate = $("#timeNow").val();
+        $("#timeNowUpdModal").val(modalDate);
 
-            var timePickerModal = modalDate;
+        var timePickerModal = modalDate;
 
-            var a = id.split(",");
-            var courtId = a[0];
-            var courtName = a[1];
-            var resId = a[2];
+        var a = id.split(",");
+        var courtId = a[0];
+        var courtName = a[1];
+        var resId = a[2];
 
 
-            var dt = new Date();
-            var dd = String(dt.getDate()).padStart(2, '0');
-            var mm = String(dt.getMonth() + 1).padStart(2, '0');
-            var yyyy = dt.getFullYear();
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
 
-            var today = yyyy + '-' + mm + '-' + dd;
+        var today = yyyy + '-' + mm + '-' + dd;
 
-            if ($('#timeNowUpdModal').val() < today) {
+        if ($('#timeNowUpdModal').val() < today) {
 
-                swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
-                    button: "Tamam",
-                });
-
-            }
-
-            else {
-
-                getCourtTimeUpd(courtId, courtName, timePickerModal, resId);
-
-                $('#rsvModalUpd').modal('toggle');
-
-            }
-
-            $("#selectedCourt option:selected").text(courtName);
-
-            $('#selectedCourt').on('change', function () {
-
-                var courtNameOption = $("#selectedCourt option:selected").text();
-                var courtIdOption = $("#selectedCourt option:selected").val();
-
-                getCourtTimeUpd(courtIdOption, courtNameOption, $('#timeNowUpdModal').val(), resId);
-
+            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+                button: "Tamam",
             });
 
-            $('#timeNowUpdModal').change(function () {
+        }
 
-                var courtNameOption = $("#selectedCourt option:selected").text();
-                var courtIdOption = $("#selectedCourt option:selected").val();
+        else {
 
-                getCourtTimeUpd(courtIdOption, courtNameOption, $('#timeNowUpdModal').val(), resId);
+            getCourtTimeUpd(courtId, courtName, timePickerModal, resId);
 
-            });
+            $('#rsvModalUpd').modal('toggle');
+
+        }
+
+        $("#selectedCourt option:selected").text(courtName);
+
+        $('#selectedCourt').on('change', function () {
+
+            var courtNameOption = $("#selectedCourt option:selected").text();
+            var courtIdOption = $("#selectedCourt option:selected").val();
+
+            getCourtTimeUpd(courtIdOption, courtNameOption, $('#timeNowUpdModal').val(), resId);
+
+        });
+
+        $('#timeNowUpdModal').change(function () {
+
+            var courtNameOption = $("#selectedCourt option:selected").text();
+            var courtIdOption = $("#selectedCourt option:selected").val();
+
+            getCourtTimeUpd(courtIdOption, courtNameOption, $('#timeNowUpdModal').val(), resId);
+
+        });
 
     }
 
-    function getCourtTimeUpd(courtId, courtName, timePickerModal , resId) {
+    function getCourtTimeUpd(courtId, courtName, timePickerModal, resId) {
 
         debugger;
 
-            $("#forApproveUpdId button:nth-of-type(2)").attr("id", resId);
+        $("#forApproveUpdId button:nth-of-type(2)").attr("id", resId);
 
 
-            var dt = new Date();
+        var dt = new Date();
 
-            var hours = dt.getHours();
-            var min = dt.getMinutes();
+        var hours = dt.getHours();
+        var min = dt.getMinutes();
 
-            if (hours < 10) {
-                var time = "0" + hours + ":" + min;
-            }
-            else if (min < 10) {
-                var time = hours + ":" + "0" + min;
-            }
-            else if (hours < 10 && min < 10) {
-                var time = "0" + hours + ":" + "0" + min;
-            }
-            else
-                var time = hours + ":" + min;
-
-
-
-            var days = new Date(timePickerModal);
-            var getday = days.getDay();
-
-            var dd = String(dt.getDate()).padStart(2, '0');
-            var mm = String(dt.getMonth() + 1).padStart(2, '0');
-            var yyyy = dt.getFullYear();
-
-            var today = yyyy + '-' + mm + '-' + dd;
-
-
-            var date = timePickerModal;
-            var b = date.split("-");
-            var timeInf = b[2] + '-' + b[1] + '-' + b[0];
-
-            if (timePickerModal < today) {
-
-                swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
-                    button: "Tamam",
-                });
-
-                $("#timeNowUpdModal").val(today);
-            }
-
-            else
-                $.ajax({
-                    type: "POST",
-                    url: '../AdminHome/GetResUpdTime',
-                    cache: false,
-                    data: { "dateInf": timePickerModal, courtId, resId },
-                    dataType: "json",
-                    async: false,
-                    success: function (res) {
-
-
-                        switch (getday) {
-                            case 0:
-                                day = "Pazar";
-                                break;
-                            case 1:
-                                day = "Pazartesi";
-                                break;
-                            case 2:
-                                day = "Salı";
-                                break;
-                            case 3:
-                                day = "Çarşamba";
-                                break;
-                            case 4:
-                                day = "Perşembe";
-                                break;
-                            case 5:
-                                day = "Cuma";
-                                break;
-                            case 6:
-                                day = "Cumartesi";
-                        }
-
-                        $("#CourtandTimes").empty();
-                        row = "";
-                        row += '<div class="modal-header" style="background-color: #004e6c;">';
-                        row += '<h4 style=" margin:auto; color:white"><i class="fas fa-flag nav-icon"></i>' + ' ' + courtName + ' ' + ' - ' + ' ' + timeInf + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
-                        row += '</div>';
-                        $("#CourtandTimes").append(row);
-
-
-                        if (res.length > 0) {
-
-                            $("#ResUpdModal").empty();
-
-                            for (var i = 0; i < res.length; i++) {
-
-                                NewRow = "";
-
-
-                                if (res[i].isTaken == true) {
-                                    NewRow += '<div style="background-color:rgb(236, 0, 18);" class="form-group reservationForm">';
-                                    NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeUpdTable">';
-                                    NewRow += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-                                    NewRow += '<label style="color:white; font-weight:inherit;" for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
-                                    NewRow += '</div></div>';
-                                }
+        if (hours < 10) {
+            var time = "0" + hours + ":" + min;
+        }
+        else if (min < 10) {
+            var time = hours + ":" + "0" + min;
+        }
+        else if (hours < 10 && min < 10) {
+            var time = "0" + hours + ":" + "0" + min;
+        }
+        else
+            var time = hours + ":" + min;
 
 
 
-                                else if (res[i].start <= time && date == today) {
-                                    NewRow += '<div style="background-color:rgb(236, 0, 18);" class="form-group reservationForm">';
-                                    NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeUpdTable">';
-                                    NewRow += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
-                                    NewRow += '<label style="color:white; font-weight:inherit; for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
-                                    NewRow += '</div></div>';
-                                }
+        var days = new Date(timePickerModal);
+        var getday = days.getDay();
+
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
 
 
-                                else {
-                                    NewRow += '<div  class="form-group reservationForm">';
-                                    NewRow += '<div class="custom-control custom-checkbox custom-control2 " id="checkTimeUpdTable">';
-                                    NewRow += '<input onclick="checkMeUpd(this.id)" class="custom-control-input custom-control-input-primary" type="checkbox" id= "ti_' + res[i].timeId + '" name= "' + res[i].start + '" per= "' + res[i].period + '">';
-                                    NewRow += '<label style="font-weight:inherit;" for="ti_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
-                                    NewRow += '</div></div>';
-                                }
+        var date = timePickerModal;
+        var b = date.split("-");
+        var timeInf = b[2] + '-' + b[1] + '-' + b[0];
+
+        if (timePickerModal < today) {
+
+            swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
+                button: "Tamam",
+            });
+
+            $("#timeNowUpdModal").val(today);
+        }
+
+        else
+            $.ajax({
+                type: "POST",
+                url: '../AdminHome/GetResUpdTime',
+                cache: false,
+                data: { "dateInf": timePickerModal, courtId, resId },
+                dataType: "json",
+                async: false,
+                success: function (res) {
 
 
-                                $("#ResUpdModal").append(NewRow);
+                    switch (getday) {
+                        case 0:
+                            day = "Pazar";
+                            break;
+                        case 1:
+                            day = "Pazartesi";
+                            break;
+                        case 2:
+                            day = "Salı";
+                            break;
+                        case 3:
+                            day = "Çarşamba";
+                            break;
+                        case 4:
+                            day = "Perşembe";
+                            break;
+                        case 5:
+                            day = "Cuma";
+                            break;
+                        case 6:
+                            day = "Cumartesi";
+                    }
+
+                    $("#CourtandTimes").empty();
+                    row = "";
+                    row += '<div class="modal-header" style="background-color: #004e6c;">';
+                    row += '<h4 style=" margin:auto; color:white"><i class="fas fa-flag nav-icon"></i>' + ' ' + courtName + ' ' + ' - ' + ' ' + timeInf + ' ' + ' - ' + ' ' + day + ' ' + ':' + ' ' + '</h4>';
+                    row += '</div>';
+                    $("#CourtandTimes").append(row);
+
+
+                    if (res.length > 0) {
+
+                        $("#ResUpdModal").empty();
+
+                        for (var i = 0; i < res.length; i++) {
+
+                            NewRow = "";
+
+
+                            if (res[i].isTaken == true) {
+                                NewRow += '<div style="background-color:rgb(236, 0, 18);" class="form-group reservationForm">';
+                                NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeUpdTable">';
+                                NewRow += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+                                NewRow += '<label style="color:white; font-weight:inherit;" for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
+                                NewRow += '</div></div>';
                             }
 
-                        }
-                    },
 
-                    error: function (textStatus, errorThrown) {
-                        console.log(JSON.stringify(textStatus));
-                        console.log(textStatus);
+
+                            else if (res[i].start <= time && date == today) {
+                                NewRow += '<div style="background-color:rgb(236, 0, 18);" class="form-group reservationForm">';
+                                NewRow += '<div class="custom-control custom-checkbox custom-control2" id="checkTimeUpdTable">';
+                                NewRow += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="customCheckbox5" checked="" disabled="">';
+                                NewRow += '<label style="color:white; font-weight:inherit; for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
+                                NewRow += '</div></div>';
+                            }
+
+
+                            else {
+                                NewRow += '<div  class="form-group reservationForm">';
+                                NewRow += '<div class="custom-control custom-checkbox custom-control2 " id="checkTimeUpdTable">';
+                                NewRow += '<input onclick="checkMeUpd(this.id)" class="custom-control-input custom-control-input-primary" type="checkbox" id= "ti_' + res[i].timeId + '" name= "' + res[i].start + '" per= "' + res[i].period + '">';
+                                NewRow += '<label style="font-weight:inherit;" for="ti_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
+                                NewRow += '</div></div>';
+                            }
+
+
+                            $("#ResUpdModal").append(NewRow);
+                        }
+
                     }
-                });
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
 
     }
 
@@ -1794,7 +1750,8 @@
                     }).then((value) => {
 
 
-                        window.location.href = "Index?date=" + $('#timeNow').val();
+
+                        getResTable($("#timeNow").val());
 
                     });
                 }
@@ -1819,10 +1776,298 @@
         });
     }
 
+    function getResTable(date) {
 
 
+        $("#timeNow").val(date);
+
+        resSchemaDetail();
+        timeInf();
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/GetResTable',
+            cache: false,
+            data: { "date": date },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                $("#xyz").empty();
+
+                row = "";
+
+                for (var i = 0; i < res.courts.length; i++) {
+
+                    if (res.courts[i].courtConditions == 1) {
+
+
+                        row += '<tr>';
+                        row += ' <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">' + res.courts[i].courtName + '</th>';
+
+
+
+                        for (var a = 0; a < res.resTimes.length; a++) {
+
+                            var Res = Enumerable.from(res.reservations)
+
+                                .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.court.courtId == res.courts[i].courtId })
+                                .select(function (x) { return x }).toArray();
+
+                            var resCancel = Enumerable.from(res.reservationCancels)
+                                .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.courtId == res.courts[i].courtId })
+                                .select(function (x) { return x }).toArray();
+
+                            var asd = res.courts[i].courtTimePeriod;
+                            var period = (60 / parseInt(asd));
+
+
+
+                            if (Res.length > 0) {
+
+                                var mem = Enumerable.from(res.memberLists)
+
+                                    .where(function (x) { return x.userId == Res[0].userId })
+                                    .select(function (x) { return x.fullName }).toArray();
+                            }
+
+                            if (Res.length > 0) {
+
+
+
+                                var xyz = Res[0].resStartTime.split(":");
+                                var xyzd = Res[0].resFinishTime.split(":");
+                                var sTimeSpl = parseInt((xyz[0] + xyz[1]));
+                                var fTimeSpl = parseInt((xyzd[0] + xyzd[1]));
+
+                                if ((fTimeSpl - sTimeSpl) >= 1000) {
+                                    var colspanVal = (fTimeSpl - sTimeSpl) * 4 / 1000;
+                                }
+                                else {
+                                    colspanVal = (fTimeSpl - sTimeSpl) * 4 / 100;
+                                }
+                            }
+
+
+                            if (Res.length != 0 && resCancel.length != 0 && Res[0].userId == Res[0].doResUserId) {
+
+
+                                row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                row += '<div style="background-color:#1bbc27!important;color:#ffffff!important;">';
+                                row += '<a style="padding:0;color:#fff;">';
+                                row += Res[0].nickName;
+                                row += '</a>';
+
+                                row += ' <small style="right: -3px;top: -10px;position:relative; color:black">';
+                                row += 'w';
+                                row += '</small>';
+                                row += '</div>';
+                                row += '<div style="position: relative;height:3px;background-color:#e61a1a"></div>';
+                                row += '</td>';
+
+                                a = a + parseInt(colspanVal) - 1;
+                            }
+
+
+                            else if (Res.length != 0 && resCancel.length != 0) {
+
+
+                                row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                row += '<div style="background-color:#1bbc27!important;color:#ffffff!important;">';
+                                row += '<a style="padding:0;color:#fff;">';
+                                row += Res[0].nickName;
+                                row += '</a>';
+                                row += '</div>';
+                                row += '<div style="position: relative;height:3px;background-color:#e61a1a"></div>';
+                                row += '</td>';
+
+                                a = a + parseInt(colspanVal) - 1;
+                            }
+
+                            else if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
+
+                                debugger;
+
+                                row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                row += '<div style="background-color:#1bbc27!important;color:#ffffff!important;">';
+                                row += '<a style="padding:0;color:#fff;">';
+                                row += Res[0].nickName;
+                                row += '</a>';
+                                row += '<small style="right: -3px;top: -10px;position:relative; color:black">';
+                                row += 'w';
+                                row += '</small>';
+                                row += '</div>';
+                                row += '</td>';
+
+                                a = a + parseInt(colspanVal) - 1;
+                            }
+
+                            else if (Res.length != 0) {
+
+                                debugger;
+
+
+                                row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                row += '<div style="background-color:#1bbc27!important;color:#ffffff!important;">';
+                                row += '<a style="padding:0;color:#fff;">';
+                                row += Res[0].nickName;
+                                row += '</a>';
+                                row += '</div>';
+                                row += '</td>';
+
+                                a = a + parseInt(colspanVal) - 1;
+                            }
+
+                            else if (resCancel.length != 0) {
+
+
+
+                                var time = resCancel[0].resStartTime;
+                                var xyz = resCancel[0].resStartTime.split(":");
+                                var xyzd = resCancel[0].resFinishTime.split(":");
+                                var sTimeCan = parseInt((xyz[0] + xyz[1]));
+                                var fTimeCan = parseInt((xyzd[0] + xyzd[1]));
+
+                                if ((fTimeCan - sTimeCan) >= 1000) {
+
+                                    colspanVal = (fTimeCan - sTimeCan) * 4 / 1000;
+                                }
+                                else {
+                                    colspanVal = (fTimeCan - sTimeCan) * 4 / 100;
+                                }
+
+                                for (var t = 0; t < colspanVal; t++) {
+
+                                    if (period == 1) {
+                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + ' id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + '" ' + 'class="tdHover " data-toggle="tooltip" data-placement="top" title="' + res.courts[i].courtName + '-' + time + '" ' + 'onclick="openResModal(this.id)" colspan="4" style="vertical-align: bottom; padding: 0px; border: 1px solid #dadee2; cursor: pointer">';
+                                        row += '<div style="height:3px;background-color:#e61a1a"></div>';
+                                        row += '</td>';
+
+                                        t = t + 3;
+                                    }
+
+                                    else if (period == 2) {
+
+                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + ' id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + '" ' + 'class="tdHover " data-toggle="tooltip" data-placement="top" title="' + res.courts[i].courtName + '-' + time + '" ' + 'onclick="openResModal(this.id)" colspan="2" style="vertical-align: bottom; padding: 0px; border: 1px solid #dadee2; cursor: pointer">';
+                                        row += '<div style="height:3px;background-color:#e61a1a"></div>';
+                                        row += '</td>';
+                                        var c = time.split(":");
+                                        var hour = parseInt(c[0]);
+                                        var min = parseInt(c[1]);
+                                        if (min == 30) {
+                                            time = (hour + 1) + ":" + "00";
+                                        }
+                                        else {
+
+                                            time = hour + ":" + (min + 30);
+                                        }
+
+                                        t = t + 1;
+                                    }
+
+                                    else
+                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + ' id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + '" ' + 'class="tdHover " data-toggle="tooltip" data-placement="top" title="' + res.courts.courtName + '-' + time + '" ' + 'onclick="openResModal(this.id)"  style="vertical-align: bottom; padding: 0px; border: 1px solid #dadee2; cursor: pointer">';
+                                    row += '<div style="height:3px;background-color:#e61a1a"></div>';
+                                    row += '</td>';
+
+                                    var c = time.split(":");
+                                    var hour = parseInt(c[0]);
+                                    var min = parseInt(c[1]);
+
+                                    if (min == 45) {
+                                        time = (hour + 1) + ":" + "00";
+                                    }
+
+                                    else {
+
+                                        time = hour + ":" + (min + 15);
+                                    }
+
+
+                                }
+
+
+                                a = a + parseInt(colspanVal - 1);
+
+                            }
+
+                            else
+                                if (period == 4) {
+
+                                    row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+                                }
+
+                                else if (period == 2) {
+                                    row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+
+                                    a = a + 1;
+                                }
+
+                                else if (period == 1) {
+                                    row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+
+                                    a = a + 3;
+                                }
+
+
+                        }
+                        row += '</tr>';
+                    }
+                }
+
+                $("#xyz").append(row);
+
+                myfunction();
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function myfunction() {
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+
+        $("#tablecount td").each(function () {
+
+
+            var abc = $(this).attr('borderRes');
+            var time = abc.split(",")[0].split(":")[1].trim();
+            var per = abc.split(",")[1].trim();
+
+            if (time == "00" && per == "1")
+
+                $(this).addClass("hourborder");
+
+            else if (time == "00" && per == "2") {
+                $(this).addClass("hourborder");
+            }
+
+            else if (time == "00" && per == "4") {
+
+                $(this).addClass("hourborder");
+            }
+
+            else {
+                $(this).addClass("");
+            }
+
+            $(this).css("width", "15px");
+
+        });
+
+
+    }
 
     function getPrice() {
+
+        debugger;
 
         var price = [];
         $('#checkPriceTables input:checked').each(function () {
@@ -1881,7 +2126,9 @@
 
         var today = yyyy + '-' + mm + '-' + dd;
 
-        var userName = memberUserName[1];
+        var userName = memberUserName[2];
+
+
 
         var resobject = {
 
@@ -1974,7 +2221,7 @@
                                 button: "Tamam",
                             }).then((value) => {
 
-                                window.location.href = "Index?date=" + $('#timeNow').val();
+                                getResTable($("#timeNow").val());
 
                             });
                         }
@@ -1985,7 +2232,7 @@
 
                             swal({
                                 title: "Rezervasyon Onaylanmadı",
-                                text: "Bakiye Yetersiz Lütfen Bakiye Yükleyiniz !",
+                                text: "Kullanıcı Bakiyesi Yetersiz ,  Lütfen Bakiye Yükleyiniz !",
                                 icon: "error",
                                 button: "Tamam",
                             }).then((value) => {
@@ -2061,7 +2308,7 @@
                         if (IdsArray[a] == res.courtPriceLists[i].courtPriceListId) {
                             row += '<tr>';
                             row += '<td>' + res.courtPriceLists[i].name + '</td>';
-                            row += '<td>'+ res.courtPriceLists[i].courtPrice+'</td>';
+                            row += '<td>' + res.courtPriceLists[i].courtPrice + '</td>';
                             row += '</tr>';
                         }
                     }
@@ -2187,7 +2434,7 @@
 
 
         if ($("#checkProcedure").is(":checked")) {
-             procedure = true;
+            procedure = true;
         }
 
         swal({
@@ -2218,7 +2465,11 @@
                                     button: "Tamam",
                                 }).then((value) => {
 
-                                    window.location.href = "Index?date=" + $('#timeNow').val();
+                                    $('#openResProcedureModal').modal('hide');
+                                    $('#openResInf').modal('hide');
+
+
+                                    getResTable($("#timeNow").val());
 
                                 });
 
@@ -2249,7 +2500,7 @@
 
         var checkList = [];
         var checkTrueList = [];
-        
+
 
         $('#checkTimeTable input:checked:not(:disabled)').each(function () {
             checkTrueList.push(this.id);
@@ -2356,9 +2607,9 @@
 
                 for (var i = checkID; i < (checkID + 2); i++) {
 
-                $("#t_" + i).prop('checked', true);
+                    $("#t_" + i).prop('checked', true);
 
-                checkList.push("t_" + i);
+                    checkList.push("t_" + i);
 
 
                 }
@@ -2577,6 +2828,38 @@
                 }
             }
     }
+
+    $(function () {
+        $('#submit').click(function () {
+            var pageTitle = 'Rezervasyon Genel Durum Şema' + ' - '  + $("#timeInfH4").text(),
+                stylesheet = '//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css',
+                win = window.open('', 'Print', 'width=500,height=300');
+            win.document.write('<html><head><title>' + pageTitle + '</title>' +
+                '<link rel="stylesheet" href="' + stylesheet + '">' +
+                '</head><body>' + $('#tablecount')[0].outerHTML + '</body></html>');
+            win.document.close();
+            win.print();
+            win.close();
+            return false;
+        });
+    });
+
+    //function takeshot() {
+    //    let div =
+    //        document.getElementById('resTableGeneral');
+
+
+    //    html2canvas(div).then(
+    //        function (canvas) {
+    //            document
+    //                .getElementById('output')
+    //                .appendChild(canvas);
+    //        })
+
+    //    $('#outputModal').modal('toggle');
+
+    //}
+
 
 </script>
 
