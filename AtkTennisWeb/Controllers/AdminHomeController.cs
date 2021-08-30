@@ -129,20 +129,20 @@ namespace AtkTennisWeb.Controllers
             }
             return View(model);
         }
-        public IActionResult MemberDetailPage(int memberNumber)
+        public IActionResult MemberDetailPage(int memberNum)
         {
-            List<MemberListDto> model = new List<MemberListDto>();
+            GetMemberDetailViewDto model = new GetMemberDetailViewDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<List<MemberListDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetMemberInf"));
+                model = Helpers.Serializers.DeserializeJson<GetMemberDetailViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetMemberDetail?memberNum=" + memberNum));
 
                 if (model == null)
 
-                    model = new List<MemberListDto>();
+                    model = new GetMemberDetailViewDto();
             }
             catch (Exception)
             {
-                model = new List<MemberListDto>();
+                model = new GetMemberDetailViewDto();
             }
 
             return View(model);
@@ -150,7 +150,41 @@ namespace AtkTennisWeb.Controllers
             
         }
 
+        public JsonResult GetCabinet(string code)
+        {
+            MemberSettingsViewDto model = new MemberSettingsViewDto();
 
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberSettingsViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetCabinet?code=" + code));
+                if (model == null)
+                    model = new MemberSettingsViewDto();
+            }
+            catch (Exception)
+            {
+                model = new MemberSettingsViewDto();
+            }
+
+            return Json(model);
+        }
+
+        public JsonResult DeleteCabinet(int id)
+        {
+            CabinetListUserDto model = new CabinetListUserDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetListUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/DeleteCabinet?id=" + id));
+                if (model == null)
+                    model = new CabinetListUserDto();
+            }
+            catch (Exception)
+            {
+                model = new CabinetListUserDto();
+            }
+
+            return Json(model);
+        }
 
         public JsonResult GetResTable(string date)
         {
@@ -317,7 +351,6 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-
         public JsonResult CancelResProcedureModal(int id)
         {
 
@@ -421,6 +454,26 @@ namespace AtkTennisWeb.Controllers
             catch (Exception)
             {
                 return Json(new AppIdentityUserDto());
+            }
+
+            return Json(true);
+
+        }
+
+        public JsonResult AddCabinet(int price, string code, string who, string type , string userId)
+        {
+            CabinetListUserDto model = new CabinetListUserDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetListUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddCabinet?price=" + price + "&code=" + code + "&who=" + who + "&type=" + type + "&userId=" + userId));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CabinetListUserDto());
             }
 
             return Json(true);

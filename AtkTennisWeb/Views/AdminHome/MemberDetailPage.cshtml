@@ -1,4 +1,4 @@
-﻿@model List<Helpers.Dto.ViewDtos.MemberListDto>;
+﻿@model Helpers.Dto.PartialViewDtos.GetMemberDetailViewDto;
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
 
@@ -6,327 +6,600 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-
-}
-
 
 <div class="content-wrapper">
 
-    @foreach (var item in Model)
-    {
-        if (item.UserId == userId)
-        {
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="card" style="border-radius:40px">
-                        <div class="card-content">
-                            <div class="card-body cleartfix">
-                                <div class="media align-items-stretch">
-                                    <div class="align-self-center">
-                                        <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>@item.FullName - @item.NickName</h4>
-                                        <span>@item.UserName</span>
-                                    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card" style="border-radius:40px">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                                <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4>@Model.memberLists.FullName - @Model.memberLists.NickName</h4>
+                                <span>@Model.memberLists.UserName</span>
+                                <h4 style="display:none" id="userId">@Model.memberLists.UserId</h4>
+                            </div>
 
 
 
-                                    <div class="align-self-center">
-                                        <h3>Toplam Bakiye: @item.Price ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
-                                    </div>
-                                </div>
+                            <div class="align-self-center">
+                                <h3>Toplam Bakiye: @Model.memberLists.Price ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        }
-    }
+            </div>
+        </div>
+    </section>
+
+
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
-            @foreach (var item in Model)
-            {
-                if (item.UserId == userId)
-                {
 
-                    <div class="row">
-                        <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3 style="font-size:1.2rem">@item.StartDate</h3>
 
-                                    <p>Başlangıç Tarihi</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3 style="font-size:1.2rem">@Model.memberLists.StartDate</h3>
 
-                            </div>
+                            <p>Başlangıç Tarihi</p>
                         </div>
-                        <!-- ./col -->
-                        <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    <h3 style="font-size:1.2rem">@item.FinishDate<sup style="font-size: 20px"></sup></h3>
-
-                                    <p>Bitiş Tarihi</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-
-                            </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
                         </div>
-                        <!-- ./col -->
-                        <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3 style="font-size:1.2rem">
-                                        @{
-                                            var a = item.Role.ToLower();
 
-                                        }
-                                        @Char.ToUpperInvariant(a[0])@a.Substring(1)
-                                    </h3>
-
-                                    <p>Kullanıcı Yetkisi</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <h3 style="font-size:1.2rem">@item.Condition</h3>
-
-                                    <p>Kullanıcı Durumu</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- ./col -->
                     </div>
-                }
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3 style="font-size:1.2rem">@Model.memberLists.FinishDate<sup style="font-size: 20px"></sup></h3>
 
-            }
+                            <p>Bitiş Tarihi</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3 style="font-size:1.2rem">
+                                @{
+                                    var a = Model.memberLists.Role.ToLower();
+
+                                }
+                                @Char.ToUpperInvariant(a[0])@a.Substring(1)
+                            </h3>
+
+                            <p>Kullanıcı Yetkisi</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3 style="font-size:1.2rem">@Model.memberLists.Condition</h3>
+
+                            <p>Kullanıcı Durumu</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+
+
+
             <!-- /.row -->
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                if (item.UserId == userId)
-                {
-                    <div class="col-lg-6">
+            <div class="row">
+
+
+                <div class="col-lg-6">
+                    <div class="card card-primary ">
+                        <div class="card-header" style="background-color:rebeccapurple;">
+                            <h3 class="card-title">Kişisel Bilgileriniz</h3>
+                        </div>
+
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
+
+                            <p class="text-muted">
+                                @Model.memberLists.FullName
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
+
+                            <p class="text-muted">
+                                @Model.memberLists.IdentityNumber
+
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
+
+                            <p class="text-muted">@Model.memberLists.BirthDate / @Model.memberLists.BirthPlace</p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
+
+                            <p class="text-muted">
+                                @Model.memberLists.Phone - @Model.memberLists.PhoneExp  / @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
+
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
+
+                            <p class="text-muted">
+                                @Model.memberLists.Email -@Model.memberLists.EmailExp
+
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
+
+                            <p class="text-muted">
+                                @Model.memberLists.Job
+
+                            </p>
+
+
+                        </div>
+
                         <div class="card card-primary ">
                             <div class="card-header" style="background-color:rebeccapurple;">
-                                <h3 class="card-title">Kişisel Bilgileriniz</h3>
+                                <h3 class="card-title">Bilgi Devam</h3>
                             </div>
-
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
+                                <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
 
                                 <p class="text-muted">
-                                    @item.FullName
+                                    @Model.memberLists.MotherName - @Model.memberLists.FatherName
                                 </p>
 
                                 <hr>
 
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
+                                <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
 
                                 <p class="text-muted">
-                                    @item.IdentityNumber
-
+                                    @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
                                 </p>
 
                                 <hr>
 
-                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Şehir - İlçe</strong>
 
-                                <p class="text-muted">@item.BirthDate / @item.BirthPlace</p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
-
-                                <p class="text-muted">
-                                    @item.Phone - @item.PhoneExp  / @item.Phone2 - @item.Phone2Exp
-
-                                </p>
+                                <p class="text-muted">@Model.memberLists.City - @Model.memberLists.District</p>
 
                                 <hr>
 
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
+                                <strong><i class="far fa-file-alt mr-1"></i> Notlar</strong>
 
-                                <p class="text-muted">
-                                    @item.Email -@item.EmailExp
-
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
-
-                                <p class="text-muted">
-                                    @item.Job
-
-                                </p>
-
-
-                            </div>
-
-                            <div class="card card-primary ">
-                                <div class="card-header" style="background-color:rebeccapurple;">
-                                    <h3 class="card-title">Bilgi Devam</h3>
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
-
-                                    <p class="text-muted">
-                                        @item.MotherName - @item.FatherName
-                                    </p>
-
-                                    <hr>
-
-                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
-
-                                    <p class="text-muted">
-                                        @item.Phone2 - @item.Phone2Exp
-                                    </p>
-
-                                    <hr>
-
-                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Şehir - İlçe</strong>
-
-                                    <p class="text-muted">@item.City - @item.District</p>
-
-                                    <hr>
-
-                                    <strong><i class="far fa-file-alt mr-1"></i> Notlar</strong>
-
-                                    <p class="text-muted">@item.Note</p>
-                                </div>
-                                <!-- /.card-body -->
+                                <p class="text-muted">@Model.memberLists.Note</p>
                             </div>
                             <!-- /.card-body -->
                         </div>
+                        <!-- /.card-body -->
                     </div>
-                 
-                    <div class="col-lg-6">
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Rezervasyon Borcu Yok</h3>
+                </div>
 
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding:0;text-align:center;">Ödenmeyen</td>
-                                            <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
-                                            <td style="padding:0;text-align:center;">İptal Edilen</td>
-                                            <td style="padding:0;text-align:center;">Genel</td>
-                                        </tr>
-                                        <tr class="info" style="color:#000;">
-                                            <td style="padding:0;text-align:center;">0 Adet</td>
-                                            <td style="padding:0;text-align:center;">14 Adet</td>
-                                            <td style="padding:0;text-align:center;">3 Adet</td>
-                                            <td style="padding:0;text-align:center;">17 Adet</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                <div class="col-lg-6">
+                    <div class="card card-white">
+                        <div class="card-header">
+                            @if (Model.totalPrice == 0)
+                            {
+                                <h2 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-calendar-alt"></i>Rezervasyon Borcu Yok</h2>
+                            }
+                            else
+                            {
+                                <h2 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-calendar-alt"></i>Rezervasyon Borcu - @Model.totalPrice ₺ </h2>
+                            }
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
                             </div>
                         </div>
-
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Aidat Borcu Yok</h3>
-
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding:0;text-align:center;">Ödenmeyen</td>
-                                            <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
-                                            <td style="padding:0;text-align:center;">İptal Edilen</td>
-                                            <td style="padding:0;text-align:center;">Genel</td>
-                                        </tr>
-                                        <tr class="info" style="color:#000;">
-                                            <td style="padding:0;text-align:center;">0 Adet</td>
-                                            <td style="padding:0;text-align:center;">14 Adet</td>
-                                            <td style="padding:0;text-align:center;">3 Adet</td>
-                                            <td style="padding:0;text-align:center;">17 Adet</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title"><i style="margin-right:10px" class="fas fa-chart-pie mr-1"></i>Dolap Bilgileri</h3>
-
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding:0;text-align:center;">Ödenmeyen</td>
-                                            <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
-                                            <td style="padding:0;text-align:center;">İptal Edilen</td>
-                                            <td style="padding:0;text-align:center;">Genel</td>
-                                        </tr>
-                                        <tr class="info" style="color:#000;">
-                                            <td style="padding:0;text-align:center;">0 Adet</td>
-                                            <td style="padding:0;text-align:center;">14 Adet</td>
-                                            <td style="padding:0;text-align:center;">3 Adet</td>
-                                            <td style="padding:0;text-align:center;">17 Adet</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="card-body p-0">
+                            <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:0;text-align:center;">Ödenmeyen</td>
+                                        <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
+                                        <td style="padding:0;text-align:center;">İptal Edilen</td>
+                                        <td style="padding:0;text-align:center;">Genel</td>
+                                    </tr>
+                                    <tr class="info" style="color:#000;">
+                                        <td style="padding:0;text-align:center;">@Convert.ToInt16(Model.reservations.Where(x => x.PriceInf == false).Count()) + @Convert.ToInt16(Model.reservationCancels.Where(x => x.PriceInf == false && x.Procedure == false).Count())</td>
+                                        <td style="padding:0;text-align:center;">@Model.reservations.Where(x => x.PriceInf == true).Count() + @Model.reservationCancels.Where(x => x.PriceInf == true && x.Procedure == false).Count()</td>
+                                        <td style="padding:0;text-align:center;">@Model.reservationCancels.Count()</td>
+                                        <td style="padding:0;text-align:center;">@Model.reservationCancels.Count() + @Model.reservations.Count()</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    
 
-                }
+                    <div class="card card-white">
+                        <div class="card-header">
+                            <h3 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-money-check-alt"></i>Aidat Borcu Yok</h3>
 
-            }
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:0;text-align:center;">Ödenmeyen</td>
+                                        <td style="padding:0;text-align:center;">Ödeme Yapılan</td>
+                                        <td style="padding:0;text-align:center;">İptal Edilen</td>
+                                        <td style="padding:0;text-align:center;">Genel</td>
+                                    </tr>
+                                    <tr class="info" style="color:#000;">
+                                        <td style="padding:0;text-align:center;">0 Adet</td>
+                                        <td style="padding:0;text-align:center;">14 Adet</td>
+                                        <td style="padding:0;text-align:center;">3 Adet</td>
+                                        <td style="padding:0;text-align:center;">17 Adet</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-        </div>
+                    @{
+                        var x = Model.cabinetListUsers.Where(x => x.CabinetUserId == Model.memberLists.UserId).ToList();
+                    }
+
+                    @if (x.Count == 0)
+                    {
+                        <div class="card card-white">
+                            <div class="card-header">
+                                <h3 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-box"></i>Dolap Bilgileri</h3>
+
+                                <div class="card-tools">
+                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black" type="button" class="btn btn-tool">
+                                        Dolap Tahsis Et
+                                    </button>
+                                </div>
+
+
+
+                            </div>
+                            <div class="card-body p-0">
+                                <h5 style="text-align:center">Dolap Bilgisi Bulunmamaktadır.</h5>
+                            </div>
+                        </div>
+                    }
+
+                    else
+                    {
+                        <div class="card card-white">
+                            <div class="card-header">
+                                @{
+                                    var firstPrice = 0;
+
+                                    foreach (var item in x)
+                                    {
+                                        var priceModel = item.CabinetOpPrice;
+
+                                        firstPrice = firstPrice + priceModel;
+                                    }
+                                }
+
+                                <h3 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-box"></i>Dolap Bilgileri - @firstPrice ₺ </h3>
+
+
+                                <div class="card-tools">
+                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black" type="button" class="btn btn-tool">
+                                        Dolap Tahsis Et
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <div class="card-body p-0">
+
+                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="padding:0;text-align:center;">Dolap Kodu</td>
+                                            <td style="padding:0;text-align:center;">Aidat Ücreti / Yıllık</td>
+                                            <td style="padding:0;text-align:center;">Dolap Türü</td>
+                                            <td style="padding:0;text-align:center;">Dolap Sahibi</td>
+                                            <td style="padding:0;text-align:center;">Dolap Alım Tarihi</td>
+
+                                        </tr>
+
+                                        @foreach (var item in x)
+
+                                        {
+                                            <tr class="info" style="color:#000;">
+
+                                                <td style="padding:0;text-align:center;">@item.CabinetCode</td>
+                                                <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
+                                                <td style="padding:0;text-align:center;">@item.CabinetOpTypes</td>
+                                                <td style="padding:0;text-align:center;">@item.CabinetWho</td>
+                                                <td style="padding:0;text-align:center;">@item.Date</td>
+                                                <td style="padding:0;text-align:center;">
+                                                    <i id="@item.CabinetOpId" onclick="deleteCabinet(this.id)" style="text-align:center" class="fas fa-trash"></i>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
         </div>
     </section>
-    <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Dolap Tahsis Et</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="recipient-name" class="col-form-label">Dolap Seç:</label>
+                        <div class="input-group">
+                            <select id="cabinetCode" class="form-control">
+                                <option disabled="disabled" selected="selected">Dolap Seç</option>
+
+                                @foreach (var item in Model.cabinetOperations)
+                                {
+                                    var codeCheck = Model.cabinetListUsers.Where(x => x.CabinetCode == item.CabinetCode).FirstOrDefault();
+
+                                    if (codeCheck == null)
+                                    {
+                                        <option id="@item.CabinetCode"> @item.CabinetCode</option>
+                                    }
+
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Türü</label>
+                        <input disabled="disabled" type="text" id="cabinetType" class="form-control">
+                    </div>
+
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Ücreti</label>
+                        <input disabled="disabled" type="text" id="cabinetPrice" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-form-label">Dolap Türü</label>
+                        <select id="whoCabinet" class="form-control">
+
+
+                            <option>Kendi</option>
+                            <option>Eşi</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="addCabinetMem()">Tahsis Et</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function addCabinetforMember() {
+
+
+        $('#myModal').modal('toggle');
+
+        $('#cabinetCode').on('change', function () {
+
+            var code = $("#cabinetCode option:selected").val();
+
+            $.ajax({
+                type: "Get",
+                url: '../AdminHome/GetCabinet',
+                cache: false,
+                data: { "code": code },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    debugger;
+
+
+                    $("#cabinetPrice").val(res.cabinetTypes[0].cabinetTypesPrice);
+                    $("#cabinetType").val(res.cabinetTypes[0].cabinetTypes);
+
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+        });
+
+    }
+
+    function addCabinetMem() {
+
+        var userId = $("#userId").text();
+        var price = $("#cabinetPrice").val();
+        var type = $("#cabinetType").val();
+        var code = $("#cabinetCode option:selected").val();
+        var who = $("#whoCabinet option:selected").val();
+
+        if (userId == "" && price == "" && type == "" && type == "" && code == "" && who == "") {
+            swal("Başarısız!", "Lütfen Bilgileri Doldurunuz", "warning");
+        }
+
+        else {
+            $.ajax({
+                type: "Get",
+                url: '../AdminHome/AddCabinet',
+                cache: false,
+                data: { "code": code, "type": type, "price": price, "who": who, "userId": userId },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res == false) {
+                        swal("Başarısız!", "Bir Hata Oluştu!", "warning");
+                    }
+                    else {
+                        swal({
+                            title: "Başarılı",
+                            text: "Dolap Tahsis Edildi !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
+
+
+
+                            location.reload();
+
+                        });
+                    }
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
+
+    function deleteCabinet(id) {
+
+
+        if (id == "") {
+            swal("Başarısız!", "Bir Hata Oluştu", "warning");
+        }
+        else {
+            swal({
+                title: "Emin Misiniz?",
+                text: "Dolap  İptal Edilecek !",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        $.ajax({
+                            type: "Get",
+                            url: '../AdminHome/DeleteCabinet',
+                            cache: false,
+                            data: { "id": id },
+                            dataType: "json",
+                            async: true,
+                            success: function (res) {
+
+
+                                if (res == false) {
+                                    swal("Başarısız!", "Bir Hata Oluştu!", "warning");
+                                }
+                                else {
+                                    swal({
+                                        title: "Başarılı",
+                                        text: "Dolap  Başarılı Bir Şekilde Üyeden Alındı !",
+                                        icon: "success",
+                                        button: "Tamam",
+                                    }).then((value) => {
+
+
+
+                                        location.reload();
+
+                                    });
+
+                                }
+
+                            },
+
+                            error: function (textStatus, errorThrown) {
+                                console.log(JSON.stringify(textStatus));
+                                console.log(textStatus);
+                            }
+                        });
+
+                    }
+                    else
+                        swal({
+                            title: "Dolap Korundu",
+                            text: "Dolap Silmekten Vazgeçtiniz!",
+                            icon: "success",
+                            button: "Tamam",
+                        });
+                });
+        }
+
+
+    }
+
+</script>
+

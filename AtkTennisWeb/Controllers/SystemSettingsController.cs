@@ -929,6 +929,31 @@ namespace AtkTennisWeb.Controllers
         }
 
         #endregion
+
+        #region MemberSettings
+
+        public IActionResult MemberSettings()
+        {
+
+            MemberSettingsViewDto model = new MemberSettingsViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberSettingsViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/MemberSettings"));
+
+                if (model == null)
+
+                    model = new MemberSettingsViewDto();
+            }
+            catch (Exception)
+            {
+                model = new MemberSettingsViewDto();
+            }
+
+            return View(model);
+        }
+
+        #endregion
     }
 }
 

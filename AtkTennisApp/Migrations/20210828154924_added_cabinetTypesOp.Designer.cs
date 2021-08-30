@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210828154924_added_cabinetTypesOp")]
+    partial class added_cabinetTypesOp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace AtkTennisApp.Migrations
                     b.ToTable("applicationLogs");
                 });
 
-            modelBuilder.Entity("AtkTennisApp.Models.CabinetListUser", b =>
+            modelBuilder.Entity("AtkTennisApp.Models.CabinetOperations", b =>
                 {
                     b.Property<int>("CabinetOpId")
                         .ValueGeneratedOnAdd()
@@ -71,30 +73,6 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("CabinetUserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CabinetWho")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CabinetOpId");
-
-                    b.ToTable("cabinetListUsers");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.CabinetOperations", b =>
-                {
-                    b.Property<int>("CabinetOpId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CabinetCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CabinetOpTypes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("CabinetOpId");
 
                     b.ToTable("cabinetOperations");
@@ -108,9 +86,6 @@ namespace AtkTennisApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CabinetTypes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CabinetTypesPrice")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CabinetId");

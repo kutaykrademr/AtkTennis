@@ -1315,7 +1315,31 @@ namespace AtkTennisApp.Controllers
 
         #endregion
 
+        #region MemberSettings
 
+        [HttpGet("MemberSettings", Name = "MemberSettings")]
+        public MemberSettingsViewModel MemberSettings()
+
+        {
+
+            MemberSettingsViewModel model = new MemberSettingsViewModel();
+
+            try
+            {
+                model.cabinetOperations = db.cabinetOperations.ToList();
+                model.cabinetTypes = db.cabinetTypes.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new MemberSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        #endregion
 
     }
 }

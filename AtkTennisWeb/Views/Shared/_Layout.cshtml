@@ -342,7 +342,7 @@
 
 
                         <li  class="nav-item ">
-                            <a style="background-color:#625e5e" href="#" class="nav-link">
+                            <a style="background-color:#625e5e" href="" class="nav-link">
                                 <i class="nav-icon fas fa-bell"></i>
                                 <p>
                                     Üyeler
@@ -355,7 +355,7 @@
 
 
                                 <li class="nav-item">
-                                    <a href="~/Public/ReservationCancel" class="nav-link">
+                                    <a href="~/SystemSettings/MemberSettings" class="nav-link">
                                         <i class="far fa-window-close nav-icon"></i>
                                         <p>Dolap İşlemleri</p>
                                     </a>
@@ -721,8 +721,6 @@
 
     function findMemberTotal() {
 
-        
-
         $.ajax({
             type: "Get",
             url: '../Public/UserList',
@@ -758,34 +756,11 @@
 
         debugger;
 
-        $.ajax({
-            type: "Get",
-            url: '../Public/UserList',
-            cache: false,
-            dataType: "json",
-            async: true,
-            success: function (res) {
+        var x = $("#findMemberTotal").val();
 
+        var memberNum = x.split("-")[0];
 
-
-                var mem = [];
-
-                for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
-                }
-
-                $("#findMemberTotal").autocomplete({
-                    source: mem
-                });
-
-
-            },
-
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+        window.location.href = "../AdminHome/MemberDetailPage?memberNum=" + memberNum;
     }
 
 </script>

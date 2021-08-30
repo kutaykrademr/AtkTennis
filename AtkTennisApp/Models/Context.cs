@@ -34,6 +34,10 @@ namespace AtkTennis.Models
 
         public DbSet<SchoolPriceType> schoolPriceTypes { get; set; }
 
+        public DbSet<CabinetType> cabinetTypes { get; set; }
+        public DbSet<CabinetOperations> cabinetOperations { get; set; }
+        public DbSet<CabinetListUser> cabinetListUsers { get; set; }
+
 
 
         public DbSet<PerformanceType> performanceTypes { get; set; }

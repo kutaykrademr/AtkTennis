@@ -70,6 +70,25 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("GetCabinet", Name = "GetCabinet")]
+        public JsonResult GetCabinet(string code)
+        {
+            MemberSettingsViewModel model = new MemberSettingsViewModel();
+
+            try
+            {
+                model.cabinetOperations = db.cabinetOperations.Where(x => x.CabinetCode == code).ToList();
+                model.cabinetTypes = db.cabinetTypes.Where(x => x.CabinetTypes == model.cabinetOperations[0].CabinetOpTypes).ToList();
+            }
+            catch (Exception ex)
+            {
+                model = new MemberSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
+
         [HttpGet("GetResTable", Name = "GetResTable")]
         public JsonResult GetResTable(string date)
         {
@@ -95,17 +114,48 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetMemberDetail", Name = "GetMemberDetail")]
-        public JsonResult GetMemberDetail(int memberNumber)
+        public JsonResult GetMemberDetail(int memberNum)
         {
-            HomeModelView model = new HomeModelView();
+            GetMemberDetailViewModel model = new GetMemberDetailViewModel();
+
 
             try
             {
-           
+                var totalPriceResInf = 0;
+                var totalPriceResCancelInf = 0;
+
+                model.memberLists = db.memberLists.Where(x => x.MemberNumber == memberNum).FirstOrDefault();
+                var userId = model.memberLists.UserId;
+                model.cabinetListUsers = db.cabinetListUsers.ToList();
+                model.cabinetTypes = db.cabinetTypes.ToList();
+                model.cabinetOperations = db.cabinetOperations.ToList();
+                model.reservations = db.reservations.Where(x => x.UserId == userId).ToList();
+                model.reservationCancels = db.reservationCancels.Where(x => x.UserId == userId).ToList();
+
+                for (int i = 0; i < model.reservations.Count; i++)
+                {
+                    if (model.reservations[i].PriceInf == false)
+                    {
+                        var x = model.reservations[i].Price;
+                        totalPriceResInf = totalPriceResInf + x;
+                    }
+                }
+                for (int i = 0; i < model.reservationCancels.Count; i++)
+                {
+                    if (model.reservationCancels[i].PriceInf == false && model.reservationCancels[i].Procedure == false)
+                    {
+                        var y = model.reservationCancels[i].Price;
+                        totalPriceResCancelInf = totalPriceResCancelInf + y;
+                    }
+                }
+
+                model.totalPrice = totalPriceResInf + totalPriceResCancelInf;
+
             }
+
             catch (Exception ex)
             {
-                model = new HomeModelView();
+                model = new GetMemberDetailViewModel();
                 Mutuals.monitizer.AddException(ex);
             }
 
@@ -138,7 +188,7 @@ namespace AtkTennisApp.Controllers
 
             return Json(model);
         }
-      
+
         [HttpGet("GetRole", Name = "GetRole")]
         public List<AppIdentityRole> GetRole()
 
@@ -175,7 +225,7 @@ namespace AtkTennisApp.Controllers
             }
             catch (Exception ex)
             {
-               
+
                 Mutuals.monitizer.AddException(ex);
             }
 
@@ -605,6 +655,8 @@ namespace AtkTennisApp.Controllers
             return Json(daily_reservations);
 
         }
+
+
 
         [HttpGet("CancelResProcedureModal", Name = "CancelResProcedureModal")]
         public JsonResult CancelResProcedureModal(int id)
@@ -1117,6 +1169,85 @@ namespace AtkTennisApp.Controllers
             }
         }
 
+        [HttpGet("DeleteCabinet", Name = "DeleteCabinet")]
+        public JsonResult DeleteCabinet(int id)
+        {
+            CabinetListUser model = new CabinetListUser();
+
+
+            if (id == null )
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.cabinetListUsers.Where(x => x.CabinetOpId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        db.Remove(model);
+                        db.SaveChanges();
+
+                        return Json(model);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(true);
+            }
+        }
+
+        [HttpGet("AddCabinet", Name = "AddCabinet")]
+        public JsonResult AddCabinet(int price, string code, string who, string type , string userId)
+        {
+            CabinetListUser model = new CabinetListUser();
+
+            var date = DateTime.Now.ToString("dd-MM-yyyy");
+            try
+            {
+
+                model.CabinetCode = code;
+                model.CabinetOpPrice = price;
+                model.CabinetOpTypes = type;
+                model.CabinetWho = who;
+                model.CabinetUserId = userId;
+                model.Date = date;
+
+
+                if (price != null && code != null && who != null && type !=null)
+                {
+                    db.Add(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+            return Json(true);
+        }
+
+
         [HttpGet("ControlNickName", Name = "ControlNickName")]
         public JsonResult ControlNickName(string nickName)
         {
@@ -1234,8 +1365,6 @@ namespace AtkTennisApp.Controllers
 
         }
     }
-
-
 }
 
 
