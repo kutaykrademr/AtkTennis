@@ -33,7 +33,7 @@ namespace AtkTennisApp.Controllers
         Context db = new Context();
 
         [HttpGet("GetHome", Name = "GetHome")]
-        public HomeModelView GetHome(string date)
+        public HomeModelView GetHome()
         {
             DateTime date1 = DateTime.Now;
             var today = date1.ToString("yyyy-MM-dd");
@@ -70,23 +70,47 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-        [HttpGet("GetCabinet", Name = "GetCabinet")]
-        public JsonResult GetCabinet(string code)
+        [HttpGet("GetMultiReservation", Name = "GetMultiReservation")]
+        public List<Court> GetMultiReservation()
         {
-            MemberSettingsViewModel model = new MemberSettingsViewModel();
+
+            List<Court> model = new List<Court>();
 
             try
             {
-                model.cabinetOperations = db.cabinetOperations.Where(x => x.CabinetCode == code).ToList();
-                model.cabinetTypes = db.cabinetTypes.Where(x => x.CabinetTypes == model.cabinetOperations[0].CabinetOpTypes).ToList();
+                model = db.courts.ToList();
+
             }
             catch (Exception ex)
             {
-                model = new MemberSettingsViewModel();
+                model = new List<Court>();
                 Mutuals.monitizer.AddException(ex);
             }
 
-            return Json(model);
+            return model;
+        }
+
+        [HttpGet("GetCabinetListUser", Name = "GetCabinetListUser")]
+        public CabinetListUserViewModel GetCabinetListUser(string date)
+        {
+      
+           CabinetListUserViewModel model = new CabinetListUserViewModel();
+
+
+            try
+            {
+                model.cabinetListUsers = db.cabinetListUsers.ToList();
+                model.memberLists = db.memberLists.ToList();
+                
+            }
+            catch (Exception ex)
+            {
+                model = new CabinetListUserViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+
+            return model;
         }
 
         [HttpGet("GetResTable", Name = "GetResTable")]
@@ -1209,6 +1233,7 @@ namespace AtkTennisApp.Controllers
             }
         }
 
+
         [HttpGet("AddCabinet", Name = "AddCabinet")]
         public JsonResult AddCabinet(int price, string code, string who, string type , string userId)
         {
@@ -1247,6 +1272,24 @@ namespace AtkTennisApp.Controllers
             return Json(true);
         }
 
+        [HttpGet("GetCabinet", Name = "GetCabinet")]
+        public JsonResult GetCabinet(string code)
+        {
+            MemberSettingsViewModel model = new MemberSettingsViewModel();
+
+            try
+            {
+                model.cabinetOperations = db.cabinetOperations.Where(x => x.CabinetCode == code).ToList();
+                model.cabinetTypes = db.cabinetTypes.Where(x => x.CabinetTypes == (model.cabinetOperations[0].CabinetOpTypes).Trim()).ToList();
+            }
+            catch (Exception ex)
+            {
+                model = new MemberSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
 
         [HttpGet("ControlNickName", Name = "ControlNickName")]
         public JsonResult ControlNickName(string nickName)
@@ -1362,6 +1405,162 @@ namespace AtkTennisApp.Controllers
             }
 
             return Json(false);
+
+        }
+
+        [HttpGet("GetResTimeMulti", Name = "GetResTimeMulti")]
+        public JsonResult GetResTimeMulti(int courtId, string dateInf , string date2 , string day)
+        {
+
+         
+
+            var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
+            var startTime = Convert.ToDateTime(court.CourtStartTime);
+            var finishTime = Convert.ToDateTime(court.CourtFinishTime);
+            string period = court.CourtTimePeriod;
+            var periodTime = Convert.ToDouble(period);
+            var sTime = startTime.AddMinutes(-periodTime);
+            var miles = (finishTime - sTime).TotalHours;
+
+            DateTime startDate = Convert.ToDateTime(dateInf);
+            DateTime finishDate = Convert.ToDateTime(date2);
+
+
+
+
+            List<string> dateList = new List<string>();
+
+            for (DateTime date = startDate; date <= finishDate ;  date=date.AddDays(1))
+            {
+                dateList.Add(date.ToString("yyyy-MM-dd"));
+            }
+
+
+
+
+
+            List<res_time> res_Times = new List<res_time>();
+
+            if (periodTime == 15)
+            {
+                var count = (miles * 4);
+
+
+                for (int i = 0; i < count; i++)
+                {
+
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+                    var d = Convert.ToString(c);
+
+                    sTime = Convert.ToDateTime(d);
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Period = periodTime,
+                        Times = d
+
+                    });
+
+                }
+
+            }
+
+
+            else if (periodTime == 30)
+            {
+                var count = miles * 2;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+                    var d = Convert.ToString(c);
+
+                    sTime = Convert.ToDateTime(d);
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Period = periodTime,
+                        Times = d
+                    });
+
+                }
+            }
+
+
+            else
+            {
+                var count = miles;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var b = sTime.AddMinutes(periodTime);
+                    var c = b.ToString("HH:mm");
+                    var d = Convert.ToString(c);
+
+                    sTime = Convert.ToDateTime(d);
+
+                    res_Times.Add(new res_time
+                    {
+                        TimesId = i,
+                        Period = periodTime,
+                        Times = d
+                    });
+
+                }
+
+            }
+
+
+
+
+            List<court_reserve> daily_reservations = new List<court_reserve>();
+
+            for (int a = 0; a < dateList.Count; a++)
+            {
+                var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateList[a] && x.CancelRes == false).ToList();
+
+                var day_routine = res_Times;
+
+            
+
+                try
+                {
+
+                    bool _isTaken = false;
+
+                    for (int i = 0; i < day_routine.Count(); i++)
+                    {
+                        foreach (var item in model)
+                        {
+                            if (day_routine[i].Times == item.ResStartTime) _isTaken = true;
+                            if (day_routine[i].Times == item.ResFinishTime) _isTaken = false;
+                        }
+
+                        daily_reservations.Add(new court_reserve
+                        {
+                            start = day_routine[i].Times,
+                            Period = day_routine[i].Period,
+                            isTaken = _isTaken,
+                            timeId = day_routine[i].TimesId
+                        });
+
+                        
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    model = new List<Reservation>();
+                    Mutuals.monitizer.AddException(ex);
+                }
+
+            }
+
+            return Json(true);
 
         }
     }

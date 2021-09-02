@@ -1,0 +1,151 @@
+﻿@model List<Helpers.Dto.ViewDtos.CourtDto>;
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="sticky-top mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Çoklu Rezervasyon Kontrol</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div id="selCourt">
+                                    <label>Kort Seçimi:</label>
+                                    <select id="courtInf" class="form-control">
+                                        @foreach (var item in Model)
+                                        {
+                                            <option value="@item.CourtId">@item.CourtName</option>
+                                        }
+
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Başlangıç Tarihi:</label>
+                                    <input class="form-control" type="date" id="timeNow" style="cursor:pointer; ">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Bitiş Tarihi:</label>
+                                    <input class="form-control" type="date" id="timeTwoNow" style="cursor:pointer; ">
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-dark" onclick="findSuitability()">Uygunluk Ara</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $('#timeNow').val(today);
+
+
+        var date = $("#timeNow").val();
+
+        const d = new Date(date);
+        d.setDate(d.getDate() + 7);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+
+        var date3 = d.getFullYear() + '-' + month + '-' + day;
+
+        $('#timeTwoNow').val(date3);
+
+    });
+
+    function findSuitability() {
+
+        var courtId = $("#courtInf option:selected").val();
+        var date = $("#timeNow").val();
+        var date2 = $('#timeTwoNow').val();
+        var day = "Pazartesi";
+
+
+        $.ajax({
+            type: "POST",
+            url: '../AdminHome/GetResTimeMulti',
+            cache: false,
+            data: { "courtId": courtId, "dateInf": date, "date2": date2 , "day":day },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    swal({
+                        title: "Dolap Türü Silindi",
+                        text: "Dolap  Başarılı Bir Şekilde Silindi !",
+                        icon: "success",
+                        button: "Tamam",
+                        timer: 600,
+                    }).then((value) => {
+
+                        location.reload();
+
+                    });
+
+                }
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: " Lütfen sonra tekrar deneyiniz.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+</script>

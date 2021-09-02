@@ -24,7 +24,7 @@ namespace AtkTennisWeb.Controllers
             try
             {
                 model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome"));
-                if(model == null)
+                if (model == null)
                     model = new HomeModelDto();
             }
             catch (Exception)
@@ -147,7 +147,44 @@ namespace AtkTennisWeb.Controllers
 
             return View(model);
 
-            
+
+        }
+        public IActionResult CabinetListUser()
+        {
+
+            CabinetListUserViewDto model = new CabinetListUserViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetListUserViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetCabinetListUser"));
+                if (model == null)
+                    model = new CabinetListUserViewDto();
+            }
+            catch (Exception)
+            {
+                model = new CabinetListUserViewDto();
+            }
+
+            return View(model);
+        }
+
+        public IActionResult MultiReservations()
+        {
+
+            List<CourtDto> model = new List<CourtDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<CourtDto>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetMultiReservation"));
+                if (model == null)
+                    model = new List<CourtDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<CourtDto>();
+            }
+
+            return View(model);
+
+
         }
 
         public JsonResult GetCabinet(string code)
@@ -168,7 +205,7 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
-        public JsonResult DeleteCabinet(int id)
+        public JsonResult DeleteCabinets(int id)
         {
             CabinetListUserDto model = new CabinetListUserDto();
 
@@ -206,14 +243,14 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
-        public JsonResult Register(string name,string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation , string phoneExp, string phone2, string phone2Exp , string email, string emailExp, string birthPlace, string motherName, string fatherName , string city, string district , string job , string note, string phone, string password, string birthdate, string gender, string role , string nickName , int memberNumber)
+        public JsonResult Register(string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, string nickName, int memberNumber)
         {
             AppIdentityUserDto model = new AppIdentityUserDto();
             try
             {
-                 model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewRegister?name=" + name + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role + 
-                     "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation + 
-                     "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber));
+                model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewRegister?name=" + name + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
+                    "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
+                    "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber));
 
                 if (model == null)
                     model = new AppIdentityUserDto();
@@ -249,7 +286,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult GetResUpdTime(int courtId, string dateInf , int resId)
+        public JsonResult GetResUpdTime(int courtId, string dateInf, int resId)
         {
             List<court_reserved> model = new List<court_reserved>();
             try
@@ -308,7 +345,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationCourtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUpdateResAdmin?id=" + id ));
+                model = Helpers.Serializers.DeserializeJson<ReservationCourtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUpdateResAdmin?id=" + id));
 
                 if (model != null)
                 {
@@ -326,7 +363,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdateResAdmin(int id , string startTime , string finishTime , string time , int cId)
+        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId)
         {
             ReservationCourtViewDto model = new ReservationCourtViewDto();
 
@@ -418,14 +455,14 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdateMemberList(string id, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role , string checkpass)
+        public JsonResult UpdateMemberList(string id, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, string checkpass)
         {
             AppIdentityRoleDto model = new AppIdentityRoleDto();
             try
             {
-               model =   Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateMemberList?name=" + name + "&username=" + username + "&id=" + id + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
-                     "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
-                     "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&checkpass=" + checkpass));
+                model = Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateMemberList?name=" + name + "&username=" + username + "&id=" + id + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
+                      "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
+                      "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&checkpass=" + checkpass));
 
                 if (model == null)
 
@@ -460,7 +497,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult AddCabinet(int price, string code, string who, string type , string userId)
+        public JsonResult AddCabinet(int price, string code, string who, string type, string userId)
         {
             CabinetListUserDto model = new CabinetListUserDto();
             try
@@ -502,7 +539,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult AddToDo(string toDo , string today)
+        public JsonResult AddToDo(string toDo, string today)
         {
             ToDoListDto model = new ToDoListDto();
             try
@@ -598,6 +635,35 @@ namespace AtkTennisWeb.Controllers
             }
 
         }
+
+        public JsonResult GetResTimeMulti(int courtId, string dateInf , string date2 , string day)
+        {
+            List<court_reserved> model = new List<court_reserved>();
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<List<court_reserved>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetResTimeMulti?courtId=" + courtId + "&dateInf=" + dateInf + "&date2=" + date2 + "&day=" + day));
+
+                if (model == null)
+
+
+                {
+                    return Json(false);
+                }
+
+
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            return Json(model);
+
+
+        }
+
+
 
     }
 

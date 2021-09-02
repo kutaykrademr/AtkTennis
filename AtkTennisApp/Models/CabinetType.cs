@@ -11,6 +11,6 @@ namespace AtkTennisApp.Models
         [Key]
         public int CabinetId { get; set; }
         public string CabinetTypes { get; set; }
-        public string CabinetTypesPrice { get; set; }
+        public int CabinetTypesPrice { get; set; }
     }
 }

@@ -228,7 +228,7 @@
                                 <thead>
                                     <tr>
                                         <th style="background-color:#f5f8fd; min-width:100px" scope="col">
-                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                                                 <button id="submit" type="button" class="btn btn-warning"><i class="fas fa-print"></i></button>
                                                 <button type="button" class="btn btn-danger"><i style="color:white" class="fas fa-trash"></i></button>
                                             </div>
@@ -2219,6 +2219,7 @@
                                 text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
                                 icon: "success",
                                 button: "Tamam",
+                                timer:600,
                             }).then((value) => {
 
                                 getResTable($("#timeNow").val());

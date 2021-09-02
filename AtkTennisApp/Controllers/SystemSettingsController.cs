@@ -1339,6 +1339,155 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("AddCabinetType", Name = "AddCabinetType")]
+        public JsonResult AddCabinetType(string type , int price)
+        {
+
+            CabinetType model = new CabinetType();
+
+            try
+            {
+                model.CabinetTypes = type;
+                model.CabinetTypesPrice = price;
+
+
+                if (model != null)
+                {
+                    db.Add(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("DeleteCabinetType", Name = "DeleteCabinetType")]
+        public JsonResult DeleteCabinetType(int id)
+        {
+
+            CabinetType model = new CabinetType();
+
+            try
+            {
+                model = db.cabinetTypes.Where(x => x.CabinetId == id).FirstOrDefault();
+               
+
+                if (model != null)
+                {
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
+
+
+
+        [HttpGet("AddCabinets", Name = "AddCabinets")]
+        public JsonResult AddCabinets(string code, string cabType)
+        {
+
+            CabinetOperations model = new CabinetOperations();
+
+            model = db.cabinetOperations.FirstOrDefault(x => x.CabinetCode == code.Trim());
+
+            if (model == null)
+            {
+                try
+                {
+                    model.CabinetCode = code;
+                    model.CabinetOpTypes = cabType;
+
+
+                    if (model != null)
+                    {
+                        db.Add(model);
+                        db.SaveChanges();
+
+                        return Json(model);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+                }
+            }
+
+            else
+            {
+                return Json(false);
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("DeleteCabinetSet", Name = "DeleteCabinetSet")]
+        public JsonResult DeleteCabinetSet(int id)
+        {
+            CabinetOperations model = new CabinetOperations();
+
+
+            if (id == null)
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.cabinetOperations.Where(x => x.CabinetOpId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        db.Remove(model);
+                        db.SaveChanges();
+
+                        return Json(model);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(true);
+            }
+        }
         #endregion
 
     }

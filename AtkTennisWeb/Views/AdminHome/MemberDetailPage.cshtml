@@ -115,82 +115,76 @@
 
             <!-- /.row -->
             <div class="row">
-
-
+     
                 <div class="col-lg-6">
-                    <div class="card card-primary ">
-                        <div class="card-header" style="background-color:rebeccapurple;">
-                            <h3 class="card-title">Kişisel Bilgileriniz</h3>
+                    <div class="card card-white ">
+                        <div class="card-header">
+                            <h3 style="color:gray" class="card-title">Kişisel Bilgileriniz</h3>
                         </div>
+                        <div class="row">
 
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
-
-                            <p class="text-muted">
-                                @Model.memberLists.FullName
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
-
-                            <p class="text-muted">
-                                @Model.memberLists.IdentityNumber
-
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
-
-                            <p class="text-muted">@Model.memberLists.BirthDate / @Model.memberLists.BirthPlace</p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
-
-                            <p class="text-muted">
-                                @Model.memberLists.Phone - @Model.memberLists.PhoneExp  / @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
-
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
-
-                            <p class="text-muted">
-                                @Model.memberLists.Email -@Model.memberLists.EmailExp
-
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
-
-                            <p class="text-muted">
-                                @Model.memberLists.Job
-
-                            </p>
-
-
-                        </div>
-
-                        <div class="card card-primary ">
-                            <div class="card-header" style="background-color:rebeccapurple;">
-                                <h3 class="card-title">Bilgi Devam</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
+                            <div class="card-body col-lg-6">
+                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
 
                                 <p class="text-muted">
-                                    @Model.memberLists.MotherName - @Model.memberLists.FatherName
+                                    @Model.memberLists.FullName
                                 </p>
 
                                 <hr>
 
-                                <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
+
+                                <p class="text-muted">
+                                    @Model.memberLists.IdentityNumber
+
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
+
+                                <p class="text-muted">@Model.memberLists.BirthDate / @Model.memberLists.BirthPlace</p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
+
+                                <p class="text-muted">
+                                    @Model.memberLists.Phone - @Model.memberLists.PhoneExp  / @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
+
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
+
+                                <p class="text-muted">
+                                    @Model.memberLists.Email -@Model.memberLists.EmailExp
+
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
+
+                                <p class="text-muted">
+                                    @Model.memberLists.Job
+
+                                </p>
+
+
+                            </div>
+
+                            <div class="card-body col-lg-6 ">
+                                <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
+
+                                <p class="text-muted">
+                                    @Model.memberLists.MotherName - @Model.memberLists.FatherName
+                                    </ p>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
 
                                 <p class="text-muted">
                                     @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
@@ -208,9 +202,7 @@
 
                                 <p class="text-muted">@Model.memberLists.Note</p>
                             </div>
-                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
                     </div>
                 </div>
 
@@ -452,6 +444,8 @@
 
         $('#cabinetCode').on('change', function () {
 
+            debugger;
+
             var code = $("#cabinetCode option:selected").val();
 
             $.ajax({
@@ -489,6 +483,8 @@
         var type = $("#cabinetType").val();
         var code = $("#cabinetCode option:selected").val();
         var who = $("#whoCabinet option:selected").val();
+
+        debugger;
 
         if (userId == "" && price == "" && type == "" && type == "" && code == "" && who == "") {
             swal("Başarısız!", "Lütfen Bilgileri Doldurunuz", "warning");
@@ -552,7 +548,7 @@
 
                         $.ajax({
                             type: "Get",
-                            url: '../AdminHome/DeleteCabinet',
+                            url: '../AdminHome/DeleteCabinets',
                             cache: false,
                             data: { "id": id },
                             dataType: "json",
@@ -570,8 +566,6 @@
                                         icon: "success",
                                         button: "Tamam",
                                     }).then((value) => {
-
-
 
                                         location.reload();
 
@@ -597,8 +591,6 @@
                         });
                 });
         }
-
-
     }
 
 </script>

@@ -953,6 +953,92 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+        public JsonResult AddCabinetType(string type, int price)
+
+        {
+            CabinetTypesDto model = new CabinetTypesDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddCabinetType?type=" + type + "&price=" + price));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationSettingsDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeleteCabinetType(int id)
+
+        {
+            CabinetTypesDto model = new CabinetTypesDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteCabinetType?id=" + id ));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationSettingsDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+
+
+
+
+        public JsonResult AddCabinets(string code, string cabType)
+
+        {
+            CabinetOperationsDto model = new CabinetOperationsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetOperationsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddCabinets?code=" + code + "&cabType=" + cabType));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CabinetOperationsDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeleteCabinetSet(int id)
+        {
+            CabinetOperationsDto model = new CabinetOperationsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetOperationsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteCabinetSet?id=" + id));
+                if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new CabinetOperationsDto();
+            }
+
+            return Json(true);
+        }
         #endregion
     }
 }
