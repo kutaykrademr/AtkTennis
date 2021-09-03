@@ -40,7 +40,7 @@
     <script src="~/lib/jquery/dist/jquery-ui.js"></script>
 </head>
 
-  
+
 
 @{
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
@@ -75,7 +75,6 @@
             border-color: rgba(0, 0, 0, 0.2);
             border-style: solid;
             border-width: 1px !important;
-            
         }
     </style>
 
@@ -270,7 +269,7 @@
                                         </a>
                                     </li>
 
-                                    <li class="nav-item">
+                                    @*<li class="nav-item">
                                         <a href="~/AdminHome/RegisterStudent" class="nav-link">
                                             <i class="fas fa-plus nav-icon"></i>
                                             <p>Öğrenci Kaydı</p>
@@ -282,7 +281,7 @@
                                             <i class="fas fa-list-ol nav-icon"></i>
                                             <p>Öğrenci Genel Liste</p>
                                         </a>
-                                    </li>
+                                    </li>*@
 
                                 </ul>
                             </li>
@@ -302,19 +301,46 @@
 
                                 <ul class="nav nav-treeview">
 
-                                    @*@{
-                                        if (roleName != "Yönetici")
-                                        {*@
-                                            <li class="nav-item">
-                                                <a href="~/Public/Reservation?date=@date" class="nav-link">
-                                                    <i class="fas fa-calendar-check nav-icon"></i>
-                                                    <p>Rezervasyon Yap</p>
-                                                </a>
-                                            </li>
-                                        @*}
-                                    }*@
+                                    <li class="nav-item">
+                                        <a href="~/AdminHome/MultiReservations" class="nav-link">
+                                            <i class="fas fa-calendar-check nav-icon"></i>
+                                            <p>Çoklu Rezervasyon Yap</p>
+                                        </a>
+                                    </li>
 
 
+
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Rezervasyon İptal</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        }
+
+                            @*<li class="nav-item ">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-bell"></i>
+                                    <p>
+                                        Rezervasyonlar
+                                        <i class="fas fa-angle-left right"></i>
+
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="~/Public/Reservation?date=@date" class="nav-link">
+                                            <i class="fas fa-calendar-check nav-icon"></i>
+                                            <p>Rezervasyon Yap</p>
+                                        </a>
+                                    </li>
+               
 
                                     <li class="nav-item">
                                         <a href="~/Public/ReservationList" class="nav-link">
@@ -337,11 +363,11 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                        }
+                            </li>*@
+                        
 
 
-                        <li  class="nav-item ">
+                        <li class="nav-item ">
                             <a style="background-color:#625e5e" href="" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
@@ -453,51 +479,51 @@
                                     </li>
 
                                     @*<li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                <p>
-                    Öğr. Gel. ve Tak. Ayar.
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Antreman Havuzu</p>
-                    </a>
-                </li>
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                            <p>
+                                Öğr. Gel. ve Tak. Ayar.
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Antreman Havuzu</p>
+                                </a>
+                            </li>
 
-                <li class="nav-item">
-                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Fiziksel Çalışmalar</p>
-                    </a>
-                </li>
+                            <li class="nav-item">
+                                <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Fiziksel Çalışmalar</p>
+                                </a>
+                            </li>
 
 
-                <li class="nav-item">
-                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Oyunlar</p>
-                    </a>
-                </li>
+                            <li class="nav-item">
+                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Oyunlar</p>
+                                </a>
+                            </li>
 
-                <li class="nav-item">
-                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Gelişim Formları</p>
-                    </a>
-                </li>
+                            <li class="nav-item">
+                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Gelişim Formları</p>
+                                </a>
+                            </li>
 
-                <li class="nav-item">
-                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>İçerik İşlemleri</p>
-                    </a>
-                </li>
-            </ul>
-        </li>*@
+                            <li class="nav-item">
+                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>İçerik İşlemleri</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>*@
 
                                     <li class="nav-item">
                                         <a href="~/SystemSettings/ReservationSettings" class="nav-link">
@@ -717,7 +743,7 @@
 
 <script>
 
-    
+
 
     jQuery.ui.autocomplete.prototype._resizeMenu = function () {
         var ul = this.menu.element;

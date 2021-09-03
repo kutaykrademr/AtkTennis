@@ -93,15 +93,15 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetCabinetListUser", Name = "GetCabinetListUser")]
         public CabinetListUserViewModel GetCabinetListUser(string date)
         {
-      
-           CabinetListUserViewModel model = new CabinetListUserViewModel();
+
+            CabinetListUserViewModel model = new CabinetListUserViewModel();
 
 
             try
             {
                 model.cabinetListUsers = db.cabinetListUsers.ToList();
                 model.memberLists = db.memberLists.ToList();
-                
+
             }
             catch (Exception ex)
             {
@@ -1199,7 +1199,7 @@ namespace AtkTennisApp.Controllers
             CabinetListUser model = new CabinetListUser();
 
 
-            if (id == null )
+            if (id == null)
             {
                 return Json(false);
             }
@@ -1235,7 +1235,7 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("AddCabinet", Name = "AddCabinet")]
-        public JsonResult AddCabinet(int price, string code, string who, string type , string userId)
+        public JsonResult AddCabinet(int price, string code, string who, string type, string userId)
         {
             CabinetListUser model = new CabinetListUser();
 
@@ -1251,7 +1251,7 @@ namespace AtkTennisApp.Controllers
                 model.Date = date;
 
 
-                if (price != null && code != null && who != null && type !=null)
+                if (price != null && code != null && who != null && type != null)
                 {
                     db.Add(model);
                     db.SaveChanges();
@@ -1409,12 +1409,12 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetResTimeMulti", Name = "GetResTimeMulti")]
-        public JsonResult GetResTimeMulti(int courtId, string dateInf , string date2 , string day)
+        public JsonResult GetResTimeMulti(int courtId, string dateInf, string date2, string day)
         {
 
-         
 
-            var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
+
+            var court = db.courts.FirstOrDefault(x => x.CourtId == courtId);
             var startTime = Convert.ToDateTime(court.CourtStartTime);
             var finishTime = Convert.ToDateTime(court.CourtFinishTime);
             string period = court.CourtTimePeriod;
@@ -1424,18 +1424,62 @@ namespace AtkTennisApp.Controllers
 
             DateTime startDate = Convert.ToDateTime(dateInf);
             DateTime finishDate = Convert.ToDateTime(date2);
-
+            var days = day.Split(",");
+            string dayy = "";
 
 
 
             List<string> dateList = new List<string>();
+            List<string> dateList2 = new List<string>();
 
-            for (DateTime date = startDate; date <= finishDate ;  date=date.AddDays(1))
+            for (DateTime date = startDate; date <= finishDate; date = date.AddDays(1))
             {
-                dateList.Add(date.ToString("yyyy-MM-dd"));
+                int i = (int)date.DayOfWeek;
+            
+
+                switch (i)
+                {
+                    case 0:
+                        dayy = "Pazar";
+                        break;
+                    case 1:
+                        dayy = "Pazartesi";
+                        break;
+                    case 2:
+                        dayy = "Salı";
+                        break;
+                    case 3:
+                        dayy = "Çarşamba";
+                        break;
+                    case 4:
+                        dayy = "Perşembe";
+                        break;
+                    case 5:
+                        dayy = "Cuma";
+                        break;
+                    case 6:
+                        dayy = "Cumartesi";
+                        break;
+
+                }
+               
+                dateList.Add(date.ToString("yyyy-MM-dd") +","+ dayy);
+
             }
 
 
+            for (int z = 0; z < days.Count(); z++)
+            {
+                for (int d = 0; d < dateList.Count(); d++)
+                {
+
+                    if (dateList[d].Split(",")[1] == days[z])
+                    {
+                        dateList2.Add(dateList[d]);
+                    }
+
+                }
+            }
 
 
 
@@ -1517,15 +1561,22 @@ namespace AtkTennisApp.Controllers
 
 
 
-            List<court_reserve> daily_reservations = new List<court_reserve>();
 
-            for (int a = 0; a < dateList.Count; a++)
+
+            List<court_reserve> daily_reservations = new List<court_reserve>();
+            List<int> asa = new List<int>();
+            var daily = 0;
+
+
+            for (int a = 0; a < dateList2.Count; a++)
             {
-                var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateList[a] && x.CancelRes == false).ToList();
+                var dateList2Split = dateList2[a].Split(",")[0];
+
+                var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateList2Split && x.CancelRes == false).ToList();
 
                 var day_routine = res_Times;
 
-            
+                daily =Convert.ToInt32( day_routine.Count());
 
                 try
                 {
@@ -1539,6 +1590,11 @@ namespace AtkTennisApp.Controllers
                             if (day_routine[i].Times == item.ResStartTime) _isTaken = true;
                             if (day_routine[i].Times == item.ResFinishTime) _isTaken = false;
                         }
+                        if (_isTaken == true)
+                        {
+                            asa.Add(day_routine[i].TimesId);
+                        }
+
 
                         daily_reservations.Add(new court_reserve
                         {
@@ -1548,19 +1604,38 @@ namespace AtkTennisApp.Controllers
                             timeId = day_routine[i].TimesId
                         });
 
-                        
+
                     }
+
+
                 }
+
+
 
                 catch (Exception ex)
                 {
                     model = new List<Reservation>();
                     Mutuals.monitizer.AddException(ex);
                 }
+              
 
             }
 
-            return Json(true);
+            for (int x = 0; x < daily_reservations.Count(); x++)
+            {
+                for (int y = 0; y < asa.Count(); y++)
+                {
+                    if (daily_reservations[x].timeId == asa[y])
+                    {
+                        daily_reservations[x].isTaken = true;
+
+                    }
+                }
+            }
+            var aasa = daily_reservations.Take(daily).ToList();
+           
+
+            return Json(aasa);
 
         }
     }

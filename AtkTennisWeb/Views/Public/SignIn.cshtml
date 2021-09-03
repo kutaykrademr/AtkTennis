@@ -121,7 +121,7 @@
                         async: true,
                         success: function (res) {
 
-                            
+                            debugger;
 
                             if (res.NAME <= 0) {
                                 $.confirm({
@@ -141,8 +141,10 @@
 
                             else {
 
-                              
-
+                                if (res.custom_role != "Yönetici") {
+                                    window.location.href = "../Public/Reservation";
+                                }
+                                else
                                 window.location.href = "../AdminHome/Index";
                             }
                         }
@@ -177,7 +179,10 @@
                 async: true,
                 success: function (res) {
 
-                    if (res == "true") {
+                    debugger;
+
+                    if (res != null) {
+
                         localStorage.setItem("userName", $("#username").val());
                         localStorage.setItem("password", $("#password").val());
 
@@ -194,10 +199,14 @@
 
                        
                         localStorage.setItem("loginCheck", check);
-                        
-                       
 
-                        window.location.href = "../AdminHome/Index";
+
+                        if (res.custom_role != "Yönetici") {
+                            window.location.href = "../Public/Reservation";
+                        }
+                        else
+                            window.location.href = "../AdminHome/Index";
+
                     }
 
                     else

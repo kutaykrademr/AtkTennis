@@ -646,26 +646,17 @@ namespace AtkTennisWeb.Controllers
 
                 if (model == null)
 
-
                 {
                     return Json(false);
                 }
-
-
             }
+
             catch (Exception)
             {
                 return Json(new ReservationViewDto());
             }
 
             return Json(model);
-
-
         }
-
-
-
     }
-
-
 }

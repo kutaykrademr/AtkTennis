@@ -44,6 +44,7 @@ namespace AtkTennisWeb.Controllers
                         HttpContext.Session.SetString("RoleId", model.custom_roleId);
                         HttpContext.Session.SetString("NickName", model.custom_nickName);
 
+                        return Json(model);
                     }
                 }
                 else

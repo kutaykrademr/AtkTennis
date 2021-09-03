@@ -3,6 +3,9 @@
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
 
+@{
+    Layout = "_MemberLayout";
+}
 
 @{
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
@@ -18,7 +21,7 @@
 
     var date = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
 
-  
+
     for (int i = 0; i < newModel.Count; i++)
     {
         if (newModel[i].PriceInf == false)
@@ -81,7 +84,7 @@
 
     <section class="content">
         <div class="container-fluid">
-       
+
             @for (int i = 0; i < date.Count; i++)
             {
                 <div class="card">

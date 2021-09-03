@@ -22,7 +22,8 @@
     <link href="~/adminRoot/plugins/summernote-bs4.min.css" rel="stylesheet" />
     <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
     <link href="~/adminRoot/css/calender.css" rel="stylesheet" />
-
+    <link href="~/adminRoot/css/loading.css" rel="stylesheet" />
+    <link href="~/lib/jquery/dist/jquery-ui.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -34,11 +35,17 @@
 
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
 </head>
+
+
 
 @{
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var roleName = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
 
 @{
@@ -47,68 +54,42 @@
 }
 
 <body class="hold-transition sidebar-mini layout-fixed">
+
+    <style>
+        .ui-autocomplete {
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1510 !important;
+            float: left;
+            min-width: 350px !important;
+            width: 350px !important;
+            padding: 4px 0;
+            margin: 2px 0 0 0;
+            list-style: circle;
+            background-color: #ffffff;
+            border-color: black !important;
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px !important;
+        }
+    </style>
+
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="margin-left:0px">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="~/AdminHome/Index" class="nav-link">AnaMenü</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Sistem Ayarları</a>
-                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                        <li><a href="~/SystemSettings/IdentityRoleSettings" class="dropdown-item">Rol ve Yetkilendirme </a></li>
-                        <li><a href="~/SystemSettings/CourtSettings" class="dropdown-item">Kort Ayarları</a></li>
-                        <li><a href="~/SystemSettings/ReservationSettings" class="dropdown-item">Rezervasyon Ayarları</a></li>
-
-                        <li class="dropdown-divider"></li>
-                        <li class="dropdown-submenu dropdown-hover">
-                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Eğitim Ayarları</a>
-                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-
-                                <li><a href="~/SystemSettings/EducationSchoolSettings" class="dropdown-item">Okul</a></li>
-                                <li><a href="~/SystemSettings/EducationPerformanceSettings" class="dropdown-item">Performans</a></li>
-                                <li><a href="~/SystemSettings/EducationPrivateLessonSettings" class="dropdown-item">Özel Ders</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu dropdown-hover">
-                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Öğrenci Gel. Tak. Ayarları</a>
-                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-
-                                <li><a href="#" class="dropdown-item">Antreman Havuzu</a></li>
-                                <li><a href="#" class="dropdown-item">Fiziksel Çalışmalar</a></li>
-                                <li><a href="#" class="dropdown-item">Oyunlar</a></li>
-                                <li><a href="#" class="dropdown-item">Gelişim Formları</a></li>
-                                <li><a href="#" class="dropdown-item">İçerik İşlemleri</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Danışma</a>
-                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                        <li><a href="~/AdminHome/NewRegister" class="dropdown-item">Yeni Üye Kayıt</a></li>
-                        <li><a href="~/AdminHome/ListUser" class="dropdown-item">Üye Listeleri</a></li>
-                        <li><a href="#" class="dropdown-item">Öğrenci Kayıt</a></li>
-                        <li><a href="#" class="dropdown-item">Öğrenci Listleri</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Rezervasyonlar</a>
-                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                        <li><a href="~/Public/Reservation?date=@date" class="dropdown-item">Rezervasyon Yap</a></li>
-                        <li><a href="#" class="dropdown-item">Rezervasyon Listem</a></li>
-                        <li><a href="#" class="dropdown-item">Rezervasyon İptali</a></li>
-                        <li><a href="#" class="dropdown-item">Üyelik Aidatlarım</a></li>
-                    </ul>
-                </li>
             </ul>
+
+     
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
@@ -181,7 +162,114 @@
 
                 </li>
             </ul>
+
+
+
         </nav>
+
+
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link">
+                <img src="~/adminRoot/images/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">
+                    @if (Mutuals.CompName == null)
+                    {@Html.Raw("---------------")}
+                else
+                { @Mutuals.CompName}
+                </span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <i style="font-size:30px; color:white;" class="fas fa-user"></i>
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">@fullname</a>
+                    </div>
+                </div>
+
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+
+
+                       <li class="nav-item menu-open">
+                                <a style="background-color:#d4ff0761" href="~/Public/Reservation?date=@date" class="nav-link active">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Ana Sayfa
+                                        <i class="right fas fa-table"></i>
+                                    </p>
+                                </a>
+                            </li>
+                        
+
+                        <li class="nav-item">
+                            <a style="background-color:#625e5e" href="/Public/MemberInf" class="nav-link">
+                                <i class="fas fa-id-card nav-icon"></i>
+                                <p>Kullanıcı Bilgilerim </p>
+                            </a>
+                        </li>
+
+
+                      
+                            <li class="nav-item ">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-bell"></i>
+                                    <p>
+                                        Rezervasyonlar
+                                        <i class="fas fa-angle-left right"></i>
+
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+
+                                   
+                                    <li class="nav-item">
+                                        <a href="~/Public/Reservation?date=@date" class="nav-link">
+                                            <i class="fas fa-calendar-check nav-icon"></i>
+                                            <p>Rezervasyon Yap</p>
+                                        </a>
+                                    </li>
+                                  
+
+
+                                    <li class="nav-item">
+                                        <a href="~/Public/ReservationList" class="nav-link">
+                                            <i class="fas fa-table nav-icon"></i>
+                                            <p>Rezervasyon Listem</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="~/Public/ReservationCancel" class="nav-link">
+                                            <i class="far fa-window-close nav-icon"></i>
+                                            <p>Rezervasyon İptal</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="~/Admin/ReservationTable" class="nav-link">
+                                            <i class="fas fa-wallet nav-icon"></i>
+                                            <p>Üyelik Aidatlarım</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+
 
         <div class="section">
             @*<main role="main" class="pb-3">*@
@@ -241,8 +329,6 @@
         </aside>
 
     </div>
-
-    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
 
     <script>
         $.widget.bridge('uibutton', $.ui.button)
@@ -341,7 +427,6 @@
 
 
     <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/adminRoot/js/Chart.min.js"></script>
     <script src="~/adminRoot/js/sparkline.js"></script>
@@ -360,6 +445,8 @@
     <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
     <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
     <script src="~/adminRoot/js/sweetAlert.js"></script>
+
+
 
 
 

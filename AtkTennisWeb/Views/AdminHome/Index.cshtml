@@ -203,6 +203,10 @@
                                 </div>
 
                                 <div style="margin-top:8px">
+                                    <a href="~/AdminHome/MultiReservations" type="button" class="btn btn-dark"><i class="fas fa-project-diagram"></i>Çoklu Rezervasyon Yap</a>
+                                </div>
+
+                                <div style="margin-top:8px">
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination">
 
@@ -2171,6 +2175,7 @@
 
         if (times.length == 0) {
 
+            
             swal({
                 title: "Rezervasyon Onaylanmadı",
                 text: "Lütfen Saat Seçiniz !",
@@ -2844,22 +2849,6 @@
             return false;
         });
     });
-
-    //function takeshot() {
-    //    let div =
-    //        document.getElementById('resTableGeneral');
-
-
-    //    html2canvas(div).then(
-    //        function (canvas) {
-    //            document
-    //                .getElementById('output')
-    //                .appendChild(canvas);
-    //        })
-
-    //    $('#outputModal').modal('toggle');
-
-    //}
 
 
 </script>
