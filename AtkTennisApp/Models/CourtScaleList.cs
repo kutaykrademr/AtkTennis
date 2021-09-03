@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Helpers.Dto.ViewDtos
+namespace AtkTennisApp.Models
 {
-   public class CourtScaleDto
+    public class CourtScaleList
     {
+        [Key]
         public int CourtScaleListId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }

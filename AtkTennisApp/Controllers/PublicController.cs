@@ -731,8 +731,17 @@ namespace AtkTennisApp.Controllers
                 var whoRes = db.memberLists.Where(x => x.UserId == model.reservations.doResUserId).FirstOrDefault().FullName;
 
                 model2.courtPriceLists = db.courtPriceLists.ToList();
-                model2.resSchemaModal.FullName = mem.FullName;
-                model2.resSchemaModal.NickName = mem.NickName;
+                if (mem == null)
+                {
+                    model2.resSchemaModal.FullName = model.reservations.NickName;
+                    model2.resSchemaModal.NickName = model.reservations.NickName; 
+                }
+                else
+                {
+                    model2.resSchemaModal.FullName = mem.FullName;
+                    model2.resSchemaModal.NickName = mem.NickName;
+                }
+           
                 model2.resSchemaModal.CourtName = model.reservations.Court.CourtName;
                 model2.resSchemaModal.ResDate = model.reservations.ResDate;
                 model2.resSchemaModal.ResEvent = model.reservations.ResEvent;

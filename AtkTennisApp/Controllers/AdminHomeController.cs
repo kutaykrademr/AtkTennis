@@ -56,6 +56,7 @@ namespace AtkTennisApp.Controllers
                 model.courtPriceLists = db.courtPriceLists.ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
+                model.courtScaleLists = db.courtScaleLists.ToList();
 
 
 
