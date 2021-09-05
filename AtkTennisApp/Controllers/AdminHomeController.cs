@@ -71,6 +71,33 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("GetUserSchoolList", Name = "GetUserSchoolList")]
+        public JsonResult GetUserSchoolList()
+        {
+
+
+            MemberSchoolPerViewModel model = new MemberSchoolPerViewModel();
+
+
+            try
+            {
+                model.schoolTypes = db.schoolTypes.ToList();
+                model.memberLists = db.memberLists.ToList();
+                model.performanceTypes = db.performanceTypes.ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                model = new MemberSchoolPerViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+
+            return Json(model);
+        }
+
         [HttpGet("GetMultiReservation", Name = "GetMultiReservation")]
         public List<Court> GetMultiReservation()
         {
@@ -126,6 +153,7 @@ namespace AtkTennisApp.Controllers
                 model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.memberLists = db.memberLists.ToList();
+                model.courtScaleLists = db.courtScaleLists.ToList();
 
             }
             catch (Exception ex)
@@ -1436,7 +1464,7 @@ namespace AtkTennisApp.Controllers
             for (DateTime date = startDate; date <= finishDate; date = date.AddDays(1))
             {
                 int i = (int)date.DayOfWeek;
-            
+
 
                 switch (i)
                 {
@@ -1463,8 +1491,8 @@ namespace AtkTennisApp.Controllers
                         break;
 
                 }
-               
-                dateList.Add(date.ToString("yyyy-MM-dd") +","+ dayy);
+
+                dateList.Add(date.ToString("yyyy-MM-dd") + "," + dayy);
 
             }
 
@@ -1577,7 +1605,7 @@ namespace AtkTennisApp.Controllers
 
                 var day_routine = res_Times;
 
-                daily =Convert.ToInt32( day_routine.Count());
+                daily = Convert.ToInt32(day_routine.Count());
 
                 try
                 {
@@ -1618,7 +1646,7 @@ namespace AtkTennisApp.Controllers
                     model = new List<Reservation>();
                     Mutuals.monitizer.AddException(ex);
                 }
-              
+
 
             }
 
@@ -1634,7 +1662,7 @@ namespace AtkTennisApp.Controllers
                 }
             }
             var aasa = daily_reservations.Take(daily).ToList();
-           
+
 
             return Json(aasa);
 

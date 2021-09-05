@@ -166,7 +166,6 @@ namespace AtkTennisWeb.Controllers
 
             return View(model);
         }
-
         public IActionResult MultiReservations()
         {
 
@@ -187,6 +186,8 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        
+
         public JsonResult GetCabinet(string code)
         {
             MemberSettingsViewDto model = new MemberSettingsViewDto();
@@ -200,6 +201,24 @@ namespace AtkTennisWeb.Controllers
             catch (Exception)
             {
                 model = new MemberSettingsViewDto();
+            }
+
+            return Json(model);
+        }
+
+        public JsonResult GetUserSchoolList()
+        {
+            MemberSchoolPerViewDto model = new MemberSchoolPerViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberSchoolPerViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetUserSchoolList"));
+                if (model == null)
+                    model = new MemberSchoolPerViewDto();
+            }
+            catch (Exception)
+            {
+                model = new MemberSchoolPerViewDto();
             }
 
             return Json(model);
