@@ -194,6 +194,46 @@
 
     });
 
+    function findMember() {
+
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetUserSchoolList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                var mem = [];
+
+              
+                for (var i = 0; i < res.performanceTypes.length; i++) {
+                    mem.push(res.performanceTypes[i].performanceCode + ' - ' + res.performanceTypes[i].performanceTypes);
+                }
+
+
+                for (var i = 0; i < res.schoolTypes.length; i++) {
+                    mem.push(res.schoolTypes[i].code + ' - ' + res.schoolTypes[i].types);
+                }
+
+
+                $("#findMember").autocomplete({
+                    source: mem
+                });
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
     function findSuitability() {
 
 
@@ -288,6 +328,7 @@
 
                         $('#rsvModal').modal('toggle');
 
+                        findMember();
                     }
                     else {
                         $.confirm({
@@ -310,6 +351,8 @@
         }
 
     }
+
+
 
 
     function checkMe(id) {

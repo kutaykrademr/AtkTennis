@@ -11,5 +11,6 @@ namespace AtkTennisApp.ViewModels
         public List<MemberList> memberLists { get; set; } = new List<MemberList>();
         public List<SchoolType> schoolTypes { get; set; } = new List<SchoolType>();
         public List<PerformanceType> performanceTypes { get; set; } = new List<PerformanceType>();
+        public List<CourtScaleList> courtScales { get; set; } = new List<CourtScaleList>();
     }
 }

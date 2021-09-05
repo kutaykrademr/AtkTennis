@@ -84,6 +84,7 @@ namespace AtkTennisApp.Controllers
                 model.schoolTypes = db.schoolTypes.ToList();
                 model.memberLists = db.memberLists.ToList();
                 model.performanceTypes = db.performanceTypes.ToList();
+                model.courtScales = db.courtScaleLists.ToList();
 
 
 
@@ -229,6 +230,7 @@ namespace AtkTennisApp.Controllers
                 model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
                 model.memberLists = db.memberLists.ToList();
                 model.courts = db.courts.ToList();
+                model.courtScales = db.courtScaleLists.ToList();
 
 
             }
@@ -514,6 +516,8 @@ namespace AtkTennisApp.Controllers
                     court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
                     mem = db.memberLists.FirstOrDefault(x => x.NickName == UserName.Trim());
 
+
+
                 }
 
                 catch (Exception e)
@@ -525,43 +529,75 @@ namespace AtkTennisApp.Controllers
 
             if (model == null)
             {
-                var memberPrice = mem.Price;
 
-                var resDebt = Price;
+
+     
 
                 try
                 {
-                    if (memberPrice - resDebt >= 0)
+
+                    if (mem != null)
                     {
+                        var memberPrice = mem.Price;
+                        var resDebt = Price;
 
-                        var newMemberPrice = memberPrice - resDebt;
-                        mem.Price = newMemberPrice;
-                        res.PriceInf = true;
+                        if (memberPrice - resDebt >= 0)
+                        {
+                            res.PrivRes = PrivRes;
+                            res.NickName = mem.NickName;
+                            res.UserId = mem.UserId;
 
-                        res.PrivRes = PrivRes;
-                        res.NickName = mem.NickName;
-                        res.Court = court;
-                        res.ResFinishTime = ResFinishTime;
-                        res.ResStartTime = ResStartTime;
-                        res.ResDate = ResDate;
-                        res.ResEvent = ResEvent;
-                        res.ResTime = ResTime;
-                        res.UserId = mem.UserId;
-                        res.doResUserId = UserId;
-                        res.ResNowDate = ResNowDate;
-                        res.Price = Price;
-                        res.PriceIds = PriceIds;
+                            var newMemberPrice = memberPrice - resDebt;
+                            mem.Price = newMemberPrice;
+                            res.PriceInf = true;
 
-                        db.memberLists.Update(mem);
-                        db.reservations.Add(res);
-                        db.SaveChanges();
+                            res.Court = court;
+                            res.ResFinishTime = ResFinishTime;
+                            res.ResStartTime = ResStartTime;
+                            res.ResDate = ResDate;
+                            res.ResEvent = ResEvent;
+                            res.ResTime = ResTime;
+                            res.doResUserId = UserId;
+                            res.ResNowDate = ResNowDate;
+                            res.Price = Price;
+                            res.PriceIds = PriceIds;
 
+                            db.memberLists.Update(mem);
+                            db.reservations.Add(res);
+                            db.SaveChanges();
+
+                        }
+
+                        else
+                        {
+                            return Json(false);
+                        }
                     }
 
                     else
                     {
-                        return Json(false);
+
+                            res.PrivRes = PrivRes;
+                            res.NickName = UserName.Trim();
+                            res.UserId = "" ;  
+                            res.PriceInf = true;
+                            res.Court = court;
+                            res.ResFinishTime = ResFinishTime;
+                            res.ResStartTime = ResStartTime;
+                            res.ResDate = ResDate;
+                            res.ResEvent = ResEvent;
+                            res.ResTime = ResTime;
+                            res.doResUserId = UserId;
+                            res.ResNowDate = ResNowDate;
+                            res.Price = Price;
+                            res.PriceIds = PriceIds;
+
+                            
+                            db.reservations.Add(res);
+                            db.SaveChanges();
+                      
                     }
+                   
 
                 }
 
@@ -573,11 +609,16 @@ namespace AtkTennisApp.Controllers
                 }
 
                 return Json(res);
+
+
             }
+
             else
 
-                return Json("false");
+               return Json("false");
         }
+
+
 
         [HttpGet("GetResTimeUpd", Name = "GetResTimeUpd")]
         public JsonResult GetResTimeUpd(int courtId, string dateInf, int resId)

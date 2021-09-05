@@ -201,7 +201,7 @@
                                 </div>
 
                                 <div style="margin-top:8px">
-                                    <a href="~/AdminHome/MultiReservations" type="button" class="btn btn-dark"><i class="fas fa-project-diagram"></i>Çoklu Rezervasyon Yap</a>
+                                    <a href="~/AdminHome/MultiReservations" type="button" class="btn btn-dark"><i style="margin-right:15px" class="fas fa-project-diagram"></i>Çoklu Rezervasyon Yap</a>
                                 </div>
 
                                 <div style="margin-top:8px">
@@ -663,7 +663,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="modal-header col-md-9">
+                    <div class="modal-header col-md-12">
                         <div class="col-sm-12">
                             <div class="form-group" style="text-align:center">
                                 <table class="table table-bordered ">
@@ -714,39 +714,6 @@
                             </div>
                         </div>
                     </div>
-
-
-                    <div class="modal-header col-md-3">
-                        <div class="col-sm-12">
-                            <div class="form-group" style="text-align:center">
-                                <table class="table table-bordered ">
-                                    <thead>
-                                        <tr>
-                                            <th style="font-weight:bold" scope="col">Rezervasyon Görevi</th>
-                                            <th style="font-weight:bold" scope="col">Tanımla</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-                                            <td>Görev</td>
-                                            <td>
-                                                <div class="custom-control custom-checkbox" id="privResCheck">
-
-                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="privChecked">
-                                                    <label for="privChecked" class="custom-control-label"></label>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
 
@@ -755,9 +722,34 @@
                 </div>
 
 
-                <div class="modal-footer" id="forApproveId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
+                <div class="modal-footer d-flex justify-content-between" id="forApproveId">
+                    <div>
+                        <table class="table table-bordered ">
+                           
+                            <tbody>
+
+                                <tr>
+                                    <td>Rezervasyon Görevi Tanımla</td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox" id="privResCheck">
+
+                                            <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="privChecked">
+                                            <label for="privChecked" class="custom-control-label"></label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                  
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                        <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
+                    </div>
+                    
                 </div>
 
             </div>
@@ -1166,9 +1158,10 @@
 
 
                 for (var i = 0; i < res.schoolTypes.length; i++) {
-                    mem.push(res.schoolTypes[i].code + ' - ' + res.schoolTypes[i].types );
+                    mem.push(res.schoolTypes[i].code + ' - ' + res.schoolTypes[i].types);
                 }
 
+           
                 $("#findMember").autocomplete({
                     source: mem
                 });
@@ -1238,14 +1231,29 @@
 
                         if (res.reservations[a].court.courtId == res.courts[i].courtId) {
 
+                            debugger;
+
                             NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item">';
 
-                            for (var x = 0; x < res.memberLists.length; x++) {
-                                if (res.reservations[a].userId == res.memberLists[x].userId) {
-                                    NewRow += '<span style="background:#337ab7 ; color:white;">' + res.memberLists[x].nickName + '</span>';
-                                    NewRow += '<span style="margin-left:25px">' + res.memberLists[x].fullName + '</span>';
+                            if (res.reservations[a].userId != "") {
+                                for (var x = 0; x < res.memberLists.length; x++) {
+                                    if (res.reservations[a].userId == res.memberLists[x].userId) {
+                                        NewRow += '<span style="background:#337ab7 ; color:white;">' + res.memberLists[x].nickName + '</span>';
+                                        NewRow += '<span style="margin-left:25px">' + res.memberLists[x].fullName + '</span>';
+                                    }
                                 }
                             }
+                            else {
+
+                                for (var c = 0; c < res.courtScales.length; c++) {
+                                    if (res.reservations[a].nickName == res.courtScales[c].code) {
+
+                                        NewRow += '<span style="background:#337ab7 ; color:white;">' + res.courtScales[c].code + '</span>';
+                                        NewRow += '<span style="margin-left:25px">' + res.courtScales[c].name + '</span>';
+                                    }
+                                }
+                            }
+
                             NewRow += '<span style="margin-left:25px" class="label label-sm label-primary">' + res.reservations[a].resStartTime + " - " + res.reservations[a].resFinishTime + '</span>';
                             NewRow += ' </li> </ul>';
                         }
@@ -2225,6 +2233,9 @@
 
     function Approve(id) {
 
+        debugger;
+
+
         // seçilen saatler
         var times = [];
         $('#checkTimeTable input:checked:not(:disabled)').each(function () {
@@ -2261,10 +2272,14 @@
 
         var today = yyyy + '-' + mm + '-' + dd;
 
+
         var userName = memberUserName[2];
 
+        if (userName == undefined) {
 
-
+            userName = memberUserName[0];
+        }
+   
         var resobject = {
 
             ResDate: '',
@@ -2355,7 +2370,7 @@
                                 text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
                                 icon: "success",
                                 button: "Tamam",
-                                timer: 600,
+                                timer:500,
                             }).then((value) => {
 
                                 getResTable($("#timeNow").val());
