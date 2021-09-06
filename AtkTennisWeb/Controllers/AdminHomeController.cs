@@ -677,5 +677,28 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
+
+        public JsonResult AddMultiRes(int CourtId, string DateInf, string Date2, string ResStartTime, string ResFinishTime, string userId, string UserName , string day)
+        {
+            var model = new ReservationViewDto();
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddMultiRes?CourtId=" + CourtId + "&DateInf=" + DateInf + "&Date2=" + Date2 + "&ResStartTime=" + ResStartTime + "&ResFinishTime=" + ResFinishTime + "&userId=" + userId + "&UserName=" + UserName + "&day=" + day));
+
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationViewDto());
+            }
+
+            if (model == null)
+            {
+                return Json(false);
+            }
+
+            return Json(true);
+
+        }
     }
 }

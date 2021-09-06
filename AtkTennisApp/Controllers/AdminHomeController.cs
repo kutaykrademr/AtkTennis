@@ -10,6 +10,7 @@ using AtkTennisApp.Models;
 using AtkTennis.Models;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
+using System.Collections;
 
 namespace AtkTennisApp.Controllers
 {
@@ -579,7 +580,7 @@ namespace AtkTennisApp.Controllers
 
                             res.PrivRes = PrivRes;
                             res.NickName = UserName.Trim();
-                            res.UserId = "" ;  
+                            res.UserId = null ;  
                             res.PriceInf = true;
                             res.Court = court;
                             res.ResFinishTime = ResFinishTime;
@@ -617,6 +618,8 @@ namespace AtkTennisApp.Controllers
 
                return Json("false");
         }
+
+
 
 
 
@@ -1708,6 +1711,201 @@ namespace AtkTennisApp.Controllers
             return Json(aasa);
 
         }
+
+
+        [HttpGet("AddMultiRes", Name = "AddMultiRes")]
+        public JsonResult AddMultiRes(int CourtId, string DateInf, string Date2, string ResStartTime, string ResFinishTime,  string userId,  string UserName, string day)
+        {
+            Reservation model = new Reservation();
+
+            DateTime startDate = Convert.ToDateTime(DateInf);
+            DateTime finishDate = Convert.ToDateTime(Date2);
+            List<string> totalDate = new List<string>();
+           
+
+            string ResNowDate = DateTime.Now.ToString("yyyy-MM-dd");
+            string ResTime = DateTime.Now.ToString("HH:mm:ss");
+            
+            Court court = new Court();
+            court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+            court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
+
+
+            var days = day.Split(",");
+            string dayy = "";
+
+            List<string> dateList = new List<string>();
+            List<string> dateList2 = new List<string>();
+
+            for (DateTime date = startDate; date <= finishDate; date = date.AddDays(1))
+            {
+                int i = (int)date.DayOfWeek;
+
+
+                switch (i)
+                {
+                    case 0:
+                        dayy = "Pazar";
+                        break;
+                    case 1:
+                        dayy = "Pazartesi";
+                        break;
+                    case 2:
+                        dayy = "Salı";
+                        break;
+                    case 3:
+                        dayy = "Çarşamba";
+                        break;
+                    case 4:
+                        dayy = "Perşembe";
+                        break;
+                    case 5:
+                        dayy = "Cuma";
+                        break;
+                    case 6:
+                        dayy = "Cumartesi";
+                        break;
+
+                }
+
+                dateList.Add(date.ToString("yyyy-MM-dd") + "," + dayy);
+
+            }
+
+
+            for (int z = 0; z < days.Count(); z++)
+            {
+                for (int d = 0; d < dateList.Count(); d++)
+                {
+
+                    if (dateList[d].Split(",")[1] == days[z])
+                    {
+                        dateList2.Add(dateList[d].Split(",")[0]);
+                    }
+
+                }
+            }
+
+
+
+            var x = ResFinishTime.Split(":");
+            var h = Convert.ToInt32(x[0]);
+            var m = Convert.ToInt32(x[1]);
+            var per = Convert.ToInt16(court.CourtTimePeriod);
+
+
+            if (per == 15)
+            {
+                if (m == 45)
+                {
+                    h = h + 1;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + "00";
+                    }
+                    else
+                        ResFinishTime = h + ":" + "00";
+                }
+                else
+                {
+
+                    m = m + 15;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+                    else
+                        ResFinishTime = h + ":" + m;
+                }
+            }
+            else if (per == 30)
+            {
+                if (m == 30)
+                {
+                    h = h + 1;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + "00";
+                    }
+                    else
+                        ResFinishTime = h + ":" + "00";
+                }
+                else
+                {
+                    m = m + 30;
+                    if (h < 10)
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+                    else
+                        ResFinishTime = h + ":" + m;
+                }
+
+            }
+            else
+            {
+                h = h + 1;
+                if (h < 10)
+                {
+                    if (m == 0)
+                    {
+                        ResFinishTime = "0" + h + ":" + m + "0";
+                    }
+                    else
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+
+                }
+                else
+                {
+                    ResFinishTime = h + ":" + "00";
+                }
+
+            }
+
+
+         
+
+
+            try
+            {
+               
+                for (int i = 0; i < dateList2.Count; i++)
+                {
+                    model = new Reservation();
+
+                    model.ResDate = dateList2[i];
+                    model.Court = court;
+                    model.ResStartTime = ResStartTime;
+                    model.ResFinishTime = ResFinishTime;
+                    model.ResTime = ResTime;
+                    model.ResNowDate = ResNowDate;
+                    model.Price = 0;
+                    model.PriceIds = "7";
+                    model.doResUserId = userId;
+                    model.NickName = UserName.Trim();
+                
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+
+                }
+            
+             
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+
+        }
+
     }
 }
 

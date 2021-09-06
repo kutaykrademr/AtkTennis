@@ -1,4 +1,6 @@
 ﻿@model List<Helpers.Dto.ViewDtos.CourtDto>;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 <style>
 
@@ -23,6 +25,12 @@
         left: 0.8rem !important;
     }
 </style>
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+<div style="display:none" class="modal-footer">
+    <textbox style="color:black; " id="userId">@userId</textbox>
+</div>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -155,7 +163,7 @@
 
             <div class="modal-footer" id="forApproveId">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
+                <button type="button" class="btn btn-primary" onclick="Approve()">Rezervasyon Yap</button>
             </div>
 
         </div>
@@ -209,7 +217,7 @@
 
                 var mem = [];
 
-              
+
                 for (var i = 0; i < res.performanceTypes.length; i++) {
                     mem.push(res.performanceTypes[i].performanceCode + ' - ' + res.performanceTypes[i].performanceTypes);
                 }
@@ -523,5 +531,137 @@
             }
     }
 
+
+    function Approve(id) {
+
+        debugger;
+
+
+        // seçilen saatler
+        var times = [];
+        $('#checkTimeTable input:checked:not(:disabled)').each(function () {
+            times.push(this.name);
+        });
+
+        var day = [];
+        $('#checkDays input:checked').each(function () {
+            day.push(this.value);
+        });
+
+        var lastDays = "";
+
+        for (var i = 0; i < day.length; i++) {
+
+            var days = day[i];
+            lastDays = days + "," + lastDays;
+        }
+
+        var memberUserName = $("#findMember").val().split("-");
+        var userName = memberUserName[0];
+        var courtId = $("#courtInf option:selected").val();
+        var date = $("#timeNow").val();
+        var date2 = $('#timeTwoNow').val();
+
+
+
+
+        if (times.length == 0) {
+
+
+            swal({
+                title: "Rezervasyon Onaylanmadı",
+                text: "Lütfen Saat Seçiniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+
+
+            });
+
+        }
+
+        else if ($("#findMember").val() == "") {
+
+            swal({
+                title: "Uyarı",
+                text: "Lütfen Üye Seçiniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+
+
+            });
+        }
+
+        else
+            try {
+
+                $.ajax({
+                    type: "POST",
+                    url: '../AdminHome/AddMultiRes',
+                    cache: false,
+                    data: {
+
+                        "ResStartTime": times[0],
+                        "ResFinishTime": times[(times.length - 1)],
+                        "UserName": userName,
+                        "CourtId": courtId,
+                        "DateInf": date,
+                        "Date2": date2,
+                        "userId": $("#userId").text(),
+                        "day": lastDays,
+
+                    },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+                        if (res == true) {
+
+                            $('#rsvModal').modal('toggle');
+
+                            swal({
+                                title: "Rezervasyon Başarılı",
+                                text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                                icon: "success",
+                                button: "Tamam",
+                                timer: 500,
+                            }).then((value) => {
+
+                                getResTable($("#timeNow").val());
+
+                            });
+                        }
+
+                        else {
+
+                            $('#rsvModal').modal('toggle');
+
+                            swal({
+                                title: "Rezervasyon Onaylanmadı",
+                                text: "Kullanıcı Bakiyesi Yetersiz ,  Lütfen Bakiye Yükleyiniz !",
+                                icon: "error",
+                                button: "Tamam",
+                            }).then((value) => {
+
+
+
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            } catch (e) {
+                console.log(e.message);
+            }
+
+
+    }
 
 </script>

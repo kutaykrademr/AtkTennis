@@ -200,10 +200,7 @@
 
                                 </div>
 
-                                <div style="margin-top:8px">
-                                    <a href="~/AdminHome/MultiReservations" type="button" class="btn btn-dark"><i style="margin-right:15px" class="fas fa-project-diagram"></i>Çoklu Rezervasyon Yap</a>
-                                </div>
-
+                             
                                 <div style="margin-top:8px">
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination">
@@ -454,19 +451,24 @@
                                 </tbody>
                             </table>
 
-                            <div class="pull-left" style="font-size: 16px; margin-top:10px">
-                                <div style="padding-bottom: 3px;float: left;width: 100%;">
+                            <div  class="pull-left d-flex justify-content-between" style="font-size: 16px; margin-top:10px">
+                                <div style="margin-top:15px">
                                     <div>
 
                                         @foreach (var item in Model.courtScaleLists)
                                         {
-                                            <div style="font-size: 13px;font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
+                                            <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
                                                 @item.Code
                                             </div>
                                         }
 
                                     </div>
                                 </div>
+
+                                <div >
+                                    <a href="~/AdminHome/MultiReservations" type="button" class="btn btn-dark"><i style="margin-right:15px" class="fas fa-project-diagram"></i>Çoklu Rezervasyon Yap</a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -987,9 +989,11 @@
 
 <script src="~/adminRoot/js/loading.js"></script>
 <script src="~/lib/jquery/dist/linq.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js" integrity="sha512-OqcrADJLG261FZjar4Z6c4CfLqd861A3yPNMb+vRQ2JwzFT49WT4lozrh3bcKxHxtDTgNiqgYbEUStzvZQRfgQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 <script>
+
+    
 
     $(document).ready(function () {
 
@@ -1235,7 +1239,7 @@
 
                             NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item">';
 
-                            if (res.reservations[a].userId != "") {
+                            if (res.reservations[a].userId != null) {
                                 for (var x = 0; x < res.memberLists.length; x++) {
                                     if (res.reservations[a].userId == res.memberLists[x].userId) {
                                         NewRow += '<span style="background:#337ab7 ; color:white;">' + res.memberLists[x].nickName + '</span>';

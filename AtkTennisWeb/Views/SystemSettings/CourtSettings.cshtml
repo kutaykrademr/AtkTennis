@@ -140,7 +140,72 @@
                         </div>
                     </div>
 
-                 
+
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Kort Ücret Tarifesi</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice"><i class="fas fa-plus-square"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example3" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>Fiyatı</th>
+                                        <th>Ücret Tipi</th>
+                                        <th>Tarife Tipi</th>
+                                        <th>Durumu</th>
+                                        <th>İşlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item2 in Model.courtPriceLists)
+                                    {
+
+                                        <tr style="text-align:center">
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice</td>
+
+                                            @{ if (@item2.PriceType == "1")
+                                                {
+                                                    <td>Asıl Ücret</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Ek Ücret</td>
+                                                }
+                                            }
+                                            <td>@item2.RecipeType</td>
+
+                                            @{ if (@item2.Condition == "1")
+                                                {
+                                                    <td>Aktif</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Pasif</td>
+                                                }
+                                            }
+
+                                            <td>
+                                                <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteCourtPrice(this.id)"><i class="fas fa-trash"></i></button>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
