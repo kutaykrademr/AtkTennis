@@ -186,7 +186,17 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        
+        public IActionResult MultiReservationCancel()
+        {
+
+           
+
+            return View();
+
+
+        }
+
+
 
         public JsonResult GetCabinet(string code)
         {

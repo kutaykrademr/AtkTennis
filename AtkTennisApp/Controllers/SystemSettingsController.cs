@@ -40,6 +40,7 @@ namespace AtkTennisApp.Controllers
 
             var Role = new AppIdentityRole();
             var Role2 = new UserSettings();
+            CourtScaleList scale = new CourtScaleList();
 
             try
             {
@@ -59,7 +60,12 @@ namespace AtkTennisApp.Controllers
                     Role2.SystemSettings = false;
                     Role2.DebtandPayment = false;
 
+                    scale.Name = roleName;
+                    scale.Code = roleName.Substring(0, 3).ToUpper();
+                    scale.Color = "#000000";
+
                     db.Add(Role2);
+                    db.Add(scale);
                     db.SaveChanges();
 
                 }
@@ -82,6 +88,7 @@ namespace AtkTennisApp.Controllers
             var role = await roleManager.FindByIdAsync(id);
 
             UserSettings Role2 = new UserSettings();
+            CourtScaleList scale = new CourtScaleList();
 
             try
             {
@@ -96,11 +103,15 @@ namespace AtkTennisApp.Controllers
                     var result = await roleManager.DeleteAsync(role);
 
                     Role2 = db.userSettings.Where(x => x.RoleId == role.Id).FirstOrDefault();
+                    scale = db.courtScaleLists.Where(x => x.Name == Role2.RoleName).FirstOrDefault();
 
                     if (Role2.RoleId != null)
                     {
                         db.Remove(Role2);
+                        db.Remove(scale);
+
                         db.SaveChanges();
+
                     }
                     else
                     {
@@ -110,7 +121,7 @@ namespace AtkTennisApp.Controllers
 
                     if (result.Succeeded)
                     {
-                        return Json(true);
+                        return Json(Role2);
                     }
                 }
 
@@ -307,6 +318,118 @@ namespace AtkTennisApp.Controllers
 
         #region CourtSettings 
 
+
+        [HttpGet("NewCourtType", Name = "NewCourtTypeourt")]
+        public JsonResult NewCourtType(string courtTypeName)
+        {
+            CourtRecipeType courtType = new CourtRecipeType();
+            
+
+            try
+            {
+                if (courtTypeName != null || courtType != null)
+                {
+
+                    courtType.CourtRecipeTypes = courtTypeName;
+
+                    db.Add(courtType);
+                    db.SaveChanges();
+
+                    return Json(courtType);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(false);
+        }
+
+        [HttpGet("DeleteCourtType", Name = "DeleteCourtType")]
+        public JsonResult DeleteCourtType(int id)
+        {
+            CourtRecipeType model = new CourtRecipeType();
+
+            try
+            {
+
+                model = db.courtRecipeTypes.Where(x => x.CourtRecipeTypeId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(true);
+        }
+
+        [HttpGet("GetCourtTypeInf", Name = "GetCourtTypeInf")]
+        public JsonResult GetCourtTypeInf(int id)
+        {
+
+
+            CourtRecipeType model = new CourtRecipeType();
+
+            try
+            {
+                model = db.courtRecipeTypes.Where(x => x.CourtRecipeTypeId == id).SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("UpdateCourtType", Name = "UpdateCourtType")]
+        public JsonResult UpdateCourtType(int id, string courtTypeName)
+        {
+            CourtRecipeType model = new CourtRecipeType();
+
+            try
+            {
+
+                model = db.courtRecipeTypes.Where(x => x.CourtRecipeTypeId == id).SingleOrDefault();
+                if (model != null)
+                {
+                    model.CourtRecipeTypes = courtTypeName;
+
+                    db.Update(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+        }
+
+
+
+
+
         [HttpGet("GetCourt", Name = "GetCourt")]
         public CourtSettingsViewModel GetCourt()
 
@@ -320,6 +443,7 @@ namespace AtkTennisApp.Controllers
                 model.courtRecipeTypes = db.courtRecipeTypes.ToList();
                 model.Courts = db.courts.ToList();   
                 model.resTimes = db.resTimes.ToList();
+                model.courtScales = db.courtScaleLists.ToList();
 
             }
             catch (Exception ex)
@@ -397,7 +521,6 @@ namespace AtkTennisApp.Controllers
             {
 
                 model = db.courts.Where(x => x.CourtId == id).SingleOrDefault();
-
                 model.CourtName = courtName;
                 model.CourtType = courtType;
                 model.CourtConditions = courtCondition;

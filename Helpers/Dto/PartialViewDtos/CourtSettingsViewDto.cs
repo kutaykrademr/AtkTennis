@@ -12,6 +12,7 @@ namespace Helpers.Dto.PartialViewDtos
         public List<CourtTimeInfDto> courtTimeInfs { get; set; } = new List<CourtTimeInfDto>();
         public List<ResTimeDto> resTimes { get; set; } = new List<ResTimeDto>();
         public List<CourtRecipeTypeDto> courtRecipeTypes { get; set; } = new List<CourtRecipeTypeDto>();
+        public List<CourtScaleDto> courtScales { get; set; } = new List<CourtScaleDto>();
 
     }
 }

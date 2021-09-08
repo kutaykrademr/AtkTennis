@@ -41,19 +41,17 @@ namespace AtkTennisWeb.Controllers
                 model = Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteRole?id=" + id));
 
                 if (model == null)
+
                     return Json(false);
                 else
                 {
-                    if(model.Id == null)
-                        return Json(false);
+                    return Json(true);
                 }
             }
             catch (Exception)
             {
                 return Json(new AppIdentityUserDto());
             }
-
-            return Json(true);
         }
 
         public JsonResult AddNewRole(string roleName)
@@ -72,7 +70,7 @@ namespace AtkTennisWeb.Controllers
                 return Json(new AppIdentityUserDto());
             }
 
-            return Json(true);         
+            return Json(true);
         }
 
         public JsonResult GetRoleInf(string ID)
@@ -150,7 +148,7 @@ namespace AtkTennisWeb.Controllers
 
         #region CourtSettings
 
-        
+
         public IActionResult CourtSettings()
         {
             CourtSettingsViewDto model = new CourtSettingsViewDto();
@@ -176,7 +174,88 @@ namespace AtkTennisWeb.Controllers
         }
 
         //Kort Ayarları
-        public JsonResult AddNewCourt(string courtName , string courtType , int AddcourtCondition, int AddcourtWebCondition , string courtStartTime , string courtFinishTime , string courtTimePeriod)
+
+        public JsonResult AddNewCourtType(string courtTypeName)
+        {
+            CourtRecipeTypeDto model = new CourtRecipeTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtRecipeTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtType?courtTypeName=" + courtTypeName));
+
+                if (model != null)
+
+                    return Json(true);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(false);
+        }
+
+        public JsonResult deleteCourtType(int id)
+        {
+            CourtRecipeTypeDto model = new CourtRecipeTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtRecipeTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteCourtType?id=" + id));
+
+                if (model != null)
+
+                    return Json(true);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(false);
+
+        }
+
+        public JsonResult GetCourtTypeInf(string id)
+        {
+            CourtRecipeTypeDto model = new CourtRecipeTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtRecipeTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetCourtTypeInf?id=" + id));
+
+                if (model != null)
+
+                    return Json(model);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(false);
+
+        }
+
+        public JsonResult UpdateCourtType(int id, string courtTypeName)
+        {
+            CourtRecipeTypeDto model = new CourtRecipeTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtRecipeTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourtType?id=" + id + "&courtTypeName=" + courtTypeName));
+
+                if (model != null)
+
+                    return Json(true);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtDto());
+            }
+
+            return Json(false);
+
+        }
+
+
+        public JsonResult AddNewCourt(string courtName, string courtType, int AddcourtCondition, int AddcourtWebCondition, string courtStartTime, string courtFinishTime, string courtTimePeriod)
         {
             CourtDto model = new CourtDto();
             try
@@ -218,7 +297,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdateCourt(int id , string courtName, string courtType, int courtCondition, int courtWebCondition , string courtTimeStart, string courtTimeFinish, string courtPeriodTime)
+        public JsonResult UpdateCourt(int id, string courtName, string courtType, int courtCondition, int courtWebCondition, string courtTimeStart, string courtTimeFinish, string courtPeriodTime)
         {
             CourtDto model = new CourtDto();
             try
@@ -259,11 +338,11 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-      
+
 
 
         //Kort Ücret Ayarları
-        public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType , string recipeCondition)
+        public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition)
         {
             CourtPriceListDto model = new CourtPriceListDto();
             try
@@ -361,7 +440,7 @@ namespace AtkTennisWeb.Controllers
                 model = Helpers.Serializers.DeserializeJson<EducationSettingsViewDto>(getResult);
 
                 if (model == null)
-                    
+
                     model = new EducationSettingsViewDto();
             }
             catch (Exception)
@@ -376,7 +455,7 @@ namespace AtkTennisWeb.Controllers
             SchoolTypeDto model = new SchoolTypeDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewSchoolType?schoolType=" + schoolType + "&schoolCode=" + schoolCode ));
+                model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewSchoolType?schoolType=" + schoolType + "&schoolCode=" + schoolCode));
 
                 if (model.Code == null && model.Types == null)
 
@@ -458,7 +537,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<SchoolTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateUpdateSchoolType?code=" + code + "&type=" + type + "&id=" + id));
 
-                if ( model.Code == null && model.Types == null)
+                if (model.Code == null && model.Types == null)
 
                     return Json(false);
             }
@@ -481,7 +560,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewSchoolLevel?levelName=" + levelName + "&levelQuota=" + levelQuota));
 
-                if ( model.Levels == null)
+                if (model.Levels == null)
 
                     return Json(false);
             }
@@ -502,7 +581,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteSchoolLevel?id=" + id));
 
-                if (model.Levels == null )
+                if (model.Levels == null)
 
                     return Json(false);
             }
@@ -541,7 +620,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<SchoolLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateUpdateSchoolLevel?levelName=" + levelName + "&quota=" + levelquota + "&id=" + id));
 
-                if (model.Levels == null )
+                if (model.Levels == null)
 
                     return Json(false);
             }
@@ -667,7 +746,7 @@ namespace AtkTennisWeb.Controllers
             PerformanceLevelDto model = new PerformanceLevelDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewPerformanceLevel?level=" + level ));
+                model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewPerformanceLevel?level=" + level));
 
                 if (model.PerLevel == null)
 
@@ -729,7 +808,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<PerformanceLevelDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdatePerfLevel?level=" + level + "&id=" + id));
 
-                if (model.PerLevel == null )
+                if (model.PerLevel == null)
 
                     return Json(false);
             }
@@ -766,7 +845,7 @@ namespace AtkTennisWeb.Controllers
         }
 
 
-        public JsonResult AddPrivLesson(string inf, string type , int? price , int? teacherprice)
+        public JsonResult AddPrivLesson(string inf, string type, int? price, int? teacherprice)
         {
             PrivateLessonDto model = new PrivateLessonDto();
             try
@@ -826,7 +905,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdatePrivLesson(int id, string privLesType, string tariffeInf , int? privLesPrice , int? teacherPrice)
+        public JsonResult UpdatePrivLesson(int id, string privLesType, string tariffeInf, int? privLesPrice, int? teacherPrice)
         {
             PrivateLessonDto model = new PrivateLessonDto();
             try
@@ -898,7 +977,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<ReservationSettingsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteResSet?id=" + id));
 
-                if (model.ReservationSettingsInf == null && model.ReservationValue == null )
+                if (model.ReservationSettingsInf == null && model.ReservationValue == null)
 
                     return Json(false);
             }
@@ -910,12 +989,12 @@ namespace AtkTennisWeb.Controllers
             return Json(true);
         }
 
-        public JsonResult UpdateResSet(string updStr )
+        public JsonResult UpdateResSet(string updStr)
         {
             ReservationSettingsDto model = new ReservationSettingsDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationSettingsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateResSet?updStr=" + updStr ));
+                model = Helpers.Serializers.DeserializeJson<ReservationSettingsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateResSet?updStr=" + updStr));
 
                 if (model.ReservationSettingsInf == null && model.ReservationValue == null)
                     return Json(false);
@@ -981,7 +1060,7 @@ namespace AtkTennisWeb.Controllers
             CabinetTypesDto model = new CabinetTypesDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteCabinetType?id=" + id ));
+                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteCabinetType?id=" + id));
 
                 if (model == null)
 

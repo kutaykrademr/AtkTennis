@@ -221,12 +221,7 @@
                             </li>
                         }
 
-                        <li class="nav-item">
-                            <a style="background-color:#625e5e" href="/Public/MemberInf" class="nav-link">
-                                <i class="fas fa-id-card nav-icon"></i>
-                                <p>Kullanıcı Bilgilerim </p>
-                            </a>
-                        </li>
+           
 
                         @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Advisory)
 
@@ -321,52 +316,7 @@
                                 </ul>
                             </li>
                         }
-
-                            @*<li class="nav-item ">
-                                <a style="background-color:#625e5e" href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-bell"></i>
-                                    <p>
-                                        Rezervasyonlar
-                                        <i class="fas fa-angle-left right"></i>
-
-                                    </p>
-                                </a>
-
-                                <ul class="nav nav-treeview">
-
-                                    <li class="nav-item">
-                                        <a href="~/Public/Reservation?date=@date" class="nav-link">
-                                            <i class="fas fa-calendar-check nav-icon"></i>
-                                            <p>Rezervasyon Yap</p>
-                                        </a>
-                                    </li>
-               
-
-                                    <li class="nav-item">
-                                        <a href="~/Public/ReservationList" class="nav-link">
-                                            <i class="fas fa-table nav-icon"></i>
-                                            <p>Rezervasyon Listem</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/Public/ReservationCancel" class="nav-link">
-                                            <i class="far fa-window-close nav-icon"></i>
-                                            <p>Rezervasyon İptal</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="~/Admin/ReservationTable" class="nav-link">
-                                            <i class="fas fa-wallet nav-icon"></i>
-                                            <p>Üyelik Aidatlarım</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>*@
-                        
-
-
+              
                         <li class="nav-item ">
                             <a style="background-color:#625e5e" href="" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>

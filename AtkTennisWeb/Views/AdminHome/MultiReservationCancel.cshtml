@@ -1,0 +1,109 @@
+﻿
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Üye Dolap Ayarları</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Dolap Kullanıcı Listesi</h3>
+                            </div>
+
+                            <div id="selTime">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li class="page-item"><input  style="height:38px"  type="search" class="form-control form-control-sm" placeholder="Üye - Okul - Performans Ara" aria-controls="example2"></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer;"></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer; "></li>
+                                        <li class="page-item"> <button class="btn btn-warning">Getir</button></li>
+
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+
+                                        <th>Dolap Alım Tarihi</th>
+                                        <th>Dolap Kodu</th>
+                                        <th>Dolap Türü</th>
+                                        <th>Dolap Alan Üye</th>
+                                        <th>Dolap Kime Ait</th>
+                                        <th>Dolap Ücreti</th>
+                                        @*<th>İşlemler</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    <tr style="text-align:center" id="">
+                                        <td>asd</td>
+                                        <td>asd</td>
+                                        <td>asd</td>
+                                        <td>asd</td>
+                                        <td>asd</td>
+                                        <td>asd</td>
+
+
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "buttons": ["print"]
+        }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
+    });
+</script>
+

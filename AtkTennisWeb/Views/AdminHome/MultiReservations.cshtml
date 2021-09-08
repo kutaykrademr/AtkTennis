@@ -170,7 +170,7 @@
     </div>
 </div>
 
-
+<script src="~/lib/jquery/dist/linq.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -213,18 +213,24 @@
             async: true,
             success: function (res) {
 
-                debugger;
-
+          
                 var mem = [];
 
+                debugger;
 
-                for (var i = 0; i < res.performanceTypes.length; i++) {
-                    mem.push(res.performanceTypes[i].performanceCode + ' - ' + res.performanceTypes[i].performanceTypes);
-                }
+                for (var i = 0; i < res.courtScales.length; i++) {
 
 
-                for (var i = 0; i < res.schoolTypes.length; i++) {
-                    mem.push(res.schoolTypes[i].code + ' - ' + res.schoolTypes[i].types);
+
+                    var checkRole = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
+                        .select(function (x) { return x }).toArray();
+
+                    if (checkRole.length == 0) {
+                        mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
+                    }
+
+
                 }
 
 
@@ -631,6 +637,7 @@
                             }).then((value) => {
 
                                 getResTable($("#timeNow").val());
+                                window.location.href = "~/AdminHome/Index";
 
                             });
                         }
@@ -641,7 +648,7 @@
 
                             swal({
                                 title: "Rezervasyon Onaylanmadı",
-                                text: "Kullanıcı Bakiyesi Yetersiz ,  Lütfen Bakiye Yükleyiniz !",
+                                text: "Bir Sorun Oluştu ,  Lütfen Tekrar Deneyiniz !",
                                 icon: "error",
                                 button: "Tamam",
                             }).then((value) => {

@@ -150,6 +150,7 @@ namespace AtkTennisApp.Controllers
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
+                model.courtScales = db.courtScaleLists.ToList();
                 
 
             }
@@ -720,6 +721,7 @@ namespace AtkTennisApp.Controllers
             MemberList mem = new MemberList();
             ReservationCourtViewModel model = new ReservationCourtViewModel();
             ResModalViewModel model2 = new ResModalViewModel();
+            CourtScaleList scaleList = new CourtScaleList();
 
             try
             {
@@ -727,15 +729,18 @@ namespace AtkTennisApp.Controllers
                 model.courts = db.courts.ToList();
                 model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
+                scaleList = db.courtScaleLists.FirstOrDefault(x => x.Code == model.reservations.NickName);
                 
                 var whoRes = db.memberLists.Where(x => x.UserId == model.reservations.doResUserId).FirstOrDefault().FullName;
 
                 model2.courtPriceLists = db.courtPriceLists.ToList();
+             
                 if (mem == null)
                 {
-                    model2.resSchemaModal.FullName = model.reservations.NickName;
-                    model2.resSchemaModal.NickName = model.reservations.NickName; 
+                    model2.resSchemaModal.NickName = model.reservations.NickName;
+                    model2.resSchemaModal.FullName = scaleList.Name; 
                 }
+
                 else
                 {
                     model2.resSchemaModal.FullName = mem.FullName;

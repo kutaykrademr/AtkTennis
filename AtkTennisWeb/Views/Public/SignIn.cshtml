@@ -142,7 +142,8 @@
                             else {
 
                                 if (res.custom_role != "Yönetici") {
-                                    window.location.href = "../Public/Reservation";
+
+                                    window.location.href = "../Public/Reservation?date=" + today;
                                 }
                                 else
                                 window.location.href = "../AdminHome/Index";
@@ -181,7 +182,7 @@
 
                     debugger;
 
-                    if (res != null) {
+                    if (res != "false") {
 
                         localStorage.setItem("userName", $("#username").val());
                         localStorage.setItem("password", $("#password").val());
@@ -202,7 +203,8 @@
 
 
                         if (res.custom_role != "Yönetici") {
-                            window.location.href = "../Public/Reservation";
+
+                            window.location.href = "../Public/Reservation?date=" + today;
                         }
                         else
                             window.location.href = "../AdminHome/Index";

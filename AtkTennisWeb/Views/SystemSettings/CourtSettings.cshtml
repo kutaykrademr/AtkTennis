@@ -31,7 +31,7 @@
                                 <h3>Kort Türleri</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourt"><i class="fas fa-plus-square"></i></button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtType"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -55,10 +55,14 @@
                                             <td>@item.CourtRecipeTypes</td>
 
 
-
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.CourtRecipeTypeId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
+
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" class="btn btn-secondary" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtTypeModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button type="button" class="btn btn-secondary" id="@item.CourtRecipeTypeId" onclick="deleteCourtType(this.id) "><i class="fas fa-trash"></i></button>
+
+
+                                                </div>
                                             </td>
 
                                         </tr>
@@ -210,59 +214,36 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
-                                <h3>Kort Ücret Tarifesi</h3>
+                                <h3>Kort Skalası</h3>
                             </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice"><i class="fas fa-plus-square"></i></button>
-                            </div>
+
                         </div>
 
                         <div class="card-body">
-                            <table id="example3" class="table table-bordered table-hover">
+                            <table id="courtScaleSet" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Adı </th>
-                                        <th>Fiyatı</th>
-                                        <th>Ücret Tipi</th>
-                                        <th>Tarife Tipi</th>
-                                        <th>Durumu</th>
+                                        <th>Kodu</th>
+                                        <th>Renk Kodu</th>
+
                                         <th>İşlemler</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @foreach (var item2 in Model.courtPriceLists)
+                                    @foreach (var item2 in Model.courtScales)
                                     {
 
                                         <tr style="text-align:center">
+                                            <td style="text-align:center;background-color:@item2.Color;color:#ffffff;"><span>@item2.Code</span></td>
                                             <td>@item2.Name</td>
-                                            <td>@item2.CourtPrice</td>
+                                            <td>@item2.Color</td>
 
-                                            @{ if (@item2.PriceType == "1")
-                                                {
-                                                    <td>Asıl Ücret</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>Ek Ücret</td>
-                                                }
-                                            }
-                                            <td>@item2.RecipeType</td>
-
-                                            @{ if (@item2.Condition == "1")
-                                                {
-                                                    <td>Aktif</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>Pasif</td>
-                                                }
-                                            }
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteCourtPrice(this.id)"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
                                             </td>
 
                                         </tr>
@@ -456,7 +437,7 @@
                         <label for="recipient-name" class="col-form-label">Başlangıç Saati:</label>
                         <div class="input-group">
                             <select id="courtTimeStart" class="form-control">
-                                
+
 
                                 @foreach (var item in Model.resTimes)
                                 {
@@ -472,7 +453,7 @@
                         <label for="recipient-name" class="col-form-label">Bitiş Saati:</label>
                         <div class="input-group">
                             <select id="courtTimeFinish" class="form-control">
-                                
+
 
                                 @foreach (var item in Model.resTimes)
                                 {
@@ -487,7 +468,7 @@
                         <label for="recipient-name" class="col-form-label">Period:</label>
                         <div class="input-group">
                             <select id="courtPeriodTime" class="form-control">
-                               
+
 
                                 <option>15</option>
                                 <option>30</option>
@@ -608,6 +589,61 @@
     </div>
 </div>
 
+<div class="modal fade" id="addCourtType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="form-group">
+                        <label class="col-form-label">Kort Türü:</label>
+                        <input type="text" id="courtTypeName" class="form-control">
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer" id="updateCourtPriceModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddCourtType()">Tür Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateCourtTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    <div class="form-group">
+                        <label class="col-form-label">Kort Türü Adı:</label>
+                        <input type="text" id="courtTypeNameUpd" class="form-control" autocomplete="new-password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" id="updateTypeModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateCourtType(this.id)">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -629,9 +665,237 @@
             "autoWidth": false,
             "responsive": true,
         });
+        $('#courtScaleSet').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
 
 
     });
+
+    function saveAddCourtType() {
+
+        if ($("#courtTypeName").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Bilgilerini Eksizsiz Doldurunuz.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        } else {
+
+            var courtTypeName = $("#courtTypeName").val();
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddNewCourtType',
+                cache: false,
+                data: { "courtTypeName": courtTypeName },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+
+                        swal({
+                            title: "Kort Ekleme Başarılı",
+                            text: "Kort Ekleme Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
+
+                            window.location.href = "CourtSettings"
+                        });
+
+
+
+                    }
+                    else {
+
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
+
+    function deleteCourtType(id) {
+
+        swal({
+            title: "Emin Misiniz?",
+            text: "Tarife Bilgisi Silinecek !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '../SystemSettings/DeleteCourtType',
+                        cache: false,
+                        data: { "id": id },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+                            if (res != false) {
+
+                                swal({
+                                    title: "Kort Silindi",
+                                    text: "Kort  Başarılı Bir Şekilde Silindi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
+
+                                    window.location.href = "CourtSettings";
+
+                                });
+                            }
+                            else {
+
+                                alert("Hata");
+                            }
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                }
+                else
+                    swal({
+                        title: "Kort Korundu",
+                        text: "Kortu Silmekten Vazgeçtiniz!",
+                        icon: "success",
+                        button: "Tamam",
+                    });
+            });
+    }
+
+    function openUpdateCourtTypeModal(id) {
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetCourtTypeInf',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res != null) {
+
+                    $("#courtTypeNameUpd").val(res.courtRecipeTypes);
+
+                    $("#updateTypeModel button:nth-of-type(2)").attr("id", id);
+                    $('#updateCourtTypeModal').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Kort Türü Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateCourtType(id) {
+
+        if ($("#courtTypeNameUpd").val() == "") {
+            $.confirm({
+                title: "Bilgilendirme",
+                content: "Lütfen Bilgilerini Eksizsiz Doldurunuz.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        } else {
+
+            $.ajax({
+                type: "GET",
+                url: '../SystemSettings/UpdateCourtType',
+                cache: false,
+                data: { "id": id, "courtTypeName": $("#courtTypeNameUpd").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+
+                        swal({
+                            title: "Kort Türü Güncelleme Başarılı",
+                            text: "Kort Güncelleme Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                            timer: 500,
+                        }).then((value) => {
+
+                            location.reload();
+                        });
+
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kort Türü Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+    }
+
 
 
     function saveAddCourt() {
@@ -763,7 +1027,7 @@
             type: "POST",
             url: '../SystemSettings/UpdateCourt',
             cache: false,
-            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type option:selected").text(), courtCondition, courtWebCondition, courtTimeStart, courtTimeFinish, courtPeriodTime},
+            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type option:selected").text(), courtCondition, courtWebCondition, courtTimeStart, courtTimeFinish, courtPeriodTime },
             dataType: "json",
             async: true,
             success: function (res) {

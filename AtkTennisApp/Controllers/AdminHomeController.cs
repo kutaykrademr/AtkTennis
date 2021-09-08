@@ -419,6 +419,10 @@ namespace AtkTennisApp.Controllers
         {
 
             var model = new Reservation();
+            var scale = new CourtScaleList();
+
+
+
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
@@ -516,6 +520,8 @@ namespace AtkTennisApp.Controllers
                     model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false).FirstOrDefault();
                     court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
                     mem = db.memberLists.FirstOrDefault(x => x.NickName == UserName.Trim());
+                    scale = db.courtScaleLists.FirstOrDefault(x => x.Code == UserName);
+
 
 
 
@@ -530,9 +536,6 @@ namespace AtkTennisApp.Controllers
 
             if (model == null)
             {
-
-
-     
 
                 try
                 {
@@ -575,12 +578,13 @@ namespace AtkTennisApp.Controllers
                         }
                     }
 
-                    else
-                    {
+                    else if (scale != null)
+                    { 
+                        {
 
                             res.PrivRes = PrivRes;
                             res.NickName = UserName.Trim();
-                            res.UserId = null ;  
+                            res.UserId = null;
                             res.PriceInf = true;
                             res.Court = court;
                             res.ResFinishTime = ResFinishTime;
@@ -593,12 +597,18 @@ namespace AtkTennisApp.Controllers
                             res.Price = Price;
                             res.PriceIds = PriceIds;
 
-                            
+
                             db.reservations.Add(res);
                             db.SaveChanges();
-                      
+
+                        }
                     }
-                   
+
+                    else
+                    {
+                        return Json(false);
+                    }
+
 
                 }
 
@@ -616,7 +626,7 @@ namespace AtkTennisApp.Controllers
 
             else
 
-               return Json("false");
+                return Json("false");
         }
 
 
@@ -1714,18 +1724,26 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("AddMultiRes", Name = "AddMultiRes")]
-        public JsonResult AddMultiRes(int CourtId, string DateInf, string Date2, string ResStartTime, string ResFinishTime,  string userId,  string UserName, string day)
+        public JsonResult AddMultiRes(int CourtId, string DateInf, string Date2, string ResStartTime, string ResFinishTime, string userId, string UserName, string day)
         {
             Reservation model = new Reservation();
+            CourtScaleList scale = new CourtScaleList();
+
+            scale = db.courtScaleLists.FirstOrDefault(x => x.Code == UserName);
+
+            if (scale == null)
+            {
+                return Json(false);
+            }
 
             DateTime startDate = Convert.ToDateTime(DateInf);
             DateTime finishDate = Convert.ToDateTime(Date2);
             List<string> totalDate = new List<string>();
-           
+
 
             string ResNowDate = DateTime.Now.ToString("yyyy-MM-dd");
             string ResTime = DateTime.Now.ToString("HH:mm:ss");
-            
+
             Court court = new Court();
             court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
             court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
@@ -1865,12 +1883,12 @@ namespace AtkTennisApp.Controllers
             }
 
 
-         
+
 
 
             try
             {
-               
+
                 for (int i = 0; i < dateList2.Count; i++)
                 {
                     model = new Reservation();
@@ -1885,15 +1903,15 @@ namespace AtkTennisApp.Controllers
                     model.PriceIds = "7";
                     model.doResUserId = userId;
                     model.NickName = UserName.Trim();
-                
+
 
                     db.Add(model);
                     db.SaveChanges();
 
-
                 }
-            
-             
+
+                return Json(model);
+
             }
 
             catch (Exception ex)
