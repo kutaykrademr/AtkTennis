@@ -216,15 +216,17 @@
                             <div class="card-title">
                                 <h3>Kort Skalası</h3>
                             </div>
-
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice"><i class="fas fa-plus-square"></i></button>
+                            </div>
                         </div>
 
                         <div class="card-body">
                             <table id="courtScaleSet" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align:center">
-                                        <th>Adı </th>
-                                        <th>Kodu</th>
+                                        <th>Kodu </th>
+                                        <th>Adı</th>
                                         <th>Renk Kodu</th>
 
                                         <th>İşlemler</th>
@@ -243,7 +245,9 @@
 
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                
+                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtScaleModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -645,6 +649,55 @@
     </div>
 </div>
 
+<div class="modal fade" id="updateCourtScaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6 form-group">
+                        <label>Adı:</label>
+                        <input type="text" id="scaleName" class="form-control" autocomplete="new-password">
+                    </div>
+
+
+                    <div class="col-md-6 form-group">
+                        <label>Kodu:</label>
+                        <input type="text" id="scaleCode" class="form-control" autocomplete="new-password">
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label>Renk:</label>
+
+                    <div class="input-group my-colorpicker2">
+                        <input id="scaleColor" type="text" class="form-control" autocomplete="new-password">
+
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-square"></i></span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer" id="updateCourtScaleModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateCourtScaleList(this.id)">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -673,6 +726,13 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
+        });
+
+
+        $('.my-colorpicker2').colorpicker()
+
+        $('.my-colorpicker2').on('colorpickerChange', function (event) {
+            $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
         });
 
 
@@ -1329,6 +1389,107 @@
     }
 
 
+    function openUpdateCourtScaleModal(id) {
+
+
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetCourtScaleInf',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                if (res != null) {
+
+
+                    $("#scaleColor").val(res.color);
+                    $("#scaleName").val(res.name);
+                    $("#scaleCode").val(res.code);
+
+                    $("#updateCourtScaleModel button:nth-of-type(2)").attr("id", id);
+                    $('#updateCourtScaleModal').modal('toggle');
+
+                 
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Skala Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateCourtScaleList(id) {
+
+
+        var color = $("#scaleColor").val();
+        var name = $("#scaleName").val();
+        var code = $("#scaleCode").val();
+
+        debugger;
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/UpdateCourtScaleList',
+            cache: false,
+            data: { "id": id, "name": name, "color": color , "code": code},
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                if (res == true) {
+
+                    swal({
+                        title: "Tarife Güncellendi",
+                        text: "Tarife Güncellemesi Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                    }).then((value) => {
+
+                        window.location.href = "CourtSettings"
+
+                    });
+
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Tarife Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
 
 </script>
 

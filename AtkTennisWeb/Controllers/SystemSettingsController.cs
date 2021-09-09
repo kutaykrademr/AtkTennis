@@ -423,6 +423,50 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+
+        //Kort Skala Ayarları
+
+        public JsonResult GetCourtScaleInf(string id)
+        {
+            CourtScaleDto model = new CourtScaleDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtScaleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetCourtScaleInf?id=" + id));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtScaleDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult UpdateCourtScaleList(int id, string name, string color , string code)
+        {
+            CourtScaleDto model = new CourtScaleDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtScaleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourtScaleList?name=" + name + "&color=" + color.Replace("#","") + "&id=" + id + "&code=" + code));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+
+            catch (Exception)
+            {
+                return Json(new CourtScaleDto());
+            }
+
+            return Json(true);
+
+        }
+
         #endregion
 
         #region EducationSettings

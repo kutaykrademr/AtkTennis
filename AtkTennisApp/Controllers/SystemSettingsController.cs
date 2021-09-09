@@ -444,6 +444,9 @@ namespace AtkTennisApp.Controllers
                 model.Courts = db.courts.ToList();   
                 model.resTimes = db.resTimes.ToList();
                 model.courtScales = db.courtScaleLists.ToList();
+                model.performanceTypes = db.performanceTypes.ToList();
+                model.schoolTypes = db.schoolTypes.ToList();
+                model.memberLists = db.memberLists.ToList();
 
             }
             catch (Exception ex)
@@ -679,6 +682,68 @@ namespace AtkTennisApp.Controllers
             }
 
             return Json(true);
+        }
+
+
+
+        [HttpGet("GetCourtScaleInf", Name = "GetCourtScaleInf")]
+        public JsonResult GetCourtScaleInf(int id)
+        {
+
+
+            CourtScaleList model = new CourtScaleList();
+
+            try
+            {
+                model = db.courtScaleLists.Where(x => x.CourtScaleListId == id).SingleOrDefault();
+               
+                if (model != null)
+                {
+
+                    return Json(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+        }
+
+        [HttpGet("UpdateCourtScaleList", Name = "UpdateCourtScaleList")]
+        public JsonResult UpdateCourtScaleList(int id, string name, string color, string code)
+        {
+            CourtScaleList model = new CourtScaleList();
+
+            try
+            {
+
+                model = db.courtScaleLists.Where(x => x.CourtScaleListId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+                    model.Name = name;
+                    model.Color = "#" + color;
+                    model.Code = code;
+
+
+                    db.Update(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
         }
 
         #endregion

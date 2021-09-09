@@ -1983,6 +1983,9 @@
 
                             else if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
 
+                                var scaleList = Enumerable.from(res.courtScaleLists)
+                                    .where(function (x) { return x.code == Res[0].nickName })
+                                    .select(function (x) { return x }).toArray();
 
 
 
@@ -1996,7 +1999,7 @@
                                     .where(function (x) { return x.name.toLowerCase() == memInf[0].role.toLowerCase() })
                                     .select(function (x) { return x }).toArray();
 
-
+                                debugger;
 
                                 if (scaleList.length > 0) {
                                     row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border - right: 1px solid #dee2e6; ">';
