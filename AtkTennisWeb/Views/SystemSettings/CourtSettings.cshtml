@@ -2,6 +2,13 @@
 
 @model Helpers.Dto.PartialViewDtos.CourtSettingsViewDto;
 
+<style>
+
+    button {
+        border:none !important;
+    }
+</style>
+
 <div class="content-wrapper">
 
     <section class="content-header">
@@ -57,12 +64,12 @@
 
                                             <td>
 
-                                                <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn btn-secondary" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtTypeModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                    <button type="button" class="btn btn-secondary" id="@item.CourtRecipeTypeId" onclick="deleteCourtType(this.id) "><i class="fas fa-trash"></i></button>
+
+                                                <button type="button" class="btn btn-outline-success" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtTypeModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-outline-danger" id="@item.CourtRecipeTypeId" onclick="deleteCourtType(this.id) "><i class="fas fa-trash"></i></button>
 
 
-                                                </div>
+
                                             </td>
 
                                         </tr>
@@ -245,9 +252,9 @@
 
 
                                             <td>
-                                                
+
                                                 <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtScaleModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="deleteCourtScale(this.id)"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-danger" id="@item2.CourtScaleListId" onclick="deleteCourtScale(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -595,9 +602,9 @@
                     </select>
 
                     <select id="recipeCondition" class="form-control">
-                        <option disabled="disabled" selected="selected">Ücret Tipi</option>       
-                            <option value="1">Aktif</option>
-                            <option value="0">Pasif</option>
+                        <option disabled="disabled" selected="selected">Ücret Tipi</option>
+                        <option value="1">Aktif</option>
+                        <option value="0">Pasif</option>
                     </select>
 
                     <div class="form-group col-md-6">
@@ -762,7 +769,7 @@
 
             </div>
 
-            <div class="modal-footer" >
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
                 <button type="button" class="btn btn-primary" onclick="saveAddCourtScale()">Güncelle</button>
             </div>
@@ -1490,7 +1497,7 @@
                     $("#updateCourtScaleModel button:nth-of-type(2)").attr("id", id);
                     $('#updateCourtScaleModal').modal('toggle');
 
-                 
+
                 }
 
                 else {
@@ -1526,7 +1533,7 @@
             type: "POST",
             url: '../SystemSettings/UpdateCourtScaleList',
             cache: false,
-            data: { "id": id, "name": name, "color": color , "code": code},
+            data: { "id": id, "name": name, "color": color, "code": code },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -1624,7 +1631,7 @@
                 }
             });
         }
-     
+
     }
 
     function deleteCourtScale(id) {

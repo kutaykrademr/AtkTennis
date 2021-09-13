@@ -1,125 +1,40 @@
 ﻿@model Helpers.Dto.PartialViewDtos.EducationSettingsViewDto;
 
-<div class="content-wrapper">
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Okul Ayarları</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
+    <style>
+
+        button {
+            border: none !important;
+        }
+    </style>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Okul Ayarları</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">DataTables</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Okul Türleri</h3>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addType"><i class="fas fa-plus-square"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Okul Kodu</th>
-                                        <th>Okul Türü</th>
-                                        <th>İşlemler</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach (var item in Model.schoolTypes)
-                                    {
-                                        <tr style="text-align:center" id="">
-
-                                            <td>@item.Code</td>
-                                            <td>@item.Types</td>
-
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item.SchoolTypesId" onclick="openUpdateschoolType(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.SchoolTypesId" onclick="deleteOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Okul Seviyeleri</h3>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addLevel"><i class="fas fa-plus-square"></i></button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Seviye Adı</th>
-
-                                        <th>İşlemler</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach (var item in Model.schoolLevels)
-                                    {
-                                        <tr style="text-align:center" id="">
-
-                                            <td>@item.Levels</td>
-
-
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item.SchoolLevelId" onclick="openUpdateschoolLevel(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.SchoolLevelId" onclick="deleteOpenModalLevel(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-
-                    <button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[0].Code', this, 'gray')" id="defaultOpen">@Model.schoolTypes[0].Types</button>
-
-                    @for (int i = 1; i < Model.schoolTypes.Count; i++)
-                    {
-                        <button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[i].Code', this, 'gray')">@Model.schoolTypes[i].Types</button>
-                    }
-
-
-
-                    <div id="@Model.schoolTypes[0].Code" class="tabcontent">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="card-title">
-                                    <h3>Okul Ücretleri</h3>
+                                    <h3>Okul Türleri</h3>
                                 </div>
                                 <div>
-                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel">Okul Ücretleri Düzenle</button>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addType"><i class="fas fa-plus-square"></i></button>
                                 </div>
                             </div>
 
@@ -127,378 +42,574 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                         <tr style="text-align:center">
-                                            <th>Performans Seviyesi</th>
-                                            <th>Ücret Bilgisi</th>
-                                            <th>Performans Seviyesi</th>
-                                            <th>Ücret Bilgisi</th>
+                                            <th>Okul Kodu</th>
+                                            <th>Okul Türü</th>
+                                            <th>İşlemler</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
 
-                                        <tr style="text-align:center" id="">
+                                        @foreach (var item in Model.schoolTypes)
+                                        {
+                                            <tr style="text-align:center" id="">
 
-                                            <td>@Model.schoolLevels[0].Levels</td>
+                                                <td>@item.Code</td>
+                                                <td>@item.Types</td>
 
-                                            <td>
-                                                @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
-                                                {
-                                                    foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
-                                                    {
-                                                        var a = type.Key;
-                                                        var b = lvl.Key;
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.SchoolTypesId" onclick="openUpdateschoolType(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.SchoolTypesId" onclick="deleteOpenModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
 
-                                                        if (a == 1 && b == 1)
-                                                        {
-                                                            foreach (var item in lvl)
-                                                            {
-                                                                if (item.schoolType.SchoolTypesId == a)
-                                                                {
-                                                                    <div class="input-group">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
-                                                                        </div>
-                                                                        <input type="text" id="@item.Id" value="@item.price" class="form-control">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <input type="checkbox">
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            </td>
-
-
-                                            <td>@Model.schoolLevels[1].Levels</td>
-
-                                            <td>
-                                                @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
-                                                {
-                                                    foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
-                                                    {
-                                                        var a = type.Key;
-                                                        var b = lvl.Key;
-
-                                                        if (a == 1 && b == 2)
-                                                        {
-                                                            foreach (var item in lvl)
-                                                            {
-                                                                if (item.schoolType.SchoolTypesId == a)
-                                                                {
-                                                                    <div class="input-group">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
-                                                                        </div>
-                                                                        <input type="text" id="@item.Id" value="@item.price" class="form-control">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <input type="checkbox">
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            </td>
-                                        </tr>
-
-                                        <tr style="text-align:center" id="">
-
-                                            <td>@Model.schoolLevels[2].Levels</td>
-
-                                            <td>
-                                                @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
-                                                {
-                                                    foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
-                                                    {
-                                                        var a = type.Key;
-                                                        var b = lvl.Key;
-
-                                                        if (a == 1 && b == 3)
-                                                        {
-                                                            foreach (var item in lvl)
-                                                            {
-                                                                if (item.schoolType.SchoolTypesId == a)
-                                                                {
-                                                                    <div class="input-group">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
-                                                                        </div>
-                                                                        <input type="text" id="@item.Id" value="@item.price" class="form-control">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <input type="checkbox">
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            </td>
-
-
-                                            <td>@Model.schoolLevels[3].Levels</td>
-
-                                            <td>
-                                                @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
-                                                {
-                                                    foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
-                                                    {
-                                                        var a = type.Key;
-                                                        var b = lvl.Key;
-
-                                                        if (a == 1 && b == 4)
-                                                        {
-                                                            foreach (var item in lvl)
-                                                            {
-                                                                if (item.schoolType.SchoolTypesId == a)
-                                                                {
-                                                                    <div class="input-group">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
-                                                                        </div>
-                                                                        <input type="text" id="@item.Id" value="@item.price" class="form-control">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <input type="checkbox">
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Okul Seviyeleri</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addLevel"><i class="fas fa-plus-square"></i></button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Seviye Adı</th>
+
+                                            <th>İşlemler</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.schoolLevels)
+                                        {
+                                            <tr style="text-align:center" id="">
+
+                                                <td>@item.Levels</td>
+
+
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.SchoolLevelId" onclick="openUpdateschoolLevel(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.SchoolLevelId" onclick="deleteOpenModalLevel(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[0].Code', this, 'gray')" id="defaultOpen">@Model.schoolTypes[0].Types</button>
+
+                        @for (int i = 1; i < Model.schoolTypes.Count; i++)
+                        {
+                            <button class="tablink" style="width:33%" onclick="openPage('@Model.schoolTypes[i].Code', this, 'gray')">@Model.schoolTypes[i].Types</button>
+                        }
+
+
+
+                        <div id="@Model.schoolTypes[0].Code" class="tabcontent">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title">
+                                        <h3>Okul Ücretleri</h3>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel">Okul Ücretleri Düzenle</button>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr style="text-align:center">
+                                                <th>Performans Seviyesi</th>
+                                                <th>Ücret Bilgisi</th>
+                                                <th>Performans Seviyesi</th>
+                                                <th>Ücret Bilgisi</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr style="text-align:center" id="">
+
+                                                <td>@Model.schoolLevels[0].Levels</td>
+
+                                                <td>
+                                                    @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
+                                                    {
+                                                        foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
+                                                        {
+                                                            var a = type.Key;
+                                                            var b = lvl.Key;
+
+                                                            if (a == 1 && b == 1)
+                                                            {
+                                                                foreach (var item in lvl)
+                                                                {
+                                                                    if (item.schoolType.SchoolTypesId == a)
+                                                                    {
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
+                                                                            </div>
+                                                                            <input type="text" id="@item.Id" value="@item.price" class="form-control">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">
+                                                                                    <input type="checkbox">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </td>
+
+
+                                                <td>@Model.schoolLevels[1].Levels</td>
+
+                                                <td>
+                                                    @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
+                                                    {
+                                                        foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
+                                                        {
+                                                            var a = type.Key;
+                                                            var b = lvl.Key;
+
+                                                            if (a == 1 && b == 2)
+                                                            {
+                                                                foreach (var item in lvl)
+                                                                {
+                                                                    if (item.schoolType.SchoolTypesId == a)
+                                                                    {
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
+                                                                            </div>
+                                                                            <input type="text" id="@item.Id" value="@item.price" class="form-control">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">
+                                                                                    <input type="checkbox">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                            <tr style="text-align:center" id="">
+
+                                                <td>@Model.schoolLevels[2].Levels</td>
+
+                                                <td>
+                                                    @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
+                                                    {
+                                                        foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
+                                                        {
+                                                            var a = type.Key;
+                                                            var b = lvl.Key;
+
+                                                            if (a == 1 && b == 3)
+                                                            {
+                                                                foreach (var item in lvl)
+                                                                {
+                                                                    if (item.schoolType.SchoolTypesId == a)
+                                                                    {
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
+                                                                            </div>
+                                                                            <input type="text" id="@item.Id" value="@item.price" class="form-control">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">
+                                                                                    <input type="checkbox">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </td>
+
+
+                                                <td>@Model.schoolLevels[3].Levels</td>
+
+                                                <td>
+                                                    @foreach (var type in Model.schoolPrices.GroupBy(item => item.schoolType.SchoolTypesId))
+                                                    {
+                                                        foreach (var lvl in Model.schoolPrices.GroupBy(item => item.schoolLevel.SchoolLevelId))
+                                                        {
+                                                            var a = type.Key;
+                                                            var b = lvl.Key;
+
+                                                            if (a == 1 && b == 4)
+                                                            {
+                                                                foreach (var item in lvl)
+                                                                {
+                                                                    if (item.schoolType.SchoolTypesId == a)
+                                                                    {
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">@item.schoolPriceType.PriceTypeDescription</span>
+                                                                            </div>
+                                                                            <input type="text" id="@item.Id" value="@item.price" class="form-control">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">
+                                                                                    <input type="checkbox">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
 
-<div class="modal fade" id="addType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Okul Türü Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Okul Kodu:</label>
-                        <input type="text" class="form-control" id="schoolCode">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Okul Türü:</label>
-                        <input type="text" class="form-control" id="schoolType">
+    <div class="modal fade" id="addType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Okul Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Okul Kodu:</label>
+                            <input type="text" class="form-control" id="schoolCode">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Okul Türü:</label>
+                            <input type="text" class="form-control" id="schoolType">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveAddSchoolType()">Ekle</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="updateType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Okul Türü Güncelle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Okul Kodu:</label>
-                        <input type="text" class="form-control" id="schoolCodes">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Okul Türü:</label>
-                        <input type="text" class="form-control" id="schoolTypes">
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAddSchoolType()">Ekle</button>
                 </div>
             </div>
-            <div class="modal-footer" id="updateOperationModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="updateschoolType(this.id)">Ekle</button>
-            </div>
         </div>
     </div>
-</div>
 
 
-<div class="modal fade" id="openDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperationModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deleteSchoolType(this.id)">Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="openDeleteLevelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperationLevelModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deleteSchoolLevel(this.id)">Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="updateLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Okul Seviyesi Güncelle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label for="recipient-name" class="col-form-label">Okul Seviyesi:</label>
-                        <input type="text" class="form-control" id="name">
+    <div class="modal fade" id="updateType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Okul Türü Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Okul Kodu:</label>
+                            <input type="text" class="form-control" id="schoolCodes">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Okul Türü:</label>
+                            <input type="text" class="form-control" id="schoolTypes">
+                        </div>
                     </div>
-
+                </div>
+                <div class="modal-footer" id="updateOperationModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updateschoolType(this.id)">Ekle</button>
                 </div>
             </div>
-            <div class="modal-footer" id="updateOperationLevelModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="updateschoolLevel(this.id)">Ekle</button>
-            </div>
         </div>
     </div>
-</div>
 
 
-<div class="modal fade" id="addLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Okul Seviyesi Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label for="recipient-name" class="col-form-label">Seviye Adı:</label>
-                        <input type="text" class="form-control" id="levelName">
-                    </div>
-
+    <div class="modal fade" id="openDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Silmek İstediğinize Emin Misiniz ?
+                </div>
+                <div class="modal-footer" id="deleteOperationModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="deleteSchoolType(this.id)">Sil</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveAddSchoolLevel()">Ekle</button>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="openDeleteLevelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Silmek İstediğinize Emin Misiniz ?
+                </div>
+                <div class="modal-footer" id="deleteOperationLevelModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="deleteSchoolLevel(this.id)">Sil</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <div class="modal fade" id="updateLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Okul Seviyesi Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="recipient-name" class="col-form-label">Okul Seviyesi:</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
 
-<script>
-
-    $(document).ready(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        $('#example2 , #example3 , #example4').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-
-        });
-    });
+                    </div>
+                </div>
+                <div class="modal-footer" id="updateOperationLevelModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updateschoolLevel(this.id)">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+    <div class="modal fade" id="addLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Okul Seviyesi Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="recipient-name" class="col-form-label">Seviye Adı:</label>
+                            <input type="text" class="form-control" id="levelName">
+                        </div>
 
-    function saveAddSchoolType() {
-        if ($("#schoolType").val() == "" || $("#schoolCode").val() == "") {
-            $.confirm({
-                title: "Bilgilendirme",
-                content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
-                buttons: {
-                    TAMAM: function () {
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAddSchoolLevel()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    }
-                }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            $('#example2 , #example3 , #example4').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+
             });
-        } else {
+        });
+
+
+
+        function saveAddSchoolType() {
+            if ($("#schoolType").val() == "" || $("#schoolCode").val() == "") {
+                $.confirm({
+                    title: "Bilgilendirme",
+                    content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddNewSchoolType',
+                    cache: false,
+                    data: { "schoolType": $("#schoolType").val(), "schoolCode": $("#schoolCode").val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res == true) {
+
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Okul Türü başarıyla eklendi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        window.location.href = "EducationSchoolSettings"
+                                    }
+                                }
+                            });
+
+
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+
+        }
+
+        function deleteOpenModal(id) {
+
+            $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+            $("#openDeleteModal").modal("toggle");
+
+        }
+
+        function deleteSchoolType(id) {
 
             $.ajax({
                 type: "POST",
-                url: '../SystemSettings/AddNewSchoolType',
+                url: '../SystemSettings/DeleteSchoolType',
                 cache: false,
-                data: { "schoolType": $("#schoolType").val(), "schoolCode": $("#schoolCode").val() },
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res != null) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Okul Türü başarıyla silindi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "EducationSchoolSettings"
+                                }
+                            }
+                        });
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Bir Hata Oluştu.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                    item
+                }
+
+            });
+
+        }
+
+        function updateschoolType(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/UpdateSchoolType',
+                cache: false,
+                data: { "id": id, "code": $("#schoolCodes").val(), "type": $("#schoolTypes").val() },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
 
-                    if (res == true) {
+                    if (res != null) {
 
                         $.confirm({
                             title: "Bilgilendirme",
-                            content: "Okul Türü başarıyla eklendi.",
+                            content: "Okul Türü başarıyla güncellendi.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -508,11 +619,13 @@
                         });
 
 
+
                     }
+
                     else {
                         $.confirm({
                             title: "Uyarı",
-                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            content: "Okul Türü Bulunamadı.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -529,199 +642,32 @@
             });
         }
 
-    }
-
-    function deleteOpenModal(id) {
-
-        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeleteModal").modal("toggle");
-
-    }
-
-    function deleteSchoolType(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeleteSchoolType',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Okul Türü başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationSchoolSettings"
-                            }
-                        }
-                    });
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Bir Hata Oluştu.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-                item
-            }
-
-        });
-
-    }
-
-    function updateschoolType(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/UpdateSchoolType',
-            cache: false,
-            data: { "id": id, "code": $("#schoolCodes").val(), "type": $("#schoolTypes").val() },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Okul Türü başarıyla güncellendi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationSchoolSettings"
-                            }
-                        }
-                    });
-
-
-
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function openUpdateschoolType(id) {
-
-        $.ajax({
-            type: "GET",
-            url: '../SystemSettings/GetSchoolTypeInf',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                
-
-                if (res != null) {
-
-                    $("#schoolCodes").val(res.code);
-                    $("#schoolTypes").val(res.types);
-
-                    $("#updateOperationModel button:nth-of-type(2)").attr("id", id);
-                    $('#updateType').modal('toggle');
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-
-
-
-    function saveAddSchoolLevel() {
-        if ($("#levelName").val() == "") {
-            $.confirm({
-                title: "Bilgilendirme",
-                content: "Lütfen Seviye Bilgilerini Eksizsiz Doldurunuz.",
-                buttons: {
-                    TAMAM: function () {
-
-                    }
-                }
-            });
-        } else {
+        function openUpdateschoolType(id) {
 
             $.ajax({
-                type: "POST",
-                url: '../SystemSettings/AddNewSchoolLevel',
+                type: "GET",
+                url: '../SystemSettings/GetSchoolTypeInf',
                 cache: false,
-                data: { "levelName": $("#levelName").val() },
+                data: { "id": id },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
 
-                    if (res == true) {
 
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Okul Seviyesi başarıyla eklendi.",
-                            buttons: {
-                                TAMAM: function () {
+                    if (res != null) {
 
-                                    window.location.href = "EducationSchoolSettings"
-                                }
-                            }
-                        });
+                        $("#schoolCodes").val(res.code);
+                        $("#schoolTypes").val(res.types);
 
-
+                        $("#updateOperationModel button:nth-of-type(2)").attr("id", id);
+                        $('#updateType').modal('toggle');
                     }
+
                     else {
                         $.confirm({
                             title: "Uyarı",
-                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            content: "Okul Türü Bulunamadı.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -738,174 +684,235 @@
             });
         }
 
-    }
 
-    function deleteOpenModalLevel(id) {
 
-        $("#deleteOperationLevelModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeleteLevelModal").modal("toggle");
 
-    }
+        function saveAddSchoolLevel() {
+            if ($("#levelName").val() == "") {
+                $.confirm({
+                    title: "Bilgilendirme",
+                    content: "Lütfen Seviye Bilgilerini Eksizsiz Doldurunuz.",
+                    buttons: {
+                        TAMAM: function () {
 
-    function deleteSchoolLevel(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeleteSchoolLevel',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Okul Seviyesi başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationSchoolSettings"
-                            }
                         }
-                    });
-                }
+                    }
+                });
+            } else {
 
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Bir Hata Oluştu.",
-                        buttons: {
-                            TAMAM: function () {
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddNewSchoolLevel',
+                    cache: false,
+                    data: { "levelName": $("#levelName").val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
 
-                            }
+
+                        if (res == true) {
+
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Okul Seviyesi başarıyla eklendi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        window.location.href = "EducationSchoolSettings"
+                                    }
+                                }
+                            });
+
+
                         }
-                    });
-                }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
 
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
             }
-        });
-    }
 
-    function updateschoolLevel(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/UpdateSchoolLevel',
-            cache: false,
-            data: { "id": id, "levelName": $("#name").val() },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Okul Türü başarıyla güncellendi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationSchoolSettings"
-                            }
-                        }
-                    });
-
-
-
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function openUpdateschoolLevel(id) {
-        $.ajax({
-            type: "GET",
-            url: '../SystemSettings/GetSchoolLevelInf',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-
-                if (res != null) {
-
-                    $("#name").val(res.levels);
-
-
-                    $("#updateOperationLevelModel button:nth-of-type(2)").attr("id", id);
-                    $('#updateLevel').modal('toggle');
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-
-    function openPage(pageName, elmnt, color) {
-        // Hide all elements with class="tabcontent" by default */
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
         }
 
-        // Remove the background color of all tablinks/buttons
-        tablinks = document.getElementsByClassName("tablink");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "";
+        function deleteOpenModalLevel(id) {
+
+            $("#deleteOperationLevelModel button:nth-of-type(2)").attr("id", id);
+            $("#openDeleteLevelModal").modal("toggle");
+
         }
 
-        // Show the specific tab content
-        document.getElementById(pageName).style.display = "block";
+        function deleteSchoolLevel(id) {
 
-        // Add the specific color to the button used to open the tab content
-        elmnt.style.backgroundColor = color;
-    }
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/DeleteSchoolLevel',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
 
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
+                    if (res != null) {
 
-</script>
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Okul Seviyesi başarıyla silindi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "EducationSchoolSettings"
+                                }
+                            }
+                        });
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Bir Hata Oluştu.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+        function updateschoolLevel(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/UpdateSchoolLevel',
+                cache: false,
+                data: { "id": id, "levelName": $("#name").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+
+                    if (res != null) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Okul Türü başarıyla güncellendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "EducationSchoolSettings"
+                                }
+                            }
+                        });
+
+
+
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Okul Türü Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+        function openUpdateschoolLevel(id) {
+            $.ajax({
+                type: "GET",
+                url: '../SystemSettings/GetSchoolLevelInf',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+
+                    if (res != null) {
+
+                        $("#name").val(res.levels);
+
+
+                        $("#updateOperationLevelModel button:nth-of-type(2)").attr("id", id);
+                        $('#updateLevel').modal('toggle');
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Okul Türü Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+
+        function openPage(pageName, elmnt, color) {
+            // Hide all elements with class="tabcontent" by default */
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the background color of all tablinks/buttons
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+
+            // Show the specific tab content
+            document.getElementById(pageName).style.display = "block";
+
+            // Add the specific color to the button used to open the tab content
+            elmnt.style.backgroundColor = color;
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+
+    </script>

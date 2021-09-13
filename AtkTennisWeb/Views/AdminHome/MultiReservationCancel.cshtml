@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Rezervasyon İptal</h1>
+
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -31,51 +31,43 @@
                             <div id="selTime">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
-                                        <li class="page-item"><input id="findMember" style="height:38px" type="search" class="form-control form-control-sm" placeholder="Üye - Okul - Performans Ara" aria-controls="example2"></li>
-                                        <li class="page-item"><input class="form-control" type="date" id="dateStart" style="cursor:pointer;"></li>
-                                        <li class="page-item"><input class="form-control" type="date" id="dateFinish" style="cursor:pointer; "></li>
-                                        <li class="page-item"> <button class="btn btn-outline-primary" onclick="findAllRes()">Getir</button></li>
+                                        <li style="margin-right:15px" class="page-item"><input id="findMember" style="height:38px" type="search" class="form-control form-control-sm" placeholder="Üye - Okul - Performans Ara" aria-controls="example2"></li>
+                                        <li style="margin-right:15px" class="page-item"><input class="form-control" type="date" id="dateStart" style="cursor:pointer;"></li>
+                                        <li style="margin-right:15px" class="page-item"><input class="form-control" type="date" id="dateFinish" style="cursor:pointer; "></li>
+                                        <li class="page-item"> <button style="border-color:inherit !important " class="btn btn-dark" onclick="findAllRes()">Mevcut Rezervasyonları Getir</button></li>
 
                                     </ul>
                                 </nav>
                             </div>
                         </div>
 
+                        <div  class="card" style="border-radius:40px ; margin-top:15px">
+                            <div class="card-content">
+                                <div class="card-body cleartfix">
+                                    <div class="media align-items-stretch">
+                                        <div class="align-self-center">
+                                            <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4>Kutay Karademir - kk372</h4>
+                                            <span>kutaykrademr</span>
+                                        </div>
+
+
+
+                                        <div class="align-self-center">
+                                            <button style="border-color:inherit !important; " class="btn btn-dark"  onclick="findAllRes()">Seçili Rezervasyonları İptal Et</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="appendResInf">
-                            @*<div class="card-body">
-                                <table id="example2" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr style="text-align:center">
-
-                                            <th>Reservasyon Id</th>
-                                            <th>Reservasyon Tarihi</th>
-                                            <th>Reservasyon Saati</th>
-                                            <th>Kort Bilgisi</th>
-                                            <th>Ücret Durumu</th>
-                                            <th>İşlemler</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
 
 
-                                        <tr style="text-align:center" id="">
-                                            <td>asd</td>
-                                            <td>asd</td>
-                                            <td>asd</td>
-                                            <td>asd</td>
-                                            <td>asd</td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" style="cursor:pointer" id="mon">
-                                                    <label class="custom-control-label" for="mon"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
 
-
-                                    </tbody>
-                                </table>
-                            </div>*@
+                           
                         </div>
                     </div>
                 </div>
@@ -108,6 +100,32 @@
             "buttons": ["print"]
         }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
+
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $('#dateStart').val(today);
+
+
+        var date = $("#dateStart").val();
+
+        const d = new Date(date);
+        d.setDate(d.getDate() + 7);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+
+        var date3 = d.getFullYear() + '-' + month + '-' + day;
+
+        $('#dateFinish').val(date3);
 
         findMember();
     });
@@ -178,102 +196,133 @@
             whoRes = memberUserName[0];
         }
 
+        if (whoRes == "" || startDate == "" || finishDate == "") {
 
-        debugger;
+            alert("Lütfen Bilgileri Eksiksiz Giriniz !!");
+        }
+        else {
+            $.ajax({
+                type: "Get",
+                url: '../AdminHome/GetResDetailSearch',
+                cache: false,
+                dataType: "json",
+                data: { "whoRes": whoRes, "startDate": startDate, "finishDate": finishDate },
+                async: true,
+                success: function (res) {
 
-        $.ajax({
-            type: "Get",
-            url: '../AdminHome/GetResDetailSearch',
-            cache: false,
-            dataType: "json",
-            data: { "whoRes": whoRes, "startDate": startDate, "finishDate": finishDate },
-            async: true,
-            success: function (res) {
-
-                debugger;
-
-            
-                if (res != "false") {
-
-
-                    $("#appendResInf").empty();
+                    debugger;
 
 
-                    row = "";
-                    row += '<div class="card-body">';
-                    row += '<table id="asd" class="table table-bordered table-hover">';
-                    row += '<thead>';
-                    row += '<tr style="text-align:center">';
-                    row += '<th>Reservasyon Id</th>';
-                    row += '<th>Reservasyon Tarihi</th>';
-                    row += '<th>Reservasyon Saati</th>';
-                    row += '<th>Kort Bilgisi</th>';
-                    row += '<th>Ücret Durumu</th>';
-                    row += '<th>İşlemler</th>';
-                    row += '</tr>';
-                    row += '</thead>';
+                    if (res != "false") {
 
 
-                 
+                        $("#appendResInf").empty();
 
-                    for (var i = 0; i < res.length; i++) {
 
-                        row += '<tbody>';
-                        row += '<tr style="text-align:center" id="">';
-                        row += '<td>' + res[i].resId + '</td>';
-                        row += '<td>' + res[i].resDate + '</td>';
-                        row += '<td>' + res[i].resStartTime + "-" + res[i].resFinishTime + '</td>';
-                        row += '<td>' + res[i].courtId + '</td>';
+                        row = "";
+                        row += '<div class="card-body">';
+                        row += '<table id="resList" class="table table-bordered table-hover">';
+                        row += '<thead>';
+                        row += '<tr style="text-align:center">';
+                        row += '<th>Reservasyon Id</th>';
+                        row += '<th>Reservasyon Tarihi</th>';
+                        row += '<th>Reservasyon Saati</th>';
+                        row += '<th>Kort Bilgisi</th>';
+                        row += '<th>Ücret Durumu</th>';
+                        row += '<th>İşlemler</th>';
+                        row += '</tr>';
+                        row += '</thead>';
 
-                        if (res[i].priceInf == "true") {
-                            row += '<td>' + "Ödendi" + '</td>';
+
+
+
+                        for (var i = 0; i < res.length; i++) {
+
+                            row += '<tbody>';
+                            row += '<tr style="text-align:center" id="">';
+                            row += '<td>' + res[i].resId + '</td>';
+                            row += '<td>' + res[i].resDate + '</td>';
+                            row += '<td>' + res[i].resStartTime + "-" + res[i].resFinishTime + '</td>';
+                            row += '<td>' + res[i].courtId + '</td>';
+
+                            if (res[i].priceInf == "true") {
+                                row += '<td>' + "Ödendi" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Ödenmedi" + '</td>';
+                            }
+
+                            row += '<td>';
+                            row += '<div class="custom-control custom-switch">';
+                            row += '<input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res[i].resId + '">';
+                            row += '<label class="custom-control-label" for="' + res[i].resId + '"></label>';
+                            row += '</div>';
+                            row += '</td>';
+                            row += '</tr>';
+                            row += '</tbody>';
+
+
+
                         }
-                        else {
-                            row += '<td>' + "Ödenmedi" + '</td>';
-                        }
-                        
+
+                        row += '<tfoot style="text-align:center; font-weight:bold">';
+                        row += '<tr>';
+                        row += '<td></td>';
+                        row += '<td></td>';
+                        row += '<td></td>';
+                        row += '<td></td>';
+                        row += '<td>Tümünü Seç</td>';
                         row += '<td>';
                         row += '<div class="custom-control custom-switch">';
-                        row += '<input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res[i].resId + '">';
-                        row += '<label class="custom-control-label" for="' + res[i].resId + '"></label>';
+                        row += '<input type="checkbox" class="custom-control-input" onchange="checkedAll(this)" style="cursor:pointer" id="' + 'allChecked' + '">';
+                        row += '<label class="custom-control-label" for="' + 'allChecked' + '"></label>';
                         row += '</div>';
                         row += '</td>';
-                        row += '</tr>';
-                        row += '</tbody>';
+                        row += '</tfoot>';
+
+                        row += '</table>';
+                        row += '</div>';
+                        row += '</div>';
+
+                        $("#appendResInf").append(row);
+
+
 
                     }
-                   
-                  
-                    row += '</table>';
-                    row += '</div>';
-                    row += '</div>';
 
-                    $("#appendResInf").append(row);
+                    else {
 
-                
 
+                        $("#appendResInf").empty();
+
+                        alert("Kriterlere Uygun Kayıt Bulunamadı");
+                    }
+
+
+
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
                 }
-
-                else {
-
-
-                    $("#appendResInf").empty();
-
-                    alert("sa");
-                }
-
-                
-
-
-            },
-
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+            });
+        }
+     
     }
 
+    function checkedAll(element) {
+
+        if (element.checked ) {
+        
+            $('#resList input[type=checkbox]:not(:disabled)').prop('checked' , true);
+        }
+        else {
+
+            $('#resList input[type=checkbox]:not(:disabled)').prop('checked', false);
+        }
+    }
 
 </script>
 
