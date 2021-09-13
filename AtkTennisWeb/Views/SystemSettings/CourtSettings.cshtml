@@ -217,7 +217,7 @@
                                 <h3>Kort Skalası</h3>
                             </div>
                             <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice"><i class="fas fa-plus-square"></i></button>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtScaleModal"><i class="fas fa-plus-square"></i></button>
                             </div>
                         </div>
 
@@ -247,7 +247,7 @@
                                             <td>
                                                 
                                                 <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtScaleModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="deleteCourtScale(this.id)"><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -571,14 +571,35 @@
                         <input type="text" class="form-control" id="recipePrice">
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Ücret Tipi:</label>
-                        <input type="text" class="form-control" id="recipePriceType">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Tarife Tipi:</label>
-                        <input type="text" class="form-control" id="courtRecipeType">
-                    </div>
+
+                    <select id="recipePriceType" class="form-control">
+                        <option disabled="disabled" selected="selected">Ücret Tipi</option>
+
+                        <option value="1"> Asıl Ücret</option>
+                        <option value="0"> Ek Ücret</option>
+
+                    </select>
+
+
+
+                    <select id="recipePriceType" class="form-control">
+                        <option disabled="disabled" selected="selected">Kort Türü</option>
+
+                        @foreach (var item in Model.courtRecipeTypes)
+                        {
+                            <option>@item.CourtRecipeTypes</option>
+                            <option>@item.CourtRecipeTypes</option>
+                        }
+
+
+                    </select>
+
+                    <select id="recipeCondition" class="form-control">
+                        <option disabled="disabled" selected="selected">Ücret Tipi</option>       
+                            <option value="1">Aktif</option>
+                            <option value="0">Pasif</option>
+                    </select>
+
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Durumu:</label>
                         <input type="text" class="form-control" id="recipeCondition">
@@ -660,6 +681,7 @@
             </div>
 
             <div class="modal-body">
+
                 <div class="row">
 
                     <div class="col-md-6 form-group">
@@ -699,6 +721,54 @@
     </div>
 </div>
 
+<div class="modal fade" id="addCourtScaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6 form-group">
+                        <label>Adı:</label>
+                        <input type="text" id="addScaleName" class="form-control" autocomplete="new-password">
+                    </div>
+
+
+                    <div class="col-md-6 form-group">
+                        <label>Kodu:</label>
+                        <input type="text" id="addScaleCode" class="form-control" autocomplete="new-password">
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label>Renk:</label>
+
+                    <div class="input-group my-colorpicker2">
+                        <input id="addScaleColor" type="text" class="form-control" autocomplete="new-password">
+
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-square"></i></span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddCourtScale()">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
 
@@ -737,6 +807,9 @@
 
 
     });
+
+
+
 
     function saveAddCourtType() {
 
@@ -955,6 +1028,7 @@
             });
         }
     }
+
 
 
 
@@ -1181,6 +1255,7 @@
 
 
 
+
     function openUpdateCourtPriceModal(ID) {
         $.ajax({
             type: "GET",
@@ -1348,7 +1423,7 @@
             type: "POST",
             url: '../SystemSettings/AddNewCourtPriceList',
             cache: false,
-            data: { "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType").val(), "courtRecipeType": $("#courtRecipeType").val(), "recipeCondition": $("#recipeCondition").val() },
+            data: { "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType option:selected").val(), "courtRecipeType": $("#courtRecipeType").val(), "recipeCondition": $("#recipeCondition").val() },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -1387,6 +1462,8 @@
             }
         });
     }
+
+
 
 
     function openUpdateCourtScaleModal(id) {
@@ -1489,6 +1566,132 @@
                 console.log(textStatus);
             }
         });
+    }
+
+    function saveAddCourtScale() {
+
+        var scaleColor = $("#addScaleColor").val();
+        var scaleName = $("#addScaleName").val();
+        var scaleCode = $("#addScaleCode").val();
+
+        if (scaleColor == "" || scaleName == "") {
+
+            alert("eksiksiz doldurun");
+        }
+
+        else {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddNewCourtScale',
+                cache: false,
+                data: { "scaleColor": scaleColor, "scaleName": scaleName, "scaleCode": scaleCode },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+
+                        swal({
+                            title: "Skala Ekleme Başarılı",
+                            text: "Skala Ekleme Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
+
+                            window.location.href = "CourtSettings"
+                        });
+
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+     
+    }
+
+    function deleteCourtScale(id) {
+
+        swal({
+            title: "Emin Misiniz?",
+            text: "Tarife Bilgisi Silinecek !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '../SystemSettings/DeleteCourtScale',
+                        cache: false,
+                        data: { "id": id },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+                            if (res != null) {
+
+                                swal({
+                                    title: "Skala Silindi",
+                                    text: "Skala  Başarılı Bir Şekilde Silindi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
+
+                                    window.location.href = "CourtSettings";
+
+                                });
+
+                            }
+
+                            else {
+                                $.confirm({
+                                    title: "Uyarı",
+                                    content: "Kullanıcı Bulunamadı.",
+                                    buttons: {
+                                        TAMAM: function () {
+
+                                        }
+                                    }
+                                });
+                            }
+
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                }
+                else
+                    swal({
+                        title: "Tarife Korundu",
+                        text: "Tarifeyi Silmekten Vazgeçtiniz!",
+                        icon: "success",
+                        button: "Tamam",
+                    });
+            });
+
+
+
     }
 
 </script>

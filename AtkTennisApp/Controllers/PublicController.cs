@@ -151,7 +151,7 @@ namespace AtkTennisApp.Controllers
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
                 model.courtScales = db.courtScaleLists.ToList();
-                
+
 
             }
             catch (Exception ex)
@@ -170,8 +170,6 @@ namespace AtkTennisApp.Controllers
 
         {
             ReservationListViewModel model = new ReservationListViewModel();
-
-
 
             try
             {
@@ -224,13 +222,13 @@ namespace AtkTennisApp.Controllers
 
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
             var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).ToList();
-                        
+
             var startTime = Convert.ToDateTime(court.CourtStartTime);
             var finishTime = Convert.ToDateTime(court.CourtFinishTime);
             string period = court.CourtTimePeriod;
             var periodTime = Convert.ToDouble(period);
             var sTime = startTime.AddMinutes(-periodTime);
-            
+
             var miles = (finishTime - sTime).TotalHours;
 
             List<res_time> res_Times = new List<res_time>();
@@ -424,7 +422,7 @@ namespace AtkTennisApp.Controllers
                 {
                     ResFinishTime = h + ":" + "00";
                 }
-               
+
             }
 
 
@@ -456,8 +454,6 @@ namespace AtkTennisApp.Controllers
 
                 var resDebt = Price;
 
-
-
                 try
                 {
                     if (memberPrice - resDebt >= 0)
@@ -469,27 +465,46 @@ namespace AtkTennisApp.Controllers
 
 
                         res.NickName = mem.NickName;
-                    res.Court = court;
-                    res.ResFinishTime = ResFinishTime;
-                    res.ResStartTime = ResStartTime;
-                    res.ResDate = ResDate;
-                    res.ResEvent = ResEvent;
-                    res.ResTime = ResTime;
-                    res.UserId = UserId;
-                    res.doResUserId = UserId;
-                    res.ResNowDate = ResNowDate;
-                    res.Price = Price;
-                    res.PriceIds = PriceIds;
+                        res.Court = court;
+                        res.ResFinishTime = ResFinishTime;
+                        res.ResStartTime = ResStartTime;
+                        res.ResDate = ResDate;
+                        res.ResEvent = ResEvent;
+                        res.ResTime = ResTime;
+                        res.UserId = UserId;
+                        res.doResUserId = UserId;
+                        res.ResNowDate = ResNowDate;
+                        res.Price = Price;
+                        res.PriceIds = PriceIds;
 
 
 
-                    db.memberLists.Update(mem);
-                    db.reservations.Add(res);
-                    db.SaveChanges();
+                        db.memberLists.Update(mem);
+                        db.reservations.Add(res);
+                        db.SaveChanges();
                     }
+
                     else
                     {
-                        return Json(false);
+                        res.PriceInf = false;
+                        res.NickName = mem.NickName;
+                        res.Court = court;
+                        res.ResFinishTime = ResFinishTime;
+                        res.ResStartTime = ResStartTime;
+                        res.ResDate = ResDate;
+                        res.ResEvent = ResEvent;
+                        res.ResTime = ResTime;
+                        res.UserId = UserId;
+                        res.doResUserId = UserId;
+                        res.ResNowDate = ResNowDate;
+                        res.Price = Price;
+                        res.PriceIds = PriceIds;
+
+
+
+                        db.memberLists.Update(mem);
+                        db.reservations.Add(res);
+                        db.SaveChanges();
                     }
 
 
@@ -730,15 +745,15 @@ namespace AtkTennisApp.Controllers
                 model.reservations = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 mem = db.memberLists.Where(x => x.UserId == model.reservations.UserId).FirstOrDefault();
                 scaleList = db.courtScaleLists.FirstOrDefault(x => x.Code == model.reservations.NickName);
-                
+
                 var whoRes = db.memberLists.Where(x => x.UserId == model.reservations.doResUserId).FirstOrDefault().FullName;
 
                 model2.courtPriceLists = db.courtPriceLists.ToList();
-             
+
                 if (mem == null)
                 {
                     model2.resSchemaModal.NickName = model.reservations.NickName;
-                    model2.resSchemaModal.FullName = scaleList.Name; 
+                    model2.resSchemaModal.FullName = scaleList.Name;
                 }
 
                 else
@@ -746,7 +761,7 @@ namespace AtkTennisApp.Controllers
                     model2.resSchemaModal.FullName = mem.FullName;
                     model2.resSchemaModal.NickName = mem.NickName;
                 }
-           
+
                 model2.resSchemaModal.CourtName = model.reservations.Court.CourtName;
                 model2.resSchemaModal.ResDate = model.reservations.ResDate;
                 model2.resSchemaModal.ResEvent = model.reservations.ResEvent;
@@ -781,6 +796,7 @@ namespace AtkTennisApp.Controllers
             ReservationCancel model2 = new ReservationCancel();
             List<Court> model3 = new List<Court>();
             ReservationSettings set = new ReservationSettings();
+            MemberList mem = new MemberList();
 
             try
             {
@@ -788,6 +804,15 @@ namespace AtkTennisApp.Controllers
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 model3 = db.courts.ToList();
 
+                if (model.PriceInf == true && procedure == true){
+
+                    mem = db.memberLists.Where(x => x.UserId == model.UserId).FirstOrDefault();
+
+                    mem.Price = mem.Price + model.Price;
+
+                    db.Update(mem);
+                    db.SaveChanges();
+                }
 
                 if (model != null)
                 {

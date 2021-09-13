@@ -189,7 +189,7 @@
                     </div>
 
                     <div class="card-body">
-                        <table id="example1" style="border-collapse:inherit" class="table table-bordered table-hover">
+                        <table id="example2" style="border-collapse:inherit" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align:center">
                                     <th>Tarih</th>
@@ -223,9 +223,23 @@
                                                     <td>Ödendi</td>
                                                 }
 
+                                                else
+                                                {
+                                                    <td>Ödenmedi - Borç Mevcut</td>
+                                                }
+
                                                 <td>Aktif</td>
 
-                                                <td>Ödendi</td>
+                                                @if (item.PriceInf == true)
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>Öde</td>
+                                                }
+
 
 
                                             </tr>
@@ -254,7 +268,7 @@
 
                                                 @if (item2.Procedure == true)
                                                 {
-                                                    <td>İade</td>
+                                                    <td>İade Edildi / Ödeme İptal Edildi</td>
                                                 }
                                                 else
                                                 {
@@ -283,7 +297,7 @@
 
                                                 else
                                                 {
-                                                    <td>Ödeme Alındı</td>
+                                                    <td>İptal Edildi - Ödendi</td>
                                                 }
 
                                             </tr>
@@ -304,12 +318,25 @@
                                                 <td>@item.Court.CourtName</td>
                                                 <td>@item.Price ₺</td>
 
-
-                                                <td>Ödendi</td>
+                                                @if (item.PriceInf == true)
+                                                {
+                                                    <td>Ödendi</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Ödenmedi</td>
+                                                }
 
                                                 <td>Aktif</td>
 
-                                                <td>Ödeme Alındı</td>
+                                                @if (item.PriceInf == true)
+                                                {
+                                                    <td>Ödeme Alındı</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Öde</td>
+                                                }
 
 
                                             </tr>
@@ -326,20 +353,32 @@
                                             <tr style="text-align:center" id="">
                                                 <td>@item2.ResDate</td>
                                                 <td>@item2.ResStartTime - @item2.ResFinishTime</td>
+
                                                 @{
                                                     var court = Model.courts.Where(x => x.CourtId == item2.CourtId).FirstOrDefault();
                                                 }
+
                                                 <td>@court.CourtName</td>
                                                 <td>@item2.Price ₺</td>
 
+
                                                 @if (item2.Procedure == true)
                                                 {
-                                                    <td>İade</td>
+                                                    <td>İade Edildi / Ödeme İptal Edildi</td>
                                                 }
                                                 else
                                                 {
-                                                    <td>Ödendi</td>
+                                                    if (item2.PriceInf == true)
+                                                    {
+                                                        <td>Ödendi</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Öde</td>
+                                                    }
+
                                                 }
+
 
                                                 @{
                                                     var x = Model.memberLists.FirstOrDefault(x => x.UserId == item2.CancelResUserId);
@@ -358,12 +397,20 @@
 
                                                 @if (item2.Procedure == true)
                                                 {
-                                                    <td>İptal Edildi / Para İade / Borç Yok </td>
+                                                    <td>İptal Edildi - Para İade - Borç Yok </td>
                                                 }
 
                                                 else
                                                 {
-                                                    <td>Ödeme Alındı</td>
+                                                    if (item2.PriceInf == true)
+                                                    {
+                                                        <td>İptal Edildi - Ödeme Alındı</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Öde</td>
+                                                    }
+
                                                 }
 
                                             </tr>

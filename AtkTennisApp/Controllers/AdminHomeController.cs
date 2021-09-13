@@ -422,7 +422,6 @@ namespace AtkTennisApp.Controllers
             var scale = new CourtScaleList();
 
 
-
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
@@ -522,9 +521,6 @@ namespace AtkTennisApp.Controllers
                     mem = db.memberLists.FirstOrDefault(x => x.NickName == UserName.Trim());
                     scale = db.courtScaleLists.FirstOrDefault(x => x.Code == UserName);
 
-
-
-
                 }
 
                 catch (Exception e)
@@ -552,6 +548,7 @@ namespace AtkTennisApp.Controllers
                             res.UserId = mem.UserId;
 
                             var newMemberPrice = memberPrice - resDebt;
+                           
                             mem.Price = newMemberPrice;
                             res.PriceInf = true;
 
@@ -574,7 +571,25 @@ namespace AtkTennisApp.Controllers
 
                         else
                         {
-                            return Json(false);
+                            res.PrivRes = PrivRes;
+                            res.NickName = mem.NickName;
+                            res.UserId = mem.UserId;
+                            res.PriceInf = false;
+                            res.Court = court;
+                            res.ResFinishTime = ResFinishTime;
+                            res.ResStartTime = ResStartTime;
+                            res.ResDate = ResDate;
+                            res.ResEvent = ResEvent;
+                            res.ResTime = ResTime;
+                            res.doResUserId = UserId;
+                            res.ResNowDate = ResNowDate;
+                            res.Price = Price;
+                            res.PriceIds = PriceIds;
+
+                        
+                            db.reservations.Add(res);
+                            db.SaveChanges();
+
                         }
                     }
 
@@ -763,8 +778,6 @@ namespace AtkTennisApp.Controllers
 
         }
 
-
-
         [HttpGet("CancelResProcedureModal", Name = "CancelResProcedureModal")]
         public JsonResult CancelResProcedureModal(int id)
 
@@ -849,8 +862,9 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                mem = db.memberLists.Where(x => x.UserId == userId).FirstOrDefault();
+               
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+                mem = db.memberLists.Where(x => x.UserId == model.UserId).FirstOrDefault();
                 model3 = db.courts.ToList();
 
                 if (procedure == true)
@@ -1315,6 +1329,8 @@ namespace AtkTennisApp.Controllers
                 return Json(true);
             }
         }
+
+
 
 
         [HttpGet("AddCabinet", Name = "AddCabinet")]
@@ -1923,6 +1939,56 @@ namespace AtkTennisApp.Controllers
             return Json(false);
 
         }
+
+
+        [HttpGet("GetResDetailSearch", Name = "GetResDetailSearch")]
+        public JsonResult GetResDetailSearch(string whoRes, string startDate, string finishDate)
+        {
+            List<Reservation> model = new List<Reservation>();
+            List<string> dateList = new List<string>();
+            ArrayList resList = new ArrayList();
+
+            DateTime startDate2 = Convert.ToDateTime(startDate);
+            DateTime finishDate2 = Convert.ToDateTime(finishDate);
+
+            try
+            {
+                for (DateTime date = startDate2; date <= finishDate2; date = date.AddDays(1))
+                {
+                    
+                    dateList.Add(date.ToString("yyyy-MM-dd"));
+
+                }
+
+                for (int i = 0; i < dateList.Count(); i++)
+                {
+                    model = db.reservations.Where(x => x.ResDate == dateList[i] && x.NickName == whoRes.Trim()).ToList();
+                 
+                    if (model != null)
+                    {
+                        foreach (var item in model)
+                        {
+                            resList.Add(item);
+                        }
+                        
+                    }
+                }
+
+                if (resList.Count != 0)
+                {
+                    return Json(resList);
+                }
+            }
+            catch (Exception ex)
+            {
+                model = new List<Reservation>();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(false);
+        }
+
+
 
     }
 }

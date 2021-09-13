@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Üye Dolap Ayarları</h1>
+                    <h1>Rezervasyon İptal</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -25,64 +25,68 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
-                                <h3>Dolap Kullanıcı Listesi</h3>
+                                <h3>Rezervasyon Listesi</h3>
                             </div>
 
                             <div id="selTime">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
-                                        <li class="page-item"><input  style="height:38px"  type="search" class="form-control form-control-sm" placeholder="Üye - Okul - Performans Ara" aria-controls="example2"></li>
-                                        <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer;"></li>
-                                        <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer; "></li>
-                                        <li class="page-item"> <button class="btn btn-warning">Getir</button></li>
+                                        <li class="page-item"><input id="findMember" style="height:38px" type="search" class="form-control form-control-sm" placeholder="Üye - Okul - Performans Ara" aria-controls="example2"></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="dateStart" style="cursor:pointer;"></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="dateFinish" style="cursor:pointer; "></li>
+                                        <li class="page-item"> <button class="btn btn-outline-primary" onclick="findAllRes()">Getir</button></li>
 
                                     </ul>
                                 </nav>
                             </div>
                         </div>
 
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
+                        <div id="appendResInf">
+                            @*<div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
 
-                                        <th>Dolap Alım Tarihi</th>
-                                        <th>Dolap Kodu</th>
-                                        <th>Dolap Türü</th>
-                                        <th>Dolap Alan Üye</th>
-                                        <th>Dolap Kime Ait</th>
-                                        <th>Dolap Ücreti</th>
-                                        @*<th>İşlemler</th>*@
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-
-                                    <tr style="text-align:center" id="">
-                                        <td>asd</td>
-                                        <td>asd</td>
-                                        <td>asd</td>
-                                        <td>asd</td>
-                                        <td>asd</td>
-                                        <td>asd</td>
+                                            <th>Reservasyon Id</th>
+                                            <th>Reservasyon Tarihi</th>
+                                            <th>Reservasyon Saati</th>
+                                            <th>Kort Bilgisi</th>
+                                            <th>Ücret Durumu</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
 
+                                        <tr style="text-align:center" id="">
+                                            <td>asd</td>
+                                            <td>asd</td>
+                                            <td>asd</td>
+                                            <td>asd</td>
+                                            <td>asd</td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" style="cursor:pointer" id="mon">
+                                                    <label class="custom-control-label" for="mon"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
 
 
-                                    </tr>
-
-
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>*@
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
     </section>
 </div>
+
+<script src="~/lib/jquery/dist/linq.min.js"></script>
+
+
 
 <script>
     $(document).ready(function () {
@@ -93,7 +97,7 @@
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-        $('#example2 , #example3 , #example4').DataTable({
+        $('#asd , #example3 , #example4').DataTable({
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -104,6 +108,172 @@
             "buttons": ["print"]
         }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
+
+        findMember();
     });
+
+    function findMember() {
+
+        debugger;
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetUserSchoolList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                var mem = [];
+
+                for (var i = 0; i < res.memberLists.length; i++) {
+                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                }
+
+
+                for (var i = 0; i < res.courtScales.length; i++) {
+
+
+
+                    var checkRole = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
+                        .select(function (x) { return x }).toArray();
+
+                    if (checkRole.length == 0) {
+                        mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
+                    }
+
+
+                }
+
+
+                $("#findMember").autocomplete({
+                    source: mem
+                });
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function findAllRes() {
+
+        var userName = $("#findMember").val();
+        var startDate = $("#dateStart").val();
+        var finishDate = $("#dateFinish").val();
+
+
+        var memberUserName = userName.split("-");
+
+        var whoRes = memberUserName[2];
+
+        if (whoRes == undefined) {
+
+            whoRes = memberUserName[0];
+        }
+
+
+        debugger;
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetResDetailSearch',
+            cache: false,
+            dataType: "json",
+            data: { "whoRes": whoRes, "startDate": startDate, "finishDate": finishDate },
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+            
+                if (res != "false") {
+
+
+                    $("#appendResInf").empty();
+
+
+                    row = "";
+                    row += '<div class="card-body">';
+                    row += '<table id="asd" class="table table-bordered table-hover">';
+                    row += '<thead>';
+                    row += '<tr style="text-align:center">';
+                    row += '<th>Reservasyon Id</th>';
+                    row += '<th>Reservasyon Tarihi</th>';
+                    row += '<th>Reservasyon Saati</th>';
+                    row += '<th>Kort Bilgisi</th>';
+                    row += '<th>Ücret Durumu</th>';
+                    row += '<th>İşlemler</th>';
+                    row += '</tr>';
+                    row += '</thead>';
+
+
+                 
+
+                    for (var i = 0; i < res.length; i++) {
+
+                        row += '<tbody>';
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td>' + res[i].resId + '</td>';
+                        row += '<td>' + res[i].resDate + '</td>';
+                        row += '<td>' + res[i].resStartTime + "-" + res[i].resFinishTime + '</td>';
+                        row += '<td>' + res[i].courtId + '</td>';
+
+                        if (res[i].priceInf == "true") {
+                            row += '<td>' + "Ödendi" + '</td>';
+                        }
+                        else {
+                            row += '<td>' + "Ödenmedi" + '</td>';
+                        }
+                        
+                        row += '<td>';
+                        row += '<div class="custom-control custom-switch">';
+                        row += '<input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res[i].resId + '">';
+                        row += '<label class="custom-control-label" for="' + res[i].resId + '"></label>';
+                        row += '</div>';
+                        row += '</td>';
+                        row += '</tr>';
+                        row += '</tbody>';
+
+                    }
+                   
+                  
+                    row += '</table>';
+                    row += '</div>';
+                    row += '</div>';
+
+                    $("#appendResInf").append(row);
+
+                
+
+                }
+
+                else {
+
+
+                    $("#appendResInf").empty();
+
+                    alert("sa");
+                }
+
+                
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
 </script>
 

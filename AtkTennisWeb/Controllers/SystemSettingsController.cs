@@ -340,7 +340,6 @@ namespace AtkTennisWeb.Controllers
 
 
 
-
         //Kort Ücret Ayarları
         public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition)
         {
@@ -466,6 +465,48 @@ namespace AtkTennisWeb.Controllers
             return Json(true);
 
         }
+
+        public JsonResult AddNewCourtScale(string scaleColor, string scaleName , string scaleCode)
+        {
+            CourtScaleDto model = new CourtScaleDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtScaleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddNewCourtScale?scaleColor=" + scaleColor.Replace("#" , "") + "&scaleName=" + scaleName + "&scaleCode=" + scaleCode));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtScaleDto());
+            }
+
+            return Json(true);
+
+        }
+
+        public JsonResult DeleteCourtScale(int id)
+        {
+            CourtScaleDto model = new CourtScaleDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtScaleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteCourtScale?id=" + id));
+
+                if (model != null)
+
+                    return Json(model);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtScaleDto());
+            }
+
+            return Json(false);
+
+        }
+
 
         #endregion
 

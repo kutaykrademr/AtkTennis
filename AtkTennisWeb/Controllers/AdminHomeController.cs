@@ -185,15 +185,9 @@ namespace AtkTennisWeb.Controllers
 
 
         }
-
         public IActionResult MultiReservationCancel()
         {
-
-           
-
             return View();
-
-
         }
 
 
@@ -708,6 +702,27 @@ namespace AtkTennisWeb.Controllers
             }
 
             return Json(true);
+
+        }
+
+        public JsonResult GetResDetailSearch(string whoRes , string startDate , string finishDate)
+        {
+            List<ReservationDto> model = new List<ReservationDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<ReservationDto>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetResDetailSearch?whoRes=" + whoRes + "&startDate=" + startDate + "&finishDate=" + finishDate));
+
+                if (model == null)
+
+                    return Json("false");
+            }
+
+            catch (Exception)
+            {
+                return Json(new List<ReservationDto>());
+            }
+
+            return Json(model);
 
         }
     }

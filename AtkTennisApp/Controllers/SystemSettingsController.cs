@@ -318,6 +318,35 @@ namespace AtkTennisApp.Controllers
 
         #region CourtSettings 
 
+        [HttpGet("GetCourt", Name = "GetCourt")]
+        public CourtSettingsViewModel GetCourt()
+
+        {
+            CourtSettingsViewModel model = new CourtSettingsViewModel();
+
+
+            try
+            {
+                model.courtPriceLists = db.courtPriceLists.ToList();
+                model.courtRecipeTypes = db.courtRecipeTypes.ToList();
+                model.Courts = db.courts.ToList();
+                model.resTimes = db.resTimes.ToList();
+                model.courtScales = db.courtScaleLists.ToList();
+                model.performanceTypes = db.performanceTypes.ToList();
+                model.schoolTypes = db.schoolTypes.ToList();
+                model.memberLists = db.memberLists.ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+                model = new CourtSettingsViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
 
         [HttpGet("NewCourtType", Name = "NewCourtTypeourt")]
         public JsonResult NewCourtType(string courtTypeName)
@@ -426,38 +455,7 @@ namespace AtkTennisApp.Controllers
             return Json(false);
         }
 
-
-
-
-
-        [HttpGet("GetCourt", Name = "GetCourt")]
-        public CourtSettingsViewModel GetCourt()
-
-        {
-            CourtSettingsViewModel model = new CourtSettingsViewModel();
-
-
-            try
-            {
-                model.courtPriceLists = db.courtPriceLists.ToList();
-                model.courtRecipeTypes = db.courtRecipeTypes.ToList();
-                model.Courts = db.courts.ToList();   
-                model.resTimes = db.resTimes.ToList();
-                model.courtScales = db.courtScaleLists.ToList();
-                model.performanceTypes = db.performanceTypes.ToList();
-                model.schoolTypes = db.schoolTypes.ToList();
-                model.memberLists = db.memberLists.ToList();
-
-            }
-            catch (Exception ex)
-            {
-                model = new CourtSettingsViewModel();
-
-                Mutuals.monitizer.AddException(ex);
-            }
-
-            return model;
-        }
+        
 
         [HttpGet("NewCourt", Name = "NewCourt")]
         public Court NewCourt(string courtName, string courtType, int courtCondition, int courtWebCondition , string courtTimePeriod , string courtStartTime , string courtFinishTime)
@@ -746,6 +744,64 @@ namespace AtkTennisApp.Controllers
             return Json(false);
         }
 
+        [HttpGet("AddNewCourtScale", Name = "AddNewCourtScale")]
+        public JsonResult AddNewCourtScale(string scaleName, string scaleColor , string scaleCode)
+        {
+
+            CourtScaleList model = new CourtScaleList();
+
+            try
+            {
+                if (scaleName != "" || scaleColor != "")
+                {
+                    model.Color = "#" + scaleColor;
+                    model.Name = scaleName;
+                    model.Code = scaleCode;
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(false);
+        }
+
+        [HttpGet("DeleteCourtScale", Name = "DeleteCourtScale")]
+        public JsonResult DeleteCourtScale(int id)
+        {
+            CourtScaleList model = new CourtScaleList();
+
+            try
+            {
+
+                model = db.courtScaleLists.Where(x => x.CourtScaleListId == id).SingleOrDefault();
+
+                if (model != null)
+                {
+                    db.Remove(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(false);
+        }
         #endregion
 
         #region EducationSettings
