@@ -120,6 +120,32 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+
+        [HttpGet("GetGeneralDebtMember", Name = "GetGeneralDebtMember")]
+        public JsonResult GetGeneralDebtMember()
+        {
+
+            List<MemberDebtType> model = new List<MemberDebtType>();
+
+            try
+            {
+                model = db.memberDebtTypes.ToList();
+             
+                if (model.Count != 0)
+                {
+                    return Json(model);
+                }
+              
+            }
+            catch (Exception ex)
+            {
+                model = new List<MemberDebtType>();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(true);
+        }
+
         [HttpGet("GetCabinetListUser", Name = "GetCabinetListUser")]
         public CabinetListUserViewModel GetCabinetListUser(string date)
         {
@@ -548,7 +574,7 @@ namespace AtkTennisApp.Controllers
                             res.UserId = mem.UserId;
 
                             var newMemberPrice = memberPrice - resDebt;
-                           
+
                             mem.Price = newMemberPrice;
                             res.PriceInf = true;
 
@@ -586,7 +612,7 @@ namespace AtkTennisApp.Controllers
                             res.Price = Price;
                             res.PriceIds = PriceIds;
 
-                        
+
                             db.reservations.Add(res);
                             db.SaveChanges();
 
@@ -594,7 +620,7 @@ namespace AtkTennisApp.Controllers
                     }
 
                     else if (scale != null)
-                    { 
+                    {
                         {
 
                             res.PrivRes = PrivRes;
@@ -862,7 +888,7 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-               
+
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
                 mem = db.memberLists.Where(x => x.UserId == model.UserId).FirstOrDefault();
                 model3 = db.courts.ToList();
@@ -1898,10 +1924,6 @@ namespace AtkTennisApp.Controllers
 
             }
 
-
-
-
-
             try
             {
 
@@ -1955,7 +1977,7 @@ namespace AtkTennisApp.Controllers
             {
                 for (DateTime date = startDate2; date <= finishDate2; date = date.AddDays(1))
                 {
-                    
+
                     dateList.Add(date.ToString("yyyy-MM-dd"));
 
                 }
@@ -1963,14 +1985,14 @@ namespace AtkTennisApp.Controllers
                 for (int i = 0; i < dateList.Count(); i++)
                 {
                     model = db.reservations.Where(x => x.ResDate == dateList[i] && x.NickName == whoRes.Trim()).ToList();
-                 
+
                     if (model != null)
                     {
                         foreach (var item in model)
                         {
                             resList.Add(item);
                         }
-                        
+
                     }
                 }
 
@@ -1988,7 +2010,99 @@ namespace AtkTennisApp.Controllers
             return Json(false);
         }
 
+        [HttpGet("CancelAllRes", Name = "CancelAllRes")]
+        public JsonResult CancelAllRes(string idLists)
+        {
+            Reservation model = new Reservation();
 
+            try
+            {
+                if (idLists != null)
+                {
+                    var ids = idLists.Split(",");
+
+                    if (ids == null)
+                    {
+                        return Json(false);
+
+                    }
+
+                    else
+                    {
+                        for (int i = 0; i < ids.Count(); i++)
+                        {
+                            model = db.reservations.Where(x => x.ResId == Convert.ToInt32(ids[i])).First();
+
+                            if (model != null)
+                            {
+                                db.Remove(model);
+                                db.SaveChanges();
+                            }
+
+                            return Json(model);
+                        }
+                    }
+                }
+
+                
+
+            }
+
+            catch (Exception ex)
+            {
+                model = new Reservation();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(false);
+        }
+
+
+        [HttpGet("AddDues", Name = "AddDues")]
+        public JsonResult AddDues(int duesYear , string duesType , int duesPrice ,string explain)
+        {
+            AddDuesViewModel model = new AddDuesViewModel();
+
+            model.memberLists = db.memberLists.Where(x=>x.Role == "ÜYE").ToList();
+
+            try
+            {
+                if (duesType == "Yıllık Aidat Ücreti")
+                {
+                    if (model.memberLists != null)
+                    {
+                        for (int i = 0; i < model.memberLists.Count; i++)
+                        {
+
+                            model.memberDuesInfTable = new MemberDuesInfTable();
+
+                            model.memberDuesInfTable.MemberId = model.memberLists[i].UserId;
+                            model.memberDuesInfTable.MemberFullName = model.memberLists[i].FullName;
+                            model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                            model.memberDuesInfTable.DuesType = duesType;
+                            model.memberDuesInfTable.DuesPrice = duesPrice;
+                            model.memberDuesInfTable.DuesYear = duesYear;
+                            model.memberDuesInfTable.Explain = explain;
+
+                            db.Add(model.memberDuesInfTable);
+                            db.SaveChanges();
+
+                        }
+
+                        return Json(model.memberLists);
+                    }
+                }
+          
+            }
+
+            catch (Exception ex)
+            {
+                model = new AddDuesViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(false);
+        }
 
     }
 }

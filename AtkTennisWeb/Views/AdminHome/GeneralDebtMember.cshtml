@@ -1,0 +1,155 @@
+﻿@model List<Helpers.Dto.ViewDtos.MemberDebtTypeDto>;
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Genel Üye Borçlandırma</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary col-6">
+
+                <div class="card-header" style="margin-top:15px;">
+                    <h3 class="card-title">! Lütfen gerekli alanları formatına uygun ve eksiksiz bir şekilde doldurunuz.</h3>
+                </div>
+
+                <form>
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Ücret Miktarı(₺):</label>
+                            <input type="text" class="form-control" id="duesPrice" placeholder="Ücret Miktarı(₺)">
+                        </div>
+
+                        <div id="duesType" class="form-group">
+                            <label>Türü:</label>
+                            <select class="form-control">
+
+                                @foreach (var item in Model)
+                                {
+                                    <option>@item.Type</option>
+                                }
+
+                            </select>
+                        </div>
+
+                        <div id="duesYear" class="form-group">
+                            <label>Yıl:</label>
+                            <select class="form-control">
+                                <option>2021</option>
+                                <option>2022</option>
+                                <option>2023</option>
+                                <option>2024</option>
+                                <option>2025</option>
+                                <option>2026</option>
+                                <option>2027</option>
+                                <option>2028</option>
+                                <option>2029</option>
+                                <option>2030</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Açıklama:</label>
+                            <textarea id="explain" class="form-control" rows="3" placeholder="Açıklama"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary" onclick="addDues()">Kaydet</button>
+                        <button type="button" class="btn btn-danger">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function addDues() {
+
+        var duesType = $("#duesType option:selected").val();
+        var duesYear = $("#duesYear option:selected").val();
+        var duesPrice = $("#duesPrice").val();
+        var explain = $("#explain").val();
+
+
+        if (duesType == "" || duesYear == "" || duesPrice == "" || explain == "") {
+
+            swal({
+                title: "Borçlandırma Onaylanmadı",
+                text: "Lütfen Bilgileri Eksiksiz Giriniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+            });
+
+        }
+
+        else {
+
+            $.ajax({
+
+                type: "GET",
+                url: '../AdminHome/AddDues',
+                cache: false,
+                data: { "duesType": duesType, "duesPrice": duesPrice, "duesYear": duesYear, "explain": explain },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res != null) {
+
+
+                        swal({
+                            title: "Rezervasyon Başarılı",
+                            text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                            timer: 500,
+                        }).then((value) => {
+
+
+
+                        });
+                    }
+
+                    else {
+
+                        swal({
+                            title: "Borçlandırma Onaylanmadı",
+                            text: "Lütfen Tekrar Deneyiniz!",
+                            icon: "error",
+                            button: "Tamam",
+                        }).then((value) => {
+
+
+
+                        });
+                    }
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+    }
+
+</script>

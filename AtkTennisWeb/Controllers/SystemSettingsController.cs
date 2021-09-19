@@ -1161,7 +1161,26 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public IActionResult MemberDuesSettings()
 
+        {
+            List<MemberDuesTypeDto> model = new List<MemberDuesTypeDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<MemberDuesTypeDto>>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/MemberDuesSettings"));
+
+                if (model == null)
+
+                    model = new List<MemberDuesTypeDto>();
+            }
+            catch (Exception)
+            {
+                return Json(new ReservationSettingsDto());
+            }
+
+            return View(model);
+
+        }
 
 
 

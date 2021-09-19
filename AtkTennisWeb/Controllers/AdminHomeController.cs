@@ -189,6 +189,23 @@ namespace AtkTennisWeb.Controllers
         {
             return View();
         }
+        public IActionResult GeneralDebtMember()
+        {
+            List<MemberDebtTypeDto> model = new List<MemberDebtTypeDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<MemberDebtTypeDto>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetGeneralDebtMember"));
+                if (model == null)
+
+                    model = new List<MemberDebtTypeDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<MemberDebtTypeDto>();
+            }
+
+            return View(model);
+        }
 
 
 
@@ -723,6 +740,48 @@ namespace AtkTennisWeb.Controllers
             }
 
             return Json(model);
+
+        }
+
+        public JsonResult CancelAllRes( string idLists)
+        {
+            ReservationDto model = new  ReservationDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/CancelAllRes?idLists=" + idLists));
+
+                if (model != null)
+
+                    return Json("true");
+            }
+
+            catch (Exception)
+            {
+                return Json(new ReservationDto ());
+            }
+
+            return Json(false);
+
+        }
+
+        public JsonResult AddDues(int duesYear, string duesType, int duesPrice , string explain)
+        {
+            AddDuesViewDto model = new AddDuesViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<AddDuesViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddDues?duesYear=" + duesYear + "&duesType=" + duesType + "&duesPrice=" + duesPrice + "&explain=" + explain ));
+
+                if (model != null)
+
+                    return Json(model);
+            }
+
+            catch (Exception)
+            {
+                return Json(new ReservationDto());
+            }
+
+            return Json(false);
 
         }
     }

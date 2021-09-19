@@ -1648,6 +1648,35 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
+        [HttpGet("MemberDuesSettings", Name = "MemberDuesSettings")]
+        public JsonResult MMemberDuesSettings(int id)
+        {
+
+            List<MemberDuesType> model = new List<MemberDuesType>();
+
+            try
+            {
+                model = db.memberDuesTypes.ToList();
+
+
+                if (model != null)
+                {
+                  
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
 
 
         [HttpGet("AddCabinets", Name = "AddCabinets")]

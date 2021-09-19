@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210917151301_added_memberDuesType")]
+    partial class added_memberDuesType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,54 +253,6 @@ namespace AtkTennisApp.Migrations
                     b.HasKey("ErrorLogId");
 
                     b.ToTable("errorLogs");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.MemberDebtType", b =>
-                {
-                    b.Property<int>("MemberDebtTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MemberDebtTypeId");
-
-                    b.ToTable("memberDebtTypes");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.MemberDuesInfTable", b =>
-                {
-                    b.Property<int>("MemberDuesInfTableId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DuesPrice")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DuesType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DuesYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Explain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemberFullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemberId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MemberDuesInfTableId");
-
-                    b.ToTable("memberDuesInfTables");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.MemberDuesType", b =>

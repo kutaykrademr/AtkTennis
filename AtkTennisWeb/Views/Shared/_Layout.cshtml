@@ -346,15 +346,15 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                    <a href="~/AdminHome/GeneralDebtMember" class="nav-link">
                                         <i class="fas fa-wallet nav-icon"></i>
-                                        <p>Üye Borçlandırma</p>
+                                        <p>Genel Üye Borçlandırma</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a href="~/Admin/ReservationTable" class="nav-link">
-                                        <i class="fas fa-wallet nav-icon"></i>
+                                        <i class="fas fa-user nav-icon"></i>
                                         <p>Potansiyel Üye</p>
                                     </a>
                                 </li>
@@ -382,12 +382,40 @@
                                         </a>
                                     </li>
 
+
                                     <li class="nav-item">
-                                        <a href="~/SystemSettings/MemberSettings" class="nav-link">
-                                            <i class="fas fa-archive nav-icon"></i>
-                                            <p>Üye Dolap Ayarları</p>
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fas fa-user"></i>
+                                          
+                                            <p>Üye Ayarları
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
                                         </a>
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+                                                <a href="~/SystemSettings/MemberSettings" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Üye Dolap Ayarları</p>
+                                                </a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a href="~/SystemSettings/MemberDuesSettings" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Üye Borçlandırma Ayarları</p>
+                                                </a>
+                                            </li>
+
+
+                                            <li class="nav-item">
+                                                <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Özel Ders</p>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
+
 
                                     <li class="nav-item">
                                         <a href="~/SystemSettings/CourtSettings" class="nav-link">
@@ -430,51 +458,51 @@
                                     </li>
 
                                     @*<li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                                <p>
-                                                    Öğr. Gel. ve Tak. Ayar.
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>Antreman Havuzu</p>
-                                                    </a>
-                                                </li>
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                <p>
+                    Öğr. Gel. ve Tak. Ayar.
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Antreman Havuzu</p>
+                    </a>
+                </li>
 
-                                                <li class="nav-item">
-                                                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>Fiziksel Çalışmalar</p>
-                                                    </a>
-                                                </li>
+                <li class="nav-item">
+                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Fiziksel Çalışmalar</p>
+                    </a>
+                </li>
 
 
-                                                <li class="nav-item">
-                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>Oyunlar</p>
-                                                    </a>
-                                                </li>
+                <li class="nav-item">
+                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Oyunlar</p>
+                    </a>
+                </li>
 
-                                                <li class="nav-item">
-                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>Gelişim Formları</p>
-                                                    </a>
-                                                </li>
+                <li class="nav-item">
+                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Gelişim Formları</p>
+                    </a>
+                </li>
 
-                                                <li class="nav-item">
-                                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>İçerik İşlemleri</p>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>*@
+                <li class="nav-item">
+                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>İçerik İşlemleri</p>
+                    </a>
+                </li>
+            </ul>
+        </li>*@
 
                                     <li class="nav-item">
                                         <a href="~/SystemSettings/ReservationSettings" class="nav-link">
