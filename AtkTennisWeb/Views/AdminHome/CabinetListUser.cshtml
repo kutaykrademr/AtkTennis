@@ -1,5 +1,13 @@
 ﻿
 @model Helpers.Dto.PartialViewDtos.CabinetListUserViewDto;
+
+<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -20,32 +28,32 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
-
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
                                 <h3>Dolap Kullanıcı Listesi</h3>
                             </div>
                             <div>
-                                @*<button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>*@
+
                             </div>
                         </div>
 
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example3" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align:center">
 
-                                        <th>Dolap Alım Tarihi</th>
-                                        <th>Dolap Kodu</th>
-                                        <th>Dolap Türü</th>
-                                        <th>Dolap Alan Üye</th>
-                                        <th>Dolap Kime Ait</th>
-                                        <th>Dolap Ücreti</th>
-                                        @*<th>İşlemler</th>*@
+                                        <th>Tarihi</th>
+                                        <th>Kodu</th>
+                                        <th>Türü</th>
+                                        <th>Üye</th>
+                                        <th>Aitlik</th>
+                                        <th>İşlem</th>
+
                                     </tr>
                                 </thead>
+
                                 <tbody>
 
                                     @foreach (var item in Model.cabinetListUsers)
@@ -55,20 +63,27 @@
                                             <td>@item.CabinetCode</td>
                                             <td>@item.CabinetOpTypes</td>
                                             @{
-                                                var x = Model.memberLists.Where(x => x.UserId == item.CabinetUserId).FirstOrDefault().FullName;
+                                                var x = Model.memberLists.Where(x => x.UserId == item.CabinetUserId).FirstOrDefault();
+
+                                                if (x != null)
+                                                {
+                                                    <td>@x.FullName</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>-</td>
+                                                }
+
                                             }
-                                            <td>@x</td>
+
+
                                             <td>@item.CabinetWho</td>
-                                            <td>@item.CabinetOpPrice</td>
 
+                                            <td>
+                                                <button id="@item.CabinetUserId" onclick="openMemberCabinetDetail(this.id)" type="button" class="btn btn-outline-success"><i class="fas fa-search"></i></button>
 
-
-                                            @*<td>
-                                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                                    <button id="submit" type="button" class="btn btn-warning"><i class="fas fa-print"></i></button>
-                                                    <button type="button" class="btn btn-danger"><i style="color:white" class="fas fa-trash"></i></button>
-                                                </div>
-                                            </td>*@
+                                                <button type="button" onclick="myfunction()" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                            </td>
                                         </tr>
                                     }
 
@@ -76,24 +91,152 @@
                             </table>
                         </div>
                     </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Boş Dolap Listesi</h3>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+
+                                        <th>Dolap Kodu</th>
+                                        <th>Dolap Türü</th>
+                                        <th>işlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item2 in Model.cabinetOperations)
+                                    {
+
+                                        var codeCheck = Model.cabinetListUsers.Where(x => x.CabinetCode == item2.CabinetCode).FirstOrDefault();
+
+                                        if (codeCheck == null)
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item2.CabinetCode</td>
+                                                <td>@item2.CabinetOpTypes</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-success"><i class="fas fa-plus"></i></button>
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Dolap Ücret Genel Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">
+                            <h3>Tahsis Edilen Dolap / Dolaplar Listesi</h3>
+                        </div>
+                        <div>
+                            @*<button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>*@
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+
+                                    <th>Dolap Alım Tarihi</th>
+                                    <th>Dolap Kodu</th>
+                                    <th>Dolap Türü</th>
+                                    <th>Dolap Alan Üye</th>
+                                    <th>Dolap Kime Ait</th>
+                                    <th>Dolap Ücreti</th>
+                                    <th>Dolap Ücret Durumu</th>
+
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cabinetListPrivUser">
+                            </tbody>
+                        </table>
+                    </div>
 
 
                 </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">
+                            <h3>Tahsis Edilen Dolap Aidat Bilgileri</h3>
+                        </div>
+                        <div>
+                            @*<button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>*@
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Dolap Aidat Yılı</th>
+                                    <th>Aidat Tipi</th>
+                                    <th>Aidat Ücreti</th>
+                                    <th>Borçlandırıldığı Tarih</th>
+                                    <th>Açıklama</th>
+                                    <th>Borç Durumu</th>
+
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cabinetDuesPrivUser">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary">Kaydet</button>
             </div>
         </div>
-    </section>
+    </div>
 </div>
 
 <script>
     $(document).ready(function () {
 
-
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        $('#example2 , #example3 , #example4').DataTable({
+        $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
             "searching": true,
@@ -101,9 +244,165 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            "pageLength": 5,
             "buttons": ["print"]
-        }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+        })
+            .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
+
+        $('#example3').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 5,
+            "buttons": ["print"]
+        })
+            .buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
+
 
     });
+
+    function myfunction() {
+        $('#exampleModal').modal('toggle')
+    }
+
+    function openMemberCabinetDetail(id) {
+
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/GetMemberCabinetDetail',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                if (res.cabinetListUsers.length > 0) {
+                    $("#cabinetListPrivUser").empty();
+
+                    row = "";
+
+                    for (var i = 0; i < res.cabinetListUsers.length; i++) {
+
+                        row += '<tr style="text-align:center" id="">';
+
+                        row += '  <td>' + res.cabinetListUsers[i].date + '</td>';
+                        row += '  <td>' + res.cabinetListUsers[i].cabinetCode + '</td>';
+                        row += '  <td>' + res.cabinetListUsers[i].cabinetOpTypes + '</td>';
+                        row += '  <td>' + res.cabinetListUsers[i].cabinetOpTypes + '</td>';
+                        row += '  <td>' + res.cabinetListUsers[i].cabinetWho + '</td>';
+                        row += '  <td>' + res.cabinetListUsers[i].cabinetOpPrice + '</td>';
+                        if (res.cabinetListUsers[i].priceCondition) {
+                            row += '<td>' + "Ödendi" + '</td>';
+                        }
+                        else {
+                            row += '<td>' + "Ödenmedi" + '</td>';
+                        }
+
+                        if (res.cabinetListUsers[i].priceCondition) {
+                            row += '<td>' + "Ödendi" + '</td>';
+                        }
+                        else {
+                            row += '<td><button id="' + res.cabinetListUsers[i].cabinetOpId + '" onclick="" type="button" class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>';
+                        }
+
+                        row += '</tr>';
+                    }
+
+                    $("#cabinetListPrivUser").append(row);
+                }
+
+                if (res.memberDuesInfs.length > 0) {
+
+                    $("#cabinetDuesPrivUser").empty();
+
+                    row = "";
+
+                    for (var i = 0; i < res.memberDuesInfs.length; i++) {
+
+                        if (res.memberDuesInfs[i].duesInfType == true) {
+
+                            row += '<tr style="text-align:center" id="">';
+                            row += '  <td>' + res.memberDuesInfs[i].memberFullName + '</td>';
+                            row += '  <td>' + res.memberDuesInfs[i].duesYear + '</td>';
+                            row += '  <td>' + res.memberDuesInfs[i].duesType + '</td>';
+                            row += '  <td>' + res.memberDuesInfs[i].duesPrice + '</td>';
+                            row += '  <td>' + res.memberDuesInfs[i].date + '</td>';
+                            row += '  <td>' + res.memberDuesInfs[i].explain + '</td>';
+
+
+                            if (res.memberDuesInfs[i].priceCondition) {
+                                row += '<td>' + "Ödendi" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Ödenmedi" + '</td>';
+                            }
+
+                            if (res.memberDuesInfs[i].priceCondition) {
+
+                                row += '<td>' + "Ödendi" + '</td>';
+                            }
+                            else {
+                                row += '<td><button id="' + res.memberDuesInfs[i].priceCondition + '" onclick="" type="button" class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>';
+                            }
+                            row += '</tr>';
+                        }
+                    }
+
+                    $("#cabinetDuesPrivUser").append(row);
+                }
+
+                $('#exampleModal').modal('toggle')
+
+
+                debugger;
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
 </script>
 
+
+<script>
+    $(function () {
+
+        var donutData = {
+            labels: [
+                'Chrome',
+                'IE',
+
+            ],
+            datasets: [
+                {
+                    data: [700, 500],
+                    backgroundColor: ['#f56954', '#00a65a'],
+                }
+            ]
+        }
+
+        var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+        var pieData = donutData;
+        var pieOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+
+        var pieChart = new Chart(pieChartCanvas, {
+            type: 'pie',
+            data: pieData,
+            options: pieOptions
+        })
+    })
+</script>

@@ -17,7 +17,7 @@
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 
 
-
+    var debtDuesList = Model.memberDuesInf.Where(x => x.PriceCondition == false && x.CancelCondition == false).ToList();
 
     var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30).ToList();
 
@@ -67,7 +67,16 @@
     }
     var totalResDebtInf = firstDebt + secDebt;
     var totalResDebtInf2 = String.Format("{0:n}", totalResDebtInf);
-   
+
+
+    var duesLastPrice = 0;
+
+    foreach (var item in debtDuesList)
+    {
+        var y = item.DuesPrice;
+
+        duesLastPrice = y + duesLastPrice;
+    }
 
 
 }
@@ -132,7 +141,11 @@
                             <div style="margin-top:10px" class="inner">
                                 <h3>
 
-                                    75,412.00 ₺
+                                    @{
+                                        var DuesPrice = String.Format("{0:n}", duesLastPrice);
+                                    }
+
+                                    @DuesPrice ₺
 
                                 </h3>
                                 <p>Toplam Aidat Borçları</p>
@@ -512,8 +525,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </section>
     </div>
@@ -1263,20 +1274,20 @@
 
                     for (var i = 0; i < res.courts.length; i++) {
 
-                        NewRow += '<li style="background-color:#e0ebf9; padding: 0.1rem 1.25rem; color:black; text-align:center;" class="list-group-item list-group-item-info">' + res.courts[i].courtName + '</li>';
+                        NewRow += '<li style="background-color:#e0ebf9; padding: 0.1rem 0.5rem; color:black; text-align:center;" class="list-group-item list-group-item-info">' + res.courts[i].courtName + '</li>';
 
                         for (var a = 0; a < res.reservations.length; a++) {
 
                             if (res.reservations[a].court.courtId == res.courts[i].courtId) {
 
 
-                                NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item">';
+                                NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item"><div class="d-flex">';
 
                                 if (res.reservations[a].userId != null) {
                                     for (var x = 0; x < res.memberLists.length; x++) {
                                         if (res.reservations[a].userId == res.memberLists[x].userId) {
-                                            NewRow += '<span style="background:#337ab7 ; color:white;">' + res.memberLists[x].nickName + '</span>';
-                                            NewRow += '<span style="margin-left:25px">' + res.memberLists[x].fullName + '</span>';
+                                            NewRow += '<div class="col-md-2 text-align-left"><span style="background:#337ab7;color:white;">' + res.memberLists[x].nickName + '</span></div>';
+                                            NewRow += '<div class="col-md-6 text-align-left">' + res.memberLists[x].fullName + '</div>';
                                         }
                                     }
                                 }
@@ -1285,14 +1296,14 @@
                                     for (var c = 0; c < res.courtScales.length; c++) {
                                         if (res.reservations[a].nickName == res.courtScales[c].code) {
 
-                                            NewRow += '<span style="background:#337ab7 ; color:white;">' + res.courtScales[c].code + '</span>';
-                                            NewRow += '<span style="margin-left:25px">' + res.courtScales[c].name + '</span>';
+                                            NewRow += '<div class="col-md-2 text-align-left"><span style="background:#337ab7;color:white;">' + res.courtScales[c].code + '</span></div>';
+                                            NewRow += '<div class="col-md-6 text-align-left">' + res.courtScales[c].name + '</div>';
                                         }
                                     }
                                 }
 
-                                NewRow += '<span style="margin-left:25px" class="label label-sm label-primary">' + res.reservations[a].resStartTime + " - " + res.reservations[a].resFinishTime + '</span>';
-                                NewRow += ' </li> </ul>';
+                                NewRow += '<div class="label label-sm label-primary col-md-4 text-align-left">' + res.reservations[a].resStartTime + " - " + res.reservations[a].resFinishTime + '</div>';
+                                NewRow += ' </div></li></ul>';
                             }
                         }
 
@@ -1865,6 +1876,8 @@
                 async: true,
                 success: function (res) {
 
+                   
+
                     $("#xyz").empty();
 
                     row = "";
@@ -1991,6 +2004,7 @@
                                         row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + scaleList[0].name + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
                                         row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
                                     }
+
                                     else {
                                         row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
                                         row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
@@ -2193,6 +2207,10 @@
 
                     $("#xyz").append(row);
 
+                    $(function () {
+                        $('[data-toggle="popover"]').popover()
+                    })
+
                     myfunction();
 
                 },
@@ -2205,11 +2223,7 @@
 
         function myfunction() {
 
-            $(function () {
-                $('[data-toggle="popover"]').popover()
-            })
-
-
+           
             $("#tablecount td").each(function () {
 
 

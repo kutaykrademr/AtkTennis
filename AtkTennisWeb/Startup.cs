@@ -36,6 +36,7 @@ namespace AtkTennisWeb
         public void ConfigureServices(IServiceCollection services)
         {
 
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDistributedMemoryCache();
@@ -45,6 +46,7 @@ namespace AtkTennisWeb
                 options.IdleTimeout = TimeSpan.FromMinutes(60);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+
             });
 
             services.AddControllersWithViews();

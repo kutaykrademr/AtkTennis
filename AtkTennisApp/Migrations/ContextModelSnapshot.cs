@@ -77,6 +77,9 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("PriceCondition")
+                        .HasColumnType("bit");
+
                     b.HasKey("CabinetOpId");
 
                     b.ToTable("cabinetListUsers");
@@ -275,8 +278,14 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("CancelCondition")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DuesInfType")
+                        .HasColumnType("bit");
 
                     b.Property<int>("DuesPrice")
                         .HasColumnType("int");
@@ -295,6 +304,9 @@ namespace AtkTennisApp.Migrations
 
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PriceCondition")
+                        .HasColumnType("bit");
 
                     b.HasKey("MemberDuesInfTableId");
 
@@ -329,6 +341,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("ActPas")
+                        .HasColumnType("bit");
+
                     b.Property<string>("BirthDate")
                         .HasColumnType("nvarchar(max)");
 
@@ -339,6 +354,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Condition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("District")
@@ -380,6 +398,18 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PartnerBirthDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartnerFullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartnerIdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartnerPhone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
@@ -401,6 +431,12 @@ namespace AtkTennisApp.Migrations
                     b.Property<bool>("PrivRes")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ReferenceMember1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceMember2")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
@@ -415,6 +451,9 @@ namespace AtkTennisApp.Migrations
 
                     b.Property<string>("WebReservation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isPartner")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

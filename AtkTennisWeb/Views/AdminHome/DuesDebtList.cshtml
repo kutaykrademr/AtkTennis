@@ -1,0 +1,277 @@
+﻿@model Helpers.Dto.PartialViewDtos.GeneralDebtViewDto;
+
+<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" style="margin-top:15px">
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+
+                                        <th>Üye Numarası</th>
+                                        <th>Adı</th>
+                                        <th>Borçlandırma Tarihi</th>
+                                        <th>Ücreti</th>
+                                        <th>Aidat Türü</th>
+                                        <th>Aidat Yılı</th>
+                                        <th>Açıklama</th>
+                                        <th>Borç Durumu</th>
+                                        <th>İşlemler</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.memberDuesInfTables)
+                                    {
+                                        <tr style="text-align:center" id="">
+
+                                            @{
+                                                var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.MemberId);
+                                                if (t != null)
+                                                {
+                                                    <td>@t.MemberNumber</td>
+
+                                                }
+                                                else
+                                                {
+                                                    <td>-</td>
+                                                }
+
+                                            }
+
+
+                                            <td>@item.MemberFullName</td>
+                                            <td>@item.Date</td>
+                                            <td>@item.DuesPrice</td>
+                                            <td>@item.DuesType</td>
+                                            <td>@item.DuesYear</td>
+                                            <td>@item.Explain</td>
+
+                                            @if (@item.PriceCondition)
+                                            {
+                                                <td>Ödendi</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Ödenmedi</td>
+                                            }
+
+
+                                            <td>
+
+                                                <button class="btn btn-outline-warning" id="" onclick="showUserInf(this.id) "><i class="fas fa-search"></i></button>
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- BAR CHART -->
+                    <div class="card card-success">
+                        <div style="background-color:#dbdbdb; color:black" class="card-header">
+                            <h3 class="card-title">Yıllara Ait Aidat Borcu İstatistik Tablosu</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <div id="barChart2"></div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <!-- BAR CHART -->
+                    <div class="card card-success">
+                        <div style="background-color:#dbdbdb; color:black" class="card-header">
+                            <h3 class="card-title">Genel Aidat Borcu İstatistik Tablosu</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <div id="barChart1"></div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 5,
+            "buttons": ["print"]
+        })
+            .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    var options2 = {
+        series: [{
+            name: 'Ödenen Borç',
+            data: [44,]
+        }, {
+            name: 'Ödenmeyen Borç',
+            data: [120,]
+        }],
+
+        colors: ['#7CB342', '#558B2F',],
+
+        chart: {
+            type: 'bar',
+            height: 330,
+
+
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '20%',
+                endingShape: 'rounded',
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: ['Toplam Aidat Borc İstatistik',],
+        },
+        yaxis: {
+            title: {
+                text: 'Genel Aidat Borc İstatistik'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + "₺"
+                }
+            }
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#barChart1"), options2);
+    chart.render();
+
+
+    var options = {
+        series: [{
+            name: 'Ödenen Borç',
+            data: [44, 78, 82]
+        }, {
+            name: 'Ödenmeyen Borç',
+            data: [120, 135, 92]
+        }],
+
+        colors: ['#7CB342', '#558B2F'],
+
+        chart: {
+            type: 'bar',
+            height: 330,
+
+
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '50%',
+                endingShape: 'rounded',
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: ['2021', '2022', '2023'],
+        },
+        yaxis: {
+            title: {
+                text: 'Yıllara Ait Aidat Borc İstatistik'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + "₺"
+                }
+            }
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#barChart2"), options);
+    chart.render();
+
+
+</script>
+

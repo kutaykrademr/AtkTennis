@@ -1,35 +1,19 @@
 ﻿
 @model Helpers.Dto.PartialViewDtos.MemberSettingsViewDto;
 
-    <style>
+<style>
 
-        button {
-            border: none !important;
-        }
-    </style>
+    button {
+        border: none !important;
+    }
+</style>
 
 <div class="content-wrapper">
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Üye Dolap Ayarları</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+            <div class="row" style="margin-top:15px">
 
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
@@ -41,7 +25,7 @@
                         </div>
 
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="cabinetTypeTable" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align:center">
 
@@ -69,11 +53,13 @@
                             </table>
                         </div>
                     </div>
+                </div>
 
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
-                                <h3>Dolap İşlemleri</h3>
+                                <h3>Dolap Ekle</h3>
                             </div>
                             <div>
                                 <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinet"><i class="fas fa-plus-square"></i></button>
@@ -81,7 +67,7 @@
                         </div>
 
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="cabinetAddTable" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Kodu</th>
@@ -109,6 +95,50 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+
+      
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="card-title">
+                        <h3>Üye Aidat İndirim Ayarları</h3>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddDuesDiscount"><i class="fas fa-plus-square"></i></button>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr style="text-align:center">
+
+                                <th>Yaşa Göre</th>
+                                <th>Kaç Yıllık Üye</th>
+                                <th>İndirim (%)</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.memberDuesTypes)
+                            {
+                                <tr style="text-align:center" id="">
+                                    <td>@item.Age (Yaş)</td>
+                                    <td>@item.Year (Yıl)</td>
+                                    <td>@item.Discount (%)</td>
+
+                                    <td>
+                                        <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-outline-danger" id="@item.MemberDuesTypeId" onclick="deleteDiscount(this.id)"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -186,6 +216,44 @@
     </div>
 </div>
 
+<div class="modal fade" id="openAddDuesDiscount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-4 form-group">
+                        <label class="col-form-label">Yaş</label>
+                        <input type="text" id="age" class="form-control" autocomplete="new-password">
+                    </div>
+
+
+                    <div class="col-md-4 form-group">
+                        <label class="col-form-label">Yıl</label>
+                        <input type="text" id="year" class="form-control" autocomplete="new-password">
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <label class="col-form-label">İndirim (%)</label>
+                        <input type="text" id="discount" class="form-control" autocomplete="new-password">
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="addDiscount()">Tür Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     $(document).ready(function () {
@@ -204,6 +272,17 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
+        });
+
+        $('#cabinetTypeTable , #cabinetAddTable').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength":3,
         });
 
     });
@@ -399,7 +478,7 @@
 
 
                 }
-                else 
+                else
                     $.confirm({
                         title: "Uyarı",
                         content: " Lütfen sonra tekrar deneyiniz.",
@@ -409,7 +488,7 @@
                             }
                         }
                     });
-                
+
 
             },
             error: function (textStatus, errorThrown) {
@@ -453,6 +532,154 @@
                                     swal({
                                         title: "Dolap Türü Silindi",
                                         text: "Dolap  Başarılı Bir Şekilde Silindi !",
+                                        icon: "success",
+                                        button: "Tamam",
+                                        timer: 600,
+                                    }).then((value) => {
+
+                                        location.reload();
+
+                                    });
+
+
+                                }
+                                else {
+                                    $.confirm({
+                                        title: "Uyarı",
+                                        content: " Lütfen sonra tekrar deneyiniz.",
+                                        buttons: {
+                                            TAMAM: function () {
+
+                                            }
+                                        }
+                                    });
+                                }
+
+                            },
+                            error: function (textStatus, errorThrown) {
+                                console.log(JSON.stringify(textStatus));
+                                console.log(textStatus);
+                            }
+                        });
+
+                    }
+                    else
+                        swal({
+                            title: "Dolap Korundu",
+                            text: "Dolap Silmekten Vazgeçtiniz!",
+                            icon: "success",
+                            button: "Tamam",
+                        });
+                });
+
+        }
+    }
+
+
+
+    function addDiscount() {
+
+        var age = $("#age").val();
+        var year = $("#year").val();
+        var discount = $("#discount").val();
+
+        debugger;
+
+        if (age == "" || year == "" || discount == "") {
+            $.confirm({
+                title: "Uyarı",
+                content: " Lütfen Boş Bilgi Bırakmayınız.",
+                buttons: {
+                    TAMAM: function () {
+
+                    }
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddDiscountType',
+                cache: false,
+                data: { "age": age, "year": year, "discount": discount },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+
+                    if (res == true) {
+
+                        swal({
+                            title: "Aidat İndirim Türü Eklendi",
+                            text: "İndirim Türü  Başarılı Bir Şekilde Eklendi !",
+                            icon: "success",
+                            button: "",
+                            timer: 600,
+                        }).then((value) => {
+
+                            location.reload();
+
+                        });
+
+
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: " Lütfen sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+    }
+
+    function deleteDiscount(id) {
+
+        debugger;
+
+        if (id == "") {
+            swal("Başarısız!", "Bir Hata Oluştu", "warning");
+        }
+        else {
+            swal({
+                title: "Emin Misiniz?",
+                text: "İndirim Türü Silinecek !",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: '../SystemSettings/DeleteDiscountType',
+                            cache: false,
+                            data: { "id": id },
+                            dataType: "json",
+                            async: true,
+                            success: function (res) {
+
+
+
+                                if (res == true) {
+
+                                    swal({
+                                        title: "İndirim Türü Silindi",
+                                        text: "İndirim  Başarılı Bir Şekilde Silindi !",
                                         icon: "success",
                                         button: "Tamam",
                                         timer: 600,

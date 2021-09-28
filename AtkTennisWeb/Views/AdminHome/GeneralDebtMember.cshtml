@@ -1,5 +1,13 @@
-﻿@model List<Helpers.Dto.ViewDtos.MemberDebtTypeDto>;
+﻿@model Helpers.Dto.PartialViewDtos.GeneralDebtViewDto;
 
+
+@{
+    var dateList = Model.memberDuesInfTables.Select(x => x.DuesYear).ToList();
+    var typeList = Model.memberDuesInfTables.Select(x => x.DuesType).ToList();
+
+    var date = dateList.Distinct().OrderByDescending(x => x).ToList();
+    var type = typeList.Distinct().OrderByDescending(x => x).ToList();
+}
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -19,66 +27,210 @@
 
     <section class="content">
         <div class="container-fluid">
-            <div class="card card-primary col-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-gray" >
 
-                <div class="card-header" style="margin-top:15px;">
-                    <h3 class="card-title">! Lütfen gerekli alanları formatına uygun ve eksiksiz bir şekilde doldurunuz.</h3>
+                        <div class="card-header" style="margin:15px;">
+                            <h3 class="card-title">! Lütfen gerekli alanları formatına uygun ve eksiksiz bir şekilde doldurunuz.</h3>
+                        </div>
+
+                        <div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ücret Miktarı(₺):</label>
+                                    <input type="text" class="form-control" id="duesPrice" placeholder="Ücret Miktarı(₺)">
+                                </div>
+
+                                <div id="duesType" class="form-group">
+                                    <label>Türü:</label>
+                                    <select class="form-control">
+
+                                        @foreach (var item in Model.memberDebtTypes)
+                                        {
+                                            <option>@item.Type</option>
+                                        }
+
+                                    </select>
+                                </div>
+
+                                <div id="duesYear" class="form-group">
+                                    <label>Yıl:</label>
+                                    <select class="form-control">
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                        <option>2026</option>
+                                        <option>2027</option>
+                                        <option>2028</option>
+                                        <option>2029</option>
+                                        <option>2030</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Açıklama:</label>
+                                    <textarea id="explain" class="form-control" rows="3" placeholder="Açıklama"></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary" onclick="addDues()">Yıllık Aidat Borçlandır</button>
+                                <button type="button" onclick="Cancel()" class="btn btn-danger">Vazgeç</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <form>
+                <div class="col-md-6">
+                    <div class="card card-gray">
+
+                        <div class="card-header" style="margin:15px;">
+                            <h3 class="card-title">! Lütfen gerekli alanları formatına uygun ve eksiksiz bir şekilde doldurunuz.</h3>
+                        </div>
+
+                        <div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Türü:</label>
+                                    <input type="text" class="form-control" id="cabinetType" disabled>
+                                </div>
+
+                                <script>
+                                    $("#cabinetType").val("Yıllık Dolap Borçlandırma");
+                                </script>
+
+                                <div id="cabinetDuesYear" class="form-group">
+                                    <label>Yıl:</label>
+                                    <select class="form-control">
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                        <option>2026</option>
+                                        <option>2027</option>
+                                        <option>2028</option>
+                                        <option>2029</option>
+                                        <option>2030</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Açıklama:</label>
+                                    <textarea id="cabinetExplain" class="form-control" rows="3" style="height:187px" placeholder="Açıklama"></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary" onclick="addCabinet()">Yıllık Dolap Borçlandır</button>
+                                <button type="button" onclick="Cancel()" class="btn btn-danger">Vazgeç</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            @for (int i = 0; i < date.Count(); i++)
+            {
+                <div class="card">
+
+                    <div class="card-header d-flex justify-content-between">
+
+                        <div class="card-title">
+                            <h3>@date[i] Yılına Ait Borçlandırmalar</h3>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>
+                        </div>
+                    </div>
+
                     <div class="card-body">
 
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Ücret Miktarı(₺):</label>
-                            <input type="text" class="form-control" id="duesPrice" placeholder="Ücret Miktarı(₺)">
-                        </div>
 
-                        <div id="duesType" class="form-group">
-                            <label>Türü:</label>
-                            <select class="form-control">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
 
-                                @foreach (var item in Model)
+                                    <th>Borç Yılı</th>
+                                    <th>Aidat Türü</th>
+                                    <th>Aidat Ücreti</th>
+                                    <th>Borçlandırma Tarihi</th>
+                                    <th>Açıklama</th>
+                                    <th>Borçlandırılan Üye Sayısı</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int a = 0; a < type.Count(); a++)
                                 {
-                                    <option>@item.Type</option>
+
+                                    var count = Model.memberDuesInfTables.Where(x => x.DuesYear == date[i] && x.DuesType == type[a]).ToList().Count();
+                                    var item = Model.memberDuesInfTables.Where(x => x.DuesYear == date[i] && x.DuesType == type[a]).FirstOrDefault();
+
+
+                                    @if (item != null)
+                                    {
+                                        @if (item.DuesYear == date[i])
+                                        {
+                                            @if (item.DuesType == type[a])
+                                            {
+
+
+                                                <tr style="text-align:center" id="">
+                                                    <td>@date[i]</td>
+                                                    <td>@type[a]</td>
+                                                    @{
+                                                        if (item.DuesInfType == true)
+                                                        {
+                                                            <td>Mevcut Dolap Fiyatlarına Göre Borçlandırılmıştır.</td>
+                                                        }
+
+                                                        else
+                                                        {
+                                                            <td>@item.DuesPrice</td>
+                                                        }
+                                                    }
+
+                                                    <td>@item.Date</td>
+                                                    <td>@item.Explain</td>
+                                                    <td>@count</td>
+
+                                                    <td>
+                                                        <button class="btn btn-outline-success" id="" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger" id="" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
                                 }
 
-                            </select>
-                        </div>
 
-                        <div id="duesYear" class="form-group">
-                            <label>Yıl:</label>
-                            <select class="form-control">
-                                <option>2021</option>
-                                <option>2022</option>
-                                <option>2023</option>
-                                <option>2024</option>
-                                <option>2025</option>
-                                <option>2026</option>
-                                <option>2027</option>
-                                <option>2028</option>
-                                <option>2029</option>
-                                <option>2030</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Açıklama:</label>
-                            <textarea id="explain" class="form-control" rows="3" placeholder="Açıklama"></textarea>
-                        </div>
-
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            }
 
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-primary" onclick="addDues()">Kaydet</button>
-                        <button type="button" class="btn btn-danger">Vazgeç</button>
-                    </div>
-                </form>
-            </div>
+
         </div>
     </section>
 </div>
 
 <script>
+
     function addDues() {
 
         var duesType = $("#duesType option:selected").val();
@@ -112,19 +264,20 @@
                 async: true,
                 success: function (res) {
 
+                    debugger;
 
-                    if (res != null) {
+                    if (res != false) {
 
 
                         swal({
-                            title: "Rezervasyon Başarılı",
-                            text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                            title: "Borçlandırma Başarılı",
+                            text: "Borçlandırma Başarılı Bir Şekilde Gerçekleşti !",
                             icon: "success",
                             button: "Tamam",
-                            timer: 500,
+                            timer: 750,
                         }).then((value) => {
 
-
+                            location.reload();
 
                         });
                     }
@@ -133,7 +286,7 @@
 
                         swal({
                             title: "Borçlandırma Onaylanmadı",
-                            text: "Lütfen Tekrar Deneyiniz!",
+                            text: "Önceden Aynı Yıl ve Aidat Türüne Borçlandırma Yapılmış Olabilir. Tekrar Deneyiniz!",
                             icon: "error",
                             button: "Tamam",
                         }).then((value) => {
@@ -152,4 +305,81 @@
         }
     }
 
+
+    function addCabinet() {
+
+        var cabinetDuesYear = $("#cabinetDuesYear option:selected").val();
+        var cabinetType = $("#cabinetType").val();
+        var cabinetExplain = $("#cabinetExplain").val();
+
+
+        if (cabinetDuesYear == "" || cabinetType == "" || cabinetExplain == "") {
+
+            swal({
+                title: "Borçlandırma Onaylanmadı",
+                text: "Lütfen Bilgileri Eksiksiz Giriniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+            });
+
+        }
+
+        else {
+
+            $.ajax({
+
+                type: "GET",
+                url: '../AdminHome/AddGenCabinetDebt',
+                cache: false,
+                data: { "cabinetDuesYear": cabinetDuesYear, "cabinetType": cabinetType, "cabinetExplain": cabinetExplain },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    debugger;
+
+                    if (res != false) {
+
+                        swal({
+                            title: "Borçlandırma Başarılı",
+                            text: "Dolap Borçlandırma Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                            timer: 750,
+                        }).then((value) => {
+
+                            location.reload();
+
+                        });
+                    }
+
+                    else {
+
+                        swal({
+                            title: "Dolap Borçlandırma Onaylanmadı",
+                            text: "Önceden Aynı Yıl ve Aidat Türüne Borçlandırma Yapılmış Olabilir. Tekrar Deneyiniz!",
+                            icon: "error",
+                            button: "Tamam",
+                        }).then((value) => {
+
+
+
+                        });
+                    }
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+    }
+
+
+    function Cancel() {
+        location.reload();
+    }
 </script>

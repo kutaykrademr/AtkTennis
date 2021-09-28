@@ -25,6 +25,8 @@ namespace AtkTennisApp
 
             try
             {
+                
+
                 Mutuals.DbUrl = Configuration.GetValue<string>("DbUrl");
                 Mutuals.AdminUrl = Configuration.GetValue<string>("AdminURL");
 
@@ -52,8 +54,9 @@ namespace AtkTennisApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppIdentityDbContext>(options =>options.UseSqlServer
-                (Configuration.GetValue<string>("DbUrl")));
+          
+            services.AddDbContext<AppIdentityDbContext>(
+                options =>options.UseSqlServer(Configuration.GetValue<string>("DbUrl") , options=> { options.EnableRetryOnFailure(); }));
 
             services.AddIdentity<AppIdentityUser, AppIdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>();

@@ -13,6 +13,7 @@ namespace Helpers.Dto.ViewDtos
         public List<ToDoListDto> toDoLists { get; set; } = new List<ToDoListDto>();
         public List<ReservationDto> reservations { get; set; } = new List<ReservationDto>();
         public List<CourtDto> courts { get; set; } = new List<CourtDto>();
+        public List<MemberDuesInfTableDto> memberDuesInf { get; set; } = new List<MemberDuesInfTableDto>();
 
 
 

@@ -2,80 +2,60 @@
 
 <div class="content-wrapper">
     <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div style="padding-right:25%; padding-left:25%" class="card">
-                        <div class="card-body register-card-body">
-                            <p class="login-box-msg">Üye Kayıt Formu </p>
+        <div class="container-fluid d-flex justify-content-center">
+            <div class="card" style="margin-top:15px;">
+                <div class="card-body">
+                    <div class="card" style="margin-bottom:20px; border:1px solid brown">
 
-                            <div class="card" style="margin-bottom:20px; box-shadow: 0 0 1px rgba(255, 0, 0, 0.53), 0 1px 3px rgba(255, 0, 0, 0.42)">
-                                <div class="card-body">
-                                    <p class="login-box-msg">Zorunlu Alan </p>
-                                    <div class="row">
-                                        <div class="input-group mb-3 col-md-4">
-                                            <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-user"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group mb-3 col-md-4">
-                                            <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <a style="cursor:pointer" onclick="getUserName()" class="fas fa-sync-alt"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group mb-3 col-md-4">
-                                            <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <a style="cursor:pointer" onclick="getNickName()" class="fas fa-sync-alt"></a>
-                                                </div>
-                                            </div>
+                        <div class="card-body">
+                            <p class="login-box-msg">Zorunlu Alan </p>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-4">
+                                    <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
                                         </div>
                                     </div>
-
-
-                                    <div class="row">
-
-                                        <div class="input-group mb-3 col-md-6">
-                                            <input type="text" class="form-control" id="memberNum" placeholder="Üye Numarası" autocomplete="new-password">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <a style="cursor:pointer" onclick="getMemberNumber()" class="fas fa-sync-alt"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-
-
-                                        <div class="form-group col-md-6">
-                                            <select id="webReservation" class="form-control">
-                                                <option disabled="disabled" selected>Web Rezervasyon</option>
-
-                                                <option value="1">Yapabilir</option>
-                                                <option value="2">Yapamaz</option>
-
-                                            </select>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="password" placeholder="Şifre" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <p class="login-box-msg">Not: Şifre en az bir Büyük , Bir Küçük Harf , Sayı ve Karakter Gerektirir ve En az "6" Haneli Olmalıdır. </p>
                                 </div>
+                                <div class="input-group mb-3 col-md-4">
+                                    <input type="text" class="form-control" id="username" disabled placeholder="Kullanıcı Adı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a style="cursor:pointer" onclick="getUserName()" class="fas fa-sync-alt"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-4">
+                                    <input type="text" class="form-control" id="nickname" disabled placeholder="Rumuz" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a style="cursor:pointer" onclick="getNickName()" class="fas fa-sync-alt"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="refmem1" placeholder="Referans Üye 1" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="refmem2" placeholder="Referans Üye 2" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row">
@@ -92,173 +72,267 @@
                                     </div>
                                 </div>
                             </div>
-
-
+                            
+                            
                             <div class="row">
+
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="email" class="form-control" placeholder="T.C Kimlik" id="identificationNumber" autocomplete="new-password">
+                                    <input type="text" class="form-control" id="memberNum" disabled placeholder="Üye Numarası" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
-                                            <span class="fas fa-envelope"></span>
+                                            <a style="cursor:pointer" onclick="getMemberNumber()" class="fas fa-sync-alt"></a>
                                         </div>
                                     </div>
                                 </div>
 
+
+
                                 <div class="form-group col-md-6">
-                                    <select id="condition" class="form-control">
-                                        <option disabled="disabled" selected>Durumu</option>
-                                        <option>Faal</option>
-                                        <option>Çıkan</option>
-                                        <option>Dondurulmuş</option>
-                                        <option>Fahri</option>
-                                        <option>İstifa</option>
-                                        <option>Onur</option>
-                                        <option>Vefat</option>
-                                        <option>Belirtilmemiş</option>
+                                    <select id="webReservation" class="form-control">
+                                        <option disabled="disabled" selected>Web Rezervasyon</option>
+
+                                        <option value="1">Yapabilir</option>
+                                        <option value="2">Yapamaz</option>
+
                                     </select>
                                 </div>
 
                             </div>
 
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="password" disabled placeholder="Şifre" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input placeholder="Telefon No" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="phone2Exp" placeholder="Tel Açıklama" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-envelope"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="birthPlace" placeholder="Doğum Yeri" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="job" placeholder="Meslek" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="note" placeholder="Not" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row" style="justify-content:end">
-                                <div class="col-4">
-                                    <button type="submit" class="btn btn-success btn-block" onclick="register()"><i class="fas fa-save"></i>Kaydet</button>
-                                </div>
-
-                            </div>
-
+                            <p class="login-box-msg">Not: Şifre en az bir Büyük , Bir Küçük Harf , Sayı ve Karakter Gerektirir ve En az "6" Haneli Olmalıdır. </p>
                         </div>
                     </div>
+
+
+
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="email" class="form-control" placeholder="T.C Kimlik" id="identificationNumber" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <select id="condition" class="form-control">
+                                <option disabled="disabled" selected>Durumu</option>
+                                <option>Faal</option>
+                                <option>Çıkan</option>
+                                <option>Dondurulmuş</option>
+                                <option>Fahri</option>
+                                <option>İstifa</option>
+                                <option>Onur</option>
+                                <option>Vefat</option>
+                                <option>Belirtilmemiş</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input placeholder="Telefon No" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="phone2Exp" placeholder="Tel Açıklama" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="birthPlace" placeholder="Doğum Yeri" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="job" placeholder="Meslek" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="note" placeholder="Not" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea id="detailAddress" class="form-control" rows="3" placeholder="Detaylı Adres Bilgisi"></textarea>
+                    </div>
+
+                    <div style="text-align:center; margin-bottom:15px;">
+                        <div class="custom-control custom-switch">
+                            <input style="cursor:pointer" type="checkbox" class="custom-control-input" onchange="checkedPartner(this)" id="part">
+                            <label style="cursor:pointer" class="custom-control-label" for="part">Üye Eşi Tenis Kulübünde Faaliyet Gösterecek ise Lütfen Tıklayınız !!!</label>
+                        </div>
+                    </div>
+
+
+                    <div class="collapse" id="collapseExample">
+                        <div class="card" style="margin-bottom:20px;  border:1px solid brown">
+
+                            <div class="card-body">
+                                <p class="login-box-msg">Zorunlu Alan (Eş Bilgileri) </p>
+                                <div class="row">
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input type="text" class="form-control" id="partnerName" placeholder="Eş Adı Soyadı" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input type="email" class="form-control" placeholder="Eş T.C Kimlik" id="partnerIdNumber" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-envelope"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input placeholder="Eş Telefon No" id="partnerPhone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input placeholder="Eş Doğum Tarihi" id="partnerBirthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="justify-content:end">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-success btn-block" onclick="register()"><i class="fas fa-save"></i>Kaydet</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -268,6 +342,49 @@
 
 
 <script>
+
+    $(document).ready(function () {
+
+        myfunction();
+
+    });
+
+    function myfunction() {
+
+        debugger;
+
+        $.ajax({
+            type: "Get",
+            url: '../Public/UserList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                var mem = [];
+
+                for (var i = 0; i < res.memberLists.length; i++) {
+                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                }
+
+                $("#refmem1").autocomplete({
+                    source: mem
+                });
+
+                $("#refmem2").autocomplete({
+                    source: mem
+                });
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
 
 
     $(function () {
@@ -307,6 +424,15 @@
         gender: null,
         nickName: null,
         privRes: null,
+        refmem1: null,
+        refmem2: null,
+        detailAddress: null,
+
+        isPartner: null,
+        partnerName: null,
+        partnerPhone: null,
+        partnerIdNumber: null,
+        partnerBirthDate: null,
 
     };
 
@@ -339,9 +465,51 @@
         userObj.password = $("#password").val();
         userObj.gender = "Male";
         userObj.memberNumber = $("#memberNum").val();
+        userObj.refmem1 = $("#refmem1").val();
+        userObj.refmem2 = $("#refmem2").val();
+        userObj.refmem2 = $("#detailAddress").val();
 
 
+        debugger;
 
+        var xasd = $("#refmem1").val();
+
+        if ($('#part').is(":checked")) {
+
+            userObj.isPartner = true;
+            userObj.partnerBirthDate = $("#partnerBirthdate").val();
+            userObj.partnerIdNumber = $("#partnerIdNumber").val();
+            userObj.partnerPhone = $("#partnerPhone").val();
+            userObj.partnerName = $("#partnerName").val();
+        }
+
+
+        if ($("#refmem2").val() == "" || $("#refmem1").val() == "" || $("#name").val() == "" || $("#username").val() == "" || $("#nickname").val() == "" || $("#memberNum").val() == "" || $("#startDate").val() == "" || $("#password").val() == "" || $("#webReservation option:selected").val() == "") {
+
+            alert("Üye Zorunlu Alanları Boş Bırakılmış, Lütfen Eksiksiz Doldurunuz !!!");
+        }
+
+
+        else if ($('#part').is(":checked")) {
+
+            if ($("#partnerBirthdate").val() == "" || $("#partnerPhone").val() == "" || $("#partnerIdNumber").val() == "" || $("#partnerName").val() == "") {
+
+                alert("Eş Bilgisi Seçimi Yapılıp Bilgiler Boş Bırakılmış , Lütfen Bilgileri Doldurunuz !!!");
+            }
+
+            else {
+
+                saveUser(userObj);
+            }
+        }
+
+
+        else 
+            saveUser(userObj);
+        
+    }
+
+    function saveUser(userObj) {
         try {
             $.ajax({
                 type: "Post",
@@ -388,7 +556,6 @@
             console.log(e.message);
         }
     }
-
 
     function getNickName() {
 
@@ -536,5 +703,19 @@
             }
         });
 
+    }
+
+    function checkedPartner(element) {
+
+        if (element.checked) {
+
+            $('#collapseExample').removeClass("collapse");
+            $('#collapseExample').addClass("collapse show");
+        }
+        else {
+
+            $('#collapseExample').removeClass("collapse show");
+            $('#collapseExample').addClass("collapse");
+        }
     }
 </script>

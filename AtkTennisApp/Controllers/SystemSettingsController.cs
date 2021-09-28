@@ -1572,6 +1572,7 @@ namespace AtkTennisApp.Controllers
             {
                 model.cabinetOperations = db.cabinetOperations.ToList();
                 model.cabinetTypes = db.cabinetTypes.ToList();
+                model.memberDuesTypes = db.memberDuesTypes.ToList();
 
             }
             catch (Exception ex)
@@ -1648,35 +1649,35 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
-        [HttpGet("MemberDuesSettings", Name = "MemberDuesSettings")]
-        public JsonResult MMemberDuesSettings(int id)
-        {
+        //[HttpGet("MemberDuesSettings", Name = "MemberDuesSettings")]
+        //public JsonResult MMemberDuesSettings(int id)
+        //{
 
-            List<MemberDuesType> model = new List<MemberDuesType>();
+        //    List<MemberDuesType> model = new List<MemberDuesType>();
 
-            try
-            {
-                model = db.memberDuesTypes.ToList();
+        //    try
+        //    {
+        //        model = db.memberDuesTypes.ToList();
 
 
-                if (model != null)
-                {
+        //        if (model != null)
+        //        {
                   
-                    return Json(model);
-                }
-                else
-                {
-                    return Json(false);
-                }
-            }
+        //            return Json(model);
+        //        }
+        //        else
+        //        {
+        //            return Json(false);
+        //        }
+        //    }
 
-            catch (Exception ex)
-            {
-                Mutuals.monitizer.AddException(ex);
-            }
+        //    catch (Exception ex)
+        //    {
+        //        Mutuals.monitizer.AddException(ex);
+        //    }
 
-            return Json(model);
-        }
+        //    return Json(model);
+        //}
 
 
         [HttpGet("AddCabinets", Name = "AddCabinets")]
@@ -1684,6 +1685,7 @@ namespace AtkTennisApp.Controllers
         {
 
             CabinetOperations model = new CabinetOperations();
+            CabinetOperations model2 = new CabinetOperations();
 
             model = db.cabinetOperations.FirstOrDefault(x => x.CabinetCode == code.Trim());
 
@@ -1691,21 +1693,16 @@ namespace AtkTennisApp.Controllers
             {
                 try
                 {
-                    model.CabinetCode = code;
-                    model.CabinetOpTypes = cabType;
+                        
+                        model2.CabinetCode = code;
+                        model2.CabinetOpTypes = cabType;
 
-
-                    if (model != null)
-                    {
-                        db.Add(model);
+                        db.Add(model2);
                         db.SaveChanges();
 
-                        return Json(model);
-                    }
-                    else
-                    {
-                        return Json(false);
-                    }
+                        return Json(model2);
+                    
+             
                 }
 
                 catch (Exception ex)
@@ -1761,6 +1758,80 @@ namespace AtkTennisApp.Controllers
                 return Json(true);
             }
         }
+
+
+        [HttpGet("AddDiscountType", Name = "AddDiscountType")]
+        public MemberDuesType AddDiscountType(int age, int year, int discount)
+        {
+
+            MemberDuesType model = new MemberDuesType();
+          
+           
+                try
+                {
+
+                    model.Age = age;
+                    model.Year = year;
+                    model.Discount = discount;
+                   
+
+                    db.Add(model);
+                    db.SaveChanges();
+
+                    return model;
+
+
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+                }
+
+            return new MemberDuesType();
+        }
+
+        [HttpGet("DeleteDiscountType", Name = "DeleteDiscountType")]
+        public MemberDuesType DeleteDiscountType(int id)
+        {
+            MemberDuesType model = new MemberDuesType();
+
+
+            if (id == null)
+            {
+                return new MemberDuesType();
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.memberDuesTypes.Where(x => x.MemberDuesTypeId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        db.Remove(model);
+                        db.SaveChanges();
+
+                        return model;
+                    }
+                    else
+                    {
+                        return new MemberDuesType();
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+
+                return new MemberDuesType();
+            }
+        }
+
         #endregion
 
     }

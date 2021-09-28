@@ -39,7 +39,21 @@ namespace AtkTennisApp.Models
         public int Price { get; set; }
         public bool PrivRes { get; set; }
         public int MemberNumber { get; set; }
-      
+        public string DetailAddress { get; set; }
+        public string ReferenceMember1 { get; set; }
+        public string ReferenceMember2 { get; set; }
+        
+
+
+        public bool isPartner { get; set; }
+        public string PartnerFullName { get; set; }
+        public string PartnerIdentityNumber { get; set; }
+        public string PartnerPhone { get; set; }
+        public string PartnerBirthDate  { get; set; }
+
+
+        public bool ActPas { get; set; }
+        
         
     }
 }

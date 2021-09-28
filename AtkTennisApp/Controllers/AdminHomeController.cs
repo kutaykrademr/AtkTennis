@@ -11,6 +11,7 @@ using AtkTennis.Models;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AtkTennisApp.Controllers
 {
@@ -33,6 +34,7 @@ namespace AtkTennisApp.Controllers
 
         Context db = new Context();
 
+       
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelView GetHome()
         {
@@ -58,6 +60,7 @@ namespace AtkTennisApp.Controllers
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
                 model.courtScaleLists = db.courtScaleLists.ToList();
+                model.memberDuesInf = db.memberDuesInfTables.ToList();
 
 
 
@@ -68,6 +71,25 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
             }
 
+
+            return model;
+        }
+
+        [HttpGet("TotalSystemUsers", Name = "TotalSystemUsers")]
+        public List<MemberList> TotalSystemUsers()
+        {
+
+            List<MemberList> model = new List<MemberList>();
+
+            try
+            {
+                model = db.memberLists.ToList();
+            }
+            catch (Exception ex)
+            {
+                model = new List<MemberList>();
+                Mutuals.monitizer.AddException(ex);
+            }
 
             return model;
         }
@@ -120,26 +142,26 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-
         [HttpGet("GetGeneralDebtMember", Name = "GetGeneralDebtMember")]
         public JsonResult GetGeneralDebtMember()
         {
 
-            List<MemberDebtType> model = new List<MemberDebtType>();
+            GeneralDebtViewModel model = new GeneralDebtViewModel();
 
             try
             {
-                model = db.memberDebtTypes.ToList();
-             
-                if (model.Count != 0)
+                model.memberDebtTypes = db.memberDebtTypes.ToList();
+                model.memberDuesInfTables = db.memberDuesInfTables.ToList();
+
+                if (model.memberDebtTypes.Count != 0 || model.memberDuesInfTables.Count != 0)
                 {
                     return Json(model);
                 }
-              
+
             }
             catch (Exception ex)
             {
-                model = new List<MemberDebtType>();
+                model = new GeneralDebtViewModel();
                 Mutuals.monitizer.AddException(ex);
             }
 
@@ -155,6 +177,7 @@ namespace AtkTennisApp.Controllers
 
             try
             {
+                model.cabinetOperations = db.cabinetOperations.ToList();
                 model.cabinetListUsers = db.cabinetListUsers.ToList();
                 model.memberLists = db.memberLists.ToList();
 
@@ -206,32 +229,40 @@ namespace AtkTennisApp.Controllers
                 var totalPriceResCancelInf = 0;
 
                 model.memberLists = db.memberLists.Where(x => x.MemberNumber == memberNum).FirstOrDefault();
-                var userId = model.memberLists.UserId;
-                model.cabinetListUsers = db.cabinetListUsers.ToList();
-                model.cabinetTypes = db.cabinetTypes.ToList();
-                model.cabinetOperations = db.cabinetOperations.ToList();
-                model.reservations = db.reservations.Where(x => x.UserId == userId).ToList();
-                model.reservationCancels = db.reservationCancels.Where(x => x.UserId == userId).ToList();
 
-                for (int i = 0; i < model.reservations.Count; i++)
+                if (model.memberLists != null)
                 {
-                    if (model.reservations[i].PriceInf == false)
-                    {
-                        var x = model.reservations[i].Price;
-                        totalPriceResInf = totalPriceResInf + x;
-                    }
-                }
-                for (int i = 0; i < model.reservationCancels.Count; i++)
-                {
-                    if (model.reservationCancels[i].PriceInf == false && model.reservationCancels[i].Procedure == false)
-                    {
-                        var y = model.reservationCancels[i].Price;
-                        totalPriceResCancelInf = totalPriceResCancelInf + y;
-                    }
-                }
+                    var userId = model.memberLists.UserId;
 
-                model.totalPrice = totalPriceResInf + totalPriceResCancelInf;
+                    model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
+                    model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
+                    model.cabinetListUsers = db.cabinetListUsers.ToList();
+                    model.cabinetTypes = db.cabinetTypes.ToList();
+                    model.cabinetOperations = db.cabinetOperations.ToList();
 
+                    model.memberDuesInfs = db.memberDuesInfTables.Where(x => x.MemberId == userId).ToList();
+                    model.reservations = db.reservations.Where(x => x.UserId == userId).ToList();
+                    model.reservationCancels = db.reservationCancels.Where(x => x.UserId == userId).ToList();
+
+                    for (int i = 0; i < model.reservations.Count; i++)
+                    {
+                        if (model.reservations[i].PriceInf == false)
+                        {
+                            var x = model.reservations[i].Price;
+                            totalPriceResInf = totalPriceResInf + x;
+                        }
+                    }
+                    for (int i = 0; i < model.reservationCancels.Count; i++)
+                    {
+                        if (model.reservationCancels[i].PriceInf == false && model.reservationCancels[i].Procedure == false)
+                        {
+                            var y = model.reservationCancels[i].Price;
+                            totalPriceResCancelInf = totalPriceResCancelInf + y;
+                        }
+                    }
+
+                    model.totalPrice = totalPriceResInf + totalPriceResCancelInf;
+                }
             }
 
             catch (Exception ex)
@@ -315,7 +346,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, int memberNumber)
+        public AppIdentityUser NewRegister(string detailAddress, string refmem1, string refmem2, string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, int memberNumber, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName, bool isPartner)
         {
             MemberList model2 = new MemberList();
 
@@ -342,6 +373,18 @@ namespace AtkTennisApp.Controllers
 
                 var id = user.Id;
 
+                if (isPartner == true)
+                {
+                    model2.isPartner = isPartner;
+                    model2.PartnerBirthDate = partnerBirthdate;
+                    model2.PartnerFullName = partnerName;
+                    model2.PartnerIdentityNumber = partnerIdNumber;
+                    model2.PartnerPhone = partnerPhone;
+                }
+
+                model2.DetailAddress = detailAddress;
+                model2.ReferenceMember1 = refmem1;
+                model2.ReferenceMember2 = refmem2;
                 model2.MemberNumber = memberNumber;
                 model2.UserId = id;
                 model2.FullName = name;
@@ -1168,6 +1211,7 @@ namespace AtkTennisApp.Controllers
                 }
 
                 var result2 = userManager.UpdateAsync(model).Result;
+
                 db.Update(model2);
                 db.SaveChanges();
 
@@ -1222,13 +1266,15 @@ namespace AtkTennisApp.Controllers
                     var result = await userManager.DeleteAsync(user);
 
 
-                    if (result.Succeeded)
-                    {
-                        db.Remove(user2);
-                        db.SaveChanges();
+                    //if (user2 != null)
+                    //{
+                    //    user2.ActPas = true;
 
-                        return Json(user2);
-                    }
+                    db.Remove(user2);
+                    db.SaveChanges();
+
+                    return Json(user2);
+                    //}
                 }
 
                 catch (Exception ex)
@@ -2031,21 +2077,26 @@ namespace AtkTennisApp.Controllers
                     {
                         for (int i = 0; i < ids.Count(); i++)
                         {
-                            model = db.reservations.Where(x => x.ResId == Convert.ToInt32(ids[i])).First();
-
-                            if (model != null)
+                            if (ids[i] != "")
                             {
-                                db.Remove(model);
-                                db.SaveChanges();
+                                model = db.reservations.Where(x => x.ResId == Convert.ToInt32(ids[i])).First();
+
+                                if (model != null)
+                                {
+                                    db.Remove(model);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+
+                                }
                             }
 
-                            return Json(model);
                         }
+
+                        return Json(model);
                     }
                 }
-
-                
-
             }
 
             catch (Exception ex)
@@ -2059,20 +2110,53 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("AddDues", Name = "AddDues")]
-        public JsonResult AddDues(int duesYear , string duesType , int duesPrice ,string explain)
+        public AddDuesViewModel AddDues(int duesYear, string duesType, int duesPrice, string explain)
         {
             AddDuesViewModel model = new AddDuesViewModel();
 
-            model.memberLists = db.memberLists.Where(x=>x.Role == "ÜYE").ToList();
+            model.memberLists = db.memberLists.ToList();
+            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear).FirstOrDefault();
 
             try
             {
-                if (duesType == "Yıllık Aidat Ücreti")
+                if (model.memberDuesInfTable != null)
                 {
-                    if (model.memberLists != null)
+                    return new AddDuesViewModel();
+                }
+                else
+                {
+
+                    for (int i = 0; i < model.memberLists.Count; i++)
                     {
-                        for (int i = 0; i < model.memberLists.Count; i++)
+                        if (duesType == "Yıllık Eş Aidat Ücreti")
                         {
+                            if (model.memberLists[i].isPartner == true)
+                            {
+                                model.memberDuesInfTable = new MemberDuesInfTable();
+
+                                model.memberDuesInfTable.MemberId = model.memberLists[i].UserId;
+                                model.memberDuesInfTable.MemberFullName = model.memberLists[i].FullName;
+                                model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                                model.memberDuesInfTable.DuesType = duesType;
+                                model.memberDuesInfTable.DuesPrice = duesPrice;
+                                model.memberDuesInfTable.DuesYear = duesYear;
+                                model.memberDuesInfTable.Explain = explain;
+
+                                db.Add(model.memberDuesInfTable);
+                                db.SaveChanges();
+                            }
+                        }
+
+                        else
+                        {
+                            //var birthDate = Convert.ToDateTime(model.memberLists[i].BirthDate);
+                            //var memberYear = Convert.ToDateTime(model.memberLists[i].StartDate);
+
+                            //foreach (var item in model.memberDuesTypes)
+                            //{
+
+                            //}
+
 
                             model.memberDuesInfTable = new MemberDuesInfTable();
 
@@ -2086,13 +2170,13 @@ namespace AtkTennisApp.Controllers
 
                             db.Add(model.memberDuesInfTable);
                             db.SaveChanges();
-
                         }
 
-                        return Json(model.memberLists);
                     }
+
+                    return model;
                 }
-          
+
             }
 
             catch (Exception ex)
@@ -2101,9 +2185,110 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
             }
 
-            return Json(false);
+            return new AddDuesViewModel();
         }
 
+        [HttpGet("AddGenCabinetDebt", Name = "AddGenCabinetDebt")]
+        public AddDuesViewModel AddGenCabinetDebt(int cabinetDuesYear, string cabinetType, string cabinetExplain)
+        {
+            AddDuesViewModel model = new AddDuesViewModel();
+
+            model.memberLists = db.memberLists.ToList();
+            var cabinetList = db.cabinetListUsers.ToList();
+            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesYear == cabinetDuesYear && x.DuesType == cabinetType.Trim()).FirstOrDefault();
+
+            try
+            {
+                if (model.memberDuesInfTable != null)
+                {
+                    return new AddDuesViewModel();
+                }
+
+                for (int i = 0; i < cabinetList.Count(); i++)
+                {
+                    var mem = db.memberLists.Where(x => x.UserId == cabinetList[i].CabinetUserId).FirstOrDefault();
+                    var typePrice = db.cabinetTypes.FirstOrDefault(x => x.CabinetTypes == cabinetList[i].CabinetOpTypes).CabinetTypesPrice;
+
+                    if (mem != null)
+                    {
+                        model.memberDuesInfTable = new MemberDuesInfTable();
+
+
+                        model.memberDuesInfTable.MemberId = cabinetList[i].CabinetUserId;
+                        model.memberDuesInfTable.DuesYear = cabinetDuesYear;
+                        model.memberDuesInfTable.DuesPrice = typePrice;
+                        model.memberDuesInfTable.DuesType = cabinetType;
+                        model.memberDuesInfTable.Explain = cabinetExplain;
+                        model.memberDuesInfTable.MemberFullName = mem.FullName;
+                        model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                        model.memberDuesInfTable.DuesInfType = true;
+
+                        db.Add(model.memberDuesInfTable);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return new AddDuesViewModel();
+                    }
+
+                }
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+                model = new AddDuesViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new AddDuesViewModel();
+        }
+
+        [HttpGet("GetMemberCabinetDetail", Name = "GetMemberCabinetDetail")]
+        public AddDuesViewModel GetMemberCabinetDetail(string id)
+        {
+            AddDuesViewModel model = new AddDuesViewModel();
+
+
+            model.cabinetListUsers = db.cabinetListUsers.Where(x => x.CabinetUserId == id).ToList();
+            model.memberDuesInfs = db.memberDuesInfTables.Where(x => x.MemberId == id).ToList();
+
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new AddDuesViewModel();
+        }
+
+        [HttpGet("DuesDebtList", Name = "DuesDebtList")]
+        public GeneralDebtViewModel DuesDebtList()
+        {
+            GeneralDebtViewModel model = new GeneralDebtViewModel();
+
+            model.memberDuesInfTables = db.memberDuesInfTables.ToList();
+            model.memberLists = db.memberLists.ToList();
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new GeneralDebtViewModel();
+        }
     }
 }
 

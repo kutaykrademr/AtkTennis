@@ -16,5 +16,6 @@ namespace AtkTennisApp.Models
         public string CabinetWho { get; set; }
         public string CabinetUserId { get; set; }
         public string Date { get; set; }
+        public bool PriceCondition { get; set; }
     }
 }

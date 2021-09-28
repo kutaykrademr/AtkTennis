@@ -112,58 +112,7 @@
                         </div>
                     </div>
 
-                    <button class="tablink" onclick="openPage('Home', this, 'gray')" id="defaultOpen">Home</button>
-                    <button class="tablink" onclick="openPage('News', this, 'gray')" >News</button>
-                    <button class="tablink" onclick="openPage('Contact', this, 'gray')">Contact</button>
-
-
-                    <div id="Home" class="tabcontent">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <div class="card-title">
-                                    <h3>Performans Seviyeleri</h3>
-                                </div>
-                                <div>
-                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel">Performans Seviyesi Ekle</button>
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <table id="example2" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr style="text-align:center">
-                                            <th>Performans Seviyesi</th>
-                                            <th>Kota</th>
-                                            <th>İşlemler</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        @foreach (var item in Model.performanceLevels)
-                                        {
-                                            <tr style="text-align:center" id="">
-
-                                                <td>@item.PerLevel</td>
-                                                <td>@item.PerQuotaInf</td>
-
-                                                <td>
-                                                    <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="News" class="tabcontent">
-                        <h3>News</h3>
-                        <p>Some news this fine day!</p>
-                    </div>
+     
                 </div>
             </div>
         </div>

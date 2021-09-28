@@ -1,4 +1,5 @@
-﻿using Helpers.Dto;
+﻿using AtkTennisWeb.Providers;
+using Helpers.Dto;
 using Helpers.Dto.PartialViewDtos;
 using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AtkTennisWeb.Controllers
 {
+    [AuthorizeUser]
     public class SystemSettingsController : Controller
     {
         #region IdentityRoleSettings
@@ -1161,26 +1163,26 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public IActionResult MemberDuesSettings()
+        //public IActionResult MemberDuesSettings()
 
-        {
-            List<MemberDuesTypeDto> model = new List<MemberDuesTypeDto>();
-            try
-            {
-                model = Helpers.Serializers.DeserializeJson<List<MemberDuesTypeDto>>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/MemberDuesSettings"));
+        //{
+        //    List<MemberDuesTypeDto> model = new List<MemberDuesTypeDto>();
+        //    try
+        //    {
+        //        model = Helpers.Serializers.DeserializeJson<List<MemberDuesTypeDto>>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/MemberDuesSettings"));
 
-                if (model == null)
+        //        if (model == null)
 
-                    model = new List<MemberDuesTypeDto>();
-            }
-            catch (Exception)
-            {
-                return Json(new ReservationSettingsDto());
-            }
+        //            model = new List<MemberDuesTypeDto>();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return Json(new ReservationSettingsDto());
+        //    }
 
-            return View(model);
+        //    return View(model);
 
-        }
+        //}
 
 
 
@@ -1222,6 +1224,49 @@ namespace AtkTennisWeb.Controllers
 
             return Json(true);
         }
+
+
+
+        public JsonResult AddDiscountType(int age, int year , int discount)
+
+        {
+            MemberDuesTypeDto model = new MemberDuesTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddDiscountType?age=" + age + "&year=" + year + "&discount=" + discount));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new MemberDuesTypeDto());
+            }
+
+            return Json(true);
+
+
+        }
+
+        public JsonResult DeleteDiscountType(int id)
+        {
+            MemberDuesTypeDto model = new MemberDuesTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteDiscountType?id=" + id));
+             
+                if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new MemberDuesTypeDto();
+            }
+
+            return Json(true);
+        }
+
         #endregion
     }
 }

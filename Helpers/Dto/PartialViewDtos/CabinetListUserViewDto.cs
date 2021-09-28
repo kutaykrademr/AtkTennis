@@ -9,5 +9,6 @@ namespace Helpers.Dto.PartialViewDtos
     {
         public List<CabinetListUserDto> cabinetListUsers { get; set; } = new List<CabinetListUserDto>();
         public List<MemberListDto> memberLists { get; set; } = new List<MemberListDto>();
+        public List<CabinetOperationsDto> cabinetOperations { get; set; } = new List<CabinetOperationsDto>();
     }
 }

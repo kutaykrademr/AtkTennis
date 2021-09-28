@@ -1,4 +1,5 @@
 ﻿using AtkTennisApp.Models;
+using AtkTennisApp.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace AtkTennisApp.ViewModels
         public List<CabinetOperations> cabinetOperations { get; set; } = new List<CabinetOperations>();
         public List<CabinetType> cabinetTypes { get; set; } = new List<CabinetType>();
         public List<CabinetListUser> cabinetListUsers { get; set; } = new List<CabinetListUser>();
+        public List<MemberDuesInfTable> memberDuesInfs { get; set; } = new List<MemberDuesInfTable>();
+        public List<AppIdentityUser> AppIdentityUsers { get; set; } = new List<AppIdentityUser>();
+        public List<AppIdentityRole> AppIdentityRoles { get; set; } = new List<AppIdentityRole>();
 
         public MemberList memberLists { get; set; } = new MemberList();
         public int totalPrice {get ;set;}

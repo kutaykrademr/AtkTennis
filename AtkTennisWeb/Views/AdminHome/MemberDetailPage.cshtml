@@ -5,30 +5,36 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .tdHover:hover {
+        background-color: #131da882;
+        color: white !important;
+    }
+</style>
 
 
 <div class="content-wrapper">
-
     <section class="content">
         <div class="container-fluid">
             <div class="card" style="border-radius:40px">
                 <div class="card-content">
                     <div class="card-body cleartfix">
                         <div class="media align-items-stretch">
+
                             <div class="align-self-center">
                                 <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
                             </div>
+
                             <div class="media-body">
                                 <h4>@Model.memberLists.FullName - @Model.memberLists.NickName</h4>
                                 <span>@Model.memberLists.UserName</span>
                                 <h4 style="display:none" id="userId">@Model.memberLists.UserId</h4>
                             </div>
 
-
-
                             <div class="align-self-center">
                                 <h3>Toplam Bakiye: @Model.memberLists.Price ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -39,12 +45,10 @@
 
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-
 
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
+
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3 style="font-size:1.2rem">@Model.memberLists.StartDate</h3>
@@ -54,12 +58,10 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-
                     </div>
                 </div>
-                <!-- ./col -->
+
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3 style="font-size:1.2rem">@Model.memberLists.FinishDate<sup style="font-size: 20px"></sup></h3>
@@ -69,12 +71,10 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-
                     </div>
                 </div>
-                <!-- ./col -->
+
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3 style="font-size:1.2rem">
@@ -90,12 +90,10 @@
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-
                     </div>
                 </div>
-                <!-- ./col -->
+
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3 style="font-size:1.2rem">@Model.memberLists.Condition</h3>
@@ -105,117 +103,406 @@
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-
                     </div>
                 </div>
-                <!-- ./col -->
+
             </div>
 
-
-
-            <!-- /.row -->
             <div class="row">
-     
                 <div class="col-lg-6">
-                    <div class="card card-white ">
+                    <div class="card card-white register-card-body">
                         <div class="card-header">
-                            <h3 style="color:gray" class="card-title">Kişisel Bilgileriniz</h3>
+                            <h3 style="color:gray" class="card-title">Kişisel Bilgiler</h3>
                         </div>
                         <div class="row">
 
                             <div class="card-body col-lg-6">
-                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı</strong>
+                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı / Rolü</strong>
 
-                                <p class="text-muted">
-                                    @Model.memberLists.FullName
-                                </p>
+                                <div class="row">
+                                    <div class="input-group col-md-7">
+                                        <input type="text" class="form-control" placeholder="Adı - Soyadı" id="name" value="@Model.memberLists.FullName" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group col-md-5">
+                                        <select id="RegistersRole" class="form-control">
+                                            <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                                            @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                                            {
+                                                <option>@Model.AppIdentityRoles[i].Name</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <hr>
+
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Kullanıcı Adı - Rumuz</strong>
+
+                                <div class="row">
+
+                                    <div class="input-group col-md-6">
+                                        <input id="username" placeholder="Kullanıcı Adı" type="text" class="form-control" value="@Model.memberLists.UserName" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="input-group col-md-6">
+                                        <input id="birthPlace" placeholder="Rumuz" disabled type="text" class="form-control" value="@Model.memberLists.NickName" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <hr>
+
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Başlangıç Tarihi - Bitiş Tarihi</strong>
+
+                                <div class="row">
+
+                                    <div class="input-group col-md-6">
+                                        <input placeholder="Başlangıç Tarihi" value="@Model.memberLists.StartDate" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group col-md-6">
+
+                                        <input placeholder="Bitiş Tarihi" value="@Model.memberLists.FinishDate" type="text" class="form-control" id="finishDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
 
                                 <hr>
 
                                 <strong><i class="fas fa-pencil-alt mr-1"></i> T.C. Kimlik Numarası</strong>
 
-                                <p class="text-muted">
-                                    @Model.memberLists.IdentityNumber
+                                <div class="input-group">
+                                    <input type="text" placeholder="TC Kimlik" class="form-control" id="identificationNumber" value="@Model.memberLists.IdentityNumber" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                </p>
 
                                 <hr>
 
                                 <strong><i class="fas fa-map-marker-alt mr-1"></i> Doğum Tarihi - Doğum Yeri</strong>
 
-                                <p class="text-muted">@Model.memberLists.BirthDate / @Model.memberLists.BirthPlace</p>
+                                <div class="row">
+
+                                    <div class="input-group col-md-6">
+                                        <input placeholder="Doğum Tarihi" value="@Model.memberLists.BirthDate" type="text" class="form-control" id="birthdate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group col-md-6">
+                                        <input id="birthPlace" placeholder="Doğum Yeri" type="text" class="form-control" value="@Model.memberLists.BirthPlace" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
 
                                 <hr>
 
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası</strong>
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> Telefon Numarası - Açıklama</strong>
 
-                                <p class="text-muted">
-                                    @Model.memberLists.Phone - @Model.memberLists.PhoneExp  / @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
+                                <div class="row">
+                                    <div class="input-group  col-md-6">
+                                        <input placeholder="Telefon No" value="@Model.memberLists.Phone" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                    </div>
 
-                                </p>
+                                    <div class="input-group  col-md-6">
+                                        <input type="text" class="form-control" value="@Model.memberLists.PhoneExp" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top:15px" class="row">
+                                    <div class="input-group  col-md-6">
+                                        <input placeholder="Telefon No 2" value="@Model.memberLists.Phone2" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group col-md-6">
+                                        <input type="text" value="@Model.memberLists.Phone2Exp" class="form-control" id="phone2Exp" placeholder="Tel Açıklama 2" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <hr>
 
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi</strong>
+                                <strong><i class="fas fa-pencil-alt mr-1"></i> E-Posta Adresi - Açıklama</strong>
 
-                                <p class="text-muted">
-                                    @Model.memberLists.Email -@Model.memberLists.EmailExp
+                                <div class="row">
 
-                                </p>
+                                    <div class="input-group  col-md-8">
+                                        <input value="@Model.memberLists.Email" type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-envelope"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group col-md-4">
+                                        <input type="text" value="@Model.memberLists.EmailExp" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
 
                                 <hr>
 
                                 <strong><i class="fas fa-pencil-alt mr-1"></i>Meslek</strong>
 
-                                <p class="text-muted">
-                                    @Model.memberLists.Job
+                                <div class="input-group col-md-12">
+                                    <input type="text" value="@Model.memberLists.Job" class="form-control" id="job" placeholder="Meslek" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                </p>
-
+                                <hr>
 
                             </div>
+
+
 
                             <div class="card-body col-lg-6 ">
                                 <strong><i class="fas fa-book mr-1"></i> Anne - Baba Adı</strong>
 
-                                <p class="text-muted">
-                                    @Model.memberLists.MotherName - @Model.memberLists.FatherName
-                                    </ p>
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <input type="text" value="@Model.memberLists.MotherName" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                    <hr>
-
-                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Aile Telefon Numarası</strong>
-
-                                <p class="text-muted">
-                                    @Model.memberLists.Phone2 - @Model.memberLists.Phone2Exp
-                                </p>
+                                    <div class="input-group col-md-6">
+                                        <input type="text" value="@Model.memberLists.FatherName" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <hr>
 
                                 <strong><i class="fas fa-map-marker-alt mr-1"></i> Şehir - İlçe</strong>
 
-                                <p class="text-muted">@Model.memberLists.City - @Model.memberLists.District</p>
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <input type="text" value="@Model.memberLists.City" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group col-md-6">
+                                        <input type="text" value="@Model.memberLists.District" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <hr>
 
                                 <strong><i class="far fa-file-alt mr-1"></i> Notlar</strong>
 
-                                <p class="text-muted">@Model.memberLists.Note</p>
+                                <div class="input-group col-md-12">
+                                    <input type="text" value="@Model.memberLists.Note" class="form-control" id="note" placeholder="Not" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <strong><i class="far fa-file-alt mr-1"></i> Detaylı Adres</strong>
+
+                                <div class="input-group col-md-12">
+                                    <input type="text" value="@Model.memberLists.DetailAddress" class="form-control" id="detailAddress" placeholder="Adres Detay" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <strong><i class="far fa-file-alt mr-1"></i>Referans Üyeler</strong>
+
+                                <div class="input-group col-md-12">
+                                    <input type="text" value="@Model.memberLists.ReferenceMember1" class="form-control" id="refMem1" placeholder="Referans Üye" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top:15px" class="input-group col-md-12">
+                                    <input type="text" value="@Model.memberLists.ReferenceMember2" class="form-control" id="refMem2" placeholder="Referans Üye 2" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+
+
+                                <strong><i class="far fa-file-alt mr-1"></i>Durumu</strong>
+
+
+                                <div class="form-group col-md-12">
+
+                                    <select id="condition" class="form-control">
+                                        <option disabled="disabled" selected>@Model.memberLists.Condition</option>
+                                        <option>Faal</option>
+                                        <option>Çıkan</option>
+                                        <option>Dondurulmuş</option>
+                                        <option>Fahri</option>
+                                        <option>İstifa</option>
+                                        <option>Onur</option>
+                                        <option>Vefat</option>
+                                        <option>Belirtilmemiş</option>
+                                    </select>
+
+                                    <hr>
+
+                                </div>
+
+                                <strong><i class="far fa-file-alt mr-1"></i>Web Rezervasyon</strong>
+
+
+                                <div class="form-group col-md-12">
+
+                                    <select id="webReservation" class="form-control">
+                                        <option disabled="disabled" selected>@Model.memberLists.WebReservation</option>
+
+                                        <option value="1">Yapabilir</option>
+                                        <option value="0">Yapamaz</option>
+
+                                    </select>
+
+                                    <hr>
+
+                                </div>
+
+                                <strong><i class="far fa-file-alt mr-1"></i>Şifre</strong>
+
+                                <div class="input-group col-md-12">
+                                    <input type="text" value="@Model.memberLists.Password" class="form-control" id="password" placeholder="Şifre" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+
+
+
                             </div>
+                            <button class="btn btn-warning" id="@Model.memberLists.UserId" onclick="updateMemberList(this.id)">Kaydet</button>
                         </div>
+
+
                     </div>
                 </div>
 
                 <div class="col-lg-6">
+
+                    <div class="card card-white">
+                        <div class="card-header">
+
+                            <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Bakiye Bilgisi - @Model.memberLists.Price ₺ </h2>
+
+                            <div class="card-tools">
+                                <button id="@Model.memberLists.UserId" onclick="" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                    Bakiye Yükle
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="card card-white">
                         <div class="card-header">
                             @if (Model.totalPrice == 0)
                             {
-                                <h2 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-calendar-alt"></i>Rezervasyon Borcu Yok</h2>
+                                <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Rezervasyon Borcu Yok</h2>
                             }
                             else
                             {
-                                <h2 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-calendar-alt"></i>Rezervasyon Borcu - @Model.totalPrice ₺ </h2>
+                                <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Rezervasyon Borcu - @Model.totalPrice ₺ </h2>
                             }
 
                             <div class="card-tools">
@@ -223,6 +510,7 @@
                                     <i class="fas fa-minus"></i>
                                 </button>
                             </div>
+
                         </div>
                         <div class="card-body p-0">
                             <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
@@ -246,7 +534,29 @@
 
                     <div class="card card-white">
                         <div class="card-header">
-                            <h3 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-money-check-alt"></i>Aidat Borcu Yok</h3>
+                            @{
+                                if (Model.memberDuesInfs.Where(x => x.PriceCondition == false && x.CancelCondition == false).Count() > 0)
+                                {
+                                    var fPrice = 0;
+
+                                    var priceList = Model.memberDuesInfs.Where(x => x.PriceCondition == false && x.CancelCondition == false).ToList();
+
+                                    foreach (var item in priceList)
+                                    {
+                                        var lastP = item.DuesPrice;
+
+                                        fPrice = lastP + fPrice;
+
+                                    }
+
+                                    <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Aidat Detay Gör" style="margin-right:15px; cursor:pointer;" class="fas fa-search"></i>Aidat Borcu - @fPrice ₺ </h3>
+                                }
+                                else
+                                {
+                                    <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Aidat Detay Gör" style="margin-right:15px; cursor:pointer;" class="fas fa-search"></i>Aidat Borcu Yok</h3>
+
+                                }
+                            }
 
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -264,10 +574,18 @@
                                         <td style="padding:0;text-align:center;">Genel</td>
                                     </tr>
                                     <tr class="info" style="color:#000;">
-                                        <td style="padding:0;text-align:center;">0 Adet</td>
-                                        <td style="padding:0;text-align:center;">14 Adet</td>
-                                        <td style="padding:0;text-align:center;">3 Adet</td>
-                                        <td style="padding:0;text-align:center;">17 Adet</td>
+                                        @{
+
+                                            var xa = Model.memberDuesInfs.Where(x => x.PriceCondition == false && x.CancelCondition == false).Count();
+                                            var ya = Model.memberDuesInfs.Where(x => x.PriceCondition == true && x.CancelCondition == false).Count();
+                                            var ass = Model.memberDuesInfs.Where(x => x.CancelCondition == true).Count();
+                                            var ca = Convert.ToInt32(xa) + Convert.ToInt32(ya) + Convert.ToInt32(ass);
+                                        }
+
+                                        <td style="padding:0;text-align:center;">@xa Adet</td>
+                                        <td style="padding:0;text-align:center;">@ya Adet</td>
+                                        <td style="padding:0;text-align:center;">@ass Adet</td>
+                                        <td style="padding:0;text-align:center;">@ca Adet</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -282,10 +600,10 @@
                     {
                         <div class="card card-white">
                             <div class="card-header">
-                                <h3 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-box"></i>Dolap Bilgileri</h3>
+                                <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Dolap Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Dolap Bilgileri</h3>
 
                                 <div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black" type="button" class="btn btn-tool">
+                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid" type="button" class="btn btn-tool tdHover">
                                         Dolap Tahsis Et
                                     </button>
                                 </div>
@@ -308,17 +626,21 @@
 
                                     foreach (var item in x)
                                     {
-                                        var priceModel = item.CabinetOpPrice;
+                                        if (item.PriceCondition == false)
+                                        {
+                                            var priceModel = item.CabinetOpPrice;
 
-                                        firstPrice = firstPrice + priceModel;
+                                            firstPrice = firstPrice + priceModel;
+                                        }
+
                                     }
                                 }
 
-                                <h3 style="color:gray" class="card-title"><i style="margin-right:15px" class="fas fa-box"></i>Dolap Bilgileri - @firstPrice ₺ </h3>
+                                <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Dolap Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Dolap Bilgileri - @firstPrice ₺ </h3>
 
 
                                 <div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black" type="button" class="btn btn-tool">
+                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
                                         Dolap Tahsis Et
                                     </button>
                                 </div>
@@ -336,6 +658,8 @@
                                             <td style="padding:0;text-align:center;">Dolap Türü</td>
                                             <td style="padding:0;text-align:center;">Dolap Sahibi</td>
                                             <td style="padding:0;text-align:center;">Dolap Alım Tarihi</td>
+                                            <td style="padding:0;text-align:center;">Dolap Ücreti</td>
+                                            <td style="padding:0;text-align:center;">Ücret Durumu</td>
 
                                         </tr>
 
@@ -349,8 +673,23 @@
                                                 <td style="padding:0;text-align:center;">@item.CabinetOpTypes</td>
                                                 <td style="padding:0;text-align:center;">@item.CabinetWho</td>
                                                 <td style="padding:0;text-align:center;">@item.Date</td>
+                                                <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
+
+                                                @{
+
+                                                    if (item.PriceCondition == false)
+                                                    {
+                                                        <td style="padding:0;text-align:center;">Ödenmedi</td>
+                                                    }
+
+                                                    else
+                                                    {
+                                                        <td style="padding:0;text-align:center;">Ödendi</td>
+                                                    }
+                                                }
+
                                                 <td style="padding:0;text-align:center;">
-                                                    <i id="@item.CabinetOpId" onclick="deleteCabinet(this.id)" style="text-align:center" class="fas fa-trash"></i>
+                                                    <i id="@item.CabinetOpId" onclick="deleteCabinet(this.id)" style="text-align:center; cursor:pointer" class="fas fa-trash"></i>
                                                 </td>
 
                                             </tr>
@@ -361,8 +700,91 @@
                         </div>
                     }
 
-                </div>
 
+                    @if (Model.memberLists.isPartner)
+                    {
+                        <div class="card card-white ">
+                            <div class="card-header">
+                                <h3 style="color:gray" class="card-title">Eş Bilgileri</h3>
+                            </div>
+                            <div class="row">
+
+                                <div class="card-body col-lg-6">
+                                    <strong><i class="fas fa-book mr-1"></i> Eş Adı - Soyadı</strong>
+
+                                    <div class="input-group col-md-6">
+                                        <input type="text" class="form-control" value="@Model.memberLists.PartnerFullName" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i> Eş T.C. Kimlik Numarası</strong>
+
+                                    <div class="input-group col-md-6">
+                                        <input type="text" class="form-control" value="@Model.memberLists.PartnerIdentityNumber" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <hr>
+
+                                </div>
+
+                                <div class="card-body col-lg-6 ">
+                                    <strong><i class="fas fa-book mr-1"></i>Eş Doğum Tarihi</strong>
+
+                                    <div class="input-group col-md-6">
+                                        <input placeholder="Doğum Tarihi" value="@Model.memberLists.PartnerBirthDate" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Eş Telefon Numarası</strong>
+
+                                    <div class="input-group  col-md-6">
+                                        <input placeholder="Telefon No" value="@Model.memberLists.Phone" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card card-white">
+                            <div class="card-header">
+
+                                <h2 class="card-title"><i style="margin-right:15px; cursor:pointer" class="fas fa-user"></i>Eş Bilgisi Bulunmamaktadır</h2>
+
+                                <div class="card-tools">
+                                    <button id="@Model.memberLists.UserId" onclick="" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                        Eş Bilgisi Ekle
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
             </div>
         </div>
     </section>
@@ -380,7 +802,6 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="recipient-name" class="col-form-label">Dolap Seç:</label>
@@ -418,9 +839,9 @@
                         <label class="col-form-label">Dolap Türü</label>
                         <select id="whoCabinet" class="form-control">
 
-
                             <option>Kendi</option>
                             <option>Eşi</option>
+
                         </select>
                     </div>
                 </div>
@@ -430,12 +851,46 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
                 <button type="button" class="btn btn-primary" onclick="addCabinetMem()">Tahsis Et</button>
             </div>
+
         </div>
     </div>
 </div>
 
 
+
 <script>
+
+    $(document).ready(function () {
+
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 5,
+            "buttons": ["print"]
+        })
+            .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
+
+
+    });
+
+    $(function () {
+
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        $('[data-mask]').inputmask()
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+    })
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
 
     function addCabinetforMember() {
 
@@ -457,12 +912,9 @@
                 async: true,
                 success: function (res) {
 
-                    debugger;
-
 
                     $("#cabinetPrice").val(res.cabinetTypes[0].cabinetTypesPrice);
                     $("#cabinetType").val(res.cabinetTypes[0].cabinetTypes);
-
 
                 },
 
@@ -592,6 +1044,143 @@
                 });
         }
     }
+
+    function updateMemberList(id) {
+
+        userObj = {
+
+            id: null,
+            name: null,
+            username: null,
+            startDate: null,
+            finishDate: null,
+            role: null,
+            condition: null,
+            identificationNumber: null,
+            webReservation: null,
+            phone: null,
+            phoneExp: null,
+            phone2: null,
+            phone2Exp: null,
+            email: null,
+            emailExp: null,
+            birthdate: null,
+            birthPlace: null,
+            motherName: null,
+            fatherName: null,
+            city: null,
+            district: null,
+            job: null,
+            note: null,
+            password: null,
+            gender: null,
+            checkpass: null,
+
+        };
+
+
+
+
+
+
+
+        userObj.checkpass = $("#password").val();
+        userObj.id = id;
+        userObj.name = $("#name").val();
+        userObj.username = $("#username").val();
+        userObj.startDate = $("#startDate").val();
+        userObj.finishDate = $("#finishDate").val();
+        userObj.role = $("#RegistersRole option:selected").text();
+        userObj.condition = $("#condition option:selected").text();
+        userObj.identificationNumber = $("#identificationNumber").val();
+        userObj.webReservation = $("#webReservation option:selected").val();
+        userObj.phone = $("#phone").val();
+        userObj.phoneExp = $("#phoneExp").val();
+        userObj.phone2 = $("#phone2").val();
+        userObj.phone2Exp = $("#phone2Exp").val();
+        userObj.email = $("#email").val();
+        userObj.emailExp = $("#emailExp").val();
+        userObj.birthdate = $("#birthdate").val();
+        userObj.birthPlace = $("#birthPlace").val();
+        userObj.motherName = $("#motherName").val();
+        userObj.fatherName = $("#fatherName").val();
+        userObj.city = $("#city").val();
+        userObj.district = $("#district").val();
+        userObj.job = $("#job").val();
+        userObj.note = $("#note").val();
+        userObj.password = $("#password").val();
+        userObj.gender = "Male";
+
+
+
+        if (userObj.password != "" || userObj.username != "") {
+
+            try {
+                $.ajax({
+                    type: "Post",
+                    url: '../AdminHome/UpdateMemberList',
+                    cache: false,
+                    data: userObj,
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+
+                        if (res == true) {
+
+
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Kullanıcı Başarıyla Güncellendi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        location.reload();
+
+                                    }
+                                }
+                            });
+                        }
+
+                        else
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Kullanıcı Güncellenirken Hata Oluştu. Şifre : En az bir büyük harf , Küçük Harf , Sayı ve Sembol(*/.) içermelidir.",
+                                buttons: {
+                                    TAMAM: function () {
+
+
+                                    }
+                                }
+                            });
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            } catch (e) {
+                console.log(e.message);
+            }
+        }
+        else {
+            $.confirm({
+                title: "Uyarı",
+                content: "Kullanıcı Adı / Şifre Boş Bırakılamaz",
+                buttons: {
+                    TAMAM: function () {
+
+
+                    }
+                }
+            });
+
+        }
+
+    }
+
 
 </script>
 

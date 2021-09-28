@@ -272,7 +272,7 @@
                             row += '<td>' + res[i].resStartTime + "-" + res[i].resFinishTime + '</td>';
                             row += '<td>' + res[i].courtId + '</td>';
 
-                            if (res[i].priceInf == "true") {
+                            if (res[i].priceInf == true) {
                                 row += '<td>' + "Ödendi" + '</td>';
                             }
                             else {
@@ -417,7 +417,7 @@
 
                     $.confirm({
                         title: "Rezervasyon Tarihi Geçmiş Rezervasyonlar Silinemez /Yada/  Lütfen Seçim Yapınız",
-                        content: "Üye Bulunamadı.",
+                        content: "Dikkat.",
                         buttons: {
                             TAMAM: function () {
 
@@ -427,14 +427,16 @@
                 }
 
                 else {
-                    $.confirm({
-                        title: "Başarılı",
-                        content: "Başarılı.",
-                        buttons: {
-                            TAMAM: function () {
+                    swal({
+                        title: "Rezervasyon Başarılı",
+                        text: "Rezervasyon Kaydınız Başarılı Bir Şekilde Gerçekleşti !",
+                        icon: "success",
+                        button: "Tamam",
+                        timer: 500,
+                    }).then((value) => {
 
-                            }
-                        }
+                        findAllRes();
+
                     });
                 }
 

@@ -52,7 +52,6 @@ namespace AtkTennisApp.Controllers
             model.SunucuIp = MutualConstants.SunucuIp;
             model.CompanyName = MutualConstants.CompanyName;
             model.ExpirationDate = MutualConstants.ExpirationDate;
-
             model.UserSettingsList = Mapping.AutoMapperBase._mapper.Map<List<Helpers.Dto.ViewDtos.UserSettingsDto>>(db.userSettings.ToList());
 
             return model;
@@ -918,7 +917,9 @@ namespace AtkTennisApp.Controllers
         {
             try
             {
+                
                 await signInManager.SignOutAsync();
+              
             }
 
             catch (Exception ex)

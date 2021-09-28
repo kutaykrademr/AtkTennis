@@ -10,5 +10,6 @@ namespace AtkTennisApp.ViewModels
     {
         public List<CabinetListUser> cabinetListUsers { get; set; } = new List<CabinetListUser>();
         public List<MemberList> memberLists { get; set; } = new List<MemberList>();
+        public List<CabinetOperations> cabinetOperations { get; set; } = new List<CabinetOperations>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Helpers.Dto;
+﻿using AtkTennisWeb.Providers;
+using Helpers.Dto;
 using Helpers.Dto.PartialViewDtos;
 using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace AtkTennisWeb.Controllers
 {
+   
     public class PublicController : Controller
     {
         public IActionResult SignIn()
@@ -376,6 +378,7 @@ namespace AtkTennisWeb.Controllers
             try
                 
             {
+                HttpContext.Session.Clear();
                 Helpers.Request.Get(Mutuals.AppUrl + "Public/Logout");
             }
 

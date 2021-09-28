@@ -13,5 +13,9 @@ namespace Helpers.Dto.ViewDtos
         public string DuesType { get; set; }
         public int DuesPrice { get; set; }
         public string Date { get; set; }
+        public string Explain { get; set; }
+        public bool DuesInfType { get; set; }
+        public bool PriceCondition { get; set; }
+        public bool CancelCondition { get; set; }
     }
 }
