@@ -66,9 +66,9 @@
             left: 0;
             z-index: 1510 !important;
             float: left;
-            min-width: 350px !important;
-            width: 350px !important;
-            padding: 4px 0;
+            min-width: 250px !important;
+            width: 250px !important;
+            padding: 2px 0;
             margin: 2px 0 0 0;
             list-style: circle;
             background-color: #ffffff;
@@ -76,6 +76,7 @@
             border-color: rgba(0, 0, 0, 0.2);
             border-style: solid;
             border-width: 1px !important;
+            border-radius:5px;
         }
     </style>
 
@@ -372,7 +373,7 @@
                                     </a>
                                 </li>
 
-                                
+
                                 <li class="nav-item">
                                     <a href="~/AdminHome/DuesDebtList" class="nav-link">
                                         <i class="fas fa-wallet nav-icon"></i>
@@ -380,7 +381,7 @@
                                     </a>
                                 </li>
 
-                            
+
 
                                 <li class="nav-item">
                                     <a href="~/Admin/ReservationTable" class="nav-link">
@@ -395,7 +396,7 @@
                             <a style="background-color:#625e5e" href="" class="nav-link">
                                 <i class="nav-icon fas fa-wallet"></i>
                                 <p>
-                                    Ödeme - Borçlandırma 
+                                    Ödeme - Borçlandırma
                                     <i class="fas fa-angle-left right"></i>
 
                                 </p>
@@ -404,21 +405,21 @@
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                    <a href="~/AdminHome/DuesDebtOperations" class="nav-link">
                                         <i class="fas fa-wallet nav-icon"></i>
                                         <p>Aidat Ödemeleri</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                    <a href="~/AdminHome/ReservationDebtOperations" class="nav-link">
                                         <i class="fas fa-wallet nav-icon"></i>
                                         <p>Rezervasyon Ödemeleri</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
+                                    <a href="~/AdminHome/CabinetDebtOperations" class="nav-link">
                                         <i class="fas fa-wallet nav-icon"></i>
                                         <p>Dolap Ödemeleri</p>
                                     </a>
@@ -603,11 +604,85 @@
                             </li>
                         }
 
+                        <li class="nav-item ">
+                            <a style="background-color:#625e5e" href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-pie"></i>
+                                <p>
+                                    Raporlar 
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
+                                        <i class="fas fa-id-card nav-icon"></i>
+                                        <p>Rol ve Yetkilendirme </p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/MemberSettings" class="nav-link">
+                                        <i class="fas fa-user nav-icon"></i>
+                                        <p>Üye Ayarları</p>
+                                    </a>
+                                </li>
+
+              
+
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/CourtSettings" class="nav-link">
+                                        <i class="fas fa-flag nav-icon"></i>
+                                        <p>Kort Ayarları </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-table-tennis"></i>
+                                        <p>
+                                            Eğitim Ayarları
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Okul</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Performans</p>
+                                            </a>
+                                        </li>
+
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Özel Ders</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+              
+                                
+
+                            </ul>
+                        </li>
+
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
+            
             </div>
-            <!-- /.sidebar -->
+
         </aside>
 
 

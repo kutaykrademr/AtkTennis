@@ -14,10 +14,11 @@ using System.Threading.Tasks;
 
 namespace AtkTennisWeb.Controllers
 {   
+    
     [AuthorizeUser]
     public class AdminHomeController : Controller
     {
-       
+        
         public IActionResult Index()
         {
 
@@ -236,6 +237,22 @@ namespace AtkTennisWeb.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult DuesDebtOperations()
+        {
+
+            return View();
+        }
+
+        public IActionResult CabinetDebtOperations()
+        {
+            return View();
+        }
+
+        public IActionResult ReservationDebtOperatins()
+        {
+            return View();
         }
 
 
@@ -869,6 +886,25 @@ namespace AtkTennisWeb.Controllers
             catch (Exception)
             {
                 return Json(new ReservationDto());
+            }
+
+            return Json(model);
+
+        }
+
+
+        public JsonResult GetDuesDebtMember(string id)
+        {
+            GeneralDebtViewDto model = new GeneralDebtViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<GeneralDebtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetDuesDebtMember?id=" + id));
+            }
+
+            catch (Exception)
+            {
+                return Json(new GeneralDebtViewDto());
             }
 
             return Json(model);

@@ -18,19 +18,21 @@
 <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
 
 
-<body class="hold-transition login-page" style="background-color:#424242">
+<body class="hold-transition login-page" style="background-color:rgb(108, 119, 110) !important">
     <div class="login-box">
-        <div class="login-logo">
-            <img src="~/images/atkimg/altyapilogo.png" alt="Alternate Text" style="width:35%">
-            <h3 style="color:white">
-                <b>TEN-İS</b>
-                <br />
-                Tenis İşletim Sistemi
-            </h3>
-        </div>
+       
 
-        <!-- /.login-logo -->
+   
         <div class="card" style="background-color:transparent">
+            <div style="margin-top:20px" class="login-logo">
+                <img src="~/images/atkimg/altyapilogo.png" alt="Alternate Text" style="width:35%">
+                <h3 style="color:white">
+                    <b>TEN-İS</b>
+                    <br />
+                    Tenis İşletim Sistemi
+                </h3>
+            </div>
+
             <div class="card-body login-card-body" style="background-color:transparent">
                 <div id="loginButtons">
 
@@ -38,7 +40,7 @@
                         <input type="text" id="username" class="form-control" placeholder="Kullanıcı Adı">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span style="color:white;" class="fas fa-envelope"></span>
                             </div>
                         </div>
                     </div>
@@ -46,7 +48,7 @@
                         <input type="password" id="password" class="form-control" placeholder="Şifre" autocomplete="new-password">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                                <span style="color:white;" class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
@@ -60,21 +62,21 @@
                             </div>
                         </div>
 
-                       
-                        <!-- /.col -->
+
+
                         <div class="col-4">
                             <button type="submit" class="btn btn-warning btn-block" onclick="signIn()">Giriş Yap</button>
                         </div>
-                        
 
-                        <!-- /.col -->
+
+    
                     </div>
                 </div>
             </div>
-            <!-- /.login-card-body -->
+
         </div>
     </div>
-    <!-- /.login-box -->
+
 </body>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

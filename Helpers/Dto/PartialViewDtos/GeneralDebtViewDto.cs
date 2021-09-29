@@ -10,5 +10,6 @@ namespace Helpers.Dto.PartialViewDtos
         public List<MemberDebtTypeDto> memberDebtTypes { get; set; } = new List<MemberDebtTypeDto>();
         public List<MemberDuesInfTableDto> memberDuesInfTables { get; set; } = new List<MemberDuesInfTableDto>();
         public List<MemberListDto> memberLists { get; set; } = new List<MemberListDto>();
+        public List<CabinetListUserDto> cabinetListUsers { get; set; } = new List<CabinetListUserDto>();
     }
 }

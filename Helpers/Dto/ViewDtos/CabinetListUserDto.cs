@@ -14,5 +14,6 @@ namespace Helpers.Dto.ViewDtos
         public string CabinetUserId { get; set; }
         public string Date { get; set; }
         public bool PriceCondition { get; set; }
+        public bool CabinetCondition { get; set; }
     }
 }

@@ -1,5 +1,334 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Aidat Ödeme İşlemleri</h3>
+                            </div>
+
+                            <div id="selTime">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li style="margin-right:5px; border-radius:20px" class="page-item"><input id="findMembers" style="height:38px" type="search" class="form-control form-control-sm" placeholder="Üye Ara" aria-controls="example2"></li>
+                                        <li class="page-item"> <button style="border-color:inherit !important " class="btn btn-dark" onclick="getList()">Getir</button></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="secimdetay" class="portlet light" style="padding: 15px;">
+                        <div class="alert alert-info" style="margin-bottom: 0;">
+                            <strong>Aidat Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
+                        </div>
+                    </div>
+
+                    <div class="card" style="border-radius:30px">
+                        <div id="appendResInf">
+                            <div class="portlet-body">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ödeme Al</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Ödeme Al</h5>
+                                <table class="table table-bordered tblOdemeBilgisi28911" style=" margin-bottom: 0;">
+                                    <tbody>
+                                        <tr class="note note-danger">
+                                            <td style="">Ödenen Miktar:</td>
+                                            <td style="">
+                                                <input type="text" name="OdenenMiktar" id="OdenenMiktar" class="form-control kotagizle" placeholder="Ödenen Miktar">
+                                            </td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
+                                            <td style="">
+                                                <select class="form-control OdemeTipi" name="OdemeTipi" id="OdemeTipi28911" data-id="28911">
+                                                    <option value="1">Nakit</option>
+                                                    <option value="2">Kredi Kartı</option>
+                                                    <option value="3">Havale * Eft</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Makbuz No:</td>
+                                            <td style=""><input type="text" name="MakbuzNumarasi" class="form-control kotagizle" placeholder="Makbuz No"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Makbuz Tarihi:</td>
+                                            <td><input class="form-control" type="date" id="dateStart" style="cursor:pointer;"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Açıklama:</td>
+                                            <td style=""><input type="text" name="Aciklama" class="form-control  kotagizle" placeholder="Açıklama"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td>Ücreti:</td>
+                                            <td>
+                                                <input disabled type="text" class="form-control" value="300" autocomplete="new-password">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-7">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Ödeme Bilgisi</h5>
+                                <table class="table table-bordered" style="text-align:center;">
+                                    <thead>
+                                        <tr>
+                                            <th>Türü</th>
+                                            <th>Miktar</th>
+                                            <th>Ödenen</th>
+                                            <th>Kalan</th>
+                                            <th>Durumu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Yıllık Aidat Ücreti
+                                            </td>
+                                            <td>
+                                                300 TL
+                                            </td>
+                                            <td>
+                                                0 TL
+                                            </td>
+                                            <td>
+                                                300  TL
+                                            </td>
+                                            <td>Ödenmedi</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/linq.min.js"></script>
+
+
+<script>
+
+    findMemberTotal();
+
+    function findMemberTotal() {
+
+        $.ajax({
+            type: "Get",
+            url: '../Public/UserList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                var mem = [];
+
+                for (var i = 0; i < res.memberLists.length; i++) {
+                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                }
+
+                $("#findMembers").autocomplete({
+                    source: mem,
+                });
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function getPaid() {
+
+        $('#exampleModal').modal('toggle')
+    }
+
+    function getList() {
+
+
+
+        $.ajax({
+            type: "Get",
+            url: '../Public/UserList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+                var userName = $("#findMembers").val();
+                var sptUserName = userName.split("-");
+                var memNum = sptUserName[0];
+
+
+                var memberInf = Enumerable.from(res.memberLists)
+                    .where(function (x) { return x.memberNumber == memNum.trim() })
+                    .select(function (x) { return x }).toArray();
+
+
+                if (memberInf.length > 0) {
+
+                    var id = memberInf[0].userId;
+
+                    $.ajax({
+                        type: "Get",
+                        url: '../AdminHome/GetDuesDebtMember',
+                        cache: false,
+                        dataType: "json",
+                        data: { "id": id },
+                        async: true,
+                        success: function (res) {
+
+                            debugger;
+
+                            $("#appendResInf").empty();
+
+
+                            row = "";
+                            row += '<div id="asd" class="card-body">';
+                            row += '<h4 style="margin-bottom:30px">Üye Aidat Borçları</h4>';
+                            row += '<table id="resList" class="table table-bordered table-hover">';
+                            row += '<thead>';
+                            row += '<tr style="text-align:center">';
+                            row += '<th>Üye Numarası</th>';
+                            row += '<th>Adı - Soyadı</th>';
+                            row += '<th>Aidat Yılı</th>';
+                            row += '<th>Aidat Türü</th>';
+                            row += '<th>Aidat Ücreti</th>';
+                            row += '<th>Borçlandırma Tarihi</th>';
+                            row += '<th>Açıklama</th>';
+                            row += '<th>Borç Durumu</th>';
+                            row += '<th>İşlemler</th>';
+                            row += '</tr>';
+                            row += '</thead>';
+
+
+
+                            for (var i = 0; i < res.memberDuesInfTables.length; i++) {
+
+                                if (res.memberDuesInfTables[i].duesInfType == false) {
+
+                                    row += '<tbody>';
+                                    row += '<tr style="text-align:center" id="">';
+                                    row += '<td>' + memberInf[0].memberNumber + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].memberFullName + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].duesYear + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].duesType + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].duesPrice + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].date + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].explain + '</td>';
+
+                                    if (res.memberDuesInfTables[i].priceCondition == true) {
+
+                                        row += '<td>' + "Ödendi" + '</td>';
+                                    }
+                                    else {
+                                        row += '<td>' + "Ödenmedi" + '</td>';
+                                    }
+                                    row += '<td><button class="btn btn-outline-dark" id="" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
+
+                                    row += '</tr>';
+                                    row += '</tbody>';
+
+                                }
+
+                            }
+
+                            row += '</table>';
+                            row += '</div>';
+                            row += '</div>';
+
+                            $("#appendResInf").append(row);
+
+                        },
+
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+
+</script>

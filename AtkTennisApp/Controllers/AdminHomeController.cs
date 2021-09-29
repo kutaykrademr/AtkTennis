@@ -1420,9 +1420,10 @@ namespace AtkTennisApp.Controllers
                 model.CabinetWho = who;
                 model.CabinetUserId = userId;
                 model.Date = date;
+                model.CabinetCondition = true;
 
 
-                if (price != null && code != null && who != null && type != null)
+                if (price != 0 && code != null && who != null && type != null)
                 {
                     db.Add(model);
                     db.SaveChanges();
@@ -2275,6 +2276,31 @@ namespace AtkTennisApp.Controllers
 
             model.memberDuesInfTables = db.memberDuesInfTables.ToList();
             model.memberLists = db.memberLists.ToList();
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new GeneralDebtViewModel();
+        }
+
+
+        [HttpGet("GetDuesDebtMember", Name = "GetDuesDebtMember")]
+        public GeneralDebtViewModel GetDuesDebtMember(string id)
+        {
+            GeneralDebtViewModel model = new GeneralDebtViewModel();
+
+            model.memberDuesInfTables = db.memberDuesInfTables.Where(x => x.MemberId == id).ToList();
+            model.memberLists = db.memberLists.Where(x => x.UserId == id).ToList();
+            model.cabinetListUsers = db.cabinetListUsers.Where(x => x.CabinetUserId == id).ToList();
+          
 
             try
             {
