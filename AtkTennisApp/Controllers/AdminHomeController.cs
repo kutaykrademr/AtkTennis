@@ -2315,6 +2315,144 @@ namespace AtkTennisApp.Controllers
 
             return new GeneralDebtViewModel();
         }
+
+        [HttpGet("GetResUser", Name = "GetResUser")]
+        public HomeModelView GetResUser(string id)
+        {
+            HomeModelView model = new HomeModelView();
+
+            model.reservations = db.reservations.Where(x => x.UserId == id).ToList();
+            model.reservationCancels = db.reservationCancels.Where(x => x.UserId == id).ToList();
+            model.memberLists = db.memberLists.Where(x => x.UserId == id).ToList();
+            model.courts = db.courts.ToList();
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new HomeModelView();
+        }
+
+        [HttpGet("GetReserInf", Name = "GetReserInf")]
+        public ResandResCancelViewModel GetReserInf(int id)
+        {
+            ResandResCancelViewModel model = new ResandResCancelViewModel();
+
+            model.reservation = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
+            model.reservationCancel = db.reservationCancels.Where(x => x.ResId == id).FirstOrDefault();
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new ResandResCancelViewModel();
+        }
+
+        [HttpGet("GetPaid", Name = "GetPaid")]
+        public AllGetPaidLogs GetPaid(string userId, int refId, int refType,
+            string doUserId, int price, int paidPrice, int remainingPrice,
+            int paymentType, int receiptNo, string receiptDate, string explain)
+        {
+            AllPaidLogsViewModel model = new AllPaidLogsViewModel();
+           
+
+            if (refType == 1)
+            {
+                    model.reservation = db.reservations.Where(x => x.ResId == refId).FirstOrDefault();
+
+                if (model.reservation != null)
+                {
+
+                 
+                    if (model.reservation.Price == 0)
+                    {
+                        model.reservation.PriceInf = true;
+                    }
+                    db.Update(model.reservation);
+                }
+
+                else
+                {
+                    model.reservationCancel = db.reservationCancels.Where(x => x.ResId == refId).FirstOrDefault();
+
+                    
+                    if (model.reservationCancel.Price == 0)
+                    {
+                        model.reservationCancel.PriceInf = true;
+                    }
+                    db.Update(model.reservationCancel);
+                }
+
+            }
+
+            model.allGetPaid.UserId = userId;
+            model.allGetPaid.Date = DateTime.Now.ToString("dd-MM-yyyy");
+            model.allGetPaid.RefId = refId;
+            model.allGetPaid.RefType = refType;
+            model.allGetPaid.DoOpUserId = doUserId;
+            model.allGetPaid.Price = price;
+            model.allGetPaid.PaidPrice = paidPrice;
+            model.allGetPaid.RemainingPrice = remainingPrice;
+            model.allGetPaid.PaymentType = paymentType;
+            model.allGetPaid.ReceiptNo = receiptNo;
+            model.allGetPaid.ReceiptDate = receiptDate;
+            model.allGetPaid.Explain = explain;
+
+            db.Add(model.allGetPaid);
+            db.SaveChanges();
+
+            try
+            {
+                return model.allGetPaid;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new AllGetPaidLogs();
+        }
+
+        public class ReservationPaymentInfo
+        {
+            public Reservation reservation { get; set; }
+            public AllGetPaidLogs paymentLog { get; set; }
+        }
+
+        [HttpGet("GetReservationPayment", Name = "GetReservationPayment")]
+        public void GetReservationPayment(string userid)
+        {
+            userid = userid.Replace(" ","");
+
+            var result = (from paidLogs in db.allGetPaidLogs
+                          join reservation in db.reservations on paidLogs.RefId equals reservation.ResId
+                          where reservation.UserId == userid && paidLogs.RefType == 1
+                          select new ReservationPaymentInfo
+                          {
+                              paymentLog = paidLogs,
+                              reservation = reservation
+
+                          }).ToList();
+
+        }
+
+
     }
 }
 

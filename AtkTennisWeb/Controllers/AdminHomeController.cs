@@ -16,6 +16,7 @@ namespace AtkTennisWeb.Controllers
 {   
     
     [AuthorizeUser]
+    [AdminUser]
     public class AdminHomeController : Controller
     {
         
@@ -36,6 +37,8 @@ namespace AtkTennisWeb.Controllers
 
             return View(model);
         }
+
+       
 
         public IActionResult NewRegister()
         {
@@ -250,7 +253,7 @@ namespace AtkTennisWeb.Controllers
             return View();
         }
 
-        public IActionResult ReservationDebtOperatins()
+        public IActionResult ReservationDebtOperations()
         {
             return View();
         }
@@ -892,7 +895,6 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-
         public JsonResult GetDuesDebtMember(string id)
         {
             GeneralDebtViewDto model = new GeneralDebtViewDto();
@@ -910,5 +912,70 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
 
         }
+
+        public JsonResult GetResUser(string id)
+        {
+            HomeModelDto model = new HomeModelDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetResUser?id=" + id));
+            }
+
+            catch (Exception)
+            {
+                return Json(new GeneralDebtViewDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult GetReserInf(int id)
+        {
+            ResandResCancelViewDto model = new ResandResCancelViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ResandResCancelViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetReserInf?id=" + id));
+            }
+
+            catch (Exception)
+            {
+                return Json(new ResandResCancelViewDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult GetPaid(string userId , int refId , int refType , 
+            string doUserId , int price , int paidPrice , int remainingPrice , 
+            int paymentType , int receiptNo , string receiptDate , string explain)
+        {
+            AllGetPaidLogsDto model = new AllGetPaidLogsDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<AllGetPaidLogsDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetPaid?userId=" + userId + "&refId=" + refId + "&refType=" + 
+                    refType + "&doUserId=" + doUserId + "&price=" + price + "&paidPrice=" + paidPrice
+                    + "&remainingPrice=" + remainingPrice + "&paymentType=" + paymentType + "&receiptNo=" + receiptNo
+                    + "&receiptDate=" + receiptDate + "&explain=" +explain
+                    ));
+            }
+
+            catch (Exception)
+            {
+                return Json(new AllGetPaidLogsDto());
+            }
+
+            return Json(model);
+
+        }
+
+
+
+     
+
     }
 }

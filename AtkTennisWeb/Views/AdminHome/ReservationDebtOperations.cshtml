@@ -4,6 +4,15 @@
     }
 </style>
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+    var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+
+<h2 style="display:none" id="currentUserId">@currentUserId</h2>
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -28,7 +37,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">
-                                <h3>Aidat Ödeme İşlemleri</h3>
+                                <h3>Rezervasyon Ödeme İşlemleri</h3>
                             </div>
 
                             <div id="selTime">
@@ -44,7 +53,7 @@
 
                     <div id="secimdetay" class="portlet light" style="padding: 15px;">
                         <div class="alert alert-info" style="margin-bottom: 0;">
-                            <strong>Aidat Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
+                            <strong>Rezervasyon Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
                         </div>
                     </div>
 
@@ -56,6 +65,13 @@
                         </div>
                     </div>
 
+                    <div class="card" style="border-radius:30px">
+                        <div id="append">
+                            <div class="portlet-body">
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -67,7 +83,7 @@
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Ödeme Al</h5>
@@ -77,18 +93,11 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5>Ödeme Al</h5>
                                 <table class="table table-bordered tblOdemeBilgisi28911" style=" margin-bottom: 0;">
                                     <tbody>
-                                        <tr class="note note-danger">
-                                            <td style="">Ödenen Miktar:</td>
-                                            <td style="">
-                                                <input type="text" name="OdenenMiktar" id="OdenenMiktar" class="form-control kotagizle" placeholder="Ödenen Miktar">
-                                            </td>
-                                        </tr>
                                         <tr class="note note-danger">
                                             <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
                                             <td style="">
@@ -101,59 +110,21 @@
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz No:</td>
-                                            <td style=""><input type="text" name="MakbuzNumarasi" class="form-control kotagizle" placeholder="Makbuz No"></td>
+                                            <td style=""><input id="receiptNo" type="text" name="MakbuzNumarasi" class="form-control kotagizle" placeholder="Makbuz No"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz Tarihi:</td>
-                                            <td><input class="form-control" type="date" id="dateStart" style="cursor:pointer;"></td>
+                                            <td><input class="form-control" type="date" id="receiptDate" style="cursor:pointer;"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Açıklama:</td>
-                                            <td style=""><input type="text" name="Aciklama" class="form-control  kotagizle" placeholder="Açıklama"></td>
+                                            <td style=""><input id="explain" type="text" name="Aciklama" class="form-control" placeholder="Açıklama"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td>Ücreti:</td>
                                             <td>
-                                                <input disabled type="text" class="form-control" value="300" autocomplete="new-password">
+                                                <input id="price" disabled type="text" class="form-control" autocomplete="new-password">
                                             </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="col-md-7">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Ödeme Bilgisi</h5>
-                                <table class="table table-bordered" style="text-align:center;">
-                                    <thead>
-                                        <tr>
-                                            <th>Türü</th>
-                                            <th>Miktar</th>
-                                            <th>Ödenen</th>
-                                            <th>Kalan</th>
-                                            <th>Durumu</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Yıllık Aidat Ücreti
-                                            </td>
-                                            <td>
-                                                300 TL
-                                            </td>
-                                            <td>
-                                                0 TL
-                                            </td>
-                                            <td>
-                                                300  TL
-                                            </td>
-                                            <td>Ödenmedi</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -162,10 +133,12 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+
+            <div id="paidOp" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="getPaidOperations(this.id)">Ödeme Al</button>
             </div>
+
         </div>
     </div>
 </div>
@@ -207,15 +180,116 @@
                 console.log(textStatus);
             }
         });
+
+
     }
 
-    function getPaid() {
+    function getPaid(id) {
+
+
+        $("#paidOp button:nth-of-type(2)").attr("id", id);
+
+
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $("#receiptDate").val(today)
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetReserInf',
+            cache: false,
+            dataType: "json",
+            data: { "id": id },
+            async: true,
+            success: function (res) {
+                debugger;
+
+                if (res.reservation.price != 0) {
+
+                    $("#price").val(res.reservation.price)
+                }
+                else {
+                    $("#price").val(res.reservationCancel.price)
+                }        
+               
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
 
         $('#exampleModal').modal('toggle')
     }
 
-    function getList() {
+    function getPaidOperations(id) {
 
+        debugger;
+
+        var userId = $("#userId").text();
+
+        if (userId == "") {
+
+            userId = $("#userId2").text();
+        }
+        var currentUserId = $("#currentUserId").text();
+        var price = $("#price").val();
+        var paidPrice = price;
+        var remainingPrice = $("#remainingPrice").val();
+        var receiptNo = $("#receiptNo").val();
+        var receiptDate = $("#receiptDate").val();
+        var explain = $("#explain").val();
+        
+
+        if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || remainingPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
+            alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
+        }
+        else {
+
+            $.ajax({
+                type: "Get",
+                url: '../AdminHome/GetPaid',
+                cache: false,
+                dataType: "json",
+                data: { "userId": userId, "refId": id, "refType": 1, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                async: true,
+                success: function (res) {
+
+                    if (res != null) {
+
+                        swal({
+                            title: "Ödeme Başarılı",
+                            text: "Ödeme Başarılı Şekilde Alındı !",
+                            icon: "success",
+                            button: "Tamam",
+                            timer: 500,
+                        }).then((value) => {
+
+                            $('#exampleModal').modal('toggle')
+                            getList();
+
+                        });
+                    }
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+        }
+    }
+
+    function getList() {
 
 
         $.ajax({
@@ -227,6 +301,7 @@
             success: function (res) {
 
                 debugger;
+
                 var userName = $("#findMembers").val();
                 var sptUserName = userName.split("-");
                 var memNum = sptUserName[0];
@@ -243,7 +318,7 @@
 
                     $.ajax({
                         type: "Get",
-                        url: '../AdminHome/GetDuesDebtMember',
+                        url: '../AdminHome/GetResUser',
                         cache: false,
                         dataType: "json",
                         data: { "id": id },
@@ -257,47 +332,99 @@
 
                             row = "";
                             row += '<div id="asd" class="card-body">';
-                            row += '<h4 style="margin-bottom:30px">Üye Aidat Borçları</h4>';
+                            row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
                             row += '<table id="resList" class="table table-bordered table-hover">';
                             row += '<thead>';
                             row += '<tr style="text-align:center">';
                             row += '<th>Üye Numarası</th>';
                             row += '<th>Adı - Soyadı</th>';
-                            row += '<th>Aidat Yılı</th>';
-                            row += '<th>Aidat Türü</th>';
-                            row += '<th>Aidat Ücreti</th>';
-                            row += '<th>Borçlandırma Tarihi</th>';
-                            row += '<th>Açıklama</th>';
-                            row += '<th>Borç Durumu</th>';
+                            row += '<th>Rezervasyon Tarihi</th>';
+                            row += '<th>Rezervasyon Saatleri</th>';
+                            row += '<th>Kort Bilgisi</th>';
+                            row += '<th>Ücret Durumu</th>';
+                            row += '<th>Ücret Bilgisi</th>';
+
                             row += '<th>İşlemler</th>';
                             row += '</tr>';
                             row += '</thead>';
 
 
 
-                            for (var i = 0; i < res.memberDuesInfTables.length; i++) {
+                            for (var i = 0; i < res.reservations.length; i++) {
 
-                                if (res.memberDuesInfTables[i].duesInfType == false) {
+                                if (res.reservations.length > 0 && res.reservations[i].priceInf == false) {
 
                                     row += '<tbody>';
                                     row += '<tr style="text-align:center" id="">';
-                                    row += '<td>' + memberInf[0].memberNumber + '</td>';
-                                    row += '<td>' + res.memberDuesInfTables[i].memberFullName + '</td>';
-                                    row += '<td>' + res.memberDuesInfTables[i].duesYear + '</td>';
-                                    row += '<td>' + res.memberDuesInfTables[i].duesType + '</td>';
-                                    row += '<td>' + res.memberDuesInfTables[i].duesPrice + '</td>';
-                                    row += '<td>' + res.memberDuesInfTables[i].date + '</td>';
-                                    row += '<td>' + res.memberDuesInfTables[i].explain + '</td>';
+                                    row += '<td id="userId" style="display:none">' + res.memberLists[0].userId + '</td>';
+                                    row += '<td>' + res.memberLists[0].memberNumber + '</td>';
+                                    row += '<td>' + res.memberLists[0].fullName + '</td>';
+                                    row += '<td>' + res.reservations[i].resDate + '</td>';
+                                    row += '<td>' + res.reservations[i].resStartTime + ' - ' + res.reservations[i].resFinishTime + '</td>';
+                                    row += '<td>' + res.reservations[i].court.courtName + '</td>';
+                                    row += '<td>' + "Ödenmedi" + '</td>';
+                                    row += '<td>' + res.reservations[i].price + '₺' + '</td>';
 
-                                    if (res.memberDuesInfTables[i].priceCondition == true) {
 
-                                        row += '<td>' + "Ödendi" + '</td>';
+                                    row += '<td><button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
+
+                                    row += '</tr>';
+                                    row += '</tbody>';
+
+                                }
+                                
+                            }
+
+                            row += '</table>';
+                            row += '</div>';
+                            row += '</div>';
+
+                            $("#appendResInf").append(row);
+
+
+                            $("#append").empty();
+
+
+                            row = "";
+                            row += '<div id="asd" class="card-body">';
+                            row += '<h4 style="margin-bottom:30px">Rezervasyon İptal Borçları</h4>';
+                            row += '<table id="resList" class="table table-bordered table-hover">';
+                            row += '<thead>';
+                            row += '<tr style="text-align:center">';
+                            row += '<th>Üye Numarası</th>';
+                            row += '<th>Adı - Soyadı</th>';
+                            row += '<th>Rezervasyon Tarihi</th>';
+                            row += '<th>Rezervasyon Saatleri</th>';
+                            row += '<th>Kort Bilgisi</th>';
+                            row += '<th>Ücret Durumu</th>';
+                            row += '<th>Ücret Bilgisi</th>';
+
+                            row += '<th>İşlemler</th>';
+                            row += '</tr>';
+                            row += '</thead>';
+
+
+
+                            for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                                if (res.reservationCancels.length > 0 && res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false) {
+
+                                    row += '<tbody>';
+                                    row += '<tr style="text-align:center" id="">';
+                                    row += '<td id="userId2" style="display:none">' + res.reservationCancels[0].userId + '</td>';
+                                    row += '<td>' + res.memberLists[0].memberNumber + '</td>';
+                                    row += '<td>' + res.memberLists[0].fullName + '</td>';
+                                    row += '<td>' + res.reservationCancels[i].resDate + '</td>';
+                                    row += '<td>' + res.reservationCancels[i].resStartTime + ' - ' + res.reservationCancels[i].resFinishTime + '</td>';
+                                    for (var c = 0; c < res.courts.length; c++) {
+                                        if (res.courts[c].courtId == res.reservationCancels[i].courtId) {
+                                            row += '<td>' + res.courts[c].courtName + '</td>';
+                                        }
                                     }
-                                    else {
-                                        row += '<td>' + "Ödenmedi" + '</td>';
-                                    }
-                                    row += '<td><button class="btn btn-outline-dark" id="" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
 
+                                    row += '<td>' + "Ödenmedi" + '</td>';
+                                    row += '<td>' + res.reservationCancels[i].price + '₺' + '</td>';
+                                    row += '<td><button class="btn btn-outline-dark" id="' + res.reservationCancels[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
                                     row += '</tr>';
                                     row += '</tbody>';
 
@@ -309,7 +436,7 @@
                             row += '</div>';
                             row += '</div>';
 
-                            $("#appendResInf").append(row);
+                            $("#append").append(row);
 
                         },
 

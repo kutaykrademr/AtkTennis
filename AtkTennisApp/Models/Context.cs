@@ -56,6 +56,8 @@ namespace AtkTennis.Models
   
         public DbSet<ToDoList> toDoLists { get; set; }
 
+        public DbSet<AllGetPaidLogs> allGetPaidLogs { get; set; }
+
 
     }
 }
