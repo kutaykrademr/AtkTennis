@@ -34,7 +34,7 @@ namespace AtkTennisApp.Controllers
 
         Context db = new Context();
 
-       
+
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelView GetHome()
         {
@@ -2300,7 +2300,7 @@ namespace AtkTennisApp.Controllers
             model.memberDuesInfTables = db.memberDuesInfTables.Where(x => x.MemberId == id).ToList();
             model.memberLists = db.memberLists.Where(x => x.UserId == id).ToList();
             model.cabinetListUsers = db.cabinetListUsers.Where(x => x.CabinetUserId == id).ToList();
-          
+
 
             try
             {
@@ -2362,26 +2362,105 @@ namespace AtkTennisApp.Controllers
             return new ResandResCancelViewModel();
         }
 
+        public class GetPaidDuesViewModel
+        {
+            public MemberDuesInfTable memberDuesInf { get; set; }
+            public List<AllGetPaidLogs> AllGetPaidLogs { get; set; } = new List<AllGetPaidLogs>();
+        }
+
+        [HttpGet("GetDuesInf", Name = "GetDuesInf")]
+        public GetPaidDuesViewModel GetDuesInf(int id)
+        {
+            GetPaidDuesViewModel model = new GetPaidDuesViewModel();
+
+            model.memberDuesInf = db.memberDuesInfTables.Where(x => x.MemberDuesInfTableId == id).FirstOrDefault();
+            model.AllGetPaidLogs = db.allGetPaidLogs.Where(x => x.RefId == id).ToList();
+
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new GetPaidDuesViewModel();
+        }
+
+        [HttpGet("GetCabinetInf", Name = "GetCabinetInf")]
+        public GetPaidDuesViewModel GetCabinetInf(int id)
+        {
+            GetPaidDuesViewModel model = new GetPaidDuesViewModel();
+
+     
+
+            model.memberDuesInf = db.memberDuesInfTables.Where(x => x.MemberDuesInfTableId == id).FirstOrDefault();
+            model.AllGetPaidLogs = db.allGetPaidLogs.Where(x => x.RefId == id).ToList();
+          
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new GetPaidDuesViewModel();
+        }
+
+        [HttpGet("GetResCancelList", Name = "GetResCancelList")]
+        public ReservationListViewModel GetResCancelList(string date)
+        {
+            ReservationListViewModel model = new ReservationListViewModel();
+
+
+            model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
+            model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
+            model.memberLists = db.memberLists.ToList();
+            model.courts = db.courts.ToList();
+
+
+            try
+            {
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new ReservationListViewModel();
+        }
+
+
         [HttpGet("GetPaid", Name = "GetPaid")]
         public AllGetPaidLogs GetPaid(string userId, int refId, int refType,
             string doUserId, int price, int paidPrice, int remainingPrice,
             int paymentType, int receiptNo, string receiptDate, string explain)
         {
             AllPaidLogsViewModel model = new AllPaidLogsViewModel();
-           
+
 
             if (refType == 1)
             {
-                    model.reservation = db.reservations.Where(x => x.ResId == refId).FirstOrDefault();
+                model.reservation = db.reservations.Where(x => x.ResId == refId).FirstOrDefault();
 
                 if (model.reservation != null)
                 {
 
-                 
-                    if (model.reservation.Price == 0)
-                    {
-                        model.reservation.PriceInf = true;
-                    }
+                    model.reservation.Price = 0;
+                    model.reservation.PriceInf = true;
+
                     db.Update(model.reservation);
                 }
 
@@ -2389,14 +2468,58 @@ namespace AtkTennisApp.Controllers
                 {
                     model.reservationCancel = db.reservationCancels.Where(x => x.ResId == refId).FirstOrDefault();
 
-                    
-                    if (model.reservationCancel.Price == 0)
-                    {
-                        model.reservationCancel.PriceInf = true;
-                    }
+
+                    model.reservationCancel.Price = 0;
+                    model.reservationCancel.PriceInf = true;
+
                     db.Update(model.reservationCancel);
                 }
 
+            }
+
+            else if (refType == 2)
+
+            {
+                model.memberDuesInf = db.memberDuesInfTables.Where(x => x.MemberDuesInfTableId == refId).FirstOrDefault();
+
+                if (model.memberDuesInf != null)
+                {
+
+
+                    if (model.memberDuesInf.DuesPrice - paidPrice == 0)
+                    {
+                        model.memberDuesInf.DuesPrice = 0;
+                        model.memberDuesInf.PriceCondition = true;
+                    }
+                    else
+                    {
+                        model.memberDuesInf.DuesPrice = price - paidPrice;
+                    }
+
+                    db.Update(model.memberDuesInf);
+                }
+            }
+
+            else
+            {
+                model.memberDuesInf = db.memberDuesInfTables.Where(x => x.MemberDuesInfTableId == refId).FirstOrDefault();
+
+                if (model.memberDuesInf != null)
+                {
+
+
+                    if (model.memberDuesInf.DuesPrice - paidPrice == 0)
+                    {
+                        model.memberDuesInf.DuesPrice = 0;
+                        model.memberDuesInf.PriceCondition = true;
+                    }
+                    else
+                    {
+                        model.memberDuesInf.DuesPrice = price - paidPrice;
+                    }
+
+                    db.Update(model.memberDuesInf);
+                }
             }
 
             model.allGetPaid.UserId = userId;
@@ -2429,30 +2552,7 @@ namespace AtkTennisApp.Controllers
             return new AllGetPaidLogs();
         }
 
-        public class ReservationPaymentInfo
-        {
-            public Reservation reservation { get; set; }
-            public AllGetPaidLogs paymentLog { get; set; }
-        }
-
-        [HttpGet("GetReservationPayment", Name = "GetReservationPayment")]
-        public void GetReservationPayment(string userid)
-        {
-            userid = userid.Replace(" ","");
-
-            var result = (from paidLogs in db.allGetPaidLogs
-                          join reservation in db.reservations on paidLogs.RefId equals reservation.ResId
-                          where reservation.UserId == userid && paidLogs.RefType == 1
-                          select new ReservationPaymentInfo
-                          {
-                              paymentLog = paidLogs,
-                              reservation = reservation
-
-                          }).ToList();
-
-        }
-
-
+   
     }
 }
 

@@ -1,0 +1,609 @@
+﻿<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+    var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+
+<h2 style="display:none" id="currentUserId">@currentUserId</h2>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="d-flex justify-content-between">
+
+                            <div style="margin:8px" id="TimeInf"><h4 id="timeInfH4" style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i> 05-10-2021  -  Salı </h4></div>
+
+
+                            <div style="margin-top:8px">
+                                <nav style="margin-right:20px" aria-label="Page navigation example">
+                                    <ul class="pagination">
+
+                                        @{
+                                            DateTime date1 = DateTime.Now;
+                                            var date2 = date1.AddDays(1);
+                                            var today = date1.ToString("yyyy-MM-dd");
+                                            var tomorrow = date2.ToString("yyyy-MM-dd");
+                                        }
+
+                                        <li class="page-item"><a style="color:white; cursor:pointer; background-color:#3fc9d5 !important" class="page-link" onclick="getRes()">Rezervasyon</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" onclick="getDues()">Aidat</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#283593" class="page-link" onclick="getCabinet()">Dolap</a></li>
+
+
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="portlet-body">
+                        <div id="secimdetay" class="portlet light" style="padding: 15px;">
+                            <div class="alert alert-info" style="margin-bottom: 0;">
+                                <strong>Ödeme Raporları Listesi!</strong> İlgili Alanları Seçerek İşleme Devam Ediniz.
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div id="appendResInf" class="card" style="border-radius:30px">
+
+                    </div>
+
+                    <div id="appendResInf2" class="card" style="border-radius:30px">
+
+                    </div>
+
+                    <div id="appendResInf3" class="card" style="border-radius:30px">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/linq.min.js"></script>
+
+
+<script>
+
+
+    function getDues() {
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/GetDuesPayment',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+       
+
+                row = "";
+                $("#appendResInf").empty();
+
+
+                row += '<div id="asd" class="card-body">';
+                row += '<h4>Ödeme Alınanlar</h4>';
+                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen Ücret</th>';
+                row += '<th>Kalan Ücret</th>';
+                row += '<th>Ödeme Alan</th>';
+                row += '<th>Ödeme Tarihi</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+                
+
+                for (var i = 0; i < res.duesInf.length; i++) {
+
+                   
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
+                        .select(function (x) { return x }).toArray();
+
+                    var getPayment = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                        .select(function (x) { return x }).toArray();
+
+
+                
+
+                    row += '<tbody>';
+                    row += '<tr style="text-align:center" id="">';
+                    row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
+                    if (res.duesInf[i].dues.priceCondition) {
+                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                    else {
+                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                    
+                    row += '<td>' + memberInf[0].memberNumber + '</td>';
+                    row += '<td>' + memberInf[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                    row += '<td>' + getPayment[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
+
+
+                    row += '</tr>';
+                    row += '</tbody>';
+
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf").append(row);
+
+                memberDuesDebtList();
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+     
+
+    }
+
+    function memberDuesDebtList() {
+        
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/MemberDuesDebtList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                row = "";
+                $("#appendResInf2").empty();
+                $("#appendResInf3").empty();
+
+                row += '<div id="asd" class="card-body">';
+                row += '<h4>Borcu Olanlar</h4>';
+                row += '<table id="" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Borçlandırma Tarihi</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ücret Durumu</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+
+
+                for (var i = 0; i < res.length; i++) {
+
+                    if (res[i].priceCondition == false && res[i].duesInfType == false) {
+
+                        row += '<tbody>';
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td style="display:none" id="userId">' + res[i].userId + '</td>';
+
+
+                        row += '<td style="background-color:#EF5350">' + res[i].memberDuesInfTableId + '</td>';
+                       
+                        row += '<td>' + res[i].memberFullName + '</td>';
+                        row += '<td>' + res[i].duesType + '</td>';
+                        row += '<td>' + res[i].duesYear + '</td>';
+                        row += '<td>' + res[i].date + '</td>';
+                        row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
+                        row += '<td >' + "Ödenmedi" + '</td>';
+                        row += '<td>' + res[i].explain + '</td>';
+
+
+
+                        row += '</tr>';
+                        row += '</tbody>';
+                    }
+
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf2").append(row);
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getCabinet() {
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/GetCabinetPayment',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                row = "";
+                $("#appendResInf").empty();
+                $("#appendResInf3").empty();
+
+
+                row += '<div i class="card-body">';
+                row += '<h4>Ödeme Alınanlar</h4>';
+                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen Ücret</th>';
+                row += '<th>Kalan Ücret</th>';
+                row += '<th>Ödeme Alan</th>';
+                row += '<th>Ödeme Tarihi</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+                debugger;
+
+                for (var i = 0; i < res.duesInf.length; i++) {
+
+                    debugger;
+
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
+                        .select(function (x) { return x }).toArray();
+
+                    var getPayment = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                        .select(function (x) { return x }).toArray();
+
+
+
+
+                    row += '<tbody>';
+                    row += '<tr style="text-align:center" id="">';
+                    row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
+
+                    if (res.duesInf[i].dues.priceCondition) {
+                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                    else {
+                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                   
+                    row += '<td>' + memberInf[0].memberNumber + '</td>';
+                    row += '<td>' + memberInf[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                    row += '<td>' + getPayment[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
+
+
+                    row += '</tr>';
+                    row += '</tbody>';
+
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf").append(row);
+
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function getRes() {
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/GetResPayment',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                row = "";
+                $("#appendResInf").empty();
+
+
+                row += '<div i class="card-body">';
+                row += '<h4>Ödeme Alınanlar</h4>';
+                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Türü</th>';
+                row += '<th>Rezervasyon Tarihi</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen Ücret</th>';
+                row += '<th>Kalan Ücret</th>';
+                row += '<th>Ödeme Alan</th>';
+                row += '<th>Ödeme Tarihi</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+               
+                for (var i = 0; i < res.duesInf.length; i++) {
+
+                 
+
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].res.userId })
+                        .select(function (x) { return x }).toArray();
+
+                    var getPayment = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                        .select(function (x) { return x }).toArray();
+
+
+
+
+                    row += '<tbody>';
+                    row += '<tr style="text-align:center" id="">';
+                    row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
+
+                    if (res.duesInf[i].res.priceInf) {
+                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                    else {
+                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+
+                    row += '<td>' + memberInf[0].memberNumber + '</td>';
+                    row += '<td>' + memberInf[0].fullName + '</td>';
+                    row += '<td>' + "Rezervasyon Ödemesi" + '</td>';
+                    row += '<td>' + res.duesInf[i].res.resDate + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                    row += '<td>' + getPayment[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                    row += '<td>' + res.duesInf[i].paymentLog.explain + '</td>';
+
+
+                    row += '</tr>';
+                    row += '</tbody>';
+
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf").append(row);
+
+                memberResDebtList();
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function memberResDebtList() {
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/MemberReservationDebtList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+               
+
+                row = "";
+                $("#appendResInf2").empty();
+
+
+                row += '<div id="asd" class="card-body">';
+                row += '<h4>Borcu Olanlar</h4>';
+                row += '<table id="" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Kort Adı</th>';
+                row += '<th>Rezervasyon Tarihi</th>';
+                row += '<th>Rezervasyon Saati</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ücret Durumu</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+
+
+                for (var i = 0; i < res.reservation.length; i++) {
+
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.reservation[i].userId })
+                        .select(function (x) { return x }).toArray();
+
+                    if (res.reservation[i].priceInf == false && res.reservation[i].procedure == false) {
+
+                        row += '<tbody>';
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td style="display:none" id="userId">' + res.reservation[i].userId + '</td>';
+                        row += '<td style="background-color:#EF5350">' + res.reservation[i].resId + '</td>';
+                        row += '<td>' + memberInf[0].memberNumber + '</td>';
+                        row += '<td>' + memberInf[0].fullName + '</td>';
+                        row += '<td>' + res.reservation[i].court.courtName + '</td>';
+                        row += '<td>' + res.reservation[i].resDate + '</td>';
+                        row += '<td>' + res.reservation[i].resStartTime + "-" + res.reservation[i].resFinishTime + '</td>';
+                        row += '<td>' + res.reservation[i].price + '</td>';
+                        row += '<td>' + "Ödenmedi" + '</td>';
+                        row += '</tr>';
+                        row += '</tbody>';
+                    }
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf2").append(row);
+
+
+
+
+                newRow = "";
+                $("#appendResInf3").empty();
+
+                debugger;
+
+                newRow += '<div id="asd" class="card-body">';
+                newRow += '<h4>Borcu Olanlar (Rezervasyon İptal)</h4>';
+                newRow += '<table id="" class="table table-bordered table-hover">';
+                newRow += '<thead>';
+                newRow += '<tr style="text-align:center">';
+                newRow += '<th>#</th>';
+                newRow += '<th>Üye Numarası</th>';
+                newRow += '<th>Üye Adı</th>';
+                newRow += '<th>Kort Adı</th>';
+                newRow += '<th>Rezervasyon Tarihi</th>';
+                newRow += '<th>Rezervasyon Saati</th>';
+                newRow += '<th>Ücreti</th>';
+                newRow += '<th>Ücret Durumu</th>';
+                newRow += '</tr>';
+                newRow += '</thead>';
+
+
+
+                for (var i = 0; i < res.reservationCancel.length; i++) {
+
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.reservationCancel[i].userId })
+                        .select(function (x) { return x }).toArray();
+
+                    if (res.reservation[i].priceInf == false && res.reservationCancel[i].procedure == false) {
+
+                        newRow += '<tbody>';
+                        newRow += '<tr style="text-align:center" id="">';
+                        newRow += '<td style="display:none" id="userId">' + res.reservationCancel[i].userId + '</td>';
+                        newRow += '<td style="background-color:#EF5350">' + res.reservationCancel[i].resId + '</td>';
+                        newRow += '<td>' + memberInf[0].memberNumber + '</td>';
+                        newRow += '<td>' + memberInf[0].fullName + '</td>';
+                        for (var x = 0; x < res.courts.length; x++) {
+                            if (res.reservationCancel[i].courtId == res.courts[x].courtId) {
+                                newRow += '<td>' + res.courts[x].courtName + '</td>';
+                            }
+                        }
+                        newRow += '<td>' + res.reservationCancel[i].resDate + '</td>';
+                        newRow += '<td>' + res.reservationCancel[i].resStartTime + "-" + res.reservationCancel[i].resFinishTime + '</td>';
+                        newRow += '<td>' + res.reservationCancel[i].price + '</td>';
+                        newRow += '<td>' + "Ödenmedi" + '</td>';
+                        newRow += '</tr>';
+                        newRow += '</tbody>';
+                    }
+                }
+
+                newRow += '</table>';
+                newRow += '</div>';
+                newRow += '</div>';
+
+
+                $("#appendResInf3").append(newRow);
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+</script>

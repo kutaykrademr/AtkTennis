@@ -258,6 +258,15 @@ namespace AtkTennisWeb.Controllers
             return View();
         }
 
+        public IActionResult AllReservationCancelList()
+        {
+            return View();
+        }
+
+        public IActionResult AllReservationList()
+        {
+            return View();
+        }
 
         //public IActionResult RegisterStudent()
         //{
@@ -938,6 +947,67 @@ namespace AtkTennisWeb.Controllers
             try
             {
                 model = Helpers.Serializers.DeserializeJson<ResandResCancelViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetReserInf?id=" + id));
+            }
+
+            catch (Exception)
+            {
+                return Json(new ResandResCancelViewDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult GetCabinetInf(int id)
+        {
+            GetPaidDuesModel model = new GetPaidDuesModel();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<GetPaidDuesModel>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetCabinetInf?id=" + id));
+            }
+
+            catch (Exception)
+            {
+                return Json(new GetPaidDuesModel());
+            }
+
+            return Json(model);
+
+        }
+
+        public JsonResult GetResCancelList(string date)
+        {
+            ReservationListViewDto model = new ReservationListViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetResCancelList?date=" + date));
+            }
+
+            catch (Exception)
+            {
+                return Json(new ReservationListViewDto());
+            }
+
+            return Json(model);
+
+        }
+
+        public class GetPaidDuesModel
+        {
+            public MemberDuesInfTableDto memberDuesInf { get; set; }
+            public List<AllGetPaidLogsDto> AllGetPaidLogs { get; set; } = new List<AllGetPaidLogsDto>();
+        }
+
+        public JsonResult GetDuesInf(int id)
+        {
+
+            GetPaidDuesModel model = new GetPaidDuesModel();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<GetPaidDuesModel>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetDuesInf?id=" + id));
             }
 
             catch (Exception)

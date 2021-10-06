@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -29,8 +30,9 @@ namespace Helpers
 
                 return JsonConvert.DeserializeObject<T>(obj, jsonSerializerSettings);
             }
-            catch
+            catch(Exception e)
             {
+
                 return default(T);
             }
         }

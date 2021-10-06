@@ -1,0 +1,311 @@
+﻿<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+    var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+<h2 style="display:none" id="currentUserId">@currentUserId</h2>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="d-flex justify-content-between">
+
+                            <div style="margin:8px" id="TimeInf"><h4 id="timeInfH4" style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i> 05-10-2021  -  Salı </h4></div>
+
+
+                            <div style="margin-top:8px">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+
+                                        @{
+                                        DateTime date1 = DateTime.Now;
+                                        var date2 = date1.AddDays(1);
+                                        var today = date1.ToString("yyyy-MM-dd");
+                                        var tomorrow = date2.ToString("yyyy-MM-dd");
+                                        }
+
+                                        <li class="page-item"><a style="color:white; cursor:pointer; background-color:#3fc9d5 !important" class="page-link" id="@today" onclick="getResCancelList(this.id)">Bugün</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" id="@tomorrow" onclick="getResCancelList(this.id)">Yarın</a></li>
+                                        <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer; background-color:#e7505a; color:white"></li>
+                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
+                                        <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
+
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="portlet-body">
+                        <div id="secimdetay" class="portlet light" style="padding: 15px;">
+                            <div class="alert alert-info" style="margin-bottom: 0;">
+                                <strong>Rezervasyon İptal Listesi!</strong> İlgili tarih bilgisini bularak işleme devam ediniz.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="appendResInf" class="card" style="border-radius:30px">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/linq.min.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $('#timeNowModal').val(today);
+
+        getResCancelList($('#timeNowModal').val());
+    });
+
+
+    $('#timeNowModal').change(function () {
+
+        getResCancelList($('#timeNowModal').val());
+
+    });
+
+    function nextDate() {
+
+        var date = $("#timeNowModal").val();
+
+        const d = new Date(date);
+        d.setDate(d.getDate() + 1);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+
+        var date3 = d.getFullYear() + '-' + month + '-' + day;
+
+        
+      
+        getResCancelList(date3);
+    }
+
+    function preDate() {
+
+        var date = $("#timeNowModal").val();
+
+        const d = new Date(date);
+        d.setDate(d.getDate() - 1);
+
+        var month = (d.getMonth() + 1);
+        var day = d.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        var date4 = d.getFullYear() + '-' + month + '-' + day;
+
+
+        getResCancelList(date4);
+
+    }
+
+    function getResCancelList(date) {
+
+
+        $("#timeNowModal").val(date);
+
+
+        $.ajax({
+
+            type: "Get",
+            url: '../AdminHome/GetResCancelList',
+            cache: false,
+            dataType: "json",
+            data: { "date": date },
+            async: true,
+            success: function (res) {
+
+                row = "";
+                $("#appendResInf").empty();
+
+                if (res.reservationCancels.length > 0) {
+
+                    row += '<div id="asd" class="card-body">';
+                    row += '<h4 style="margin-bottom:30px">Rezervasyon İptal Listesi</h4>';
+                    row += '<table id="resList" class="table table-bordered table-hover">';
+                    row += '<thead>';
+                    row += '<tr style="text-align:center">';
+                    row += '<th>Rezervasyon Id</th>';
+                    row += '<th>Üye Numarası</th>';
+                    row += '<th>Adı - Soyadı</th>';
+                    row += '<th>Kort Adı</th>';
+                    row += '<th>Tarihi</th>';
+                    row += '<th>Başlangıç Saati</th>';
+                    row += '<th>Bitiş Saati</th>';
+                    row += '<th>Ücreti</th>';
+                    row += '<th>Ücret Durumu</th>';
+                    row += '<th>Prosedür</th>';
+                    row += '<th>İptal Eden</th>';
+                    row += '</tr>';
+                    row += '</thead>';
+
+
+                    for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                        var memberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.reservationCancels[i].userId })
+                            .select(function (x) { return x }).toArray();
+
+                        var cancelMemberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.reservationCancels[i].cancelResUserId })
+                            .select(function (x) { return x }).toArray();
+
+                        var courtId = res.reservationCancels[i].courtId;
+
+
+                        for (var c = 0; c < res.courts.length; c++) {
+                            if (res.courts[c].courtId == courtId) {
+
+                                var courtName = res.courts[c].courtName;
+                            }
+                        }
+
+                        row += '<tbody>';
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
+                        row += '<td>' + res.reservationCancels[i].resId + '</td>';
+                        row += '<td>' + memberInf[0].memberNumber + '</td>';
+                        row += '<td>' + memberInf[0].fullName + '</td>';
+                        row += '<td>' + courtName + '</td>';
+                        row += '<td>' + res.reservationCancels[i].resDate + '</td>';
+                        row += '<td>' + res.reservationCancels[i].resStartTime + '</td>';
+                        row += '<td>' + res.reservationCancels[i].resFinishTime + '</td>';
+                        row += '<td>' + res.reservationCancels[i].price + '</td>';
+                        if (res.reservationCancels[i].priceInf) {
+                            row += '<td>' + "Ödendi" + '</td>';
+                        }
+                        else {
+                            row += '<td>' + "Ödenmedi" + '</td>';
+                        }
+                        if (res.reservationCancels[i].procedure) {
+                            row += '<td>' + "Var" + '</td>';
+                        }
+                        else {
+                            row += '<td>' + "Yok" + '</td>';
+                        }
+                       
+                        row += '<td>' + cancelMemberInf[0].fullName + '</td>';
+
+
+
+                        row += '</tr>';
+                        row += '</tbody>';
+
+                    }
+
+                    row += '</table>';
+                    row += '</div>';
+                    row += '</div>';
+                }
+
+                else {
+
+                    row += '<h4 style="text-align:center">Rezervasyon İptali Bulunamamıştır.</h4>';
+                }
+
+                $("#appendResInf").append(row);
+
+                timeInf();
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function timeInf() {
+
+        var time = $('#timeNowModal').val();
+        var b = time.split("-");
+        var timeNow = b[2] + '-' + b[1] + '-' + b[0];
+
+        var days = new Date(time);
+        var getday = days.getDay();
+
+
+        switch (getday) {
+            case 0:
+                day = "Pazar";
+                break;
+            case 1:
+                day = "Pazartesi";
+                break;
+            case 2:
+                day = "Salı";
+                break;
+            case 3:
+                day = "Çarşamba";
+                break;
+            case 4:
+                day = "Perşembe";
+                break;
+            case 5:
+                day = "Cuma";
+                break;
+            case 6:
+                day = "Cumartesi";
+        }
+
+        $("#TimeInf").empty();
+        row = "";
+        row += '<h4 id="timeInfH4" style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i>' + ' ' + timeNow + ' ' + ' - ' + ' ' + day + ' ' + '</h4>';
+        $("#TimeInf").append(row);
+
+    }
+
+</script>

@@ -4,6 +4,15 @@
     }
 </style>
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+    var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
+
+<h2 style="display:none" id="currentUserId">@currentUserId</h2>
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -81,40 +90,41 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>Ödeme Al</h5>
-                                <table class="table table-bordered tblOdemeBilgisi28911" style=" margin-bottom: 0;">
+                                <table class="table table-bordered" style=" margin-bottom: 0;">
                                     <tbody>
                                         <tr class="note note-danger">
                                             <td style="">Ödenen Miktar:</td>
                                             <td style="">
-                                                <input type="text" name="OdenenMiktar" id="OdenenMiktar" class="form-control kotagizle" placeholder="Ödenen Miktar">
+                                                <input type="text" id="paidPrice" class="form-control" placeholder="Ödenen Miktar">
                                             </td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
                                             <td style="">
-                                                <select class="form-control OdemeTipi" name="OdemeTipi" id="OdemeTipi28911" data-id="28911">
+                                                <select class="form-control OdemeTipi" id="paymentType" data-id="28911">
                                                     <option value="1">Nakit</option>
                                                     <option value="2">Kredi Kartı</option>
-                                                    <option value="3">Havale * Eft</option>
+                                                    <option value="3">Havale </option>
+                                                    <option value="4">Eft </option>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz No:</td>
-                                            <td style=""><input type="text" name="MakbuzNumarasi" class="form-control kotagizle" placeholder="Makbuz No"></td>
+                                            <td style=""><input type="text" id="receiptNo" class="form-control" placeholder="Makbuz No"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz Tarihi:</td>
-                                            <td><input class="form-control" type="date" id="dateStart" style="cursor:pointer;"></td>
+                                            <td><input class="form-control" type="date" id="receiptDate" style="cursor:pointer;"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Açıklama:</td>
-                                            <td style=""><input type="text" name="Aciklama" class="form-control  kotagizle" placeholder="Açıklama"></td>
+                                            <td style=""><input type="text" id="explain" class="form-control  kotagizle" placeholder="Açıklama"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td>Ücreti:</td>
                                             <td>
-                                                <input disabled type="text" class="form-control" value="300" autocomplete="new-password">
+                                                <input disabled type="text" class="form-control" id="price" autocomplete="new-password">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -128,33 +138,22 @@
                     <div class="col-md-7">
                         <div class="card">
                             <div class="card-body">
-                                <h5>Ödeme Bilgisi</h5>
+                                <h5>Ödeme Geçmişi</h5>
                                 <table class="table table-bordered" style="text-align:center;">
                                     <thead>
                                         <tr>
-                                            <th>Türü</th>
+
+                                            <th>#</th>
+                                            <th>Adı</th>
+                                            <th>Aidat Türü</th>
                                             <th>Miktar</th>
                                             <th>Ödenen</th>
                                             <th>Kalan</th>
-                                            <th>Durumu</th>
+
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Yıllık Aidat Ücreti
-                                            </td>
-                                            <td>
-                                                300 TL
-                                            </td>
-                                            <td>
-                                                0 TL
-                                            </td>
-                                            <td>
-                                                300  TL
-                                            </td>
-                                            <td>Ödenmedi</td>
-                                        </tr>
+                                    <tbody id="allLastOp">
+                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -162,9 +161,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+            <div id="paidOp" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="getPaidOperations(this.id)">Kaydet</button>
             </div>
         </div>
     </div>
@@ -176,6 +175,72 @@
 <script>
 
     findMemberTotal();
+
+    function getPaidOperations(id) {
+
+        debugger;
+
+        var userId = $("#userId").text();
+
+        if (userId == "") {
+
+            userId = $("#userId2").text();
+        }
+        var currentUserId = $("#currentUserId").text();
+        var price = $("#price").val();
+        var paidPrice = $("#paidPrice").val();
+        var receiptNo = $("#receiptNo").val();
+        var receiptDate = $("#receiptDate").val();
+        var explain = $("#explain").val();
+
+
+        if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
+            alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
+        }
+        else {
+
+            if (parseInt(price) - parseInt(paidPrice) < 0) {
+                alert("fazla tutar girdiniz !");
+            }
+            else {
+                $.ajax({
+                    type: "Get",
+                    url: '../AdminHome/GetPaid',
+                    cache: false,
+                    dataType: "json",
+                    data: { "userId": userId, "refId": id, "refType": 2, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                    async: true,
+                    success: function (res) {
+
+                        if (res != null) {
+
+                            swal({
+                                title: "Ödeme Başarılı",
+                                text: "Ödeme Başarılı Şekilde Alındı !",
+                                icon: "success",
+                                button: "Tamam",
+                                timer: 500,
+                            }).then((value) => {
+
+                                $('#exampleModal').modal('toggle')
+                                getList();
+
+                            });
+                        }
+
+                    },
+
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+
+
+        }
+    }
+
 
     function findMemberTotal() {
 
@@ -209,10 +274,73 @@
         });
     }
 
-    function getPaid() {
+
+    function getPaid(id) {
+
+        $("#paidOp button:nth-of-type(2)").attr("id", id);
+
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $("#receiptDate").val(today)
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetDuesInf',
+            cache: false,
+            dataType: "json",
+            data: { "id": id },
+            async: true,
+            success: function (res) {
+
+                debugger;
+                $("#allLastOp").empty();
+
+                if (res.allGetPaidLogs.length > 0) {
+
+                    row = "";
+
+                    for (var x = 0; x < res.allGetPaidLogs.length; x++) {
+     
+                        row += '<tr>';
+                        row += '<td>' + x + '</td>';
+                        row += '<td>' + res.memberDuesInf.memberFullName + '</td>';
+                        row += '<td>' + res.memberDuesInf.duesType + '</td>';
+                        row += '<td>' + res.allGetPaidLogs[x].price + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.allGetPaidLogs[x].paidPrice + "₺" + '</td>';
+                        row += '<td>' + res.allGetPaidLogs[x].remainingPrice + "₺" + '</td>';
+                        row += '</tr>';
+
+                    }
+
+                    $("#allLastOp").append(row);
+
+                }
+
+                if (res.memberDuesInf.duesPrice != 0) {
+
+                    $("#price").val(res.memberDuesInf.duesPrice)
+                }
+
+                else {
+                    $("#price").val(res.memberDuesInf.duesPrice)
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
 
         $('#exampleModal').modal('toggle')
     }
+
 
     function getList() {
 
@@ -277,10 +405,11 @@
 
                             for (var i = 0; i < res.memberDuesInfTables.length; i++) {
 
-                                if (res.memberDuesInfTables[i].duesInfType == false) {
+                                if (res.memberDuesInfTables[i].priceCondition == false && res.memberDuesInfTables[i].duesInfType == false) {
 
                                     row += '<tbody>';
                                     row += '<tr style="text-align:center" id="">';
+                                    row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
                                     row += '<td>' + memberInf[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].memberFullName + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].duesYear + '</td>';
@@ -296,7 +425,7 @@
                                     else {
                                         row += '<td>' + "Ödenmedi" + '</td>';
                                     }
-                                    row += '<td><button class="btn btn-outline-dark" id="" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
+                                    row += '<td><button class="btn btn-outline-dark" id="' + res.memberDuesInfTables[i].memberDuesInfTableId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
 
                                     row += '</tr>';
                                     row += '</tbody>';

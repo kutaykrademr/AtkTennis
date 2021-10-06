@@ -96,21 +96,22 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <table class="table table-bordered tblOdemeBilgisi28911" style=" margin-bottom: 0;">
+                                <table class="table table-bordered " style=" margin-bottom: 0;">
                                     <tbody>
                                         <tr class="note note-danger">
                                             <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
                                             <td style="">
-                                                <select class="form-control OdemeTipi" name="OdemeTipi" id="OdemeTipi28911" data-id="28911">
+                                                <select class="form-control" id="paymentType" data-id="28911">
                                                     <option value="1">Nakit</option>
                                                     <option value="2">Kredi Kartı</option>
-                                                    <option value="3">Havale * Eft</option>
+                                                    <option value="3">Havale </option>
+                                                    <option value="4">Eft </option>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz No:</td>
-                                            <td style=""><input id="receiptNo" type="text" name="MakbuzNumarasi" class="form-control kotagizle" placeholder="Makbuz No"></td>
+                                            <td style=""><input id="receiptNo" type="text" name="MakbuzNumarasi" class="form-control " placeholder="Makbuz No"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz Tarihi:</td>
@@ -239,6 +240,7 @@
 
             userId = $("#userId2").text();
         }
+        var paymentType = $("#currentUserId option:selected").val();
         var currentUserId = $("#currentUserId").text();
         var price = $("#price").val();
         var paidPrice = price;
@@ -258,7 +260,7 @@
                 url: '../AdminHome/GetPaid',
                 cache: false,
                 dataType: "json",
-                data: { "userId": userId, "refId": id, "refType": 1, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                data: { "userId": userId, "refId": id, "refType": 1, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": paymentType, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
                 async: true,
                 success: function (res) {
 
