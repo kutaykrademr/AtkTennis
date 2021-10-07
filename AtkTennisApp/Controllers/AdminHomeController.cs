@@ -1403,29 +1403,50 @@ namespace AtkTennisApp.Controllers
         }
 
 
+        public class CabinetandDuesTable
+        {
+            public CabinetListUser cabinetListUser { get; set; } = new CabinetListUser();
+            public MemberDuesInfTable memberDuesInfTable { get; set; } = new MemberDuesInfTable();
+            public MemberList memberList { get; set; } = new MemberList();
 
+        }
 
         [HttpGet("AddCabinet", Name = "AddCabinet")]
         public JsonResult AddCabinet(int price, string code, string who, string type, string userId)
         {
-            CabinetListUser model = new CabinetListUser();
+            CabinetandDuesTable model = new CabinetandDuesTable();
 
             var date = DateTime.Now.ToString("dd-MM-yyyy");
             try
             {
 
-                model.CabinetCode = code;
-                model.CabinetOpPrice = price;
-                model.CabinetOpTypes = type;
-                model.CabinetWho = who;
-                model.CabinetUserId = userId;
-                model.Date = date;
-                model.CabinetCondition = true;
+                model.cabinetListUser.CabinetCode = code;
+                model.cabinetListUser.CabinetOpPrice = price;
+                model.cabinetListUser.CabinetOpTypes = type;
+                model.cabinetListUser.CabinetWho = who;
+                model.cabinetListUser.CabinetUserId = userId;
+                model.cabinetListUser.Date = date;
+                model.cabinetListUser.CabinetCondition = true;
+
+
+                model.memberDuesInfTable.DuesInfType = true;
+                model.memberDuesInfTable.DuesPrice = price;
+                model.memberDuesInfTable.RemainingPrice = price;
+                model.memberDuesInfTable.DuesType = "Dolap Tahsilat Ücreti";
+                model.memberDuesInfTable.Explain = "Dolap Tahsilat Ücreti";
+                model.memberDuesInfTable.MemberId = userId;
+                model.memberDuesInfTable.MemberFullName = db.memberLists.Where(x => x.UserId == model.memberDuesInfTable.MemberId).FirstOrDefault().FullName;
+                model.memberDuesInfTable.Date = date;
+                model.memberDuesInfTable.DuesYear = Convert.ToInt16(date.Split("-")[2]);
+
+
+
 
 
                 if (price != 0 && code != null && who != null && type != null)
                 {
-                    db.Add(model);
+                    db.Add(model.memberDuesInfTable);
+                    db.Add(model.cabinetListUser);
                     db.SaveChanges();
 
                     return Json(model);
@@ -2140,6 +2161,7 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
                                 model.memberDuesInfTable.DuesType = duesType;
                                 model.memberDuesInfTable.DuesPrice = duesPrice;
+                                model.memberDuesInfTable.RemainingPrice = duesPrice;
                                 model.memberDuesInfTable.DuesYear = duesYear;
                                 model.memberDuesInfTable.Explain = explain;
 
@@ -2166,6 +2188,7 @@ namespace AtkTennisApp.Controllers
                             model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
                             model.memberDuesInfTable.DuesType = duesType;
                             model.memberDuesInfTable.DuesPrice = duesPrice;
+                            model.memberDuesInfTable.RemainingPrice = duesPrice;
                             model.memberDuesInfTable.DuesYear = duesYear;
                             model.memberDuesInfTable.Explain = explain;
 
@@ -2396,11 +2419,11 @@ namespace AtkTennisApp.Controllers
         {
             GetPaidDuesViewModel model = new GetPaidDuesViewModel();
 
-     
+
 
             model.memberDuesInf = db.memberDuesInfTables.Where(x => x.MemberDuesInfTableId == id).FirstOrDefault();
             model.AllGetPaidLogs = db.allGetPaidLogs.Where(x => x.RefId == id).ToList();
-          
+
 
             try
             {
@@ -2485,15 +2508,16 @@ namespace AtkTennisApp.Controllers
                 if (model.memberDuesInf != null)
                 {
 
-
-                    if (model.memberDuesInf.DuesPrice - paidPrice == 0)
+                    if (model.memberDuesInf.RemainingPrice - paidPrice == 0)
                     {
-                        model.memberDuesInf.DuesPrice = 0;
+                        model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
+                        model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PriceCondition = true;
                     }
                     else
                     {
-                        model.memberDuesInf.DuesPrice = price - paidPrice;
+                        model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
+                        model.memberDuesInf.RemainingPrice = remainingPrice;
                     }
 
                     db.Update(model.memberDuesInf);
@@ -2507,15 +2531,18 @@ namespace AtkTennisApp.Controllers
                 if (model.memberDuesInf != null)
                 {
 
-
-                    if (model.memberDuesInf.DuesPrice - paidPrice == 0)
+                    if (price - paidPrice == 0)
                     {
-                        model.memberDuesInf.DuesPrice = 0;
+
                         model.memberDuesInf.PriceCondition = true;
+                        model.memberDuesInf.RemainingPrice = remainingPrice;
+                        model.memberDuesInf.PaidPrice = paidPrice;
+
                     }
                     else
-                    {
-                        model.memberDuesInf.DuesPrice = price - paidPrice;
+                    { 
+                        model.memberDuesInf.RemainingPrice =remainingPrice;
+                        model.memberDuesInf.PaidPrice =paidPrice;
                     }
 
                     db.Update(model.memberDuesInf);
@@ -2552,7 +2579,7 @@ namespace AtkTennisApp.Controllers
             return new AllGetPaidLogs();
         }
 
-   
+
     }
 }
 

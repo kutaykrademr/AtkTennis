@@ -67,6 +67,8 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
+
+
         public JsonResult GetCabinetPayment()
         {
 
@@ -104,6 +106,8 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
+
+
 
 
         public class ResandCancelListDto

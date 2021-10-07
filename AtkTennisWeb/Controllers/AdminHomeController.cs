@@ -617,12 +617,19 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public class CabinetandDuesTableDto
+        {
+            public CabinetListUserDto cabinetListUser { get; set; } = new CabinetListUserDto();
+            public MemberDuesInfTableDto memberDuesInfTable { get; set; } = new MemberDuesInfTableDto();
+            public MemberListDto memberList { get; set; } = new MemberListDto();
+
+        }
         public JsonResult AddCabinet(int price, string code, string who, string type, string userId)
         {
-            CabinetListUserDto model = new CabinetListUserDto();
+            CabinetandDuesTableDto model = new CabinetandDuesTableDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CabinetListUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddCabinet?price=" + price + "&code=" + code + "&who=" + who + "&type=" + type + "&userId=" + userId));
+                model = Helpers.Serializers.DeserializeJson<CabinetandDuesTableDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddCabinet?price=" + price + "&code=" + code + "&who=" + who + "&type=" + type + "&userId=" + userId));
 
                 if (model == null)
 
@@ -630,7 +637,7 @@ namespace AtkTennisWeb.Controllers
             }
             catch (Exception)
             {
-                return Json(new CabinetListUserDto());
+                return Json(new CabinetandDuesTableDto());
             }
 
             return Json(true);

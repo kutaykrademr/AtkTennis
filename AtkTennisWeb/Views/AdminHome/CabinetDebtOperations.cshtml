@@ -257,6 +257,8 @@
                             row += '<th>Aidat Yılı</th>';
                             row += '<th>Aidat Türü</th>';
                             row += '<th>Aidat Ücreti</th>';
+                            row += '<th>Ödenen Ücret</th>';
+                            row += '<th>Kalan Ücret</th>';
                             row += '<th>Borçlandırma Tarihi</th>';
                             row += '<th>Açıklama</th>';
                             row += '<th>Borç Durumu</th>';
@@ -280,6 +282,8 @@
                                     row += '<td>' + res.memberDuesInfTables[i].duesYear + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].duesType + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].duesPrice + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].paidPrice + '</td>';
+                                    row += '<td>' + res.memberDuesInfTables[i].remainingPrice + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].date + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].explain + '</td>';
                                     row += '<td>' + "Ödenmedi" + '</td>';

@@ -53,8 +53,8 @@
                                         }
 
                                         <li class="page-item"><a style="color:white; cursor:pointer; background-color:#3fc9d5 !important" class="page-link" onclick="getRes()">Rezervasyon</a></li>
-                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" onclick="getDues()">Aidat</a></li>
-                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#283593" class="page-link" onclick="getCabinet()">Dolap</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" onclick="memberDuesDebtList()">Aidat</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#283593" class="page-link" onclick="memberCabinetDuesList()">Dolap</a></li>
 
 
                                     </ul>
@@ -71,7 +71,6 @@
                             </div>
                         </div>
                     </div>
-
 
 
                     <div id="appendResInf" class="card" style="border-radius:30px">
@@ -95,113 +94,34 @@
 
 
 <script src="~/lib/jquery/dist/linq.min.js"></script>
-
+<script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
 
 <script>
 
+    function myfunction() {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-    function getDues() {
-
-        $.ajax({
-
-            type: "Get",
-            url: '../Report/GetDuesPayment',
-            cache: false,
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-       
-
-                row = "";
-                $("#appendResInf").empty();
-
-
-                row += '<div id="asd" class="card-body">';
-                row += '<h4>Ödeme Alınanlar</h4>';
-                row += '<table id="resList" class="table table-bordered table-hover">';
-                row += '<thead>';
-                row += '<tr style="text-align:center">';
-                row += '<th>#</th>';
-                row += '<th>Üye Numarası</th>';
-                row += '<th>Üye Adı</th>';
-                row += '<th>Aidat Türü</th>';
-                row += '<th>Aidat Yılı</th>';
-                row += '<th>Ücreti</th>';
-                row += '<th>Ödenen Ücret</th>';
-                row += '<th>Kalan Ücret</th>';
-                row += '<th>Ödeme Alan</th>';
-                row += '<th>Ödeme Tarihi</th>';
-                row += '<th>Açıklama</th>';
-                row += '</tr>';
-                row += '</thead>';
-
-                
-
-                for (var i = 0; i < res.duesInf.length; i++) {
-
-                   
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
-                        .select(function (x) { return x }).toArray();
-
-                    var getPayment = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
-                        .select(function (x) { return x }).toArray();
-
-
-                
-
-                    row += '<tbody>';
-                    row += '<tr style="text-align:center" id="">';
-                    row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
-                    if (res.duesInf[i].dues.priceCondition) {
-                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-                    else {
-                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-                    
-                    row += '<td>' + memberInf[0].memberNumber + '</td>';
-                    row += '<td>' + memberInf[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
-                    row += '<td>' + getPayment[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
-
-
-                    row += '</tr>';
-                    row += '</tbody>';
-
-                }
-
-                row += '</table>';
-                row += '</div>';
-                row += '</div>';
-
-
-                $("#appendResInf").append(row);
-
-                memberDuesDebtList();
-
-            },
-
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
         });
-
-     
-
     }
 
+
+
+
+
+
     function memberDuesDebtList() {
-        
+
         $.ajax({
 
             type: "Get",
@@ -213,12 +133,12 @@
 
 
                 row = "";
-                $("#appendResInf2").empty();
+                $("#appendResInf").empty();
                 $("#appendResInf3").empty();
 
                 row += '<div id="asd" class="card-body">';
-                row += '<h4>Borcu Olanlar</h4>';
-                row += '<table id="" class="table table-bordered table-hover">';
+                row += '<h4>Ödeme Yapanlar</h4>';
+                row += '<table id="example3" class="table table-bordered table-hover">';
                 row += '<thead>';
                 row += '<tr style="text-align:center">';
                 row += '<th>#</th>';
@@ -227,39 +147,114 @@
                 row += '<th>Aidat Yılı</th>';
                 row += '<th>Borçlandırma Tarihi</th>';
                 row += '<th>Ücreti</th>';
+                row += '<th>Ödenen</th>';
+                row += '<th>Kalan</th>';
+                row += '<th>Ücret Durumu</th>';
+                row += '<th>Açıklama</th>';
+                row += '<th><i class="fas fa-search"></i></th>';
+                row += '</tr>';
+                row += '</thead>';
+
+
+                row += '<tbody>';
+                for (var i = 0; i < res.length; i++) {
+
+                    if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice) {
+
+                        if (res[i].duesInfType == false) {
+                            row += '<tr style="text-align:center" id="">';
+                      
+                            if (res[i].remainingPrice != 0) {
+                                row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
+                            }
+                            else {
+                                row += '<td style="background-color:#8BC34A">' + res[i].memberDuesInfTableId + '</td>';
+                            }
+                            row += '<td>' + res[i].memberFullName + '</td>';
+                            row += '<td>' + res[i].duesType + '</td>';
+                            row += '<td>' + res[i].duesYear + '</td>';
+                            row += '<td>' + res[i].date + '</td>';
+                            row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
+                            row += '<td style="font-weight:bold">' + res[i].paidPrice + "₺" + '</td>';
+                            row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
+                            row += '<td >' + "Ödenmedi" + '</td>';
+                            row += '<td>' + res[i].explain + '</td>';
+                            row += '<td><i id="' + res[i].memberDuesInfTableId + '" onclick="getCabinet(this.id)" style="cursor:pointer" class="fas fa-search"></i></td>';
+
+
+
+                            row += '</tr>';
+                        }
+
+                    }
+
+                }
+                row += '</tbody>';
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf").append(row);
+
+
+                row = "";
+                $("#appendResInf2").empty();
+                $("#appendResInf3").empty();
+
+                row += '<div  class="card-body">';
+                row += '<h4>Borcu Olanlar</h4>';
+                row += '<table id="example2" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+   
+                row += '<th>#</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Borçlandırma Tarihi</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen</th>';
+                row += '<th>Kalan</th>';
                 row += '<th>Ücret Durumu</th>';
                 row += '<th>Açıklama</th>';
                 row += '</tr>';
                 row += '</thead>';
-
+                row += '<tbody>';
 
 
                 for (var i = 0; i < res.length; i++) {
 
                     if (res[i].priceCondition == false && res[i].duesInfType == false) {
 
-                        row += '<tbody>';
+                      
                         row += '<tr style="text-align:center" id="">';
-                        row += '<td style="display:none" id="userId">' + res[i].userId + '</td>';
+                  
+                        if (res[i].paidPrice != 0) {
 
+                            row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
+                        }
+                        else {
+                            row += '<td style="background-color:#EF5350">' + res[i].memberDuesInfTableId + '</td>';
+                        }
 
-                        row += '<td style="background-color:#EF5350">' + res[i].memberDuesInfTableId + '</td>';
-                       
                         row += '<td>' + res[i].memberFullName + '</td>';
                         row += '<td>' + res[i].duesType + '</td>';
                         row += '<td>' + res[i].duesYear + '</td>';
                         row += '<td>' + res[i].date + '</td>';
                         row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res[i].paidPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
                         row += '<td >' + "Ödenmedi" + '</td>';
                         row += '<td>' + res[i].explain + '</td>';
 
 
 
                         row += '</tr>';
-                        row += '</tbody>';
                     }
 
                 }
+                row += '</tbody>';
 
                 row += '</table>';
                 row += '</div>';
@@ -267,7 +262,9 @@
 
 
                 $("#appendResInf2").append(row);
-
+         
+                myfunction(); 
+                
             },
 
             error: function (textStatus, errorThrown) {
@@ -278,86 +275,73 @@
 
     }
 
-    function getCabinet() {
+    function memberCabinetDuesList() {
 
         $.ajax({
 
             type: "Get",
-            url: '../Report/GetCabinetPayment',
+            url: '../Report/MemberDuesDebtList',
             cache: false,
             dataType: "json",
             async: true,
             success: function (res) {
 
+
                 row = "";
                 $("#appendResInf").empty();
-                $("#appendResInf3").empty();
 
-
-                row += '<div i class="card-body">';
-                row += '<h4>Ödeme Alınanlar</h4>';
-                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<div id="asd" class="card-body">';
+                row += '<h4>Ödeme Yapanlar</h4>';
+                row += '<table id="example3" class="table table-bordered table-hover">';
                 row += '<thead>';
-                row += '<tr style="text-align:center">';
+                row += '<tr style="text-align:center">';   
                 row += '<th>#</th>';
-                row += '<th>Üye Numarası</th>';
                 row += '<th>Üye Adı</th>';
                 row += '<th>Aidat Türü</th>';
                 row += '<th>Aidat Yılı</th>';
+                row += '<th>Borçlandırma Tarihi</th>';
                 row += '<th>Ücreti</th>';
-                row += '<th>Ödenen Ücret</th>';
-                row += '<th>Kalan Ücret</th>';
-                row += '<th>Ödeme Alan</th>';
-                row += '<th>Ödeme Tarihi</th>';
+                row += '<th>Ödenen</th>';
+                row += '<th>Kalan</th>';
+                row += '<th>Ücret Durumu</th>';
                 row += '<th>Açıklama</th>';
+                row += '<th><i class="fas fa-search"></i></th>';
                 row += '</tr>';
                 row += '</thead>';
-
-                debugger;
-
-                for (var i = 0; i < res.duesInf.length; i++) {
-
-                    debugger;
-
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
-                        .select(function (x) { return x }).toArray();
-
-                    var getPayment = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
-                        .select(function (x) { return x }).toArray();
+                row += '<tbody>';
 
 
+                for (var i = 0; i < res.length; i++) {
 
+                    if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice) {
 
-                    row += '<tbody>';
-                    row += '<tr style="text-align:center" id="">';
-                    row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
+                        if (res[i].duesInfType == true) {
+                            row += '<tr style="text-align:center" id="">';
+                          
+                            if (res[i].remainingPrice != 0) {
+                                row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
+                            }
 
-                    if (res.duesInf[i].dues.priceCondition) {
-                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                            else {
+                                row += '<td style="background-color:#8BC34A">' + res[i].memberDuesInfTableId + '</td>';
+                            }
+
+                            row += '<td>' + res[i].memberFullName + '</td>';
+                            row += '<td>' + res[i].duesType + '</td>';
+                            row += '<td>' + res[i].duesYear + '</td>';
+                            row += '<td>' + res[i].date + '</td>';
+                            row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
+                            row += '<td style="font-weight:bold">' + res[i].paidPrice + "₺" + '</td>';
+                            row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
+                            row += '<td >' + "Ödenmedi" + '</td>';
+                            row += '<td>' + res[i].explain + '</td>';
+                            row += '<td><i id="' + res[i].memberDuesInfTableId + '" onclick="getCabinet(this.id)" style="cursor:pointer" class="fas fa-search"></i></td>';
+                            row += '</tr>';
+                        }
                     }
-                    else {
-                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-                   
-                    row += '<td>' + memberInf[0].memberNumber + '</td>';
-                    row += '<td>' + memberInf[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
-                    row += '<td>' + getPayment[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
-
-
-                    row += '</tr>';
-                    row += '</tbody>';
-
                 }
 
+                row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
                 row += '</div>';
@@ -366,6 +350,71 @@
                 $("#appendResInf").append(row);
 
 
+                row = "";
+                $("#appendResInf2").empty();
+                $("#appendResInf3").empty();
+
+                row += '<div  class="card-body">';
+                row += '<h4>Borcu Olanlar</h4>';
+                row += '<table id="example2" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Borçlandırma Tarihi</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen</th>';
+                row += '<th>Kalan</th>';
+                row += '<th>Ücret Durumu</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+                row += '<tbody>';
+
+
+                for (var i = 0; i < res.length; i++) {
+
+                    if (res[i].priceCondition == false && res[i].duesInfType == true) {
+
+                       
+                        row += '<tr style="text-align:center" id="">';
+                        if (res[i].paidPrice != 0) {
+
+                            row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
+                        }
+                        else {
+                            row += '<td style="background-color:#EF5350">' + res[i].memberDuesInfTableId + '</td>';
+                        }
+
+                        row += '<td>' + res[i].memberFullName + '</td>';
+                        row += '<td>' + res[i].duesType + '</td>';
+                        row += '<td>' + res[i].duesYear + '</td>';
+                        row += '<td>' + res[i].date + '</td>';
+                        row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res[i].paidPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
+                        row += '<td >' + "Ödenmedi" + '</td>';
+                        row += '<td>' + res[i].explain + '</td>';
+
+
+
+                        row += '</tr>';
+                    }
+
+                }
+                row += '</tbody>';
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf2").append(row);
+
+                myfunction();
+
             },
 
             error: function (textStatus, errorThrown) {
@@ -373,6 +422,7 @@
                 console.log(textStatus);
             }
         });
+
     }
 
     function getRes() {
@@ -409,10 +459,10 @@
                 row += '</tr>';
                 row += '</thead>';
 
-               
+
                 for (var i = 0; i < res.duesInf.length; i++) {
 
-                 
+
 
                     var memberInf = Enumerable.from(res.memberLists)
                         .where(function (x) { return x.userId == res.duesInf[i].res.userId })
@@ -481,11 +531,11 @@
             async: true,
             success: function (res) {
 
-               
+
 
                 row = "";
                 $("#appendResInf2").empty();
-
+                $("#appendResInf").empty();
 
                 row += '<div id="asd" class="card-body">';
                 row += '<h4>Borcu Olanlar</h4>';
@@ -605,5 +655,206 @@
         });
 
     }
+
+
+    
+    function getDues(id) {
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/GetDuesPayment',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                row = "";
+                $("#appendResInf").empty();
+
+
+                row += '<div id="asd" class="card-body">';
+                row += '<h4>Ödeme Alınanlar</h4>';
+                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen Ücret</th>';
+                row += '<th>Kalan Ücret</th>';
+                row += '<th>Ödeme Alan</th>';
+                row += '<th>Ödeme Tarihi</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+
+
+                for (var i = 0; i < res.duesInf.length; i++) {
+
+
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
+                        .select(function (x) { return x }).toArray();
+
+                    var getPayment = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                        .select(function (x) { return x }).toArray();
+
+
+
+
+                    row += '<tbody>';
+                    row += '<tr style="text-align:center" id="">';
+                    row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
+                    if (res.duesInf[i].dues.priceCondition) {
+                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                    else {
+                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+
+                    row += '<td>' + memberInf[0].memberNumber + '</td>';
+                    row += '<td>' + memberInf[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                    row += '<td>' + getPayment[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
+
+
+                    row += '</tr>';
+                    row += '</tbody>';
+
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf").append(row);
+
+                memberDuesDebtList();
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+
+
+    }
+
+    function getCabinet(id) {
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/GetCabinetPayment',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                row = "";
+                $("#appendResInf").empty();
+                $("#appendResInf2").empty();
+
+
+                row += '<div i class="card-body">';
+                row += '<h4>Ödeme Alınanlar</h4>';
+                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>#</th>';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Üye Adı</th>';
+                row += '<th>Aidat Türü</th>';
+                row += '<th>Aidat Yılı</th>';
+                row += '<th>Ücreti</th>';
+                row += '<th>Ödenen Ücret</th>';
+                row += '<th>Kalan Ücret</th>';
+                row += '<th>Ödeme Alan</th>';
+                row += '<th>Ödeme Tarihi</th>';
+                row += '<th>Açıklama</th>';
+                row += '</tr>';
+                row += '</thead>';
+                row += '<tbody>';
+                debugger;
+
+                for (var i = 0; i < res.duesInf.length; i++) {
+
+                    debugger;
+
+                    var memberInf = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
+                        .select(function (x) { return x }).toArray();
+
+                    var getPayment = Enumerable.from(res.memberLists)
+                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                        .select(function (x) { return x }).toArray();
+
+
+
+
+                 
+                    row += '<tr style="text-align:center" id="">';
+                    row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
+
+                    if (res.duesInf[i].dues.priceCondition) {
+                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+                    else {
+                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                    }
+
+                    row += '<td>' + memberInf[0].memberNumber + '</td>';
+                    row += '<td>' + memberInf[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                    row += '<td>' + getPayment[0].fullName + '</td>';
+                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
+
+
+                    row += '</tr>';
+                 
+
+                }
+                row += '</tbody>';
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+
+                $("#appendResInf").append(row);
+
+                memberCabinetDuesList();
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
 
 </script>
