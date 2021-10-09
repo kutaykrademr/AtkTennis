@@ -378,7 +378,15 @@
 
               
 
-                $("#price").val(res.memberDuesInf.duesPrice);
+
+                if (res.memberDuesInf.remainingPrice != 0) {
+
+                    $("#price").val(res.memberDuesInf.remainingPrice)
+                }
+
+                else {
+                    $("#price").val(res.memberDuesInf.remainingPrice)
+                }
 
                 $('#exampleModal').modal('toggle')
 

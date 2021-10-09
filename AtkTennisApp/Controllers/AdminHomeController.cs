@@ -2536,13 +2536,13 @@ namespace AtkTennisApp.Controllers
 
                         model.memberDuesInf.PriceCondition = true;
                         model.memberDuesInf.RemainingPrice = remainingPrice;
-                        model.memberDuesInf.PaidPrice = paidPrice;
+                        model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
 
                     }
                     else
                     { 
                         model.memberDuesInf.RemainingPrice =remainingPrice;
-                        model.memberDuesInf.PaidPrice =paidPrice;
+                        model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                     }
 
                     db.Update(model.memberDuesInf);

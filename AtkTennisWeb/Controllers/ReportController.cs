@@ -29,13 +29,13 @@ namespace AtkTennisWeb.Controllers
             public List<ReservationDto> res { get; set; } = new List<ReservationDto>();
         }
 
-        public JsonResult GetDuesPayment()
+        public JsonResult GetDuesPayment(int id)
         {
 
             DuesInfDto model = new DuesInfDto();
             try
             {
-                var asd = Helpers.Request.Get(Mutuals.AppUrl + "Report/GetDuesPayment");
+                var asd = Helpers.Request.Get(Mutuals.AppUrl + "Report/GetDuesPayment?id=" + id);
                 model = Helpers.Serializers.DeserializeJson<DuesInfDto>(asd);
                 if (model == null)
                     model = new DuesInfDto();
@@ -69,13 +69,13 @@ namespace AtkTennisWeb.Controllers
 
 
 
-        public JsonResult GetCabinetPayment()
+        public JsonResult GetCabinetPayment(int id)
         {
 
             DuesInfDto model = new DuesInfDto();
             try
             {
-                var asd = Helpers.Request.Get(Mutuals.AppUrl + "Report/GetCabinetPayment");
+                var asd = Helpers.Request.Get(Mutuals.AppUrl + "Report/GetCabinetPayment?id=" + id);
                 model = Helpers.Serializers.DeserializeJson<DuesInfDto>(asd);
                 if (model == null)
                     model = new DuesInfDto();

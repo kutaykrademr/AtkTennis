@@ -32,13 +32,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetDuesPayment", Name = "GetDuesPayment")]
-        public JsonResult GetDuesPayment()
+        public JsonResult GetDuesPayment(int id)
         {
             DuesInf duesInf = new DuesInf();
 
             duesInf.duesInf = (from paidLogs in db.allGetPaidLogs
                                join dues in db.memberDuesInfTables on paidLogs.RefId equals dues.MemberDuesInfTableId
-                               where paidLogs.RefType == 2
+                               where paidLogs.RefType == 2 && paidLogs.RefId == id
                                select new DuesPaymentInfo
                                {
                                    paymentLog = paidLogs,
@@ -62,13 +62,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("GetCabinetPayment", Name = "GetCabinetPayment")]
-        public JsonResult GetCabinetPayment()
+        public JsonResult GetCabinetPayment(int id)
         {
             DuesInf duesInf = new DuesInf();
 
             duesInf.duesInf = (from paidLogs in db.allGetPaidLogs
                                join dues in db.memberDuesInfTables on paidLogs.RefId equals dues.MemberDuesInfTableId
-                               where paidLogs.RefType == 3
+                               where paidLogs.RefType == 3 && paidLogs.RefId == id
                                select new DuesPaymentInfo
                                {
                                    paymentLog = paidLogs,

@@ -91,10 +91,51 @@
     </section>
 </div>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="duesInf2x">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="cabinetInf2x">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="~/lib/jquery/dist/linq.min.js"></script>
-<script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
 
 <script>
 
@@ -112,6 +153,7 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            "pageLength":10,
         });
     }
 
@@ -179,7 +221,7 @@
                             row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
                             row += '<td >' + "Ödenmedi" + '</td>';
                             row += '<td>' + res[i].explain + '</td>';
-                            row += '<td><i id="' + res[i].memberDuesInfTableId + '" onclick="getCabinet(this.id)" style="cursor:pointer" class="fas fa-search"></i></td>';
+                            row += '<td><i id="' + res[i].memberDuesInfTableId + '" onclick="getDues(this.id)" style="cursor:pointer" class="fas fa-search"></i></td>';
 
 
 
@@ -262,7 +304,8 @@
 
 
                 $("#appendResInf2").append(row);
-         
+
+            
                 myfunction(); 
                 
             },
@@ -535,9 +578,9 @@
 
                 row = "";
                 $("#appendResInf2").empty();
-                $("#appendResInf").empty();
+            
 
-                row += '<div id="asd" class="card-body">';
+                row += '<div class="card-body">';
                 row += '<h4>Borcu Olanlar</h4>';
                 row += '<table id="" class="table table-bordered table-hover">';
                 row += '<thead>';
@@ -552,6 +595,7 @@
                 row += '<th>Ücret Durumu</th>';
                 row += '</tr>';
                 row += '</thead>';
+                row += '<tbody>';
 
 
 
@@ -563,22 +607,21 @@
 
                     if (res.reservation[i].priceInf == false && res.reservation[i].procedure == false) {
 
-                        row += '<tbody>';
-                        row += '<tr style="text-align:center" id="">';
+                          row += '<tr style="text-align:center" id="">';
                         row += '<td style="display:none" id="userId">' + res.reservation[i].userId + '</td>';
                         row += '<td style="background-color:#EF5350">' + res.reservation[i].resId + '</td>';
                         row += '<td>' + memberInf[0].memberNumber + '</td>';
                         row += '<td>' + memberInf[0].fullName + '</td>';
                         row += '<td>' + res.reservation[i].court.courtName + '</td>';
                         row += '<td>' + res.reservation[i].resDate + '</td>';
-                        row += '<td>' + res.reservation[i].resStartTime + "-" + res.reservation[i].resFinishTime + '</td>';
+                        row += '<td>' + res.reservation[i].resStartTime + '</td>';
                         row += '<td>' + res.reservation[i].price + '</td>';
                         row += '<td>' + "Ödenmedi" + '</td>';
                         row += '</tr>';
-                        row += '</tbody>';
+                       
                     }
                 }
-
+                row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
                 row += '</div>';
@@ -594,7 +637,7 @@
 
                 debugger;
 
-                newRow += '<div id="asd" class="card-body">';
+                newRow += '<div  class="card-body">';
                 newRow += '<h4>Borcu Olanlar (Rezervasyon İptal)</h4>';
                 newRow += '<table id="" class="table table-bordered table-hover">';
                 newRow += '<thead>';
@@ -609,7 +652,7 @@
                 newRow += '<th>Ücret Durumu</th>';
                 newRow += '</tr>';
                 newRow += '</thead>';
-
+                newRow += '<tbody>';
 
 
                 for (var i = 0; i < res.reservationCancel.length; i++) {
@@ -618,9 +661,9 @@
                         .where(function (x) { return x.userId == res.reservationCancel[i].userId })
                         .select(function (x) { return x }).toArray();
 
-                    if (res.reservation[i].priceInf == false && res.reservationCancel[i].procedure == false) {
+                    if (res.reservationCancel[i].priceInf == false && res.reservationCancel[i].procedure == false) {
 
-                        newRow += '<tbody>';
+                     
                         newRow += '<tr style="text-align:center" id="">';
                         newRow += '<td style="display:none" id="userId">' + res.reservationCancel[i].userId + '</td>';
                         newRow += '<td style="background-color:#EF5350">' + res.reservationCancel[i].resId + '</td>';
@@ -632,14 +675,15 @@
                             }
                         }
                         newRow += '<td>' + res.reservationCancel[i].resDate + '</td>';
-                        newRow += '<td>' + res.reservationCancel[i].resStartTime + "-" + res.reservationCancel[i].resFinishTime + '</td>';
+                        newRow += '<td>' + res.reservationCancel[i].resStartTime +  '</td>';
                         newRow += '<td>' + res.reservationCancel[i].price + '</td>';
                         newRow += '<td>' + "Ödenmedi" + '</td>';
                         newRow += '</tr>';
-                        newRow += '</tbody>';
+                     
                     }
                 }
 
+                newRow += '</tbody>';
                 newRow += '</table>';
                 newRow += '</div>';
                 newRow += '</div>';
@@ -665,6 +709,7 @@
             type: "Get",
             url: '../Report/GetDuesPayment',
             cache: false,
+            data: {"id" : id},
             dataType: "json",
             async: true,
             success: function (res) {
@@ -672,7 +717,7 @@
 
 
                 row = "";
-                $("#appendResInf").empty();
+                $("#duesInf2x").empty();
 
 
                 row += '<div id="asd" class="card-body">';
@@ -717,7 +762,7 @@
                         row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
                     }
                     else {
-                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        row += '<td style="background-color:#FBC02D">' + res.duesInf[i].paymentLog.refId + '</td>';
                     }
 
                     row += '<td>' + memberInf[0].memberNumber + '</td>';
@@ -742,9 +787,10 @@
                 row += '</div>';
 
 
-                $("#appendResInf").append(row);
+                $("#duesInf2x").append(row);
 
-                memberDuesDebtList();
+                $('#exampleModal').modal('toggle');
+
 
             },
 
@@ -765,15 +811,15 @@
             type: "Get",
             url: '../Report/GetCabinetPayment',
             cache: false,
+            data: {"id" : id},
             dataType: "json",
             async: true,
             success: function (res) {
 
                 row = "";
-                $("#appendResInf").empty();
-                $("#appendResInf2").empty();
 
-
+                $("#cabinetInf2x").empty();
+             
                 row += '<div i class="card-body">';
                 row += '<h4>Ödeme Alınanlar</h4>';
                 row += '<table id="resList" class="table table-bordered table-hover">';
@@ -818,7 +864,7 @@
                         row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
                     }
                     else {
-                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        row += '<td style="background-color:#FBC02D">' + res.duesInf[i].paymentLog.refId + '</td>';
                     }
 
                     row += '<td>' + memberInf[0].memberNumber + '</td>';
@@ -843,9 +889,10 @@
                 row += '</div>';
 
 
-                $("#appendResInf").append(row);
+                $("#cabinetInf2x").append(row);
 
-                memberCabinetDuesList();
+
+                $('#exampleModal2').modal('toggle');
             },
 
             error: function (textStatus, errorThrown) {
