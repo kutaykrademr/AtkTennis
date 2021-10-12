@@ -544,9 +544,6 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
-       
-
-        //Modal eksiği var
         [HttpGet("DeleteCourt", Name = "DeleteCourt")]
         public JsonResult DeleteCourt(int id)
         {
@@ -669,7 +666,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateCourtPriceList", Name = "UpdateCourtPriceList")]
-        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition)
+        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition , string recipeTypeName , string month , string day)
         {
             CourtPriceList model = new CourtPriceList();
 
@@ -678,10 +675,13 @@ namespace AtkTennisApp.Controllers
 
                 model = db.courtPriceLists.Where(x => x.CourtPriceListId == id).SingleOrDefault();
 
+                model.MonthInf = month;
+                model.DayInf = day;
                 model.Name = name;
                 model.CourtPrice = courtPrice;
                 model.PriceType = priceType;
-                model.RecipeType = recipeType;
+                model.RecipeTypeId = recipeType;
+                model.RecipeType = recipeTypeName;
                 model.Condition = condition;
 
                 db.Update(model);

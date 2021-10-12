@@ -384,12 +384,12 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition)
+        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition , string recipeTypeName , string month, string day)
         {
             CourtPriceListDto model = new CourtPriceListDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtPriceListDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourtPriceList?Name=" + name + "&courtPrice=" + courtPrice + "&priceType=" + priceType + "&recipeType=" + recipeType + "&condition=" + condition + "&id=" + id));
+                model = Helpers.Serializers.DeserializeJson<CourtPriceListDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCourtPriceList?Name=" + name + "&month=" + month + "&day=" + day + "&recipeTypeName=" + recipeTypeName + "&courtPrice=" + courtPrice + "&priceType=" + priceType + "&recipeType=" + recipeType + "&condition=" + condition + "&id=" + id));
 
                 if (model == null)
 

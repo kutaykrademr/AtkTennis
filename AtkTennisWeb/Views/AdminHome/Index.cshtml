@@ -183,12 +183,12 @@
 
                                 @if (Model.TodayResCount == null)
                                 {
-                                    @Html.Raw("-") ;
+                                @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                    @Model.TodayResCount
+                                @Model.TodayResCount
 
                             </h3>
                             <p>Bugüne Ait Rezervasyon Sayısı</p>
@@ -208,12 +208,12 @@
 
                                 @if (Model.TotalResCount == null)
                                 {
-                                    @Html.Raw("-") ;
+                                @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                    @Model.TotalResCount
+                                @Model.TotalResCount
 
                             </h3>
 
@@ -279,7 +279,7 @@
 
                                         {
 
-                                            <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+                                        <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
 
                                         }
 
@@ -296,9 +296,9 @@
 
                                         @foreach (var item in Model.courtScaleLists)
                                         {
-                                            <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
-                                                @item.Code
-                                            </div>
+                                        <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
+                                            @item.Code
+                                        </div>
                                         }
 
                                     </div>
@@ -453,7 +453,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                                <option value="@item.CourtId">@item.CourtName</option>
+                            <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -517,7 +517,6 @@
                                         </tr>
                                     </thead>
                                     <tbody id="courtPriceListAppend">
-
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -589,7 +588,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                                <option value="@item.CourtId">@item.CourtName</option>
+                            <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -652,29 +651,29 @@
                                         {
                                             if (item2.Condition == "1")
                                             {
-                                                <tr>
-                                                    <td>@item2.Name</td>
-                                                    <td>@item2.CourtPrice ₺ </td>
-                                                    <td>
-                                                        <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
+                                        <tr>
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice ₺ </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
 
-                                                            @{
+                                                    @{
                                                                 if (item2.PriceType == "1")
                                                                 {
-                                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
                                                                 }
 
                                                                 else
                                                                 {
-                                                                    <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                        <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
                                                                 }
 
-                                                            }
+                                                    }
 
-                                                            <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                    <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
                                             }
                                         }
 
@@ -806,7 +805,7 @@
 
 <script>
 
-    $(document).ready(function () {
+$(document).ready(function () {
 
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -1334,7 +1333,7 @@
 
                     }
                 }
-         
+
 
                 $("#courtPriceListAppend").append(row);
 
@@ -1463,7 +1462,7 @@
                             else {
                                 NewRow += '<div  class="form-group reservationForm">';
                                 NewRow += '<div class="custom-control custom-checkbox custom-control2 " id="checkTimeTable">';
-                                NewRow += '<input onclick="checkMe(this.id)" class="custom-control-input custom-control-input-primary" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '" per= "' + res[i].period + '">';
+                                NewRow += '<input onclick="checkMe(this.id)"  class="custom-control-input custom-control-input-primary xy1" type="checkbox" id= "t_' + res[i].timeId + '" name= "' + res[i].start + '" per= "' + res[i].period + '">';
                                 NewRow += '<label style="font-weight:inherit;" for="t_' + res[i].timeId + '" class="custom-control-label custom-control-label2">' + res[i].start + '</label>';
                                 NewRow += '</div></div>';
                             }
@@ -1481,6 +1480,7 @@
                 }
             });
 
+        checkMe(clcTime);
     }
 
     function openResModalUpd(id) {
@@ -2428,9 +2428,31 @@
 
     function checkMe(id) {
 
-        var per = $("#" + id).attr("per");
-        var checkID = parseInt(id.split("_")[1]);
+        var checkID = "";
 
+        debugger;
+
+        var value = $("input[name='" + id + "']");
+
+        if (value.length != 0) {
+
+            var xx = id.split(":");
+
+            if (xx.length > 1) {
+                var value = $("input[name='" + id + "']");
+                id = value[0].id;
+                checkID = parseInt(value[0].id.split("_")[1]);
+                $("input[id=" + id + "]").attr('checked', true)
+            }
+        }
+
+        else {
+
+            checkID = parseInt(id.split("_")[1]);
+        }
+
+
+        var per = $("#" + id).attr("per");
         var checkList = [];
         var checkTrueList = [];
 
@@ -2439,159 +2461,163 @@
             checkTrueList.push(this.id);
         });
 
-        for (var i = 0; i < checkTrueList.length; i++) {
+        if (checkTrueList.length > 0) {
+            for (var i = 0; i < checkTrueList.length; i++) {
 
-            var x = checkTrueList[i];
+                var x = checkTrueList[i];
 
-            if (x != id) {
+                if (x != id) {
 
-                checkList.push(x);
-            }
-
-        }
-        checkList.push(id);
-
-
-
-        if (per == 15) {
-
-            if (checkTrueList.length < 4 && checkTrueList.length == 3) {
-
-                for (var i = 0; i < checkTrueList.length; i++) {
-
-                    var checkedTime = checkTrueList[i];
-
-                    $('#' + checkedTime).prop('checked', false);
-                }
-            }
-
-
-            else if (checkTrueList.length < 4 && checkTrueList.length != 1) {
-
-                for (var i = 0; i < checkTrueList.length; i++) {
-
-                    $("#t_" + i).prop('checked', false);
+                    checkList.push(x);
                 }
 
             }
+            checkList.push(id);
 
 
 
-            else if (checkTrueList.length > 4 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
+            if (per == 15) {
 
-                for (var i = 0; i < checkTrueList.length; i++) {
-                    var checkedTime = checkTrueList[i];
+                if (checkTrueList.length < 4 && checkTrueList.length == 3) {
 
-                    $('#' + checkedTime).prop('checked', true);
+                    for (var i = 0; i < checkTrueList.length; i++) {
+
+                        var checkedTime = checkTrueList[i];
+
+                        $('#' + checkedTime).prop('checked', false);
+                    }
                 }
 
+
+                else if (checkTrueList.length < 4 && checkTrueList.length != 1) {
+
+                    for (var i = 0; i < checkTrueList.length; i++) {
+
+                        $("#t_" + i).prop('checked', false);
+                    }
+
+                }
+
+
+
+                else if (checkTrueList.length > 4 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
+
+                    for (var i = 0; i < checkTrueList.length; i++) {
+                        var checkedTime = checkTrueList[i];
+
+                        $('#' + checkedTime).prop('checked', true);
+                    }
+
+                }
+
+
+                else if (checkTrueList.length > 4) {
+
+                    for (var i = 0; i < checkTrueList.length; i++) {
+                        var checkedTime = checkTrueList[i];
+
+                        $('#' + checkedTime).prop('checked', false);
+                    }
+
+
+                    for (var i = checkID; i < (checkID + 4); i++) {
+
+                        $("#t_" + i).prop('checked', true);
+
+                        checkList.push("t_" + i);
+
+                    }
+                }
+
+                else
+                    for (var i = checkID; i < (checkID + 4); i++) {
+
+                        $("#t_" + i).prop('checked', true);
+
+                        checkList.push("t_" + i);
+
+                    }
             }
 
+            else if (per == 30) {
 
-            else if (checkTrueList.length > 4) {
+                if (checkTrueList.length > 2 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
 
-                for (var i = 0; i < checkTrueList.length; i++) {
-                    var checkedTime = checkTrueList[i];
+                    for (var i = 0; i < checkTrueList.length; i++) {
+                        var checkedTime = checkTrueList[i];
 
-                    $('#' + checkedTime).prop('checked', false);
-                }
-
-
-                for (var i = checkID; i < (checkID + 4); i++) {
-
-                    $("#t_" + i).prop('checked', true);
-
-                    checkList.push("t_" + i);
+                        $('#' + checkedTime).prop('checked', true);
+                    }
 
                 }
+
+                else if (checkTrueList.length > 2) {
+
+                    for (var i = 0; i < checkTrueList.length; i++) {
+
+                        var checkedTime = checkTrueList[i];
+
+                        $('#' + checkedTime).prop('checked', false);
+                    }
+
+
+                    for (var i = checkID; i < (checkID + 2); i++) {
+
+                        $("#t_" + i).prop('checked', true);
+
+                        checkList.push("t_" + i);
+
+
+                    }
+                }
+
+                else if (checkTrueList.length == 1) {
+
+
+                    for (var i = 0; i < checkTrueList.length; i++) {
+
+                        var checkedTime = checkTrueList[i];
+
+                        $('#' + checkedTime).prop('checked', false);
+                    }
+
+
+                    for (var i = checkID; i < (checkID + 2); i++) {
+
+                        $("#t_" + i).prop('checked', true);
+
+                        checkList.push("t_" + i);
+
+
+                    }
+                }
+
             }
 
             else
-                for (var i = checkID; i < (checkID + 4); i++) {
 
-                    $("#t_" + i).prop('checked', true);
+                if (checkTrueList.length > 1) {
 
-                    checkList.push("t_" + i);
+                    for (var i = 0; i < checkTrueList.length; i++) {
 
+                        var checkedTime = checkTrueList[i];
+
+                        $('#' + checkedTime).prop('checked', false);
+                    }
+
+
+                    for (var i = checkID; i < (checkID + 1); i++) {
+
+                        $("#t_" + i).prop('checked', true);
+
+                        checkList.push("t_" + i);
+
+
+                    }
                 }
         }
 
-        else if (per == 30) {
 
-            if (checkTrueList.length > 2 && checkList[checkList.length - 1].split("_")[1] - checkList[checkList.length - 2].split("_")[1] == 1) {
-
-                for (var i = 0; i < checkTrueList.length; i++) {
-                    var checkedTime = checkTrueList[i];
-
-                    $('#' + checkedTime).prop('checked', true);
-                }
-
-            }
-
-            else if (checkTrueList.length > 2) {
-
-                for (var i = 0; i < checkTrueList.length; i++) {
-
-                    var checkedTime = checkTrueList[i];
-
-                    $('#' + checkedTime).prop('checked', false);
-                }
-
-
-                for (var i = checkID; i < (checkID + 2); i++) {
-
-                    $("#t_" + i).prop('checked', true);
-
-                    checkList.push("t_" + i);
-
-
-                }
-            }
-
-            else if (checkTrueList.length == 1) {
-
-
-                for (var i = 0; i < checkTrueList.length; i++) {
-
-                    var checkedTime = checkTrueList[i];
-
-                    $('#' + checkedTime).prop('checked', false);
-                }
-
-
-                for (var i = checkID; i < (checkID + 2); i++) {
-
-                    $("#t_" + i).prop('checked', true);
-
-                    checkList.push("t_" + i);
-
-
-                }
-            }
-
-        }
-
-        else
-
-            if (checkTrueList.length > 1) {
-
-                for (var i = 0; i < checkTrueList.length; i++) {
-
-                    var checkedTime = checkTrueList[i];
-
-                    $('#' + checkedTime).prop('checked', false);
-                }
-
-
-                for (var i = checkID; i < (checkID + 1); i++) {
-
-                    $("#t_" + i).prop('checked', true);
-
-                    checkList.push("t_" + i);
-
-
-                }
-            }
     }
 
     function checkMeUpd(id) {

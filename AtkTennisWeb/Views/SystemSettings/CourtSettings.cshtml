@@ -120,6 +120,8 @@
                                     @for (int i = 0; i < Model.courtPriceLists.Count; i++)
                                     {
                                         <tr style="text-align:center">
+
+
                                             <td>@Model.courtPriceLists[i].Name</td>
                                             <td>@Model.courtPriceLists[i].CourtPrice</td>
 
@@ -132,7 +134,7 @@
                                                 <td>Pasif Ücret</td>
                                             }
 
-                                          
+
                                             <td>@Model.courtPriceLists[i].RecipeType</td>
 
                                             @if (Model.courtPriceLists[i].Condition == "1")
@@ -528,12 +530,52 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Kort Tarife Güncelle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+
+                <div class="form-group">
+                    <label>Ay Seçiniz</label>
+
+                    <select id="selectMonth" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Ay Bilgisi Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Gün Seçiniz</label>
+                    <select id="selectDay" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Gün Bilgisi Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="0,1,2,3,4,5,6">Tüm Günler</option>
+                        <option value="1,">Pazartesi</option>
+                        <option value="2,">Salı</option>
+                        <option value="3,">Çarşamba</option>
+                        <option value="4,">Perşembe</option>
+                        <option value="5,">Cuma</option>
+                        <option value="6,">Cumartesi</option>
+                        <option value="0,">Pazar</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Saat Seçiniz</label>
+                    <select id="selectTime" class="select2bs4" multiple="multiple" data-placeholder="Saat Bilgisi Seçimi Yapınız" style="width: 100%;">
+
+                        <option value="1">Tüm Saatler </option>
+
+                        @foreach (var item in Model.resTimes)
+
+                        {
+                            if (item.Restimes60 == 60)
+                            {
+                                <option value="@item.ResTimes,">@item.ResTimes</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+
                 <div class="row ">
                     <div class="col-md-6 form-group">
                         <label class="col-form-label">Kort Adı:</label>
@@ -551,14 +593,25 @@
                         <select id="priceType" class="form-control">
                             <option disabled="disabled" selected="selected">Ücret Tipi</option>
 
-                            <option value="1"> Asıl Ücret</option>
-                            <option value="0"> Ek Ücret</option>
+                            <option value="1">Asıl Ücret</option>
+                            <option value="0">Ek Ücret</option>
                         </select>
                     </div>
-                    <div class="col-md-6 form-group">
-                        <label class="col-form-label">Tarife Tipi</label>
-                        <input type="text" id="recipeType" class="form-control">
+
+                    <div class="col-md-6">
+                        <label class="col-form-label">Kort Türü</label>
+                        <select id="recipeType2" class="form-control">
+                            <option disabled="disabled" selected="selected">Kort Türü</option>
+
+                            @foreach (var item in Model.courtRecipeTypes)
+                            {
+                                <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+
+                            }
+
+                        </select>
                     </div>
+
                 </div>
 
                 <div class="row ">
@@ -1384,9 +1437,138 @@
 
                     $("#courtPriceName").val(res.name);
                     $("#price").val(res.courtPrice);
-                    $("#priceType option:selected").text(res.priceType);
-                    $("#recipeType").val(res.recipeType);
-                    $("#conditions option:selected").text(res.condition);
+
+                    if (res.priceType == "1") {
+                        $("#priceType option:selected").text("Asıl Ücret");
+                        $("#priceType option:selected").val("1");
+                    }
+                    else {
+                        $("#priceType option:selected").text("Ek Ücret");
+                        $("#priceType option:selected").val("0");
+                    }
+
+
+                    $("#recipeType2 option:selected").text(res.recipeType);
+                    $("#recipeType2 option:selected").val(res.recipeTypeId);
+
+                    if (res.condition == "1") {
+                        $("#conditions option:selected").text("Aktif");
+                        $("#conditions option:selected").val("1");
+                    }
+                    else {
+                        $("#conditions option:selected").text("Pasif");
+                        $("#conditions option:selected").val("0");
+                    }
+
+                    var monthInfName = "";
+
+                    $("#selectMonth").empty();
+
+                    row = "";
+
+                    for (var i = 0; i < 12; i++) {
+                        debugger;
+
+                        switch (i) {
+                            case 0:
+                                monthInfName = "Ocak";
+                                break;
+                            case 1:
+                                monthInfName = "Şubat";
+                                break;
+                            case 2:
+                                monthInfName = "Mart";
+                                break;
+                            case 3:
+                                monthInfName = "Nisan";
+                                break;
+                            case 4:
+                                monthInfName = "Mayıs";
+                                break;
+                            case 5:
+                                monthInfName = "Haziran";
+                                break;
+                            case 6:
+                                monthInfName = "Temmuz";
+                                break;
+                            case 7:
+                                monthInfName = "Ağustos";
+                                break;
+                            case 8:
+                                monthInfName = "Eylül";
+                                break;
+                            case 9:
+                                monthInfName = "Ekim";
+                                break;
+                            case 10:
+                                monthInfName = "Kasım";
+                                break;
+                            case 11:
+                                monthInfName = "Aralık";
+                                break;
+
+                            default:
+                        }
+
+                        if (res.monthInf.includes(i))
+
+                            row += '<option selected value="' + i + "," + '">' + monthInfName + '</option>'
+
+                        else
+                            row += '<option value="' + i + "," + '">' + monthInfName + '</option>'
+
+                    }
+
+
+                    $("#selectMonth").append(row);
+
+
+                    var dayInfName = "";
+
+                    $("#selectDay").empty();
+
+                    row = "";
+
+                    for (var i = 0; i < 7; i++) {
+                        debugger;
+
+                        switch (i) {
+                            case 0:
+                                dayInfName = "Pazar";
+                                break;
+                            case 1:
+                                dayInfName = "Pazartesi";
+                                break;
+                            case 2:
+                                dayInfName = "Salı";
+                                break;
+                            case 3:
+                                dayInfName = "Çarşamba";
+                                break;
+                            case 4:
+                                dayInfName = "Perşembe";
+                                break;
+                            case 5:
+                                dayInfName = "Cuma";
+                                break;
+                            case 6:
+                                dayInfName = "Cumartesi";
+                                break;                       
+
+                            default:
+                        }
+
+                        if (res.dayInf.includes(i))
+
+                            row += '<option selected value="' + i + "," + '">' + dayInfName + '</option>'
+
+                        else
+                            row += '<option value="' + i + "," + '">' + dayInfName + '</option>'
+                    }
+
+
+                    $("#selectDay").append(row);
+
                     $("#updateCourtPriceModel button:nth-of-type(2)").attr("id", ID);
                     $('#updatePriceModalLong').modal('toggle');
                 }
@@ -1413,14 +1595,47 @@
 
     function updateCourtPriceList(id) {
 
+        var month = $("#selectMonth").val();
+
+        var months = "";
+
+        for (var i = 0; i < month.length; i++) {
+            var firstMonth = month[i];
+            months = firstMonth + months;
+        }
+
+        var day = $("#selectDay").val();
+
+        var days = "";
+
+        for (var i = 0; i < day.length; i++) {
+
+            var firstMonth = day[i];
+
+            days = firstMonth + days;
+        }
+
+        //var time = $("#selectedTime").val();
+
+        //var times = "";
+
+        //for (var i = 0; i < time.length; i++) {
+
+        //    var firstDay = time[i];
+
+        //    times = firstDay + times;
+        //}
+
         var priceType = $("#priceType option:selected").val();
         var condition = $("#conditions option:selected").val();
+        var recipeType = $("#recipeType2 option:selected").val();
+        var recipeTypeName = $("#recipeType2 option:selected").text();
 
         $.ajax({
             type: "POST",
             url: '../SystemSettings/UpdateCourtPriceList',
             cache: false,
-            data: { "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), priceType, "recipeType": $("#recipeType").val(), condition },
+            data: {"month":months , "day":days , "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), "priceType": priceType, "recipeType": recipeType, "recipeTypeName": recipeTypeName, "condition": condition },
             dataType: "json",
             async: true,
             success: function (res) {
