@@ -343,12 +343,12 @@ namespace AtkTennisWeb.Controllers
 
 
         //Kort Ücret Ayarları
-        public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition)
+        public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition , string month , string time, string day , string recipeTypeId)
         {
             CourtPriceListDto model = new CourtPriceListDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtPriceListDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtPriceList?recipeName=" + recipeName + "&recipePrice=" + recipePrice + "&recipePriceType=" + recipePriceType + "&courtRecipeType=" + courtRecipeType + "&recipeCondition=" + recipeCondition));
+                model = Helpers.Serializers.DeserializeJson<CourtPriceListDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtPriceList?recipeName=" + recipeName + "&recipeTypeId=" + recipeTypeId + "&time=" + time + "&day=" + day + "&month=" + month + "&recipePrice=" + recipePrice + "&recipePriceType=" + recipePriceType + "&courtRecipeType=" + courtRecipeType + "&recipeCondition=" + recipeCondition));
 
                 if (model == null)
 
@@ -421,6 +421,26 @@ namespace AtkTennisWeb.Controllers
             }
 
             return Json(true);
+
+        }
+
+        public JsonResult GetPriceListTable(int id)
+        {
+             List<CourtPriceListDto> model = new List<CourtPriceListDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<CourtPriceListDto>>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetPriceListTable?id=" + id));
+
+                if (model.Count > 0)
+
+                    return Json(model);
+            }
+            catch (Exception)
+            {
+                return Json(new List<CourtPriceListDto>());
+            }
+
+            return Json(model);
 
         }
 

@@ -302,6 +302,68 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
+        public class CourtPriceListViewModel
+        {
+            public List<CourtPriceList> courtPriceLists { get; set; } = new List<CourtPriceList>();
+            public List<CourtPriceList> priceLists { get; set; } = new List<CourtPriceList>();
+            public List<string> priceListsId { get; set; } = new List<string>();
+           
+        }
+
+
+        [HttpGet("GetPriceList", Name = "GetPriceList")]
+        public CourtPriceListViewModel GetPriceList(int id, string time, string day, string month)
+        {
+            CourtPriceListViewModel model = new CourtPriceListViewModel();
+
+            var courtType = db.courts.Where(x => x.CourtId == id).FirstOrDefault().CourtType;
+
+            var time2 = time.Split(":")[0].Trim();
+
+            model.courtPriceLists = db.courtPriceLists.Where(x => x.RecipeTypeId == courtType && x.TimeInf.Contains(time2) && x.DayInf.Contains(day) && x.MonthInf.Contains(month)).ToList();
+
+            model.priceLists = db.courtPriceLists.Where(x => x.RecipeTypeId == courtType).ToList();
+
+
+            var ids = "";
+
+            for (int i = 0; i < model.courtPriceLists.Count; i++)
+            {
+                var asd = model.courtPriceLists[i].CourtPriceListId;
+
+                ids = Convert.ToString(asd);
+
+                model.priceListsId.Add(ids);
+            }
+
+
+            foreach (var item in model.priceListsId)
+            {
+                if (model.priceLists.Where(x => x.CourtPriceListId == Convert.ToInt32(item)).Count() > 0)
+                {
+                    model.priceLists.Remove(model.priceLists.Where(x=>x.CourtPriceListId == Convert.ToInt32(item)).FirstOrDefault());
+                }
+            }
+
+            try
+            {
+                if (model.courtPriceLists.Count != 0)
+                {
+                    return model;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new CourtPriceListViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+
+            return model;
+        }
+
+
         [HttpGet("GetRole", Name = "GetRole")]
         public List<AppIdentityRole> GetRole()
 
@@ -2241,6 +2303,7 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.MemberId = cabinetList[i].CabinetUserId;
                         model.memberDuesInfTable.DuesYear = cabinetDuesYear;
                         model.memberDuesInfTable.DuesPrice = typePrice;
+                        model.memberDuesInfTable.RemainingPrice = typePrice;
                         model.memberDuesInfTable.DuesType = cabinetType;
                         model.memberDuesInfTable.Explain = cabinetExplain;
                         model.memberDuesInfTable.MemberFullName = mem.FullName;
@@ -2540,8 +2603,8 @@ namespace AtkTennisApp.Controllers
 
                     }
                     else
-                    { 
-                        model.memberDuesInf.RemainingPrice =remainingPrice;
+                    {
+                        model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                     }
 

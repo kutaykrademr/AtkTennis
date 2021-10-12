@@ -85,32 +85,20 @@
                             <div class="card-title">
                                 <h3>Kort Ücret Tarifesi</h3>
                             </div>
+
                             <div>
                                 <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addCourtPrice"><i class="fas fa-plus-square"></i></button>
                             </div>
-
                         </div>
+
                         <div class="card-header d-flex justify-content-between">
 
-                            <div>
-                                <button class="btn btn-primary">Balon Kort</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-primary">Kapalı Kort</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-primary" >Açık Kort Toprak</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-primary">Açık Kort Toprak</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-primary">Açık Kort Toprak</button>
-                            </div>
+                            @foreach (var item in Model.courtRecipeTypes)
+                            {
+                                <div>
+                                    <button class="btn btn-outline-dark pListGen pList_@item.CourtRecipeTypeId" id="@item.CourtRecipeTypeId" onclick="getPriceList(this.id)">@item.CourtRecipeTypes</button>
+                                </div>
+                            }
 
                         </div>
 
@@ -128,39 +116,38 @@
 
                                     </tr>
                                 </thead>
-                                <tbody>
-
-                                    @foreach (var item2 in Model.courtPriceLists)
+                                <tbody id="getPriceListTable">
+                                    @for (int i = 0; i < Model.courtPriceLists.Count; i++)
                                     {
-
                                         <tr style="text-align:center">
-                                            <td>@item2.Name</td>
-                                            <td>@item2.CourtPrice</td>
+                                            <td>@Model.courtPriceLists[i].Name</td>
+                                            <td>@Model.courtPriceLists[i].CourtPrice</td>
 
-                                            @{ if (@item2.PriceType == "1")
-                                                {
-                                                    <td>Asıl Ücret</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>Ek Ücret</td>
-                                                }
+                                            @if (Model.courtPriceLists[i].PriceType == "1")
+                                            {
+                                                <td>Aktif Ücret</td>
                                             }
-                                            <td>@item2.RecipeType</td>
+                                            else
+                                            {
+                                                <td>Pasif Ücret</td>
+                                            }
 
-                                            @{ if (@item2.Condition == "1")
-                                                {
-                                                    <td>Aktif</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>Pasif</td>
-                                                }
+                                          
+                                            <td>@Model.courtPriceLists[i].RecipeType</td>
+
+                                            @if (Model.courtPriceLists[i].Condition == "1")
+                                            {
+                                                <td>Aktif</td>
+                                            }
+
+                                            else
+                                            {
+                                                <td>Pasif</td>
                                             }
 
                                             <td>
-                                                <button class="btn btn-outline-success" id="@item2.CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item2.CourtPriceListId" onclick="deleteCourtPrice(this.id)"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-outline-success" id="@Model.courtPriceLists[i].CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-outline-danger" id="@Model.courtPriceLists[i].CourtPriceListId" onclick="deleteCourtPrice(this.id) "><i class="fas fa-trash"></i></button>
                                             </td>
 
                                         </tr>
@@ -170,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
@@ -218,7 +205,7 @@
                         </div>
                     </div>
                 </div>
-             
+
 
             </div>
 
@@ -254,7 +241,16 @@
                             {
                                 <tr style="text-align:center" id="">
                                     <td>@item.CourtName</td>
-                                    <td>@item.CourtType</td>
+
+                                    @foreach (var item2 in Model.courtRecipeTypes)
+                                    {
+                                        if (item2.CourtRecipeTypeId == Convert.ToInt32(item.CourtType))
+                                        {
+                                            <td>@item2.CourtRecipeTypes</td>
+                                        }
+
+                                    }
+
 
                                     @if (item.CourtWebConditions == 1)
                                     {
@@ -294,7 +290,7 @@
 
 
 
-     
+
         </div>
 
     </section>
@@ -325,7 +321,7 @@
 
                                 @foreach (var item in Model.courtRecipeTypes)
                                 {
-                                    <option> @item.CourtRecipeTypes</option>
+                                    <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
                                 }
 
 
@@ -588,17 +584,74 @@
     </div>
 </div>
 
-<div class="modal fade" id="addCourtPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="addCourtPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Kort Ekle</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Kort Ücret Ekle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div class="form-group">
+                    <label>Ay Seçiniz</label>
+                    <select id="selectedMonth" class="select2bs4" multiple="multiple" data-placeholder="Ay Bilgisi Seçimi Yapınız"
+                            style="width: 100%;">
+                        <option value="0,1,2,3,4,5,6,7,8,9,10,11">Tüm Yıl</option>
+                        <option value="0,">Ocak</option>
+                        <option value="1,">Şubat</option>
+                        <option value="2,">Mart</option>
+                        <option value="3,">Nisan</option>
+                        <option value="4,">Mayıs</option>
+                        <option value="5,">Haziran</option>
+                        <option value="6,">Temmuz</option>
+                        <option value="7,">Ağustos</option>
+                        <option value="8,">Eylül</option>
+                        <option value="9,">Ekim</option>
+                        <option value="10,">Kasım</option>
+                        <option value="11,">Aralık</option>
+
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Gün Seçiniz</label>
+                    <select id="selectedDay" class="select2bs4" multiple="multiple" data-placeholder="Gün Bilgisi Seçimi Yapınız"
+                            style="width: 100%;">
+                        <option value="0,1,2,3,4,5,6">Tüm Günler</option>
+                        <option value="1,">Pazartesi</option>
+                        <option value="2,">Salı</option>
+                        <option value="3,">Çarşamba</option>
+                        <option value="4,">Perşembe</option>
+                        <option value="5,">Cuma</option>
+                        <option value="6,">Cumartesi</option>
+                        <option value="0,">Pazar</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Saat Seçiniz</label>
+                    <select id="selectedTime" class="select2bs4" multiple="multiple" data-placeholder="Saat Bilgisi Seçimi Yapınız" style="width: 100%;">
+
+                        <option value="1">Tüm Saatler </option>
+
+                        @foreach (var item in Model.resTimes)
+
+                        {
+                            if (item.Restimes60 == 60)
+                            {
+                                <option value="@item.ResTimes,">@item.ResTimes</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+
                 <div class="row">
+
+
                     <div class="form-group col-md-6">
                         <label for="recipient-name" class="col-form-label">Tarife Adı:</label>
                         <input type="text" class="form-control" id="recipeName">
@@ -608,45 +661,37 @@
                         <label for="recipient-name" class="col-form-label">Tarife Fiyatı:</label>
                         <input type="text" class="form-control" id="recipePrice">
                     </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <select id="recipePriceType" class="form-control">
+                            <option disabled="disabled" selected="selected">Ücret Tipi</option>
+
+                            <option value="1"> Asıl Ücret</option>
+                            <option value="0"> Ek Ücret</option>
+
+                        </select>
+                    </div>
 
 
-                    <select id="recipePriceType" class="form-control">
-                        <option disabled="disabled" selected="selected">Ücret Tipi</option>
+                    <div class="col-md-6">
+                        <select id="recipeTypeAdd" class="form-control">
+                            <option disabled="disabled" selected="selected">Kort Türü</option>
 
-                        <option value="1"> Asıl Ücret</option>
-                        <option value="0"> Ek Ücret</option>
+                            @foreach (var item in Model.courtRecipeTypes)
+                            {
+                                <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
 
-                    </select>
+                            }
 
-
-
-                    <select id="recipePriceType" class="form-control">
-                        <option disabled="disabled" selected="selected">Kort Türü</option>
-
-                        @foreach (var item in Model.courtRecipeTypes)
-                        {
-                            <option>@item.CourtRecipeTypes</option>
-                            <option>@item.CourtRecipeTypes</option>
-                        }
-
-
-                    </select>
-
-                    <select id="recipeCondition" class="form-control">
-                        <option disabled="disabled" selected="selected">Ücret Tipi</option>
-                        <option value="1">Aktif</option>
-                        <option value="0">Pasif</option>
-                    </select>
-
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Durumu:</label>
-                        <input type="text" class="form-control" id="recipeCondition">
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveAddCourtPrice()">Ekle</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddCourtPrice()">Kaydet</button>
             </div>
         </div>
     </div>
@@ -811,6 +856,11 @@
 <script>
 
     $(document).ready(function () {
+
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+
 
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -1481,11 +1531,45 @@
 
     function saveAddCourtPrice() {
 
+
+        var month = $("#selectedMonth").val();
+
+        var months = "";
+
+        for (var i = 0; i < month.length; i++) {
+            var firstMonth = month[i];
+            months = firstMonth + months;
+        }
+
+        var day = $("#selectedDay").val();
+
+        var days = "";
+
+        for (var i = 0; i < day.length; i++) {
+
+            var firstMonth = day[i];
+
+            days = firstMonth + days;
+        }
+
+        var time = $("#selectedTime").val();
+
+        var times = "";
+
+        for (var i = 0; i < time.length; i++) {
+
+            var firstDay = time[i];
+
+            times = firstDay + times;
+        }
+
+        debugger;
+
         $.ajax({
             type: "POST",
             url: '../SystemSettings/AddNewCourtPriceList',
             cache: false,
-            data: { "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType option:selected").val(), "courtRecipeType": $("#courtRecipeType").val(), "recipeCondition": $("#recipeCondition").val() },
+            data: { "month": months, "day": days, "time": times, "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType option:selected").val(), "courtRecipeType": $("#recipeTypeAdd option:selected").text(), "recipeTypeId": $("#recipeTypeAdd option:selected").val(), "recipeCondition": "1" },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -1525,6 +1609,71 @@
         });
     }
 
+    function getPriceList(id) {
+
+
+        $(".pListGen").removeClass("btn-dark");
+        $(".pListGen").addClass("btn-outline-dark");
+        $(".pList_" + id).removeClass("btn-outline-dark");
+        $(".pList_" + id).addClass("btn-dark");
+
+        $.ajax({
+            type: "GET",
+            url: '../SystemSettings/GetPriceListTable',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+                $("#getPriceListTable").empty();
+
+                row = "";
+
+                if (res.length > 0) {
+
+                    for (var i = 0; i < res.length; i++) {
+
+                        row += '  <tr style="text-align:center" id="">';
+                        row += '<td>' + res[i].name + '</td>';
+                        row += '<td>' + res[i].courtPrice + '</td>';
+                        if (res[i].priceType == 1) {
+                            row += '<td>' + "Asıl Ücret" + '</td>';
+                        }
+                        else {
+                            row += '<td>' + "Ek Ücret" + '</td>';
+                        }
+
+                        row += '<td>' + res[i].recipeType + '</td>';
+                        if (res[i].condition == 1) {
+                            row += '<td>' + "Aktif" + '</td>';
+                        }
+                        else {
+                            row += '<td>' + "Pasif" + '</td>';
+                        }
+
+                        row += '<td>';
+                        row += '<button class="btn btn-outline-success" id="' + res[i].courtPriceListId + '" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>';
+                        row += '<button class="btn btn-outline-danger" id="' + res[i].courtPriceListId + '" onclick="deleteCourtPrice(this.id) "><i class="fas fa-trash"></i></button>';
+                        row += '</td>';
+                        row += '</tr>';
+
+                    }
+                }
+
+
+                $("#getPriceListTable").append(row);
+
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
 
 
 
@@ -1581,8 +1730,6 @@
         var color = $("#scaleColor").val();
         var name = $("#scaleName").val();
         var code = $("#scaleCode").val();
-
-        debugger;
 
         $.ajax({
             type: "POST",

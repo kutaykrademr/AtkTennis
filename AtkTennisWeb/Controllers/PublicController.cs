@@ -226,6 +226,35 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
+        public class CourtPriceListViewModel
+        {
+            public List<CourtPriceListDto> courtPriceLists { get; set; } = new List<CourtPriceListDto>();
+            public List<CourtPriceListDto> priceLists { get; set; } = new List<CourtPriceListDto>();
+            public List<string> priceListsId { get; set; } = new List<string>();
+
+        }
+
+
+        public JsonResult GetListPrice(int id, string day, string month, string time)
+        {
+            CourtPriceListViewModel model = new CourtPriceListViewModel();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtPriceListViewModel>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetListPrice?id=" + id + "&day=" + day + "&month=" + month + "&time=" + time));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtPriceListViewModel());
+            }
+
+            return Json(model);
+
+        }
+
         public JsonResult GetResTime(int courtId, string dateInf)
         {
             List<court_reserved> model = new List<court_reserved>();

@@ -153,7 +153,7 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
-            "pageLength":10,
+            "pageLength": 10,
         });
     }
 
@@ -205,7 +205,7 @@
 
                         if (res[i].duesInfType == false) {
                             row += '<tr style="text-align:center" id="">';
-                      
+
                             if (res[i].remainingPrice != 0) {
                                 row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
                             }
@@ -249,7 +249,7 @@
                 row += '<table id="example2" class="table table-bordered table-hover">';
                 row += '<thead>';
                 row += '<tr style="text-align:center">';
-   
+
                 row += '<th>#</th>';
                 row += '<th>Üye Adı</th>';
                 row += '<th>Aidat Türü</th>';
@@ -269,9 +269,9 @@
 
                     if (res[i].priceCondition == false && res[i].duesInfType == false) {
 
-                      
+
                         row += '<tr style="text-align:center" id="">';
-                  
+
                         if (res[i].paidPrice != 0) {
 
                             row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
@@ -305,9 +305,9 @@
 
                 $("#appendResInf2").append(row);
 
-            
-                myfunction(); 
-                
+
+                myfunction();
+
             },
 
             error: function (textStatus, errorThrown) {
@@ -337,7 +337,7 @@
                 row += '<h4>Ödeme Yapanlar</h4>';
                 row += '<table id="example3" class="table table-bordered table-hover">';
                 row += '<thead>';
-                row += '<tr style="text-align:center">';   
+                row += '<tr style="text-align:center">';
                 row += '<th>#</th>';
                 row += '<th>Üye Adı</th>';
                 row += '<th>Aidat Türü</th>';
@@ -356,11 +356,13 @@
 
                 for (var i = 0; i < res.length; i++) {
 
-                    if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice) {
+                    if (res[i].duesInfType == true) {
 
-                        if (res[i].duesInfType == true) {
+                        if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice) {
+
+
                             row += '<tr style="text-align:center" id="">';
-                          
+
                             if (res[i].remainingPrice != 0) {
                                 row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
                             }
@@ -421,7 +423,7 @@
 
                     if (res[i].priceCondition == false && res[i].duesInfType == true) {
 
-                       
+
                         row += '<tr style="text-align:center" id="">';
                         if (res[i].paidPrice != 0) {
 
@@ -467,6 +469,7 @@
         });
 
     }
+
 
     function getRes() {
 
@@ -578,7 +581,7 @@
 
                 row = "";
                 $("#appendResInf2").empty();
-            
+
 
                 row += '<div class="card-body">';
                 row += '<h4>Borcu Olanlar</h4>';
@@ -607,7 +610,7 @@
 
                     if (res.reservation[i].priceInf == false && res.reservation[i].procedure == false) {
 
-                          row += '<tr style="text-align:center" id="">';
+                        row += '<tr style="text-align:center" id="">';
                         row += '<td style="display:none" id="userId">' + res.reservation[i].userId + '</td>';
                         row += '<td style="background-color:#EF5350">' + res.reservation[i].resId + '</td>';
                         row += '<td>' + memberInf[0].memberNumber + '</td>';
@@ -618,7 +621,7 @@
                         row += '<td>' + res.reservation[i].price + '</td>';
                         row += '<td>' + "Ödenmedi" + '</td>';
                         row += '</tr>';
-                       
+
                     }
                 }
                 row += '</tbody>';
@@ -663,7 +666,7 @@
 
                     if (res.reservationCancel[i].priceInf == false && res.reservationCancel[i].procedure == false) {
 
-                     
+
                         newRow += '<tr style="text-align:center" id="">';
                         newRow += '<td style="display:none" id="userId">' + res.reservationCancel[i].userId + '</td>';
                         newRow += '<td style="background-color:#EF5350">' + res.reservationCancel[i].resId + '</td>';
@@ -675,11 +678,11 @@
                             }
                         }
                         newRow += '<td>' + res.reservationCancel[i].resDate + '</td>';
-                        newRow += '<td>' + res.reservationCancel[i].resStartTime +  '</td>';
+                        newRow += '<td>' + res.reservationCancel[i].resStartTime + '</td>';
                         newRow += '<td>' + res.reservationCancel[i].price + '</td>';
                         newRow += '<td>' + "Ödenmedi" + '</td>';
                         newRow += '</tr>';
-                     
+
                     }
                 }
 
@@ -701,7 +704,7 @@
     }
 
 
-    
+
     function getDues(id) {
 
         $.ajax({
@@ -709,7 +712,7 @@
             type: "Get",
             url: '../Report/GetDuesPayment',
             cache: false,
-            data: {"id" : id},
+            data: { "id": id },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -811,7 +814,7 @@
             type: "Get",
             url: '../Report/GetCabinetPayment',
             cache: false,
-            data: {"id" : id},
+            data: { "id": id },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -819,7 +822,7 @@
                 row = "";
 
                 $("#cabinetInf2x").empty();
-             
+
                 row += '<div i class="card-body">';
                 row += '<h4>Ödeme Alınanlar</h4>';
                 row += '<table id="resList" class="table table-bordered table-hover">';
@@ -856,7 +859,7 @@
 
 
 
-                 
+
                     row += '<tr style="text-align:center" id="">';
                     row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
 
@@ -880,7 +883,7 @@
 
 
                     row += '</tr>';
-                 
+
 
                 }
                 row += '</tbody>';

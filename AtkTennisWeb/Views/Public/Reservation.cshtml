@@ -728,7 +728,8 @@
                                     <th style="font-weight:bold" scope="col">Seç</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="courtPriceListAppend">
+
                                 @foreach (var item2 in Model.courtPriceLists)
                                 {
                                     if (item2.Condition == "1")
@@ -756,6 +757,7 @@
                                         </tr>
                                     }
                                 }
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -825,16 +827,6 @@
 
          });
 
-
-        getPrice();
-
-        $('#checkPriceTable input').click(function () {
-            if ($(this).is(':checked'))
-                getPrice();
-            else {
-                getPrice();
-            }
-        });
 
 
 
@@ -979,6 +971,76 @@
     function getCourtTime(courtId , courtName , checkTime) {
 
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
+
+        var pickerDay = new Date($("#timeNow").val());
+        var Day = pickerDay.getDay();
+        var Month = pickerDay.getMonth();
+
+        debugger;
+
+        $.ajax({
+            type: "POST",
+            url: '../Public/GetListPrice',
+            cache: false,
+            data: { "id": courtId, "day": Day, "month": Month, "time": checkTime },
+            dataType: "json",
+            async: false,
+            success: function (res) {
+
+                debugger;
+
+                $("#courtPriceListAppend").empty();
+
+                row = "";
+
+                for (var i = 0; i < res.courtPriceLists.length; i++) {
+
+                    if (res.courtPriceLists[i].condition == "1") {
+
+                        row += '<tr>';
+                        row += '<td>' + res.courtPriceLists[i].name + '</td>';
+                        row += '<td>' + res.courtPriceLists[i].courtPrice + "₺" + '</td>';
+                        row += '<td>';
+                        row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
+                        row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline"' + res.courtPriceLists[i].courtPriceListId + '" type="checkbox" name="' + res.courtPriceLists[i].courtPrice + '" id="cb_' + res.courtPriceLists[i].courtPriceListId + '"checked="checked" disabled="true">';
+                        row += '<label for="cb_' + res.courtPriceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+                        row += '</div>';
+                        row += '</td>';
+                        row += '</tr>';
+
+                    }
+                }
+
+                for (var i = 0; i < res.priceLists.length; i++) {
+
+                    if (res.priceLists[i].condition == "1") {
+
+                        row += '<tr>';
+                        row += '<td>' + res.priceLists[i].name + '</td>';
+                        row += '<td>' + res.priceLists[i].courtPrice + "₺" + '</td>';
+                        row += '<td>';
+                        row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
+                        row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()"' + res.priceLists[i].courtPriceListId + '" type="checkbox" name="' + res.priceLists[i].courtPrice + '" id="cb_' + res.priceLists[i].courtPriceListId + '">';
+                        row += '<label for="cb_' + res.priceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+                        row += '</div>';
+                        row += '</td>';
+                        row += '</tr>';
+
+                    }
+                }
+
+
+                $("#courtPriceListAppend").append(row);
+
+                getPrice()
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
 
         var dt = new Date();
 
@@ -1159,8 +1221,10 @@
 
     function getPrice() {
 
+        debugger;
+
         var price = [];
-        $('#checkPriceTable input:checked').each(function () {
+        $('#checkPriceTables input:checked').each(function () {
             price.push(this.name);
         });
 

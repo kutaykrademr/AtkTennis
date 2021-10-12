@@ -38,8 +38,6 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
-       
-
         public IActionResult NewRegister()
         {
 
@@ -383,6 +381,8 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
+
+
         public JsonResult NewReservationAdmin(ReservationDto res)
         {
             var model = new ReservationViewDto();
@@ -555,6 +555,35 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public class CourtPriceListViewModel
+        {
+            public List<CourtPriceListDto> courtPriceLists { get; set; } = new List<CourtPriceListDto>();
+            public List<CourtPriceListDto> priceLists { get; set; } = new List<CourtPriceListDto>();
+            public List<string> priceListsId { get; set; } = new List<string>();
+
+        }
+
+
+        public JsonResult GetPriceList(int id , string day , string month , string time)
+        {
+            CourtPriceListViewModel model = new CourtPriceListViewModel();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CourtPriceListViewModel>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetPriceList?id=" + id + "&day="+ day + "&month=" + month + "&time=" + time));
+
+                if (model == null)
+
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                return Json(new CourtPriceListViewModel());
+            }
+
+            return Json(model);
+
+        }
+
         public JsonResult GetResSchemaDetail(string date)
         {
             ResSchemaViewDto model = new ResSchemaViewDto();
@@ -574,6 +603,9 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
 
         }
+
+
+
 
         public JsonResult UpdateMemberList(string id, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, string checkpass)
         {
@@ -624,6 +656,7 @@ namespace AtkTennisWeb.Controllers
             public MemberListDto memberList { get; set; } = new MemberListDto();
 
         }
+
         public JsonResult AddCabinet(int price, string code, string who, string type, string userId)
         {
             CabinetandDuesTableDto model = new CabinetandDuesTableDto();

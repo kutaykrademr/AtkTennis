@@ -575,15 +575,37 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("NewCourtPriceList", Name = "NewCourtPriceList")]
-        public CourtPriceList NewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition)
+        public CourtPriceList NewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition , string time, string day , string month , string recipeTypeId)
         {
 
             var CourtPriceList = new CourtPriceList();
+            var times = db.resTimes.ToList();
 
             try
             {
                 if (recipeName != null || recipePriceType != null || courtRecipeType != null || recipeCondition != null)
                 {
+                    CourtPriceList.RecipeTypeId = recipeTypeId;
+                    CourtPriceList.DayInf = day;
+                    CourtPriceList.MonthInf = month;
+
+                    if (time == "1")
+                    {
+                        var str = "";
+
+                        for (int i = 0; i < times.Count; i++)
+                        {
+                            var firstStr = times[i].ResTimes;
+                            str = firstStr + "," + str;
+                        }
+                        CourtPriceList.TimeInf = str;
+                    }
+
+                    else
+                    {
+                        CourtPriceList.TimeInf = time;
+                    }
+                    
                     CourtPriceList.Name = recipeName;
                     CourtPriceList.CourtPrice = recipePrice;
                     CourtPriceList.PriceType = recipePriceType;
@@ -624,6 +646,26 @@ namespace AtkTennisApp.Controllers
             }
 
             return Json(model);
+        }
+
+        [HttpGet("GetPriceListTable", Name = "GetPriceListTable")]
+        public List<CourtPriceList> GetPriceListTable(int id)
+        {
+            List<CourtPriceList> model = new List<CourtPriceList>();
+
+            var typeId = Convert.ToString(id);
+
+            try
+            {
+                model = db.courtPriceLists.Where(x => x.RecipeTypeId == typeId).ToList();
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return model;
         }
 
         [HttpGet("UpdateCourtPriceList", Name = "UpdateCourtPriceList")]
