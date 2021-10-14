@@ -83,6 +83,13 @@
 
 <style>
 
+    .modal-dialog-bottom {
+        position: fixed !important;
+        top: auto;
+        right: 0;
+        left: 0;
+        bottom: 0;
+    }
 
     .table-bordered2 {
         border: 1px solid #dee2e6;
@@ -183,12 +190,12 @@
 
                                 @if (Model.TodayResCount == null)
                                 {
-                                @Html.Raw("-") ;
+                                    @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                @Model.TodayResCount
+                                    @Model.TodayResCount
 
                             </h3>
                             <p>Bugüne Ait Rezervasyon Sayısı</p>
@@ -208,12 +215,12 @@
 
                                 @if (Model.TotalResCount == null)
                                 {
-                                @Html.Raw("-") ;
+                                    @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                @Model.TotalResCount
+                                    @Model.TotalResCount
 
                             </h3>
 
@@ -279,7 +286,7 @@
 
                                         {
 
-                                        <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+                                            <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
 
                                         }
 
@@ -296,9 +303,9 @@
 
                                         @foreach (var item in Model.courtScaleLists)
                                         {
-                                        <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
-                                            @item.Code
-                                        </div>
+                                            <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
+                                                @item.Code
+                                            </div>
                                         }
 
                                     </div>
@@ -453,7 +460,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                            <option value="@item.CourtId">@item.CourtName</option>
+                                <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -477,6 +484,7 @@
                                 <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer; background-color:#e7505a; color:white"></li>
                                 <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate2()"><i class="fas fa-chevron-left"></i></button></li>
                                 <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate2()"><i class="fas fa-chevron-right"></i></button></li>
+
                             </ul>
                         </nav>
                     </div>
@@ -498,6 +506,20 @@
                 </div>
             </div>
 
+
+            <div class="modal-footer" id="forApproveId">
+                <div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="ApproveAll(this.id)">Rezervasyon Yap</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="priceModal">
+    <div class="modal-dialog modal-lg modal-dialog-bottom ">
+        <div class="modal-content">
             <div id="priceList" style="display:block">
 
                 <div class="modal-header" style="background-color: #004e6c;">
@@ -537,12 +559,10 @@
                 </div>
 
 
-                <div class="modal-footer d-flex justify-content-between" id="forApproveId">
+                <div class="modal-footer d-flex justify-content-between" id="forApproveId2">
                     <div>
                         <table class="table table-bordered ">
-
                             <tbody>
-
                                 <tr>
                                     <td>Rezervasyon Görevi Tanımla</td>
                                     <td>
@@ -552,21 +572,17 @@
                                             <label for="privChecked" class="custom-control-label"></label>
                                         </div>
                                     </td>
-
                                 </tr>
-
                             </tbody>
-
                         </table>
                     </div>
 
                     <div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                        <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Yap</button>
+                        <button type="button" class="btn btn-primary" onclick="Approve(this.id)">Rezervasyon Tamamla</button>
                     </div>
 
                 </div>
-
             </div>
         </div>
     </div>
@@ -588,7 +604,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                            <option value="@item.CourtId">@item.CourtName</option>
+                                <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -651,29 +667,29 @@
                                         {
                                             if (item2.Condition == "1")
                                             {
-                                        <tr>
-                                            <td>@item2.Name</td>
-                                            <td>@item2.CourtPrice ₺ </td>
-                                            <td>
-                                                <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
+                                                <tr>
+                                                    <td>@item2.Name</td>
+                                                    <td>@item2.CourtPrice ₺ </td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
 
-                                                    @{
+                                                            @{
                                                                 if (item2.PriceType == "1")
                                                                 {
-                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
                                                                 }
 
                                                                 else
                                                                 {
-                                                        <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                                    <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
                                                                 }
 
-                                                    }
+                                                            }
 
-                                                    <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                            <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             }
                                         }
 
@@ -805,7 +821,7 @@
 
 <script>
 
-$(document).ready(function () {
+    $(document).ready(function () {
 
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -1167,7 +1183,6 @@ $(document).ready(function () {
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
 
-        debugger;
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
         $("#timeNowModal").val(date4);
@@ -1198,10 +1213,13 @@ $(document).ready(function () {
 
         var timePickerModal = modalDate;
 
+
+
         var a = id.split(",");
         var courtId = a[0];
         var courtName = a[1];
         var clcTime = a[2];
+
 
         var resStartTime = $('#doRes').attr('start');
         var resFinishTime = $('#doRes').attr('finish');
@@ -1273,79 +1291,15 @@ $(document).ready(function () {
 
         });
 
+
     }
 
     function getCourtTime(courtId, courtName, timePickerModal, clcTime) {
 
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
+        $("#forApproveId2 button:nth-of-type(2)").attr("id", courtId);
 
-        var pickerDay = new Date(timePickerModal);
-        var Day = pickerDay.getDay();
-        var Month = pickerDay.getMonth();
-
-        $.ajax({
-            type: "POST",
-            url: '../AdminHome/GetPriceList',
-            cache: false,
-            data: { "id": courtId, "day": Day, "month": Month, "time": clcTime },
-            dataType: "json",
-            async: false,
-            success: function (res) {
-
-                debugger;
-
-                $("#courtPriceListAppend").empty();
-
-                row = "";
-
-                for (var i = 0; i < res.courtPriceLists.length; i++) {
-
-                    if (res.courtPriceLists[i].condition == "1") {
-
-                        row += '<tr>';
-                        row += '<td>' + res.courtPriceLists[i].name + '</td>';
-                        row += '<td>' + res.courtPriceLists[i].courtPrice + "₺" + '</td>';
-                        row += '<td>';
-                        row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
-                        row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()" value="' + res.courtPriceLists[i].courtPriceListId + '" type="checkbox" name="' + res.courtPriceLists[i].courtPrice + '" id="cb_' + res.courtPriceLists[i].courtPriceListId + '" checked="checked">';
-                        row += '<label for="cb_' + res.courtPriceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
-                        row += '</div>';
-                        row += '</td>';
-                        row += '</tr>';
-
-                    }
-                }
-
-                for (var i = 0; i < res.priceLists.length; i++) {
-
-                    if (res.priceLists[i].condition == "1") {
-
-                        row += '<tr>';
-                        row += '<td>' + res.priceLists[i].name + '</td>';
-                        row += '<td>' + res.priceLists[i].courtPrice + "₺" + '</td>';
-                        row += '<td>';
-                        row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
-                        row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()" value="' + res.priceLists[i].courtPriceListId + '" type="checkbox" name="' + res.priceLists[i].courtPrice + '" id="cb_' + res.priceLists[i].courtPriceListId + '">';
-                        row += '<label for="cb_' + res.priceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
-                        row += '</div>';
-                        row += '</td>';
-                        row += '</tr>';
-
-                    }
-                }
-
-
-                $("#courtPriceListAppend").append(row);
-
-                getPrice()
-
-            },
-
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
+       
 
         var dt = new Date();
 
@@ -1481,6 +1435,7 @@ $(document).ready(function () {
             });
 
         checkMe(clcTime);
+
     }
 
     function openResModalUpd(id) {
@@ -1540,8 +1495,6 @@ $(document).ready(function () {
         });
 
     }
-
-
 
     function getCourtTimeUpd(courtId, courtName, timePickerModal, resId) {
 
@@ -1779,8 +1732,6 @@ $(document).ready(function () {
                         row += '<tr>';
                         row += ' <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">' + res.courts[i].courtName + '</th>';
 
-
-
                         for (var a = 0; a < res.resTimes.length; a++) {
 
 
@@ -1791,9 +1742,6 @@ $(document).ready(function () {
                             var resCancel = Enumerable.from(res.reservationCancels)
                                 .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.courtId == res.courts[i].courtId })
                                 .select(function (x) { return x }).toArray();
-
-
-
 
 
                             var asd = res.courts[i].courtTimePeriod;
@@ -1843,6 +1791,7 @@ $(document).ready(function () {
                                     .where(function (x) { return x.name.toLowerCase() == memInf[0].role.toLowerCase() })
                                     .select(function (x) { return x }).toArray();
 
+
                                 debugger;
 
                                 if (scaleList.length > 0) {
@@ -1867,6 +1816,8 @@ $(document).ready(function () {
                             }
 
                             else if (Res.length != 0) {
+
+                                debugger;
 
                                 var scaleList = Enumerable.from(res.courtScaleLists)
                                     .where(function (x) { return x.code == Res[0].nickName })
@@ -1908,10 +1859,6 @@ $(document).ready(function () {
                                 a = a + parseInt(colspanVal) - 1;
                             }
 
-
-
-
-
                             else
                                 if (period == 4) {
 
@@ -1932,6 +1879,7 @@ $(document).ready(function () {
 
 
                         }
+
                         row += '</tr>';
                     }
                 }
@@ -2007,6 +1955,119 @@ $(document).ready(function () {
             $("#sumOfPrice").html(sum);
         }
 
+    }
+
+
+    function ApproveAll(id) {
+
+       
+        var checkTimeList = [];
+
+        $('#checkTimeTable input:checked:not(:disabled)').each(function () {
+            checkTimeList.push(this.name);
+        });
+
+        if (checkTimeList.length == 0) {
+            swal({
+                title: "Uyarı",
+                text: "Lütfen Saat Seçiniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+
+
+            });
+        }
+
+        else if ($("#findMember").val() == "") {
+
+            swal({
+                title: "Uyarı",
+                text: "Lütfen Üye Seçiniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+
+
+            });
+        }
+        else {
+            var timePickerModal = $('#timeNowModal').val();
+
+            var clcTime = checkTimeList[0];
+            var pickerDay = new Date(timePickerModal);
+            var Day = pickerDay.getDay();
+            var Month = pickerDay.getMonth();
+            var courtId = id;
+
+            $.ajax({
+                type: "POST",
+                url: '../AdminHome/GetPriceList',
+                cache: false,
+                data: { "id": courtId, "day": Day, "month": Month, "time": clcTime },
+                dataType: "json",
+                async: false,
+                success: function (res) {
+
+                    $("#courtPriceListAppend").empty();
+
+                    row = "";
+
+                    for (var i = 0; i < res.courtPriceLists.length; i++) {
+
+                        if (res.courtPriceLists[i].condition == "1") {
+
+                            row += '<tr>';
+                            row += '<td>' + res.courtPriceLists[i].name + '</td>';
+                            row += '<td>' + res.courtPriceLists[i].courtPrice + "₺" + '</td>';
+                            row += '<td>';
+                            row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
+                            row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()" value="' + res.courtPriceLists[i].courtPriceListId + '" type="checkbox" name="' + res.courtPriceLists[i].courtPrice + '" id="cb_' + res.courtPriceLists[i].courtPriceListId + '" checked="checked">';
+                            row += '<label for="cb_' + res.courtPriceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+                            row += '</div>';
+                            row += '</td>';
+                            row += '</tr>';
+
+                        }
+                    }
+
+                    for (var i = 0; i < res.priceLists.length; i++) {
+
+                        if (res.priceLists[i].condition == "1") {
+
+                            row += '<tr>';
+                            row += '<td>' + res.priceLists[i].name + '</td>';
+                            row += '<td>' + res.priceLists[i].courtPrice + "₺" + '</td>';
+                            row += '<td>';
+                            row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
+                            row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()" value="' + res.priceLists[i].courtPriceListId + '" type="checkbox" name="' + res.priceLists[i].courtPrice + '" id="cb_' + res.priceLists[i].courtPriceListId + '">';
+                            row += '<label for="cb_' + res.priceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+                            row += '</div>';
+                            row += '</td>';
+                            row += '</tr>';
+
+                        }
+                    }
+
+
+                    $("#courtPriceListAppend").append(row);
+
+                    getPrice()
+
+                    $('#priceModal').modal('toggle');
+
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+       
     }
 
     function Approve(id) {
@@ -2193,6 +2254,7 @@ $(document).ready(function () {
         });
     }
 
+
     //RezervasyonBilgiModal
 
     function openResInfModal(id) {
@@ -2283,7 +2345,7 @@ $(document).ready(function () {
 
                 if (res != null) {
 
-                    debugger;
+
 
                     $("#nickAndFullName").text(res.resSchemaModal.nickName + ' - ' + res.resSchemaModal.fullName);
                     $("#courtName").text('Kort Adı:' + ' ' + res.resSchemaModal.courtName);
@@ -2428,9 +2490,9 @@ $(document).ready(function () {
 
     function checkMe(id) {
 
-        var checkID = "";
-
         debugger;
+
+        var checkID = "";
 
         var value = $("input[name='" + id + "']");
 

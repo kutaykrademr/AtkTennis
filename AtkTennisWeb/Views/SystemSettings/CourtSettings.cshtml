@@ -437,7 +437,7 @@
 
                                 @foreach (var item in Model.courtRecipeTypes)
                                 {
-                                    <option> @item.CourtRecipeTypes</option>
+                                    <option value="@item.CourtRecipeTypeId"> @item.CourtRecipeTypes</option>
                                 }
 
 
@@ -1326,7 +1326,7 @@
             type: "POST",
             url: '../SystemSettings/UpdateCourt',
             cache: false,
-            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type option:selected").text(), courtCondition, courtWebCondition, courtTimeStart, courtTimeFinish, courtPeriodTime },
+            data: { "id": id, "courtName": $("#name").val(), "courtType": $("#type option:selected").val(), courtCondition, courtWebCondition, courtTimeStart, courtTimeFinish, courtPeriodTime },
             dataType: "json",
             async: true,
             success: function (res) {

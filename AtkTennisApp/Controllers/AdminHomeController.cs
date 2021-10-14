@@ -252,6 +252,8 @@ namespace AtkTennisApp.Controllers
                             totalPriceResInf = totalPriceResInf + x;
                         }
                     }
+
+
                     for (int i = 0; i < model.reservationCancels.Count; i++)
                     {
                         if (model.reservationCancels[i].PriceInf == false && model.reservationCancels[i].Procedure == false)
