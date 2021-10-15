@@ -85,7 +85,7 @@
 
     .modal-dialog-bottom {
         position: fixed !important;
-        top: auto;
+        top: 50%;
         right: 0;
         left: 0;
         bottom: 0;
@@ -190,12 +190,12 @@
 
                                 @if (Model.TodayResCount == null)
                                 {
-                                    @Html.Raw("-") ;
+                                @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                    @Model.TodayResCount
+                                @Model.TodayResCount
 
                             </h3>
                             <p>Bugüne Ait Rezervasyon Sayısı</p>
@@ -215,12 +215,12 @@
 
                                 @if (Model.TotalResCount == null)
                                 {
-                                    @Html.Raw("-") ;
+                                @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                    @Model.TotalResCount
+                                @Model.TotalResCount
 
                             </h3>
 
@@ -286,7 +286,7 @@
 
                                         {
 
-                                            <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+                                        <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
 
                                         }
 
@@ -303,9 +303,9 @@
 
                                         @foreach (var item in Model.courtScaleLists)
                                         {
-                                            <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
-                                                @item.Code
-                                            </div>
+                                        <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
+                                            @item.Code
+                                        </div>
                                         }
 
                                     </div>
@@ -421,16 +421,15 @@
                                     <div class="info-box-content">
                                         <div class="row">
                                             <div style="margin-right:7px">
-                                                <button style="font-size:15px; background-color:#ffc107" type="button" class="btn btn-dark">Ödeme</button>
+                                                <button style="font-size:15px; background-color:#ffc107" type="button" class="btn btn-dark"><i style="margin-right:8px" class="fas fa-wallet"></i>Ödeme</button>
                                             </div>
+
+                                            <div style="margin-right:10px">
+                                                <button style="font-size:15px;" type="button" class="btn btn-danger"><i style="margin-right:8px" class="fas fa-wallet"></i>Toplu Ödeme</button>
+                                            </div>
+
                                             <div style="margin-right:7px">
-                                                <button style="font-size:15px;" type="button" class="btn btn-danger">Toplu Ödeme</button>
-                                            </div>
-                                            <div style="margin-right:7px">
-                                                <button style="font-size:15px; background-color:#17a2b8" type="button" class="btn btn-dark"><i class="fas fa-print"></i> </button>
-                                            </div>
-                                            <div>
-                                                <button style="font-size:15px;  background-color:#17a2b8" type="button" class="btn btn-dark"><i class="fas fa-edit"></i></button>
+                                                <button id="ppp" style="font-size:15px; background-color:#17a2b8" type="button" onclick="ppp()" class="btn btn-dark"><i class="fas fa-print"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -460,7 +459,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                                <option value="@item.CourtId">@item.CourtName</option>
+                            <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -588,6 +587,132 @@
     </div>
 </div>
 
+
+<div id="xad" class="panel" style="width: 8cm; margin-bottom: 1cm; background-color: #fff;">
+    <div class="panel-body" style="padding: 2px;">
+        <div class="portlet light portlet-fit bordered" style="margin-bottom: 0px;">
+            <div class="portlet-title" style="background-color: black; text-align: center; padding: 0px; margin-bottom: 0px;">
+                <img src="~/images/atkimg/logoprint.png" alt="logo" class="logo-default" style="background-color:#000;">
+            </div>
+
+            <div id="receiptAppend" class="portlet-body" style="padding: 15px;">
+
+                <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">
+                    ATK - Aytekin Kaya Tenis Akademisi<br>
+                    KORT REZERVASYON İŞLEMLERİ
+                </div>
+
+                <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;text-align:center">
+                    #81418<br>
+                    Kapalı 3<br>
+                    15.10.2021<br>
+                    Cuma - 09:00-10:15 (75 dk)<br>
+                    Kayıt Tarihi: 13.10.2021 12:26<br>
+                </div>
+
+                <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">
+                    db1<br>
+                    DENİZ  BUDAK
+                </div>
+
+                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
+                    <thead>
+                        <tr>
+                            <td class="invoice-title uppercase" style="text-align:left;"> ÜCRET BİLGİSİ </td>
+                            <td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"> Ücret </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p style="margin: 5px;">Kort Ücreti</p>
+                                <p style="margin: 5px;"> </p>
+                            </td>
+                            <td class="text-center sbold" style="width:100px;">50 TL</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
+                    <thead>
+                        <tr>
+                            <td class="invoice-title uppercase" style="text-align:left;"> ÖDEME BİLGİSİ </td>
+                            <td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"> Türü </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nakit</td>
+                            <td class="text-center sbold" style="width:100px;">0 TL</td>
+                        </tr>
+                        <tr>
+                            <td>Kredi Kartı</td>
+                            <td class="text-center sbold" style="width:100px;">0 TL</td>
+                        </tr>
+                        <tr>
+                            <td>Toplam Ödenen</td>
+                            <td class="text-center sbold" style="width:100px;">0 TL</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
+                    <thead>
+                        <tr>
+                            <td class="invoice-title uppercase" style="text-align:left;"> DETAYLAR </td>
+                            <td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                REZERVASYON<br>
+                                13.10.2021 12:26:10
+                            </td>
+                            <td class="text-center sbold" style="width:100px;font-size: 12px;">
+                                merve <br>
+
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+
+
+                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
+                    <tbody>
+                        <tr>
+                            <td style="text-align:center; vertical-align:middle;height:45px;color:#9f9f9f;border: 1px solid #000000!important;">
+                                <small>Yetkili İmza</small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    <i class="fa fa-map-marker"></i>19 Mayıs Stadyum İçi Ulus / ANKARA<br>
+                    <i class="fa fa-phone"></i>Telefon: 0 (312) 310 71 74<br>
+                    <i class="fa fa-envelope"></i>E-Posta: info@atktenis.com.tr<br>
+                    <i class="fa fa-flag"></i>Web:http://atktenis.com.tr
+                </p>
+
+                <hr>
+                <p style="text-align: right;">
+                    15.10.2021 11:43:02
+                    nclkrYTJq3k6Z_Mk=aiüe
+                </p>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="rsvModalUpd">
     <div class="modal-dialog modal-lg" style="max-width:1000px; ">
         <div class="modal-content">
@@ -597,14 +722,13 @@
 
             <div class="modal-header">
                 <div class="row">
-
                     <div id="selCourt" class="col-md-6">
 
                         <select id="selectedCourt" class="form-control">
 
                             @foreach (var item in Model.courts)
                             {
-                                <option value="@item.CourtId">@item.CourtName</option>
+                            <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -667,29 +791,29 @@
                                         {
                                             if (item2.Condition == "1")
                                             {
-                                                <tr>
-                                                    <td>@item2.Name</td>
-                                                    <td>@item2.CourtPrice ₺ </td>
-                                                    <td>
-                                                        <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
+                                        <tr>
+                                            <td>@item2.Name</td>
+                                            <td>@item2.CourtPrice ₺ </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
 
-                                                            @{
+                                                    @{
                                                                 if (item2.PriceType == "1")
                                                                 {
-                                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
                                                                 }
 
                                                                 else
                                                                 {
-                                                                    <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                        <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
                                                                 }
 
-                                                            }
+                                                    }
 
-                                                            <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                    <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
                                             }
                                         }
 
@@ -1299,7 +1423,7 @@
         $("#forApproveId button:nth-of-type(2)").attr("id", courtId);
         $("#forApproveId2 button:nth-of-type(2)").attr("id", courtId);
 
-       
+
 
         var dt = new Date();
 
@@ -1960,7 +2084,7 @@
 
     function ApproveAll(id) {
 
-       
+
         var checkTimeList = [];
 
         $('#checkTimeTable input:checked:not(:disabled)').each(function () {
@@ -2067,7 +2191,7 @@
                 }
             });
         }
-       
+
     }
 
     function Approve(id) {
@@ -2269,8 +2393,8 @@
             success: function (res) {
 
 
-
                 $("#PriceInf").empty();
+
                 row = "";
 
                 if (res.resSchemaModal.priceInf == false) {
@@ -2284,12 +2408,14 @@
                     row += '<span class="info-box-text">Ücreti Ödendi - Borç Mevcut Değil</span>';
                 }
                 row += '</div>';
+
                 $("#PriceInf").append(row);
 
 
 
                 var x = res.resSchemaModal.priceIds;
                 var IdsArray = x.split(",");
+
 
                 $("#PriceNI").empty();
 
@@ -2308,6 +2434,9 @@
                 }
 
                 $("#PriceNI").append(row);
+
+
+
 
                 $("#sumPrice").html(res.resSchemaModal.price);
 
@@ -2370,6 +2499,114 @@
                         }
                     });
                 }
+
+                $("#receiptAppend").empty();
+
+                row = "";
+                row += '<div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">';
+                row += 'ATK - Aytekin Kaya Tenis Akademisi<br>';
+                row += 'KORT REZERVASYON İŞLEMLERİ';
+                row += '</div>';
+                row += '<div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;text-align:center">';
+                row += '#81418<br>';
+                row += '' + res.resSchemaModal.courtName + '<br>';
+                row += '' + date + ' ' + day + ' - ' + res.resSchemaModal.resStartTime + '<br>';
+                row += 'Kayıt Tarihi : 13.10.2021 12:26 ';
+
+
+
+                row += ' <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">';
+                row += '' + res.resSchemaModal.nickName + '<br>';
+                row += '' + 'Kutay Karademir' + '<br>';
+                row += '</div>';
+
+
+
+                row += '<table class="table bordered" style="background-color:#fff;margin:0;width:100%">';
+                row += '<thead>';
+                row += '<tr>';
+                row += '<td class="invoice-title uppercase" style="text-align:left; font-weight:bold">Ücret Bilgisi</td>';
+                row += '<td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"> Ücret </td>';
+                row += '</tr>';
+                row += '</thead>';
+
+                row += '<tbody>';
+                row += '<tr>';
+                row += '<td>';
+                row += '<p style="margin: 5px;">Kort Ücreti</p>';
+                row += '<p style="margin: 5px;"> </p>';
+                row += '</td>';
+                row += ' <td class="text-center sbold" style="width:100px; font-weight:bold">' + res.resSchemaModal.price + ' ' + '₺' + '</td>';
+                row += '</tr>';
+                row += '</tbody>';
+                row += '</table>';
+
+                row += '<table class="table bordered" style="background-color:#fff;margin:0;width:100%">';
+                row += '<thead>';
+                row += '<tr>';
+                row += '<td class="invoice-title uppercase" style="text-align:left; font-weight:bold"> Ödeme Bilgisi </td>';
+                row += '<td class="invoice-title uppercase text-center" style="width:100px;text-align:left;">Ödenen Ücret</td>';
+                row += '</tr>';
+                row += '</thead>';
+                row += '<tbody>';
+                row += '<tr>';
+                row += '<td>Nakit</td>';
+                row += '<td class="text-center sbold" style="width:100px; font-weight:bold">' + res.resSchemaModal.price + ' ' + '₺' + '</td>';
+                row += '</tbody>';
+                row += '</table>';
+
+
+                row += '<table class="table bordered" style="background-color:#fff;margin:0;width:100%">';
+                row += '<thead>';
+                row += '<tr>';
+                row += '<td class="invoice-title uppercase" style="text-align:left; font-weight:bold"> Detaylar </td>';
+                row += '<td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"></td>';
+                row += '</tr>';
+                row += '</thead>';
+                row += '<tbody>';
+                row += '<tr>';
+                row += '<tr>';
+                row += '<td>';
+                row += 'Rezervasyon<br>';
+                row += '13.10.2021 12:26:10';
+                row += '</td>';
+                row += '<td class="text-center sbold" style="width:100px;font-size: 12px;">';
+                row += 'merve<br>';
+                row += '</td>';
+                row += '</tr>';
+                row += '</tbody>';
+                row += '</table>';
+
+                row += '<table class="table bordered" style="background-color:#fff;margin:0;width:100%">';
+                row += '<tbody>';
+                row += '<tr>';
+                row += '<td style="text-align:center; vertical-align:middle;height:45px;color:#9f9f9f;border: 1px solid #000000!important;">';
+                row += '<small>Yetkili İmza</small>';
+                row += '</td>';
+                row += '</tr>';
+                row += '</tbody>';
+                row += '</table>';
+
+                row += '<p style="text-align:left">';
+                row += '<i class="fas fa-map-marker"></i>19 Mayıs Stadyum İçi Ulus / ANKARA<br>';
+                row += '<i class="fas fa-user"></i>Telefon: 0 (312) 310 71 74<br>';
+                row += '<i class="fas fa-envelope"></i>E-Posta: info@atktenis.com.tr<br>';
+                row += '<i class="fas fa-flag"></i>Web:http://atktenis.com.tr';
+                row += '</p>';
+
+
+                row += '<hr>';
+                row += '<p style="text-align: right;">';
+                row += '15.10.2021 11:43:02';
+                row += '</p>';
+                row += '</div>';
+
+
+
+
+
+
+                $("#receiptAppend").append(row);
 
             },
             error: function (textStatus, errorThrown) {
@@ -2494,14 +2731,13 @@
 
         var checkID = "";
 
-        var value = $("input[name='" + id + "']");
+        var value = $("input[name='" + id.trim() + "']");
 
         if (value.length != 0) {
 
             var xx = id.split(":");
 
             if (xx.length > 1) {
-                var value = $("input[name='" + id + "']");
                 id = value[0].id;
                 checkID = parseInt(value[0].id.split("_")[1]);
                 $("input[id=" + id + "]").attr('checked', true)
@@ -2864,6 +3100,17 @@
             return false;
         });
     });
+
+
+
+    function ppp() {
+
+        var divToPrint = document.getElementById("xad");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
 
 
 </script>

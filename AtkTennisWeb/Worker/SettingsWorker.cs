@@ -121,8 +121,6 @@ namespace AtkTennisWeb.Worker
                 }
                 else
                 {
-
-
                     if (appLogList.M1 != null)
                         Mutuals.M1 = appLogList.M1;
                     else
