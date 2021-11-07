@@ -91,10 +91,13 @@
                                 <thead>
 
                                     <tr style="text-align:center">
-                                        <th>Yetki Alanları </th>
+                                        <th>Admin Panel Kullanıcı Yetki Alanları </th>
                                         @for (int i = 0; i < Model.userSettings.Count; i++)
                                         {
-                                            <th>@Model.userSettings[i].RoleName</th>
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
+                                            {
+                                                <th>@Model.userSettings[i].RoleName</th>
+                                            }
                                         }
                                     </tr>
 
@@ -106,15 +109,17 @@
                                         <td>AnaSayfa</td>
                                         @for (int i = 0; i < Model.userSettings.Count; i++)
                                         {
-                                            if (Model.userSettings[i].Dashboard == true)
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
                                             {
-                                                <td><input id="Dashboard_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                if (Model.userSettings[i].Dashboard == true)
+                                                {
+                                                    <td><input id="Dashboard_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="Dashboard_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td><input id="Dashboard_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
-                                            }
-
                                         }
                                     </tr>
 
@@ -122,32 +127,17 @@
                                         <td>Danışma</td>
                                         @for (int i = 0; i < Model.userSettings.Count; i++)
                                         {
-                                            if (Model.userSettings[i].Advisory == true)
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
                                             {
-                                                <td><input id="Advisory_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                if (Model.userSettings[i].Advisory == true)
+                                                {
+                                                    <td><input id="Advisory_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="Advisory_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td><input id="Advisory_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
-                                            }
-
-                                        }
-                                    </tr>
-
-
-                                    <tr style="text-align:center">
-                                        <td>Ödeme ve Borç</td>
-                                        @for (int i = 0; i < Model.userSettings.Count; i++)
-                                        {
-                                            if (Model.userSettings[i].DebtandPayment == true)
-                                            {
-                                                <td><input id="DebtandPayment_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
-                                            }
-                                            else
-                                            {
-                                                <td><input id="DebtandPayment_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
-                                            }
-
                                         }
                                     </tr>
 
@@ -155,33 +145,94 @@
                                         <td>Rezervasyon</td>
                                         @for (int i = 0; i < Model.userSettings.Count; i++)
                                         {
-                                            if (Model.userSettings[i].Reservations == true)
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
                                             {
-                                                <td><input id="Reservations_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                if (Model.userSettings[i].Reservations == true)
+                                                {
+                                                    <td><input id="Reservations_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="Reservations_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td><input id="Reservations_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
-                                            }
-
                                         }
                                     </tr>
 
                                     <tr style="text-align:center">
-                                        <td>Sistem</td>
+                                        <td>Üye Borçlu Listeleri</td>
                                         @for (int i = 0; i < Model.userSettings.Count; i++)
                                         {
-                                            if (Model.userSettings[i].SystemSettings == true)
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
                                             {
-                                                <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                if (Model.userSettings[i].MemberDebtList == true)
+                                                {
+                                                    <td><input id="MemberDebtList_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="MemberDebtList_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
-                                            }
-
                                         }
                                     </tr>
+
+                                    <tr style="text-align:center">
+                                        <td>Ödeme ve Borç</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
+                                            {
+                                                if (Model.userSettings[i].DebtandPayment == true)
+                                                {
+                                                    <td><input id="DebtandPayment_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="DebtandPayment_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                            }
+                                        }
+                                    </tr>
+
+
+
+                                    <tr style="text-align:center">
+                                        <td>Sistem Ayarları</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
+                                            {
+                                                if (Model.userSettings[i].SystemSettings == true)
+                                                {
+                                                    <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="System_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                            }
+                                        }
+                                    </tr>
+
+                                    <tr style="text-align:center">
+                                        <td>Raporlar</td>
+                                        @for (int i = 0; i < Model.userSettings.Count; i++)
+                                        {
+                                            if (Model.userSettings[i].RoleName == "Sekreterya" || Model.userSettings[i].RoleName == "Yönetici")
+                                            {
+                                                if (Model.userSettings[i].Reports == true)
+                                                {
+                                                    <td><input id="Reports_@Model.userSettings[i].UserSettingsId" type="checkbox" checked data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><input id="Reports_@Model.userSettings[i].UserSettingsId" type="checkbox" data-toggle="toggle" data-onstyle="warning"></td>
+                                                }
+                                            }
+                                        }
+                                    </tr>
+
 
                                 </tbody>
                             </table>

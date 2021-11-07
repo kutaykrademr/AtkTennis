@@ -37,25 +37,27 @@ namespace AtkTennisApp.Controllers
 
         Context db = new Context();
 
-        [HttpGet("GetMySettings", Name = "GetMySettings")]
-        public MutualsConstantsDto GetMySettings()
-        {
-            MutualsConstantsDto model = new MutualsConstantsDto();
 
-            model.M1 = MutualConstants.M1;
-            model.M2 = MutualConstants.M2;
-            model.M3 = MutualConstants.M3;
-            model.M4 = MutualConstants.M4;
-            model.M5 = MutualConstants.M5;
-            model.M6 = MutualConstants.M6;
-            model.PhotoUrl = MutualConstants.PhotoUrl;
-            model.SunucuIp = MutualConstants.SunucuIp;
-            model.CompanyName = MutualConstants.CompanyName;
-            model.ExpirationDate = MutualConstants.ExpirationDate;
-            model.UserSettingsList = Mapping.AutoMapperBase._mapper.Map<List<Helpers.Dto.ViewDtos.UserSettingsDto>>(db.userSettings.ToList());
 
-            return model;
-        }
+        //[HttpGet("GetMySettings", Name = "GetMySettings")]
+        //public MutualsConstantsDto GetMySettings(string companyId)
+        //{
+        //    MutualsConstantsDto model = new MutualsConstantsDto();
+
+        //    model.M1 = MutualConstants.M1;
+        //    model.M2 = MutualConstants.M2;
+        //    model.M3 = MutualConstants.M3;
+        //    model.M4 = MutualConstants.M4;
+        //    model.M5 = MutualConstants.M5;
+        //    model.M6 = MutualConstants.M6;
+        //    model.PhotoUrl = MutualConstants.PhotoUrl;
+        //    model.SunucuIp = MutualConstants.SunucuIp;
+        //    model.CompanyName = MutualConstants.CompanyName;
+        //    model.ExpirationDate = MutualConstants.ExpirationDate;
+        //    model.UserSettingsList = Mapping.AutoMapperBase._mapper.Map<List<Helpers.Dto.ViewDtos.UserSettingsDto>>(db.userSettings.ToList());
+
+        //    return model;
+        //}
 
         [HttpGet("GetUsers", Name = "GetUsers")]
         public IdentityPartialClass GetUsers()
@@ -81,8 +83,41 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+        [HttpGet("GetRoles", Name = "GetRoles")]
+        public async Task<SignIn> GetRoles(string UserName, string password)
+        {
+            SignIn model = new SignIn();
+
+            List<string> roles = new List<string>();
+
+            var result = signInManager.PasswordSignInAsync(UserName, password ,false, false).Result;
+
+            if (result.Succeeded)
+            {
+                var _user = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName);
+
+                var _roles = await userManager.GetRolesAsync(_user);
+
+                model.custom_role = (List<string>)_roles;
+                model.custom_roleId = new List<string>();
+
+                foreach (var role in _roles)
+                {
+                    var _role = await roleManager.FindByNameAsync(role);
+                    model.custom_roleId.Add((string)_role.Id);
+                }
+
+
+                return model;
+            }
+
+            return model;
+          
+        }
+
+
         [HttpGet("SignIn", Name = "SignIn")]
-        public async Task<SignIn> SignIn(string UserName, string Password)
+        public async Task<SignIn> SignIn(string UserName, string Password ,string RoleName, string RoleId)
         {
 
             SignIn Model2 = new SignIn();
@@ -117,6 +152,7 @@ namespace AtkTennisApp.Controllers
                 model.Password = Model2.Password;
                 model.custom_userid = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).Id;
                 model.custom_name = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName).FullName;
+                model.comp_Id = a.CompanyId;
 
 
                 var user = await userManager.FindByIdAsync(model.custom_userid);
@@ -125,8 +161,15 @@ namespace AtkTennisApp.Controllers
 
                 var roleID = await roleManager.FindByNameAsync(roles[0]);
 
-                model.custom_role = roles[0];
-                model.custom_roleId = roleID.Id;
+                var _roles = await userManager.GetRolesAsync(user);
+
+               
+                model.custom_roleId = new List<string>();
+                model.custom_role = new List<string>();
+
+                model.custom_role.Add(RoleName);
+                model.custom_roleId.Add(RoleId);
+         
 
             }
 
@@ -147,11 +190,13 @@ namespace AtkTennisApp.Controllers
                 model.courtPriceLists = db.courtPriceLists.ToList();
                 model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
+                model.memberDues = db.memberDuesInfTables.ToList();
                 model.reservationSettings = db.reservationSettings.ToList();
                 model.memberLists = db.memberLists.ToList();
                 model.courtScales = db.courtScaleLists.ToList();
 
-
+                model.res = db.reservations.ToList();
+                model.resCan = db.reservationCancels.ToList();
             }
             catch (Exception ex)
             {
@@ -215,12 +260,67 @@ namespace AtkTennisApp.Controllers
 
         }
 
+        [HttpGet("GetMemberDebt", Name = "GetMemberDebt")]
+        public List<MemberDuesInfTable> GetMemberDebt(string userId)
+
+        {
+            List<MemberDuesInfTable> model = new List<MemberDuesInfTable>();
+
+
+            try
+            {
+                model = db.memberDuesInfTables.Where(x=>x.MemberId == userId && x.DuesInfType == false).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new List<MemberDuesInfTable>();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model; 
+
+        }
+
+        public class cabinetView
+        {
+            public List<CabinetListUser> cabinetListUsers { get; set; } = new List<CabinetListUser>();
+            public List<MemberDuesInfTable> memberDuesInfTables { get; set; } = new List<MemberDuesInfTable>();
+
+        }
+
+        [HttpGet("GetCabinetDebt", Name = "GetCabinetDebt")]
+        public cabinetView GetCabinetDebt(string userId)
+
+        {
+            cabinetView model = new cabinetView();
+
+
+            try
+            {
+                model.memberDuesInfTables = db.memberDuesInfTables.Where(x => x.MemberId == userId && x.DuesInfType == true).ToList();
+                model.cabinetListUsers = db.cabinetListUsers.Where(x => x.CabinetUserId == userId).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new cabinetView();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+
+        }
+
+
         [HttpGet("GetResTime", Name = "GetResTime")]
         public JsonResult GetResTime(int courtId, string dateInf)
         {
 
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
-            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).ToList();
+            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).OrderBy(x => x.ResStartTime).ToList();
 
             var startTime = Convert.ToDateTime(court.CourtStartTime);
             var finishTime = Convert.ToDateTime(court.CourtFinishTime);
@@ -344,9 +444,8 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservation", Name = "NewReservation")]
-        public JsonResult NewReservation(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds)
+        public JsonResult NewReservation(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds , string RoleName , string RoleId)
         {
-
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
@@ -385,6 +484,7 @@ namespace AtkTennisApp.Controllers
                         ResFinishTime = h + ":" + m;
                 }
             }
+          
             else if (per == 30)
             {
                 if (m == 30)
@@ -405,21 +505,22 @@ namespace AtkTennisApp.Controllers
                         ResFinishTime = "0" + h + ":" + m;
                     }
                     else
-                        ResFinishTime = h + ":" + "00";
+                        ResFinishTime = h + ":" + m;
                 }
 
             }
+          
             else
             {
                 h = h + 1;
 
                 if (h < 10)
                 {
-                    ResFinishTime = "0" + h + ":" + "00";
+                    ResFinishTime = "0" + h + ":" + m;
                 }
                 else
                 {
-                    ResFinishTime = h + ":" + "00";
+                    ResFinishTime = h + ":" + m;
                 }
 
             }
@@ -475,6 +576,8 @@ namespace AtkTennisApp.Controllers
                         res.ResNowDate = ResNowDate;
                         res.Price = Price;
                         res.PriceIds = PriceIds;
+                        res.RoleId = RoleId;
+                        res.RoleName = RoleName;
 
 
 
@@ -498,6 +601,8 @@ namespace AtkTennisApp.Controllers
                         res.ResNowDate = ResNowDate;
                         res.Price = Price;
                         res.PriceIds = PriceIds;
+                        res.RoleName = RoleName;
+                        res.RoleId = RoleId;
 
 
 
@@ -542,6 +647,28 @@ namespace AtkTennisApp.Controllers
             catch (Exception ex)
             {
                 model = new ReservationListViewModel();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+
+        }
+
+        [HttpGet("GetResList2", Name = "GetResList2")]
+        public JsonResult GetResList2(string date, string userId)
+
+        {
+            List<Reservation> model = new List<Reservation>();
+
+            try
+            {
+                model = db.reservations.Where(x => x.UserId == userId && x.ResDate == date).ToList();
+              
+            }
+            catch (Exception ex)
+            {
+                model = new List<Reservation>();
 
                 Mutuals.monitizer.AddException(ex);
             }

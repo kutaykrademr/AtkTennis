@@ -483,13 +483,13 @@
                     <div class="card card-white">
                         <div class="card-header">
 
-                            <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Bakiye Bilgisi - @Model.memberLists.Price ₺ </h2>
+                            <h2 class="card-title">Bakiye Bilgisi - @Model.memberLists.Price ₺ </h2>
 
-                            <div class="card-tools">
-                                <button id="@Model.memberLists.UserId" onclick="" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
-                                    Bakiye Yükle
-                                </button>
-                            </div>
+                            @*<div class="card-tools">
+                                    <button id="@Model.memberLists.UserId" onclick="" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                        Bakiye Yükle
+                                    </button>
+                                </div>*@
 
                         </div>
                     </div>
@@ -600,7 +600,7 @@
                     {
                         <div class="card card-white">
                             <div class="card-header">
-                                <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Dolap Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Dolap Bilgileri</h3>
+                                <h3 class="card-title">Dolap Bilgileri</h3>
 
                                 <div class="card-tools">
                                     <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid" type="button" class="btn btn-tool tdHover">
@@ -659,7 +659,7 @@
                                             <td style="padding:0;text-align:center;">Dolap Sahibi</td>
                                             <td style="padding:0;text-align:center;">Dolap Alım Tarihi</td>
                                             <td style="padding:0;text-align:center;">Dolap Ücreti</td>
-                                            <td style="padding:0;text-align:center;">Ücret Durumu</td>
+
 
                                         </tr>
 
@@ -675,18 +675,7 @@
                                                 <td style="padding:0;text-align:center;">@item.Date</td>
                                                 <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
 
-                                                @{
 
-                                                    if (item.PriceCondition == false)
-                                                    {
-                                                        <td style="padding:0;text-align:center;">Ödenmedi</td>
-                                                    }
-
-                                                    else
-                                                    {
-                                                        <td style="padding:0;text-align:center;">Ödendi</td>
-                                                    }
-                                                }
 
                                                 <td style="padding:0;text-align:center;">
                                                     <i id="@item.CabinetOpId" onclick="deleteCabinet(this.id)" style="text-align:center; cursor:pointer" class="fas fa-trash"></i>
@@ -701,71 +690,26 @@
                     }
 
 
-                    @if (Model.memberLists.isPartner)
+                    @if (Model.memberLists.PartnerId != null)
                     {
                         <div class="card card-white ">
                             <div class="card-header">
-                                <h3 style="color:gray" class="card-title">Eş Bilgileri</h3>
-                            </div>
-                            <div class="row">
-
-                                <div class="card-body col-lg-6">
-                                    <strong><i class="fas fa-book mr-1"></i> Eş Adı - Soyadı</strong>
-
-                                    <div class="input-group col-md-6">
-                                        <input type="text" class="form-control" value="@Model.memberLists.PartnerFullName" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                @{
+                                    var partnerInf = Model.memberLists2.Where(x => x.UserId == Model.memberLists.PartnerId).FirstOrDefault();
+                                }
+                                <h3 style="color:black" class="card-title">Eş Bilgisi .......  @partnerInf.MemberNumber - @partnerInf.FullName - @partnerInf.NickName </h3>
 
 
-                                    <hr>
-
-                                    <strong><i class="fas fa-pencil-alt mr-1"></i> Eş T.C. Kimlik Numarası</strong>
-
-                                    <div class="input-group col-md-6">
-                                        <input type="text" class="form-control" value="@Model.memberLists.PartnerIdentityNumber" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <hr>
-
+                                <div class="card-tools">
+                                    <a href="../AdminHome/MemberDetailPage?memberNum=@partnerInf.MemberNumber" type="button" class="btn btn-tool">
+                                        <i class="fas fa-search"></i>
+                                    </a>
                                 </div>
 
-                                <div class="card-body col-lg-6 ">
-                                    <strong><i class="fas fa-book mr-1"></i>Eş Doğum Tarihi</strong>
-
-                                    <div class="input-group col-md-6">
-                                        <input placeholder="Doğum Tarihi" value="@Model.memberLists.PartnerBirthDate" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                        </div>
-                                    </div>
-
-                                    <hr>
-
-                                    <strong><i class="fas fa-pencil-alt mr-1"></i>Eş Telefon Numarası</strong>
-
-                                    <div class="input-group  col-md-6">
-                                        <input placeholder="Telefon No" value="@Model.memberLists.Phone" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                    </div>
-
-                                    <hr>
-
-                                </div>
                             </div>
                         </div>
+
+
                     }
                     else
                     {
@@ -775,7 +719,7 @@
                                 <h2 class="card-title"><i style="margin-right:15px; cursor:pointer" class="fas fa-user"></i>Eş Bilgisi Bulunmamaktadır</h2>
 
                                 <div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                    <button id="@Model.memberLists.UserId" onclick="addPartner(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
                                         Eş Bilgisi Ekle
                                     </button>
                                 </div>
@@ -856,6 +800,140 @@
     </div>
 </div>
 
+<div class="modal fade" id="addPartnerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Eş Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card" style="margin-bottom:20px;  border:1px solid brown">
+
+                    <div class="card-body">
+                        <p class="login-box-msg">Zorunlu Alan (Eş Bilgileri) </p>
+                        <div class="row">
+                            <div class="input-group mb-3 col-md-4">
+                                <input type="text" class="form-control" id="partnerName" placeholder="Eş Adı Soyadı" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3 col-md-4">
+                                <input type="text" class="form-control" id="nickname2" disabled="" placeholder="Rumuz" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a style="cursor:pointer" onclick="getNickName2()" class="fas fa-sync-alt"></a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="input-group mb-3 col-md-4">
+                                <input type="text" class="form-control" id="username2" disabled="" placeholder="Kullanıcı Adı" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a style="cursor:pointer" onclick="getUserName2()" class="fas fa-sync-alt"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group mb-3 col-md-6">
+                                <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate2" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3 col-md-6">
+                                <input placeholder="Bitiş Tarihi" type="text" class="form-control" id="finishDate2" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="input-group mb-3 col-md-6">
+                                <input type="text" class="form-control" id="memberNum2" disabled="" placeholder="Üye Numarası" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a style="cursor:pointer" onclick="getMemberNumber2()" class="fas fa-sync-alt"></a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group col-md-6">
+                                <select id="webReservation2" class="form-control">
+                                    <option disabled="disabled" selected="">Web Rezervasyon</option>
+
+                                    <option value="1">Yapabilir</option>
+                                    <option value="2">Yapamaz</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="input-group mb-3 col-md-4">
+                                <input type="email" class="form-control" placeholder="Eş T.C Kimlik" id="partnerIdNumber" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-envelope"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3 col-md-4">
+                                <input placeholder="Eş Telefon No" id="partnerPhone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3 col-md-4">
+                                <input placeholder="Eş Doğum Tarihi" id="partnerBirthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="password2" disabled="" placeholder="Şifre" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <a style="cursor:pointer" onclick="getPassword2()" class="fas fa-lock"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="addPartOp" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="addOpPartner(this.id)">Eş Ekle</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 
 <script>
@@ -878,6 +956,216 @@
 
 
     });
+    function getNickName2() {
+
+        var name = $("#partnerName").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = ad[0][0];
+        var soyad1 = ad[1][0];
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 3; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var nick = (ad1 + soyad1 + text).toLowerCase();
+
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlNickName',
+            cache: false,
+            data: { "nickName": nick },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#nickname2").val(nick);
+                }
+                else {
+
+                    getNickName()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getMemberNumber2() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var memberNumber = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlMemberNumber',
+            cache: false,
+            data: { "memberNumber": memberNumber },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#memberNum2").val(memberNumber);
+                }
+                else {
+
+                    getMemberNumber()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getPassword2() {
+
+        var name = $("#partnerName").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = (ad[0][0]).toUpperCase();
+        var soyad1 = (ad[1][0]).toLowerCase();
+
+        var text = "123";
+        var char = ".";
+
+        var password = (ad1 + soyad1 + text + char);
+
+        $("#password2").val(password);
+
+    }
+
+    function getUserName2() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var userName = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlUserName',
+            cache: false,
+            data: { "userName": userName },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#username2").val(userName);
+                }
+                else {
+
+                    getUserName()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+
+
+    userObj = {
+
+    
+
+        memberNumber2: null,
+        nickName2: null,
+        username2: null,     
+        startDate2: null,
+        finishDate2: null,
+        partnerName: null,
+        partnerPhone: null,
+        partnerIdNumber: null,
+        partnerBirthDate: null,
+        password2: null,
+        id:null,
+
+    };
+
+   
+    function addPartner(id) {
+
+        $('#addPartnerModal').modal('toggle');
+
+        $("#addPartOp button:nth-of-type(2)").attr("id", id);
+ 
+    }
+
+    function addOpPartner(id) {
+        userObj.id = id;
+        userObj.nickName2 = $("#nickname2").val();
+        userObj.username2 = $("#username2").val();
+        userObj.startDate2 = $("#startDate2").val();
+        userObj.finishDate2 = $("#finishDate2").val();
+        userObj.memberNumber2 = $("#memberNum2").val();
+        userObj.password2 = $("#password2").val();
+        userObj.partnerBirthDate = $("#partnerBirthdate").val();
+        userObj.partnerIdNumber = $("#partnerIdNumber").val();
+        userObj.partnerPhone = $("#partnerPhone").val();
+        userObj.partnerName = $("#partnerName").val();
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/AddPartner',
+            cache: false,
+            data: userObj,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res != null) {
+                    alert("başarılı");
+                }
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
 
     $(function () {
 
@@ -1078,11 +1366,7 @@
 
         };
 
-
-
-
-
-
+        debugger;
 
         userObj.checkpass = $("#password").val();
         userObj.id = id;

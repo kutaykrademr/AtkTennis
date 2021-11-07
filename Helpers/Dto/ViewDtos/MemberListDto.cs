@@ -6,9 +6,10 @@ namespace Helpers.Dto.ViewDtos
 {
     public class MemberListDto
     {
-        
+
         public int Id { get; set; }
         public string UserId { get; set; }
+        public string NickName { get; set; }
         public string FullName { get; set; }
         public string Gender { get; set; }
         public string UserName { get; set; }
@@ -33,7 +34,6 @@ namespace Helpers.Dto.ViewDtos
         public string Job { get; set; }
         public string Note { get; set; }
         public string Password { get; set; }
-        public string NickName { get; set; }
         public int Price { get; set; }
         public bool PrivRes { get; set; }
         public int MemberNumber { get; set; }
@@ -43,12 +43,9 @@ namespace Helpers.Dto.ViewDtos
 
 
 
-
         public bool isPartner { get; set; }
-        public string PartnerFullName { get; set; }
-        public string PartnerIdentityNumber { get; set; }
-        public string PartnerPhone { get; set; }
-        public string PartnerBirthDate { get; set; }
+        public string PartnerId { get; set; }
+
 
 
         public bool ActPas { get; set; }

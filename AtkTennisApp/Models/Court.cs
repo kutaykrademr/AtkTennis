@@ -17,6 +17,8 @@ namespace AtkTennisApp.Models
         public string CourtStartTime { get; set; }
         public string CourtFinishTime { get; set; }
         public string CourtTimePeriod { get; set; }
+        public string CompanyId { get; set; }
+
 
     }
 }

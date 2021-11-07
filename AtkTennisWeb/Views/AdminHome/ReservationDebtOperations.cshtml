@@ -51,9 +51,11 @@
                         </div>
                     </div>
 
-                    <div id="secimdetay" class="portlet light" style="padding: 15px;">
-                        <div class="alert alert-info" style="margin-bottom: 0;">
-                            <strong>Rezervasyon Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
+                    <div class="portlet-body">
+                        <div class="portlet light" style="padding: 15px;">
+                            <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">
+                                <strong>Rezervasyon Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
+                            </div>
                         </div>
                     </div>
 
@@ -151,6 +153,35 @@
 
     findMemberTotal();
 
+    function dataTable() {
+
+        $('#resList').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 15,
+            buttons: [{ extend: 'pdf', title: 'Rezervasyon  Borçları' }, { extend: 'print', title: 'Rezervasyon  Borçları'}]
+        })
+            .buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
+
+        $('#resList2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 15,
+           buttons: [{ extend: 'pdf', title: 'Rezervasyon İptal Borçları' }, { extend: 'print', title: 'Rezervasyon İptal  Borçları'}]
+        })
+            .buttons().container().appendTo('#resList2_wrapper .col-md-6:eq(0)');
+    }
+
     function findMemberTotal() {
 
         $.ajax({
@@ -234,12 +265,15 @@
 
         debugger;
 
-        var userId = $("#userId").text();
+        var userId = $("#userId").val();
 
         if (userId == "") {
 
-            userId = $("#userId2").text();
+            userId = $("#userId2").val();
         }
+
+        debugger;
+        
         var paymentType = $("#currentUserId option:selected").val();
         var currentUserId = $("#currentUserId").text();
         var price = $("#price").val();
@@ -337,7 +371,7 @@
                             row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
                             row += '<table id="resList" class="table table-bordered table-hover">';
                             row += '<thead>';
-                            row += '<tr style="text-align:center">';
+                            row += '<tr style="text-align:center">';               
                             row += '<th>Üye Numarası</th>';
                             row += '<th>Adı - Soyadı</th>';
                             row += '<th>Rezervasyon Tarihi</th>';
@@ -350,15 +384,14 @@
                             row += '</tr>';
                             row += '</thead>';
 
+                            row += '<tbody>';
 
 
                             for (var i = 0; i < res.reservations.length; i++) {
 
                                 if (res.reservations.length > 0 && res.reservations[i].priceInf == false) {
 
-                                    row += '<tbody>';
-                                    row += '<tr style="text-align:center" id="">';
-                                    row += '<td id="userId" style="display:none">' + res.memberLists[0].userId + '</td>';
+                                    row += '<tr style="text-align:center" id="">';                                 
                                     row += '<td>' + res.memberLists[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberLists[0].fullName + '</td>';
                                     row += '<td>' + res.reservations[i].resDate + '</td>';
@@ -368,21 +401,24 @@
                                     row += '<td>' + res.reservations[i].price + '₺' + '</td>';
 
 
-                                    row += '<td><button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
-
+                                    row += '<td>';
+                                    row += '<button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button>';
+                                    row += '<button style="display:none" class="btn btn-outline-dark" value="' + res.memberLists[0].userId + '" id="userId"</button>';
+                                    row += '</td>';
                                     row += '</tr>';
-                                    row += '</tbody>';
+                                
 
                                 }
                                 
                             }
 
+                            row += '</tbody>';
                             row += '</table>';
                             row += '</div>';
                             row += '</div>';
 
                             $("#appendResInf").append(row);
-
+                    
 
                             $("#append").empty();
 
@@ -390,7 +426,7 @@
                             row = "";
                             row += '<div id="asd" class="card-body">';
                             row += '<h4 style="margin-bottom:30px">Rezervasyon İptal Borçları</h4>';
-                            row += '<table id="resList" class="table table-bordered table-hover">';
+                            row += '<table id="resList2" class="table table-bordered table-hover">';
                             row += '<thead>';
                             row += '<tr style="text-align:center">';
                             row += '<th>Üye Numarası</th>';
@@ -412,9 +448,8 @@
                                 if (res.reservationCancels.length > 0 && res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false) {
 
                                     row += '<tbody>';
-                                    row += '<tr style="text-align:center" id="">';
-                                    row += '<td id="userId2" style="display:none">' + res.reservationCancels[0].userId + '</td>';
-                                    row += '<td>' + res.memberLists[0].memberNumber + '</td>';
+                                    row += '<tr style="text-align:center" id="">';                                   
+                                    row += '<td id="userId2" value="' + res.memberLists[0].userId + '">' + res.memberLists[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberLists[0].fullName + '</td>';
                                     row += '<td>' + res.reservationCancels[i].resDate + '</td>';
                                     row += '<td>' + res.reservationCancels[i].resStartTime + ' - ' + res.reservationCancels[i].resFinishTime + '</td>';
@@ -426,7 +461,10 @@
 
                                     row += '<td>' + "Ödenmedi" + '</td>';
                                     row += '<td>' + res.reservationCancels[i].price + '₺' + '</td>';
-                                    row += '<td><button class="btn btn-outline-dark" id="' + res.reservationCancels[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button></td>';
+                                    row += '<td>';
+                                    row += '<button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button>';
+                                    row += '<button style="display:none" class="btn btn-outline-dark" value="' + res.memberLists[0].userId + '" id="userId2"</button>';
+                                    row += '</td>';
                                     row += '</tr>';
                                     row += '</tbody>';
 
@@ -440,6 +478,7 @@
 
                             $("#append").append(row);
 
+                            dataTable();
                         },
 
                         error: function (textStatus, errorThrown) {

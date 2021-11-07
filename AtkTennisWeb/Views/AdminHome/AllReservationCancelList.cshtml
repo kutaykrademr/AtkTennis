@@ -65,8 +65,8 @@
                     </div>
 
                     <div class="portlet-body">
-                        <div id="secimdetay" class="portlet light" style="padding: 15px;">
-                            <div class="alert alert-info" style="margin-bottom: 0;">
+                        <div class="portlet light" style="padding: 15px;">
+                            <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">
                                 <strong>Rezervasyon İptal Listesi!</strong> İlgili tarih bilgisini bularak işleme devam ediniz.
                             </div>
                         </div>
@@ -103,6 +103,14 @@
         getResCancelList($('#timeNowModal').val());
     });
 
+
+    function dataTable() {
+
+        $("#resList").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            buttons: [{ extend: 'pdf', title: 'Rezervasyon İptal Listesi' }, { extend: 'print', title: 'Rezervasyon İptal Listesi' }]
+        }).buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
+    }
 
     $('#timeNowModal').change(function () {
 
@@ -190,7 +198,7 @@
                     row += '<th>İptal Eden</th>';
                     row += '</tr>';
                     row += '</thead>';
-
+                    row += '<tbody>';
 
                     for (var i = 0; i < res.reservationCancels.length; i++) {
 
@@ -212,9 +220,8 @@
                             }
                         }
 
-                        row += '<tbody>';
-                        row += '<tr style="text-align:center" id="">';
-                        row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
+                       
+                        row += '<tr style="text-align:center" id="">';                     
                         row += '<td>' + res.reservationCancels[i].resId + '</td>';
                         row += '<td>' + memberInf[0].memberNumber + '</td>';
                         row += '<td>' + memberInf[0].fullName + '</td>';
@@ -241,10 +248,10 @@
 
 
                         row += '</tr>';
-                        row += '</tbody>';
+                      
 
                     }
-
+                    row += '</tbody>';
                     row += '</table>';
                     row += '</div>';
                     row += '</div>';
@@ -258,7 +265,7 @@
                 $("#appendResInf").append(row);
 
                 timeInf();
-
+                dataTable();
             },
 
             error: function (textStatus, errorThrown) {

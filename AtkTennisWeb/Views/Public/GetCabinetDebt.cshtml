@@ -1,0 +1,237 @@
+﻿
+@model Helpers.Dto.PartialViewDtos.CabinetViewDto;
+
+@{
+    Layout = "_MemberLayout";
+}
+
+<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Üye Dolap Borç Bilgisi</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Mevcut Dolaplar</h3>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example3" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+
+                                        <th>Dolap Alım Tarihi</th>
+                                        <th>Dolap Kodu</th>
+                                        <th>Türü</th>
+                                        <th>Aitlik</th>
+
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var item in Model.cabinetListUsers)
+                                    {
+                                        <tr style="text-align:center" id="">
+                                            <td>@item.Date</td>
+                                            <td>@item.CabinetCode</td>
+                                            <td>@item.CabinetOpTypes</td>
+                                            <td>@item.CabinetWho</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" style="margin-top:15px">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Dolap Aidat  Borçları</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+
+
+                                        <th>Adı</th>
+                                        <th>Borçlandırma Tarihi</th>
+                                        <th>Ücreti</th>
+                                        <th>Ödenen</th>
+                                        <th>Kalan</th>
+                                        <th>Aidat Türü</th>
+                                        <th>Aidat Yılı</th>
+                                        <th>Açıklama</th>
+                                        <th>Borç Durumu</th>
+                                        <th>işlemler</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.memberDuesInfTables)
+                                    {
+
+                                        <tr style="text-align:center" id="">
+
+                                            <td>@item.MemberFullName</td>
+                                            <td>@item.Date</td>
+                                            <td>@item.DuesPrice</td>
+                                            <td>@item.PaidPrice</td>
+                                            <td>@item.RemainingPrice</td>
+                                            <td>@item.DuesType</td>
+                                            <td>@item.DuesYear</td>
+                                            <td>@item.Explain</td>
+
+                                            @if (@item.PriceCondition)
+                                            {
+                                                <td>Ödendi</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Ödenmedi</td>
+                                            }
+                                            
+                                            <td><button class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>
+                                        </tr>
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Dolap Ücret Genel Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">
+                            <h3>Tahsis Edilen Dolap / Dolaplar Listesi</h3>
+                        </div>
+                        <div>
+                            @*<button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>*@
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+
+                                    <th>Dolap Alım Tarihi</th>
+                                    <th>Dolap Kodu</th>
+                                    <th>Dolap Türü</th>
+                                    <th>Dolap Alan Üye</th>
+                                    <th>Dolap Kime Ait</th>
+                                    <th>Dolap Ücreti</th>
+                                    <th>Dolap Ücret Durumu</th>
+
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cabinetListPrivUser">
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">
+                            <h3>Tahsis Edilen Dolap Aidat Bilgileri</h3>
+                        </div>
+                        <div>
+                            @*<button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>*@
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr style="text-align:center">
+
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Dolap Aidat Yılı</th>
+                                    <th>Aidat Tipi</th>
+                                    <th>Aidat Ücreti</th>
+                                    <th>Borçlandırıldığı Tarih</th>
+                                    <th>Açıklama</th>
+                                    <th>Borç Durumu</th>
+
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cabinetDuesPrivUser">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -416,7 +416,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Kort Düzenle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -430,16 +430,14 @@
                     </div>
                     <div class="col-md-6 form-group">
 
-                        <label for="recipient-name" class="col-form-label">Kort Durumu:</label>
+                        <label for="recipient-name" class="col-form-label">Kort Türü:</label>
                         <div class="input-group">
                             <select id="type" class="form-control">
-                                <option disabled="disabled" selected="selected">Kort Türü</option>
 
                                 @foreach (var item in Model.courtRecipeTypes)
                                 {
                                     <option value="@item.CourtRecipeTypeId"> @item.CourtRecipeTypes</option>
                                 }
-
 
                             </select>
                         </div>

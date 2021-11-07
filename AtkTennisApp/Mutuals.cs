@@ -12,6 +12,7 @@ namespace AtkTennisApp
         public static string DbUrl { get; set; }
         public static string AdminUrl { get; set; }
         public static string MyIp { get; set; }
+        public static string IdUrl { get; set; }
 
 
 

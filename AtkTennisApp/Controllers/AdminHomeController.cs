@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using System.Collections;
 using Microsoft.AspNetCore.Authorization;
+using static AtkTennisApp.Program;
+using Helpers.Dto;
+using Helpers;
 
 namespace AtkTennisApp.Controllers
 {
@@ -33,7 +36,6 @@ namespace AtkTennisApp.Controllers
         }
 
         Context db = new Context();
-
 
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelView GetHome()
@@ -61,6 +63,7 @@ namespace AtkTennisApp.Controllers
                 model.memberLists = db.memberLists.ToList();
                 model.courtScaleLists = db.courtScaleLists.ToList();
                 model.memberDuesInf = db.memberDuesInfTables.ToList();
+                model.reservationCancels = db.reservationCancels.ToList();
 
 
 
@@ -200,7 +203,7 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model.courts = db.courts.ToList();
-                model.resTimes = db.resTimes.ToList();
+                model.resTimes = db.resTimes.OrderBy(x=>x.ResTimes).ToList();
                 model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.memberLists = db.memberLists.ToList();
@@ -234,6 +237,7 @@ namespace AtkTennisApp.Controllers
                 {
                     var userId = model.memberLists.UserId;
 
+                    model.memberLists2 = db.memberLists.ToList();
                     model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
                     model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
                     model.cabinetListUsers = db.cabinetListUsers.ToList();
@@ -304,12 +308,37 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
+
+
+        [HttpGet("ReservationDebtList", Name = "ReservationDebtList")]
+        public ReservationListViewModel ReservationDebtList()
+        {
+
+            ReservationListViewModel model = new ReservationListViewModel();
+
+            try
+            {
+                model.reservations = db.reservations.ToList();
+                model.reservationCancels = db.reservationCancels.ToList();
+                model.memberLists = db.memberLists.ToList();
+                model.courts = db.courts.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new ReservationListViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
         public class CourtPriceListViewModel
         {
             public List<CourtPriceList> courtPriceLists { get; set; } = new List<CourtPriceList>();
             public List<CourtPriceList> priceLists { get; set; } = new List<CourtPriceList>();
             public List<string> priceListsId { get; set; } = new List<string>();
-           
+
         }
 
 
@@ -343,7 +372,7 @@ namespace AtkTennisApp.Controllers
             {
                 if (model.priceLists.Where(x => x.CourtPriceListId == Convert.ToInt32(item)).Count() > 0)
                 {
-                    model.priceLists.Remove(model.priceLists.Where(x=>x.CourtPriceListId == Convert.ToInt32(item)).FirstOrDefault());
+                    model.priceLists.Remove(model.priceLists.Where(x => x.CourtPriceListId == Convert.ToInt32(item)).FirstOrDefault());
                 }
             }
 
@@ -410,12 +439,21 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string detailAddress, string refmem1, string refmem2, string name, string nickName, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, int memberNumber, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName, bool isPartner)
+        public AppIdentityUser NewRegister(string detailAddress, string name, string username, string startDate, string finishDate, string condition,
+            string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email,
+            string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job,
+            string note, string phone, string password, string birthdate, string gender, string role, string nickName,
+            int memberNumber, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
+            bool isPartner, string refmem1, string refmem2, string nickName2, string username2, string startDate2,
+            string finishDate2, string memberNumber2, string password2)
         {
             MemberList model2 = new MemberList();
+            MemberList model3 = new MemberList();
 
             var Role = new AppIdentityRole();
             var user = new AppIdentityUser();
+            var user2 = new AppIdentityUser();
+
             try
             {
                 if (!roleManager.RoleExistsAsync(role).Result)
@@ -434,16 +472,52 @@ namespace AtkTennisApp.Controllers
                 Role.Name = role;
 
                 var result = userManager.CreateAsync(user, password).Result;
+               
+
+                if (isPartner)
+                {
+                    user2.UserName = username2;
+                    user2.FullName = partnerName;
+                    user2.BirthDate = partnerBirthdate;
+                    user2.PhoneNumber = partnerPhone;
+                    Role.Name = role;
+
+                    var result2 = userManager.CreateAsync(user2, password).Result;
+
+                    if (result2.Succeeded)
+                    {
+                        model3.UserId = user2.Id;
+                        model3.IdentityNumber = partnerIdNumber;
+                        model3.NickName = nickName2;
+                        model3.UserName = username2;
+                        model3.FullName = partnerName;
+                        model3.StartDate = startDate2;
+                        model3.FinishDate = finishDate2;
+                        model3.Phone = partnerPhone;
+                        model3.PhoneExp = "Kendi";
+                        model3.BirthDate = partnerBirthdate;
+                        model3.Role = role;
+                        model3.MemberNumber = Convert.ToInt32(memberNumber2);
+                        model3.WebReservation = webReservation;
+                        model3.Password = password2;
+                        model3.isPartner = false;
+                        model3.PartnerId = user.Id;
+                        
+
+                        userManager.AddToRoleAsync(user2, role).Wait();
+                        db.Add(model3);
+                        db.SaveChanges();
+                    }
+                  
+                }
 
                 var id = user.Id;
+
 
                 if (isPartner == true)
                 {
                     model2.isPartner = isPartner;
-                    model2.PartnerBirthDate = partnerBirthdate;
-                    model2.PartnerFullName = partnerName;
-                    model2.PartnerIdentityNumber = partnerIdNumber;
-                    model2.PartnerPhone = partnerPhone;
+                    model2.PartnerId = user2.Id;
                 }
 
                 model2.DetailAddress = detailAddress;
@@ -476,25 +550,33 @@ namespace AtkTennisApp.Controllers
                 model2.Job = job;
                 model2.Note = note;
                 model2.Password = password;
-
+  
 
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, role).Wait();
+                    userManager.AddToRoleAsync(user, "Üye").Wait();
                     db.Add(model2);
                     db.SaveChanges();
                 }
+
+         
                 else
                 {
                     ModelState.AddModelError("", "Invalid User Details");
                 }
+
+                var MyIp = set.MyIpAdress;
+
+                var x  = Helpers.Serializers.DeserializeJson<MemberList>(Helpers.Request.Get(Mutuals.IdUrl + "Home/AddMember?name=" + name + "&nickName2=" + nickName2 + "&userId=" + user.Id + "&user2Id=" + user2.Id + "&password2=" + password2 + "&memberNumber2=" + memberNumber2 + "&startDate2=" + startDate2 + "&finishDate2=" + finishDate2 + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
+                   "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
+                   "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&detailAddress=" + detailAddress + "&refmem1=" + refmem1 + "&refmem2=" + refmem2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber + "&partnerBirthdate=" + partnerBirthdate + "&partnerIdNumber=" + partnerIdNumber + "&partnerPhone=" + partnerPhone + "&partnerName=" + partnerName + "&isPartner=" + isPartner + "&MyIp=" + MyIp));
+
             }
             catch (Exception ex)
             {
-
                 Mutuals.monitizer.AddException(ex);
             }
-
 
             return user;
         }
@@ -550,15 +632,14 @@ namespace AtkTennisApp.Controllers
         [HttpGet("NewReservationAdmin", Name = "NewReservationAdmin")]
         public JsonResult NewReservationAdmin(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName, bool PrivRes)
         {
+          
 
             var model = new Reservation();
             var scale = new CourtScaleList();
 
-
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
-
             ReservationTotal model4 = new ReservationTotal();
 
             court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
@@ -634,17 +715,22 @@ namespace AtkTennisApp.Controllers
                 }
                 else
                 {
-                    ResFinishTime = h + ":" + "00";
+                    ResFinishTime = h + ":" + m;
                 }
 
             }
 
+            var splitTime = Convert.ToInt32(ResStartTime.Split(":")[1]);
+            var splitTime2 = Convert.ToInt32(ResFinishTime.Split(":")[1]);
+            var timeX = splitTime2 - splitTime;
 
             if (ResDate == null || ResTime == null || ResStartTime == null || ResFinishTime == null || ResEvent == null || UserId == null || ResNowDate == null || PriceIds == null)
             {
                 return Json(false);
             }
 
+          
+      
             else
             {
                 try
@@ -662,6 +748,10 @@ namespace AtkTennisApp.Controllers
 
                 }
             }
+
+         
+
+          
 
             if (model == null)
             {
@@ -695,6 +785,8 @@ namespace AtkTennisApp.Controllers
                             res.ResNowDate = ResNowDate;
                             res.Price = Price;
                             res.PriceIds = PriceIds;
+                            res.RoleName = mem.Role.Trim();
+                            
 
                             db.memberLists.Update(mem);
                             db.reservations.Add(res);
@@ -718,6 +810,7 @@ namespace AtkTennisApp.Controllers
                             res.ResNowDate = ResNowDate;
                             res.Price = Price;
                             res.PriceIds = PriceIds;
+                            res.RoleName = mem.Role.Trim();
 
 
                             db.reservations.Add(res);
@@ -786,7 +879,7 @@ namespace AtkTennisApp.Controllers
         {
             var res = db.reservations.Where(x => x.ResId == resId).FirstOrDefault();
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
-            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).ToList();
+            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).OrderBy(x=>x.ResStartTime).ToList();
 
             var startTime = Convert.ToDateTime(court.CourtStartTime);
             var finishTime = Convert.ToDateTime(court.CourtFinishTime);
@@ -935,8 +1028,18 @@ namespace AtkTennisApp.Controllers
                 if (model != null && set != null)
                 {
                     model2.courtPriceLists = db.courtPriceLists.ToList();
-                    model2.resSchemaModal.FullName = mem.FullName;
-                    model2.resSchemaModal.NickName = mem.NickName;
+                    if (mem == null)
+                    {
+                        model2.resSchemaModal.FullName = model.reservations.NickName;
+                        model2.resSchemaModal.NickName = model.reservations.NickName;
+                    }
+
+                    else
+                    {
+                        model2.resSchemaModal.FullName = mem.FullName;
+                        model2.resSchemaModal.NickName = mem.NickName;
+                    }
+
                     model2.resSchemaModal.CourtName = model.reservations.Court.CourtName;
                     model2.resSchemaModal.ResDate = model.reservations.ResDate;
                     model2.resSchemaModal.ResEvent = model.reservations.ResEvent;
@@ -1000,16 +1103,20 @@ namespace AtkTennisApp.Controllers
                 mem = db.memberLists.Where(x => x.UserId == model.UserId).FirstOrDefault();
                 model3 = db.courts.ToList();
 
-                if (procedure == true)
+                if (mem != null)
                 {
-                    var memberPrice = mem.Price;
-                    var newPrice = memberPrice + model.Price;
+                    if (procedure == true && model.PriceInf == true)
+                    {
+                        var memberPrice = mem.Price;
+                        var newPrice = memberPrice + model.Price;
 
-                    mem.Price = newPrice;
+                        mem.Price = newPrice;
 
-                    db.Update(mem);
-                    db.SaveChanges();
+                        db.Update(mem);
+                        db.SaveChanges();
+                    }
                 }
+
 
                 if (model != null)
                 {
@@ -2276,6 +2383,67 @@ namespace AtkTennisApp.Controllers
             return new AddDuesViewModel();
         }
 
+        [HttpGet("AddDuesSingle", Name = "AddDuesSingle")]
+        public AddDuesViewModel AddDuesSingle(int duesYear, string duesType, int duesPrice, string explain, int memNum)
+        {
+            AddDuesViewModel model = new AddDuesViewModel();
+
+            model.memberLists = db.memberLists.Where(x => x.MemberNumber == memNum).ToList();
+            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear).FirstOrDefault();
+
+            try
+            {
+
+
+
+                if (duesType == "Yıllık Eş Aidat Ücreti")
+                {
+                    if (model.memberLists[0].isPartner == true)
+                    {
+                        model.memberDuesInfTable = new MemberDuesInfTable();
+
+                        model.memberDuesInfTable.MemberId = model.memberLists[0].UserId;
+                        model.memberDuesInfTable.MemberFullName = model.memberLists[0].FullName;
+                        model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                        model.memberDuesInfTable.DuesType = duesType;
+                        model.memberDuesInfTable.DuesPrice = duesPrice;
+                        model.memberDuesInfTable.RemainingPrice = duesPrice;
+                        model.memberDuesInfTable.DuesYear = duesYear;
+                        model.memberDuesInfTable.Explain = explain;
+
+                        db.Add(model.memberDuesInfTable);
+                        db.SaveChanges();
+                    }
+                }
+
+                else
+                {
+                    model.memberDuesInfTable = new MemberDuesInfTable();
+                    model.memberDuesInfTable.MemberId = model.memberLists[0].UserId;
+                    model.memberDuesInfTable.MemberFullName = model.memberLists[0].FullName;
+                    model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                    model.memberDuesInfTable.DuesType = duesType;
+                    model.memberDuesInfTable.DuesPrice = duesPrice;
+                    model.memberDuesInfTable.RemainingPrice = duesPrice;
+                    model.memberDuesInfTable.DuesYear = duesYear;
+                    model.memberDuesInfTable.Explain = explain;
+
+                    db.Add(model.memberDuesInfTable);
+                    db.SaveChanges();
+                }
+
+                return model;
+            }
+
+            catch (Exception ex)
+            {
+                model = new AddDuesViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return new AddDuesViewModel();
+        }
+
         [HttpGet("AddGenCabinetDebt", Name = "AddGenCabinetDebt")]
         public AddDuesViewModel AddGenCabinetDebt(int cabinetDuesYear, string cabinetType, string cabinetExplain)
         {
@@ -2531,6 +2699,66 @@ namespace AtkTennisApp.Controllers
         }
 
 
+        [HttpGet("AddPartner", Name = "AddPartner")]
+        public AppIdentityUser AddPartner(string id, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
+          bool isPartner, string nickName2, string username2, string startDate2,
+          string finishDate2, string memberNumber2, string password2 , string webReservation)
+        {
+            MemberList model2 = new MemberList();
+            var x = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
+            var Role = new AppIdentityRole();
+            var user = new AppIdentityUser();
+         
+
+            try
+            {
+                user.UserName = username2;
+                user.Email = "@gmail.com";
+                user.FullName = partnerName;
+                user.BirthDate = partnerBirthdate;
+                user.PhoneNumber = partnerPhone;
+                Role.Name = "Üye";
+
+                var result = userManager.CreateAsync(user, password2).Result;
+
+                if (result.Succeeded)
+                {
+                    model2.Role = Role.Name;
+                    model2.UserId = user.Id;
+                    model2.PartnerId = id;
+                    model2.FullName = partnerName;
+                    model2.NickName = nickName2;
+                    model2.UserName = username2;
+                    model2.StartDate = startDate2;
+                    model2.FinishDate = finishDate2;
+                    model2.MemberNumber = Convert.ToInt32(memberNumber2);
+                    model2.WebReservation = "1";
+                    model2.IdentityNumber = partnerIdNumber;
+                    model2.Phone = partnerPhone;
+                    model2.PhoneExp = "Kendi";
+                    model2.BirthDate = partnerBirthdate;
+                    model2.Password = password2;
+
+                    x.PartnerId = user.Id;
+                    x.isPartner = true;
+
+                    userManager.AddToRoleAsync(user, Role.Name).Wait();
+                    db.Add(model2);
+                    db.Update(x);
+                    
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return user;
+        }
+
         [HttpGet("GetPaid", Name = "GetPaid")]
         public AllGetPaidLogs GetPaid(string userId, int refId, int refType,
             string doUserId, int price, int paidPrice, int remainingPrice,
@@ -2598,10 +2826,12 @@ namespace AtkTennisApp.Controllers
 
                     if (price - paidPrice == 0)
                     {
-
+   
                         model.memberDuesInf.PriceCondition = true;
                         model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
+
+
 
                     }
                     else

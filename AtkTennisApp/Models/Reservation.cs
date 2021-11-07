@@ -26,6 +26,9 @@ namespace AtkTennisApp.Models
         public string? CancelResUserId { get; set; }
         public bool Procedure { get; set; }
         public bool PrivRes { get; set; }
+        public string RoleName { get; set; }
+        public string RoleId { get; set; }
+        public string CompanyId { get; set; }
 
         public Court Court { get; set; }
 

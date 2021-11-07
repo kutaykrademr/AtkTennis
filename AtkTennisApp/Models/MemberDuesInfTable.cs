@@ -24,5 +24,9 @@ namespace AtkTennisApp.Models
         public bool PriceCondition { get; set; }
         public bool CancelCondition { get; set; }
 
+        public string CompanyId { get; set; }
+        public string RoleName { get; set; }
+        public string RoleId { get; set; }
+
     }
 }

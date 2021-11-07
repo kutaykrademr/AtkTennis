@@ -2,6 +2,7 @@
 using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace AtkTennisWeb.Controllers
     public class ReportController : Controller
     {
         public IActionResult DebtReports()
+        {
+            return View();
+        }
+
+        public IActionResult CourtOccupancyReports()
         {
             return View();
         }
@@ -107,7 +113,31 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
+        public class CourtOccupancyDto
+        {
+            public List<ReservationDto> myAL { get; set; } = new List<ReservationDto>();
+            public List<CourtDto> court { get; set; } = new List<CourtDto>();
+        }
 
+        public JsonResult GetResOccupancy(string firstDate, string secDate)
+        {
+            CourtOccupancyDto model = new CourtOccupancyDto();
+            try
+            {
+              
+                model = Helpers.Serializers.DeserializeJson<CourtOccupancyDto>(Helpers.Request.Get(Mutuals.AppUrl + "Report/GetResOccupancy?firstDate=" + firstDate + "&secDate=" + secDate ));
+                
+                if (model == null)
+
+                    model = new CourtOccupancyDto();
+            }
+            catch (Exception)
+            {
+                model = new CourtOccupancyDto();
+            }
+
+            return Json(model);
+        }
 
 
         public class ResandCancelListDto

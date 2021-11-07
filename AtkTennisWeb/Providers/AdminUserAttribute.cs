@@ -21,7 +21,9 @@ namespace AtkTennisWeb.Providers
             {
                 bool control = false;
 
-                if (context.HttpContext.Session.GetString("Role") == "Yönetici")
+                var role = context.HttpContext.Session.GetString("Role");
+
+                if ( role == "Yönetici" || role == "Sekreterya")
                 {
                     control = true;
                 }
@@ -29,7 +31,7 @@ namespace AtkTennisWeb.Providers
 
                 if (!control)
                 {
-                    context.Result = new RedirectResult("../Public/SignIn");
+                    context.Result = new RedirectResult("../Public/Error403");
                 }
             }
             catch

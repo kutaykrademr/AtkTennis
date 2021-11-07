@@ -65,9 +65,9 @@
                     </div>
 
                     <div class="portlet-body">
-                        <div id="secimdetay" class="portlet light" style="padding: 15px;">
-                            <div class="alert alert-info" style="margin-bottom: 0;">
-                                <strong>Rezervasyon  Listesi!</strong> İlgili tarih bilgisini bularak işleme devam ediniz.
+                        <div class="portlet light" style="padding: 15px;">
+                            <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">
+                                <strong>Rezervasyon Bilgisi!</strong> İlgili tarih bilgisini bularak işleme devam ediniz.
                             </div>
                         </div>
                     </div>
@@ -102,21 +102,18 @@
 
         getResCancelList($('#timeNowModal').val());
 
-       
-
-        $('#example2').DataTable({
-            "paging": false,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
-
     });
 
-   
+
+     function dataTable() {
+
+        $("#resList").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            buttons: [{ extend: 'pdf', title: 'Rezervasyon Listesi' }, { extend: 'print', title: 'Rezervasyon Listesi' }]
+           
+        }).buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
+        
+    }
 
     $('#timeNowModal').change(function () {
 
@@ -124,7 +121,7 @@
 
     });
 
-    function nextDate() {
+    function nextDate(){
 
         var date = $("#timeNowModal").val();
 
@@ -160,7 +157,7 @@
             day = "0" + day;
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
-        
+
         getResCancelList(date4);
 
     }
@@ -188,7 +185,7 @@
 
                     row += '<div id="asd" class="card-body">';
                     row += '<h4 style="margin-bottom:30px">Rezervasyon Listesi</h4>';
-                    row += '<table id="example2" class="table table-bordered table-hover">';
+                    row += '<table id="resList" class="table table-bordered table-hover">';
                     row += '<thead>';
                     row += '<tr style="text-align:center">';
                     row += '<th>Rezervasyon Id</th>';
@@ -201,11 +198,11 @@
                     row += '<th>Ücreti</th>';
                     row += '<th>Ücret Durumu</th>';
                     row += '<th>Rezervasyon Yapan</th>';
-                    
-                    
+
+
                     row += '</tr>';
                     row += '</thead>';
-
+                    row += '<tbody>';
 
                     for (var i = 0; i < res.reservations.length; i++) {
 
@@ -218,12 +215,11 @@
                             .select(function (x) { return x }).toArray();
 
                         debugger;
-                        
-                      
 
-                        row += '<tbody>';
+
+
+                     
                         row += '<tr style="text-align:center" id="">';
-                        row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
                         row += '<td>' + res.reservations[i].resId + '</td>';
                         row += '<td>' + memberInf[0].memberNumber + '</td>';
                         row += '<td>' + memberInf[0].fullName + '</td>';
@@ -232,7 +228,7 @@
                         row += '<td>' + res.reservations[i].resStartTime + '</td>';
                         row += '<td>' + res.reservations[i].resFinishTime + '</td>';
                         row += '<td>' + res.reservations[i].price + '</td>';
-                      
+
 
                         if (res.reservations[i].priceInf == true) {
                             row += '<td>' + "Ödendi" + '</td>';
@@ -245,10 +241,10 @@
 
 
                         row += '</tr>';
-                        row += '</tbody>';
+                       
 
                     }
-
+                    row += '</tbody>';
                     row += '</table>';
                     row += '</div>';
                     row += '</div>';
@@ -262,6 +258,7 @@
                 $("#appendResInf").append(row);
 
                 timeInf();
+                dataTable()
             },
 
             error: function (textStatus, errorThrown) {
@@ -310,7 +307,7 @@
         row += '<h4 id="timeInfH4" style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i>' + ' ' + timeNow + ' ' + ' - ' + ' ' + day + ' ' + '</h4>';
         $("#TimeInf").append(row);
 
-      
+
 
     }
 

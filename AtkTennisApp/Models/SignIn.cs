@@ -21,8 +21,9 @@ namespace AtkTennisApp.Models
 
         public string custom_userid { get; set; }
         public string custom_name { get; set; }
-        public string custom_role { get; set; }
-        public string custom_roleId { get; set; }
+        public List<string> custom_role { get; set; }
+        public List<string> custom_roleId { get; set; }
         public string custom_nickName { get; set; }
+        public string comp_Id { get; set; }
     }
 }

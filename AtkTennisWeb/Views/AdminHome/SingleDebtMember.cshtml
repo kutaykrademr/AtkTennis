@@ -1,0 +1,205 @@
+﻿@model Helpers.Dto.PartialViewDtos.GeneralDebtViewDto;
+
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Yeni Üye Borçlandırma</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-gray">
+
+                        <div class="card-header" style="margin:15px;">
+                            <h3 class="card-title">! Lütfen gerekli alanları formatına uygun ve eksiksiz bir şekilde doldurunuz.</h3>
+                        </div>
+
+                        <div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Üye Ara:</label>                        
+                                    <input id="findMember" style="height:38px" type="search" class="form-control form-control-sm ui-autocomplete-input" placeholder="Üye Ara" aria-controls="example2" autocomplete="off">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ücret Miktarı(₺):</label>
+                                    <input type="text" class="form-control" id="duesPrice" placeholder="Ücret Miktarı(₺)" autocomplete="new-password">
+                                </div>
+
+                                <div id="duesType" class="form-group">
+                                    <label>Türü:</label>
+                                    <select class="form-control">
+
+                                        <option>Yıllık Aidat Ücreti</option>
+                                        <option>Yıllık Eş Aidat Ücreti</option>
+
+                                    </select>
+                                </div>
+
+                                <div id="duesYear" class="form-group">
+                                    <label>Yıl:</label>
+                                    <select class="form-control">
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                        <option>2026</option>
+                                        <option>2027</option>
+                                        <option>2028</option>
+                                        <option>2029</option>
+                                        <option>2030</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Açıklama:</label>
+                                    <textarea id="explain" class="form-control" rows="3" placeholder="Açıklama"></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary" onclick="addDues()">Yıllık Aidat Borçlandır</button>
+                                <button type="button" onclick="Cancel()" class="btn btn-danger">Vazgeç</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+
+    findMemberTotal();
+
+    function findMemberTotal() {
+
+        $.ajax({
+            type: "Get",
+            url: '../Public/UserList',
+            cache: false,
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+
+                var mem = [];
+
+                for (var i = 0; i < res.memberLists.length; i++) {
+                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                }
+
+                $("#findMember").autocomplete({
+                    source: mem,
+                });
+
+               
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function addDues() {
+
+        var memNum = $("#findMember").val().split("-")[0];
+        var duesType = $("#duesType option:selected").val();
+        var duesYear = $("#duesYear option:selected").val();
+        var duesPrice = $("#duesPrice").val();
+        var explain = $("#explain").val();
+
+
+        if (duesType == "" || duesYear == "" || duesPrice == "" || explain == "" || memNum == "") {
+
+            swal({
+                title: "Borçlandırma Onaylanmadı",
+                text: "Lütfen Bilgileri Eksiksiz Giriniz !",
+                icon: "error",
+                button: "Tamam",
+            }).then((value) => {
+
+            });
+
+        }
+
+        else {
+
+            $.ajax({
+
+                type: "GET",
+                url: '../AdminHome/AddDuesSingle',
+                cache: false,
+                data: { "duesType": duesType, "duesPrice": duesPrice, "duesYear": duesYear, "explain": explain, "memNum": memNum },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    debugger;
+
+                    if (res != false) {
+
+
+                        swal({
+                            title: "Borçlandırma Başarılı",
+                            text: "Borçlandırma Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                            timer: 750,
+                        }).then((value) => {
+
+                            location.reload();
+
+                        });
+                    }
+
+                    else {
+
+                        swal({
+                            title: "Borçlandırma Onaylanmadı",
+                            text: "Önceden Aynı Yıl ve Aidat Türüne Borçlandırma Yapılmış Olabilir. Tekrar Deneyiniz!",
+                            icon: "error",
+                            button: "Tamam",
+                        }).then((value) => {
+
+
+
+                        });
+                    }
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+    }
+
+    function Cancel() {
+        location.reload();
+    }
+</script>

@@ -23,6 +23,9 @@ namespace AtkTennisApp.Models
 
         public int RefType { get; set; }
         public int RefId { get; set; }
-        
+        public string CompanyId { get; set; }
+        public string RoleName { get; set; }
+        public string RoleId { get; set; }
+
     }
 }

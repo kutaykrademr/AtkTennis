@@ -11,6 +11,8 @@ namespace AtkTennisApp.Models
         [Key]
         public int CourtRecipeTypeId { get; set; }
         public string CourtRecipeTypes { get; set; }
-       
+        public string CompanyId { get; set; }
+ 
+
     }
 }

@@ -70,10 +70,6 @@
                             </div>
 
 
-
-                            <div class="align-self-center">
-                                <h3>Toplam Borç: @totalPrice ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,52 +110,57 @@
 
                                 @foreach (var item in newModel)
                                 {
+
                                     if (item.UserId == userId)
                                     {
                                         if (item.ResDate.Split("-")[0] == date[i])
                                         {
-                                            <tr style="text-align:center" id="">
-                                                <td>@item.ResDate</td>
-                                                <td>@item.ResStartTime - @item.ResFinishTime</td>
-                                                <td>@item.Court.CourtName</td>
-                                                <td>@item.Price ₺</td>
 
-                                                @if (item.PriceInf == false)
-                                                {
-                                                    <td>Ödenmedi</td>
-                                                }
+                                                DateTime date1 = DateTime.Now;
+                                                var today = date1.ToString("yyyy-MM-dd");
 
-                                                else
-                                                {
-                                                    <td>Ödendi</td>
-                                                }
-
-                                                <td>Aktif</td>
-                                                <td>
-
-                                                    @{
-                                                        DateTime date1 = DateTime.Now;
-                                                        var today = date1.ToString("yyyy-MM-dd");
-
-                                                        var y = today.Split("-");
-                                                        var currentToday = Convert.ToInt32(y[2] + y[1] + y[0]);
+                                                var y = today.Split("-");
+                                                var currentToday = Convert.ToInt32(y[2] + y[1] + y[0]);
 
 
-                                                        var x = item.ResDate.Split("-");
-                                                        var resDate = Convert.ToInt32(x[2] + x[1] + x[0]);
-                                                    }
+                                                var x = item.ResDate.Split("-");
+                                                var resDate = Convert.ToInt32(x[2] + x[1] + x[0]);
+                                            
 
-                                                    @if (resDate >= currentToday)
+                                            if (resDate >= currentToday)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item.ResDate</td>
+                                                    <td>@item.ResStartTime - @item.ResFinishTime</td>
+                                                    <td>@item.Court.CourtName</td>
+                                                    <td>@item.Price ₺</td>
+
+                                                    @if (item.PriceInf == false)
                                                     {
-                                                        <button id="@item.ResId" style="color:white; background-color:#17a2b8 ; border-color:#17a2b8" class="btn btn-warning" onclick="cancelRes(this.id)"><i style="margin-right:10px" class="fas fa-check"></i>İptal Et</button>
+                                                        <td>Ödenmedi</td>
                                                     }
+
                                                     else
                                                     {
-                                                        <button style="color:black; cursor:text; background-color:white;" class="btn">-</button>
+                                                        <td>Ödendi</td>
                                                     }
 
-                                                </td>
-                                            </tr>
+                                                    <td>Aktif</td>
+                                                    <td>
+
+
+
+                                                        @if (resDate >= currentToday)
+                                                        {
+                                                            <button id="@item.ResId" style="color:white; background-color:#17a2b8; border-color:#17a2b8" class="btn btn-warning" onclick="cancelRes(this.id)"><i style="margin-right:10px" class="fas fa-check"></i>İptal Et</button>
+                                                        }
+
+
+                                                    </td>
+                                                </tr>
+                                            }
+
+
                                         }
                                     }
                                 }

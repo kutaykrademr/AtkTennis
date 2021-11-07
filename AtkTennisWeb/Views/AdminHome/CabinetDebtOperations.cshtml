@@ -52,9 +52,9 @@
                     </div>
 
                     <div class="portlet-body">
-                        <div id="secimdetay" class="portlet light" style="padding: 15px;">
-                            <div class="alert alert-info" style="margin-bottom: 0;">
-                                <strong>Dolap Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
+                        <div class="portlet light" style="padding: 15px;">
+                            <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">
+                                <strong>Rezervasyon Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
                             </div>
                         </div>
                     </div>
@@ -172,6 +172,23 @@
 
     findMemberTotal();
 
+    function dataTable() {
+
+        $('#resList').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 15,
+             buttons: [{ extend: 'pdf', title: 'Dolap Aidat  Borçları' }, { extend: 'print', title: 'Dolap Aidat  Borçları' }]
+        })
+            .buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
+    }
+
+
     function findMemberTotal() {
 
         $.ajax({
@@ -265,7 +282,7 @@
                             row += '<th>Ödeme</th>';
                             row += '</tr>';
                             row += '</thead>';
-
+                            row += '<tbody>';
 
 
 
@@ -273,10 +290,10 @@
 
                                 if (res.memberDuesInfTables[i].duesInfType == true && res.memberDuesInfTables[i].priceCondition == false) {
 
-                                    row += '<tbody>';
+                           
                                     row += '<tr style="text-align:center" id="">';
 
-                                    row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
+                             
                                     row += '<td>' + memberInf[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].memberFullName + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].duesYear + '</td>';
@@ -289,24 +306,23 @@
                                     row += '<td>' + "Ödenmedi" + '</td>';
 
 
-                                    row += '<td><button class="btn btn-outline-dark" id="' + res.memberDuesInfTables[i].memberDuesInfTableId + '" onclick="getPaidDues(this.id) "><i class="fas fa-wallet"></i></button></td>';
+                                    row += '<td><button class="btn btn-outline-dark userId" value="' + memberInf[0].userId + '" id="' + res.memberDuesInfTables[i].memberDuesInfTableId + '" onclick="getPaidDues(this.id) "><i class="fas fa-wallet"></i></button></td>';
 
                                     row += '</tr>';
-                                    row += '</tbody>';
+                                  
 
                                 }
 
                             }
 
-
-
+                            row += '</tbody>';
                             row += '</table>';
                             row += '</div>';
                             row += '</div>';
 
                             $("#append").append(row);
 
-
+                            dataTable();
 
 
                         },
@@ -405,7 +421,7 @@
 
         debugger;
 
-        var userId = $("#userId").text();
+        var userId = $(".userId").val();
         var currentUserId = $("#currentUserId").text();
         var price = $("#price").val();
         var paidPrice = $("#paidPrice").val();

@@ -2,204 +2,205 @@
 @inject IHttpContextAccessor HttpContextAccessor;
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ATK Tenis Akademisi Sistemi</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ATK Tenis Akademisi Sistemi</title>
 
-
-    <link href="~/adminRoot/plugins/icheck-bootstrap.min.css" rel="stylesheet" />
-    <link href="~/adminRoot/plugins/jqvmap.min.css" rel="stylesheet" />
-    <link href="~/adminRoot/css/all.min.css" rel="stylesheet" />
-    <link href="~/adminRoot/css/adminlte.css" rel="stylesheet" />
-    <link href="~/adminRoot/plugins/OverlayScrollbars.min.css" rel="stylesheet" />
-    <link href="~/adminRoot/plugins/daterangepicker.css" rel="stylesheet" />
-    <link href="~/adminRoot/plugins/summernote-bs4.min.css" rel="stylesheet" />
-    <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
-    <link href="~/adminRoot/css/calender.css" rel="stylesheet" />
-    <link href="~/adminRoot/css/loading.css" rel="stylesheet" />
-    <link href="~/lib/jquery/dist/jquery-ui.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
-    <link href="~/vendor/select2/select2.min.css" rel="stylesheet" media="all">
-    @*<link href="~/rcss/main.css" rel="stylesheet" media="all">*@
-    <link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
-
-    <!-- jQuery -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 
-    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
-</head>
+        <link href="~/adminRoot/plugins/icheck-bootstrap.min.css" rel="stylesheet" />
+        <link href="~/adminRoot/plugins/jqvmap.min.css" rel="stylesheet" />
+        <link href="~/adminRoot/css/all.min.css" rel="stylesheet" />
+        <link href="~/adminRoot/css/adminlte.css" rel="stylesheet" />
+        <link href="~/adminRoot/plugins/OverlayScrollbars.min.css" rel="stylesheet" />
+        <link href="~/adminRoot/plugins/daterangepicker.css" rel="stylesheet" />
+        <link href="~/adminRoot/plugins/summernote-bs4.min.css" rel="stylesheet" />
+        <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
+        <link href="~/adminRoot/css/calender.css" rel="stylesheet" />
+        <link href="~/adminRoot/css/loading.css" rel="stylesheet" />
+        <link href="~/lib/jquery/dist/jquery-ui.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+        <link href="~/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+        @*<link href="~/rcss/main.css" rel="stylesheet" media="all">*@
+        <link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+        <!-- jQuery -->
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+        <script src="~/lib/jquery/dist/jquery-ui.js"></script>
+    </head>
 
 
 
-@{
-    var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-    var roleName = HttpContextAccessor.HttpContext.Session.GetString("Role");
-}
+    @{
+        var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
+        var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+        var roleName = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    }
 
-@{
-    DateTime today = DateTime.Now;
-    var date = today.ToString("yyyy-MM-dd");
-}
+    @{
+        DateTime today = DateTime.Now;
+        var date = today.ToString("yyyy-MM-dd");
+    }
 
-<body class="hold-transition sidebar-mini layout-fixed">
+    <body class="hold-transition sidebar-mini layout-fixed">
 
-    <style>
-        .ui-autocomplete {
-            font-size: 14px;
-            cursor: pointer;
-            text-align: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1510 !important;
-            float: left;
-            min-width: 350px !important;
-            width: 350px !important;
-            padding: 4px 0;
-            margin: 2px 0 0 0;
-            list-style: circle;
-            background-color: #ffffff;
-            border-color: black !important;
-            border-color: rgba(0, 0, 0, 0.2);
-            border-style: solid;
-            border-width: 1px !important;
-        }
-    </style>
+        <style>
+            .ui-autocomplete {
+                font-size: 14px;
+                cursor: pointer;
+                text-align: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1510 !important;
+                float: left;
+                min-width: 350px !important;
+                width: 350px !important;
+                padding: 4px 0;
+                margin: 2px 0 0 0;
+                list-style: circle;
+                background-color: #ffffff;
+                border-color: black !important;
+                border-color: rgba(0, 0, 0, 0.2);
+                border-style: solid;
+                border-width: 1px !important;
+            }
+        </style>
 
-    <div class="wrapper">
+        <div class="wrapper">
 
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-            </ul>
-
-     
-
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i style="font-size:20px" class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
-                    </a>
+            <!-- Navbar -->
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                </ul>
 
 
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
+
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i style="font-size:20px" class="far fa-bell"></i>
+                            <span class="badge badge-warning navbar-badge">15</span>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
+
+
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">15 Notifications</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-users mr-2"></i> 8 friend requests
+                                <span class="float-right text-muted text-sm">12 hours</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-file mr-2"></i> 3 new reports
+                                <span class="float-right text-muted text-sm">2 days</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i style="font-size:20px" class="fas fa-user-cog"></i>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
+
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">Kullanıcı İşlemleri </span>
+                            <div class="dropdown-divider"></div>
+                            <a href="~/Public/MemberInf" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i>Üyelik Bilgilerim
+
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a id="@userId" onclick="changeCurrentPassModal(this.id)" style="cursor:pointer" class="dropdown-item">
+                                <i class="fas fa-users mr-2"></i> Şifre Değiştir
+                            </a>
+
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i style="font-size:20px" class="fas fa-wallet"></i>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">Toplam Bakiye :  </span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i>Bakiye Yükle
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" onclick="logOut()" style="cursor:pointer">
+                            <i style="font-size:20px; color:#dc3545" class="fas fa-power-off mr-2"></i>
+                        </a>
+
+                    </li>
+                </ul>
+
+
+
+            </nav>
+
+
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <a href="#" class="brand-link">
+                    <img src="~/adminRoot/images/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                    <span class="brand-text font-weight-light">
+                        @if (Mutuals.CompName == null)
+                        {@Html.Raw("---------------")}
+                    else
+                    { @Mutuals.CompName}
+                    </span>
+                </a>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            <i style="font-size:30px; color:white;" class="fas fa-user"></i>
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">@fullname</a>
+                        </div>
                     </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i style="font-size:20px" class="fas fa-user-cog"></i>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">Kullanıcı İşlemleri </span>
-                        <div class="dropdown-divider"></div>
-                        <a href="~/Public/MemberInf" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i>Üyelik Bilgilerim
-
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a id="@userId" onclick="changeCurrentPassModal(this.id)" style="cursor:pointer" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> Şifre Değiştir
-                        </a>
-
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i style="font-size:20px" class="fas fa-wallet"></i>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">Toplam Bakiye :  </span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i>Bakiye Yükle
-                        </a>
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" onclick="logOut()" style="cursor:pointer">
-                        <i style="font-size:20px; color:#dc3545" class="fas fa-power-off mr-2"></i>
-                    </a>
-
-                </li>
-            </ul>
 
 
-
-        </nav>
-
-
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="#" class="brand-link">
-                <img src="~/adminRoot/images/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">
-                    @if (Mutuals.CompName == null)
-                    {@Html.Raw("---------------")}
-                else
-                { @Mutuals.CompName}
-                </span>
-            </a>
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <i style="font-size:30px; color:white;" class="fas fa-user"></i>
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">@fullname</a>
-                    </div>
-                </div>
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
 
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-
-
-                       <li class="nav-item menu-open">
+                            <li class="nav-item menu-open">
                                 <a style="background-color:#d4ff0761" href="~/Public/Reservation?date=@date" class="nav-link active">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
@@ -208,17 +209,17 @@
                                     </p>
                                 </a>
                             </li>
-                        
-
-                        <li class="nav-item">
-                            <a style="background-color:#625e5e" href="/Public/MemberInf" class="nav-link">
-                                <i class="fas fa-id-card nav-icon"></i>
-                                <p>Kullanıcı Bilgilerim </p>
-                            </a>
-                        </li>
 
 
-                      
+                            <li class="nav-item">
+                                <a style="background-color:#625e5e" href="/Public/MemberInf" class="nav-link">
+                                    <i class="fas fa-id-card nav-icon"></i>
+                                    <p>Kullanıcı Bilgilerim </p>
+                                </a>
+                            </li>
+
+
+
                             <li class="nav-item ">
                                 <a style="background-color:#625e5e" href="#" class="nav-link">
                                     <i class="nav-icon fas fa-bell"></i>
@@ -231,14 +232,14 @@
 
                                 <ul class="nav nav-treeview">
 
-                                   
+
                                     <li class="nav-item">
                                         <a href="~/Public/Reservation?date=@date" class="nav-link">
                                             <i class="fas fa-calendar-check nav-icon"></i>
                                             <p>Rezervasyon Yap</p>
                                         </a>
                                     </li>
-                                  
+
 
 
                                     <li class="nav-item">
@@ -255,215 +256,239 @@
                                         </a>
                                     </li>
 
+                                 
+                                </ul>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-bell"></i>
+                                    <p>
+                                        Aidatlar
+                                        <i class="fas fa-angle-left right"></i>
+
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+
                                     <li class="nav-item">
-                                        <a href="~/Admin/ReservationTable" class="nav-link">
+                                        <a href="~/Public/GetMemberDebt?userId=@userId" class="nav-link">
                                             <i class="fas fa-wallet nav-icon"></i>
                                             <p>Üyelik Aidatlarım</p>
                                         </a>
                                     </li>
+
+                                    <li class="nav-item">
+                                        <a href="~/Public/GetCabinetDebt?userId=@userId" class="nav-link">
+                                            <i class="fas fa-wallet nav-icon"></i>
+                                            <p>Dolap Aidatlarım</p>
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </li>
 
-                    </ul>
-                </nav>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+
+
+            <div class="section">
+                @*<main role="main" class="pb-3">*@
+                @RenderBody()
+                @*</main>*@
             </div>
-        </aside>
 
+            <div class="modal fade" id="updatesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-body register-card-body">
+                                    <p class="login-box-msg">Şifre Güncelle </p>
 
-
-        <div class="section">
-            @*<main role="main" class="pb-3">*@
-            @RenderBody()
-            @*</main>*@
-        </div>
-
-        <div class="modal fade" id="updatesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body register-card-body">
-                                <p class="login-box-msg">Şifre Güncelle </p>
-
-                                <div class="input-group mb-3">
-                                    <input type="password" class="form-control" id="currentPassword" placeholder="Mevcut Şifre" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-lock"></span>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="currentPassword" placeholder="Mevcut Şifre" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-lock"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="input-group mb-3">
-                                    <input type="password" class="form-control" id="newPassword" placeholder="Yeni Şifre" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-lock"></span>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="newPassword" placeholder="Yeni Şifre" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-lock"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="input-group mb-3">
-                                    <input type="password" class="form-control" id="checkPassword" placeholder="Yeni Şifre Tekrarı" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-lock"></span>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="checkPassword" placeholder="Yeni Şifre Tekrarı" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-lock"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <div class="modal-footer" id="updateModels">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                        <button type="button" class="btn btn-primary" onclick="updateCurrentUserPass(this.id)">Güncelle</button>
+                        <div class="modal-footer" id="updateModels">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                            <button type="button" class="btn btn-primary" onclick="updateCurrentUserPass(this.id)">Güncelle</button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <aside class="control-sidebar control-sidebar-dark">
+            </aside>
+
         </div>
 
-        <aside class="control-sidebar control-sidebar-dark">
-        </aside>
-
-    </div>
-
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
+        <script>
+            $.widget.bridge('uibutton', $.ui.button)
 
 
 
 
-        function changeCurrentPassModal(id) {
+            function changeCurrentPassModal(id) {
 
-            $("#updateModels button:nth-of-type(2)").attr("id", id);
-            $('#updatesModal').modal('toggle');
+                $("#updateModels button:nth-of-type(2)").attr("id", id);
+                $('#updatesModal').modal('toggle');
 
-        }
+            }
 
-        function updateCurrentUserPass(id) {
+            function updateCurrentUserPass(id) {
 
-            var currentPass = $("#currentPassword").val();
-            var newPass = $("#newPassword").val();
-            var newPassCheck = $("#checkPassword").val();
-
-
-
-            if (newPass == newPassCheck) {
-
-                try {
-
-                    $.ajax({
-                        type: "POST",
-                        url: '../Public/ChangeCurrentUserPass',
-                        cache: false,
-                        data: { "id": id, "currentPass": currentPass, "newPass": newPass, "newPassCheck": newPassCheck },
-                        dataType: "json",
-                        async: true,
-                        success: function (res) {
+                var currentPass = $("#currentPassword").val();
+                var newPass = $("#newPassword").val();
+                var newPassCheck = $("#checkPassword").val();
 
 
-                            if (res == true) {
 
-                                $('#updatesModal').modal('toggle');
+                if (newPass == newPassCheck) {
 
-                                swal({
-                                    title: "Şifre Güncellendi",
-                                    text: "Şifre Güncellemesi Başarılı Bir Şekilde Gerçekleşti !",
-                                    icon: "success",
-                                    button: "Tamam",
-                                });
-                            }
+                    try {
 
-                            else {
-                                $.confirm({
-                                    title: "Uyarı",
-                                    content: "Şifre Kuralları",
-                                    buttons: {
-                                        TAMAM: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: '../Public/ChangeCurrentUserPass',
+                            cache: false,
+                            data: { "id": id, "currentPass": currentPass, "newPass": newPass, "newPassCheck": newPassCheck },
+                            dataType: "json",
+                            async: true,
+                            success: function (res) {
 
 
+                                if (res == true) {
+
+                                    $('#updatesModal').modal('toggle');
+
+                                    swal({
+                                        title: "Şifre Güncellendi",
+                                        text: "Şifre Güncellemesi Başarılı Bir Şekilde Gerçekleşti !",
+                                        icon: "success",
+                                        button: "Tamam",
+                                    });
+                                }
+
+                                else {
+                                    $.confirm({
+                                        title: "Uyarı",
+                                        content: "Şifre Kuralları",
+                                        buttons: {
+                                            TAMAM: function () {
+
+
+                                            }
                                         }
-                                    }
-                                });
-                            }
+                                    });
+                                }
 
-                        },
-                        error: function (textStatus, errorThrown) {
-                            console.log(JSON.stringify(textStatus));
-                            console.log(textStatus);
+                            },
+                            error: function (textStatus, errorThrown) {
+                                console.log(JSON.stringify(textStatus));
+                                console.log(textStatus);
+                            }
+                        });
+                    } catch (e) {
+                        console.log(e.message);
+                    }
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Şifreler Uyumsuz",
+                        buttons: {
+                            TAMAM: function () {
+
+
+                            }
                         }
                     });
-                } catch (e) {
-                    console.log(e.message);
                 }
             }
 
-            else {
-                $.confirm({
-                    title: "Uyarı",
-                    content: "Şifreler Uyumsuz",
-                    buttons: {
-                        TAMAM: function () {
+            function logOut() {
 
+                localStorage.clear();
+                window.location.href = "/Public/Logout";
 
-                        }
-                    }
-                });
             }
-        }
-
-        function logOut() {
-
-            localStorage.clear();
-            window.location.href = "/Public/Logout";
-
-        }
 
 
-    </script>
+        </script>
 
 
-    <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/adminRoot/js/Chart.min.js"></script>
-    <script src="~/adminRoot/js/sparkline.js"></script>
-    <script src="~/adminRoot/js/jquery.knob.min.js"></script>
-    <script src="~/adminRoot/js/moment.min.js"></script>
-    <script src="~/adminRoot/js/daterangepicker.js"></script>
-    <script src="~/adminRoot/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="~/adminRoot/js/summernote-bs4.min.js"></script>
-    <script src="~/adminRoot/js/jquery.overlayScrollbars.min.js"></script>
-    <script src="~/adminRoot/js/adminlte.js"></script>
-    <script src="~/adminRoot/js/demo.js"></script>
-    <script src="~/adminRoot/js/dashboard.js"></script>
-    <script src="~/adminRoot/js/calender.js"></script>
-    <script src="~/adminRoot/js/jquery.inputmask.min.js"></script>
-    <script src="~/plugins/jszip/jszip.min.js"></script>
-    <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="~/adminRoot/js/sweetAlert.js"></script>
+        <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/adminRoot/js/Chart.min.js"></script>
+        <script src="~/adminRoot/js/sparkline.js"></script>
+        <script src="~/adminRoot/js/jquery.knob.min.js"></script>
+        <script src="~/adminRoot/js/moment.min.js"></script>
+        <script src="~/adminRoot/js/daterangepicker.js"></script>
+        <script src="~/adminRoot/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="~/adminRoot/js/summernote-bs4.min.js"></script>
+        <script src="~/adminRoot/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="~/adminRoot/js/adminlte.js"></script>
+        <script src="~/adminRoot/js/demo.js"></script>
+        <script src="~/adminRoot/js/dashboard.js"></script>
+        <script src="~/adminRoot/js/calender.js"></script>
+        <script src="~/adminRoot/js/jquery.inputmask.min.js"></script>
+        <script src="~/plugins/jszip/jszip.min.js"></script>
+        <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
+        <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
+        <script src="~/adminRoot/js/sweetAlert.js"></script>
 
 
 
 
 
-    <script src="~/vendor/select2/select2.min.js"></script>
-    @*<script src="~/rjs/global.js"></script>*@
+        <script src="~/vendor/select2/select2.min.js"></script>
+        @*<script src="~/rjs/global.js"></script>*@
 
-    @*dataTable*@
-    <script src="~/plugins/datatables/jquery.dataTables.js"></script>
-    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
-    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.js"></script>
-    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.js"></script>
-    <script src="~/plugins/datatables-buttons/js/dataTables.buttons.js"></script>
-    <script src="~/plugins/datatables-buttons/js/buttons.bootstrap4.js"></script>
-    <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        @*dataTable*@
+        <script src="~/plugins/datatables/jquery.dataTables.js"></script>
+        <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+        <script src="~/plugins/datatables-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.js"></script>
+        <script src="~/plugins/datatables-buttons/js/dataTables.buttons.js"></script>
+        <script src="~/plugins/datatables-buttons/js/buttons.bootstrap4.js"></script>
+        <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+        <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-</body>
+    </body>
 </html>
 

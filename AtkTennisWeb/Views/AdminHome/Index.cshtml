@@ -15,11 +15,12 @@
     var username = HttpContextAccessor.HttpContext.Session.GetString("UserName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 
 
     var debtDuesList = Model.memberDuesInf.Where(x => x.PriceCondition == false && x.CancelCondition == false).ToList();
 
-    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30).ToList();
+    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30).OrderBy(x=> x.ResTimes).ToList();
 
     var x = times.Count * 4;
 
@@ -32,7 +33,7 @@
     var resSetTime = resSettingsTime.ReservationValue;
 
     var TotalResPriceList = Model.reservations.Where(x => x.PriceInf == false).ToList();
-    var TotalResCanPriceList = Model.reservationCancels.Where(x => x.PriceInf == false).ToList();
+    var TotalResCanPriceList = Model.reservationCancels.Where(x => x.PriceInf == false && x.Procedure == false).ToList();
 
     float firstDebt;
     float secDebt;
@@ -237,7 +238,7 @@
             <div id="resTableGeneral" class="row">
                 <div class="col-lg-9">
 
-                    <div style="display: none;"><input id="RoleName" ="" ="text" name="name" value="@Role" /></div>
+                    <div style="display: none;"><input id="RoleName" name="name" value="@Role" /></div>
                     <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
 
                     <div class="card">
@@ -285,8 +286,10 @@
                                         @for (int i = 0; i < times.Count; i++)
 
                                         {
-
+                                            if (times[i].ResTimes.Split(":")[1] != "45")
+                                            {
                                         <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+                                            }
 
                                         }
 
@@ -361,8 +364,6 @@
                     </div>
 
                 </div>
-
-
 
 
                 <div class="row">
@@ -517,7 +518,7 @@
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="priceModal">
-    <div class="modal-dialog modal-lg modal-dialog-bottom ">
+    <div class="modal-dialog modal-lg modal-dialog-bottom" style="top:38% !important">
         <div class="modal-content">
             <div id="priceList" style="display:block">
 
@@ -588,128 +589,28 @@
 </div>
 
 
-<div id="xad" class="panel" style="width: 8cm; margin-bottom: 1cm; background-color: #fff;">
-    <div class="panel-body" style="padding: 2px;">
-        <div class="portlet light portlet-fit bordered" style="margin-bottom: 0px;">
-            <div class="portlet-title" style="background-color: black; text-align: center; padding: 0px; margin-bottom: 0px;">
-                <img src="~/images/atkimg/logoprint.png" alt="logo" class="logo-default" style="background-color:#000;">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="priceModal">
+    <div class="modal-dialog modal-lg modal-dialog-bottom ">
+        <div id="xad" class="panel" style="width: 8cm; display:block; margin-bottom: 1cm; background-color: #fff;">
+            <div class="panel-body" style="padding: 2px;">
+                <div class="portlet light portlet-fit bordered" style="margin-bottom: 0px;">
+                    <div class="portlet-title" style="background-color: black; text-align: center; padding: 0px; margin-bottom: 0px;">
+                        <img src="~/images/atkimg/logoprint.png" alt="logo" class="logo-default" style="background-color:#000;">
+                    </div>
+
+                    <div id="receiptAppend" class="portlet-body" style="padding: 15px;">
+
+
+                    </div>
+
+                </div>
             </div>
-
-            <div id="receiptAppend" class="portlet-body" style="padding: 15px;">
-
-                <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">
-                    ATK - Aytekin Kaya Tenis Akademisi<br>
-                    KORT REZERVASYON İŞLEMLERİ
-                </div>
-
-                <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;text-align:center">
-                    #81418<br>
-                    Kapalı 3<br>
-                    15.10.2021<br>
-                    Cuma - 09:00-10:15 (75 dk)<br>
-                    Kayıt Tarihi: 13.10.2021 12:26<br>
-                </div>
-
-                <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">
-                    db1<br>
-                    DENİZ  BUDAK
-                </div>
-
-                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
-                    <thead>
-                        <tr>
-                            <td class="invoice-title uppercase" style="text-align:left;"> ÜCRET BİLGİSİ </td>
-                            <td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"> Ücret </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p style="margin: 5px;">Kort Ücreti</p>
-                                <p style="margin: 5px;"> </p>
-                            </td>
-                            <td class="text-center sbold" style="width:100px;">50 TL</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
-                    <thead>
-                        <tr>
-                            <td class="invoice-title uppercase" style="text-align:left;"> ÖDEME BİLGİSİ </td>
-                            <td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"> Türü </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Nakit</td>
-                            <td class="text-center sbold" style="width:100px;">0 TL</td>
-                        </tr>
-                        <tr>
-                            <td>Kredi Kartı</td>
-                            <td class="text-center sbold" style="width:100px;">0 TL</td>
-                        </tr>
-                        <tr>
-                            <td>Toplam Ödenen</td>
-                            <td class="text-center sbold" style="width:100px;">0 TL</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
-                    <thead>
-                        <tr>
-                            <td class="invoice-title uppercase" style="text-align:left;"> DETAYLAR </td>
-                            <td class="invoice-title uppercase text-center" style="width:100px;text-align:left;"></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                REZERVASYON<br>
-                                13.10.2021 12:26:10
-                            </td>
-                            <td class="text-center sbold" style="width:100px;font-size: 12px;">
-                                merve <br>
-
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
-
-
-
-                <table class="table bordered" style="background-color:#fff;margin:0;width:100%">
-                    <tbody>
-                        <tr>
-                            <td style="text-align:center; vertical-align:middle;height:45px;color:#9f9f9f;border: 1px solid #000000!important;">
-                                <small>Yetkili İmza</small>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <p>
-                    <i class="fa fa-map-marker"></i>19 Mayıs Stadyum İçi Ulus / ANKARA<br>
-                    <i class="fa fa-phone"></i>Telefon: 0 (312) 310 71 74<br>
-                    <i class="fa fa-envelope"></i>E-Posta: info@atktenis.com.tr<br>
-                    <i class="fa fa-flag"></i>Web:http://atktenis.com.tr
-                </p>
-
-                <hr>
-                <p style="text-align: right;">
-                    15.10.2021 11:43:02
-                    nclkrYTJq3k6Z_Mk=aiüe
-                </p>
-            </div>
-
-
         </div>
     </div>
 </div>
+
+
+
 
 
 
@@ -765,116 +666,114 @@
                 </div>
             </div>
 
-            <div id="priceList" style="display:block">
+            @*<div id="priceList" style="display:block">
 
-                <div class="modal-header" style="background-color: #004e6c;">
-                    <h4 style="margin:auto; color:white">Ücretlendirme</h4>
-                </div>
+                    <div class="modal-header" style="background-color: #004e6c;">
+                        <h4 style="margin:auto; color:white">Ücretlendirme</h4>
+                    </div>
 
-                <div class="row">
-                    <div class="modal-header col-md-9">
-                        <div class="col-sm-12">
-                            <div class="form-group" style="text-align:center">
-                                <table class="table table-bordered">
+                    <div class="row">
+                        <div class="modal-header col-md-9">
+                            <div class="col-sm-12">
+                                <div class="form-group" style="text-align:center">
+                                    <table class="table table-bordered">
 
-                                    <thead>
-                                        <tr>
-                                            <th style="font-weight:bold" scope="col">Adı</th>
-                                            <th style="font-weight:bold" scope="col">Fiyatı</th>
-                                            <th style="font-weight:bold" scope="col">Seç</th>
-                                        </tr>
-                                    </thead>
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight:bold" scope="col">Adı</th>
+                                                <th style="font-weight:bold" scope="col">Fiyatı</th>
+                                                <th style="font-weight:bold" scope="col">Seç</th>
+                                            </tr>
+                                        </thead>
 
-                                    <tbody>
+                                        <tbody>
 
-                                        @foreach (var item2 in Model.courtPriceLists)
-                                        {
-                                            if (item2.Condition == "1")
+                                            @foreach (var item2 in Model.courtPriceLists)
                                             {
-                                        <tr>
-                                            <td>@item2.Name</td>
-                                            <td>@item2.CourtPrice ₺ </td>
-                                            <td>
-                                                <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
+                                                if (item2.Condition == "1")
+                                                {
+                                                    <tr>
+                                                        <td>@item2.Name</td>
+                                                        <td>@item2.CourtPrice ₺ </td>
+                                                        <td>
+                                                            <div class="custom-control custom-checkbox " id="checkPriceUpdTables">
 
-                                                    @{
-                                                                if (item2.PriceType == "1")
-                                                                {
-                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                                @{
+                                                                    if (item2.PriceType == "1")
+                                                                    {
+                                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" value="@item2.CourtPriceListId" type="checkbox" name="@item2.CourtPrice" id="cb_@item2.CourtPriceListId" checked="checked" disabled="">
+                                                                    }
+
+                                                                    else
+                                                                    {
+                                                                        <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
+                                                                    }
+
                                                                 }
 
-                                                                else
-                                                                {
-                                                        <input class="custom-control-input custom-control-input-danger" value="@item2.CourtPriceListId" name="@item2.CourtPrice" type="checkbox" id="cb_@item2.CourtPriceListId">
-                                                                }
-
-                                                    }
-
-                                                    <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                                <label for="cb_@item2.CourtPriceListId" class="custom-control-label"></label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
                                             }
-                                        }
 
-                                    </tbody>
+                                        </tbody>
 
-                                    <tfoot>
-                                        <tr>
-                                            <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
-                                            <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </tfoot>
+                                        <tfoot>
+                                            <tr>
+                                                <th style="font-weight:bold" scope="col">Ücret Toplam :</th>
+                                                <th id="sumOfPrice" style="font-weight:bold" scope="col"></th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </tfoot>
 
-                                </table>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-header col-md-3">
+                            <div class="col-sm-12">
+                                <div class="form-group" style="text-align:center">
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight:bold" scope="col">Rezervasyon Görevi</th>
+                                                <th style="font-weight:bold" scope="col">Tanımla</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Görev</td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox" id="privResCheck">
+
+                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="privChecked">
+                                                        <label for="privChecked" class="custom-control-label"></label>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>*@
+
+            <div style="display:none" class="modal-footer">
+                <textbox style="color:black; " id="userId">@userId</textbox>
+            </div>
 
 
-                    <div class="modal-header col-md-3">
-                        <div class="col-sm-12">
-                            <div class="form-group" style="text-align:center">
-                                <table class="table table-bordered ">
-                                    <thead>
-                                        <tr>
-                                            <th style="font-weight:bold" scope="col">Rezervasyon Görevi</th>
-                                            <th style="font-weight:bold" scope="col">Tanımla</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Görev</td>
-                                            <td>
-                                                <div class="custom-control custom-checkbox" id="privResCheck">
-
-                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="privChecked">
-                                                    <label for="privChecked" class="custom-control-label"></label>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div style="display:none" class="modal-footer">
-                    <textbox style="color:black; " id="userId">@userId</textbox>
-                </div>
-
-
-                <div class="modal-footer" id="forApproveUpdId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" onclick="updateReservation(this.id)">Güncelle</button>
-                </div>
-
+            <div class="modal-footer" id="forApproveUpdId">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateReservation(this.id)">Güncelle</button>
             </div>
         </div>
     </div>
@@ -1195,7 +1094,7 @@
                                 }
                             }
 
-                            NewRow += '<div class="label label-sm label-primary col-md-4 text-align-left">' + res.reservations[a].resStartTime + " - " + res.reservations[a].resFinishTime + '</div>';
+                            NewRow += '<div class="label label-sm label-primary col-md-4 text-align-left">' + res.reservations[a].resStartTime + '</div>';
                             NewRow += ' </div></li></ul>';
                         }
                     }
@@ -1843,12 +1742,14 @@
             success: function (res) {
 
 
+                debugger;
 
                 $("#xyz").empty();
 
                 row = "";
 
                 for (var i = 0; i < res.courts.length; i++) {
+
 
                     if (res.courts[i].courtConditions == 1) {
 
@@ -1904,15 +1805,9 @@
                                     .select(function (x) { return x }).toArray();
 
 
-
-                                var memInf = Enumerable.from(res.memberLists)
-
-                                    .where(function (x) { return x.nickName == Res[0].nickName })
-                                    .select(function (x) { return x }).toArray();
-
                                 var scaleList2 = Enumerable.from(res.courtScaleLists)
 
-                                    .where(function (x) { return x.name.toLowerCase() == memInf[0].role.toLowerCase() })
+                                    .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
                                     .select(function (x) { return x }).toArray();
 
 
@@ -1951,14 +1846,10 @@
 
                                 if (scaleList.length == 0) {
 
-                                    var memInf = Enumerable.from(res.memberLists)
-
-                                        .where(function (x) { return x.nickName == Res[0].nickName })
-                                        .select(function (x) { return x }).toArray();
 
                                     var scaleList2 = Enumerable.from(res.courtScaleLists)
 
-                                        .where(function (x) { return x.name.toLowerCase() == memInf[0].role.toLowerCase() })
+                                        .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
                                         .select(function (x) { return x }).toArray();
 
                                 }
@@ -1969,6 +1860,7 @@
                                     row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + scaleList[0].name + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
                                     row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
                                 }
+
                                 else {
                                     row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
                                     row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
@@ -2038,14 +1930,29 @@
 
                 $(this).addClass("hourborder");
 
+            else if (time == "15" && per == "1") {
+                $(this).addClass("hourborder");
+            }
+
             else if (time == "00" && per == "2") {
                 $(this).addClass("hourborder");
             }
 
-            else if (time == "00" && per == "4") {
-
+            else if (time == "15" && per == "2") {
                 $(this).addClass("hourborder");
             }
+
+
+            else if (time == "15" && per == "4") {
+                $(this).addClass("hourborder");
+            }
+
+
+            //else if (time == "00" && per == "4") {
+
+            //    $(this).addClass("hourborder");
+            //}
+
 
             else {
                 $(this).addClass("");
@@ -2182,13 +2089,13 @@
 
                     $('#priceModal').modal('toggle');
 
-
                 },
 
                 error: function (textStatus, errorThrown) {
                     console.log(JSON.stringify(textStatus));
                     console.log(textStatus);
                 }
+
             });
         }
 
@@ -2325,6 +2232,8 @@
                     async: true,
                     success: function (res) {
 
+                        debugger;
+
                         if (res == true) {
 
                             $('#rsvModal').modal('toggle');
@@ -2338,6 +2247,7 @@
                             }).then((value) => {
 
                                 getResTable($("#timeNow").val());
+                                $('#priceModal').modal('toggle');
 
                             });
                         }
@@ -2392,6 +2302,21 @@
             async: true,
             success: function (res) {
 
+                var date = new Date();
+
+                const d = new Date(date);
+                d.setDate(d.getDate() + 1);
+
+                var month = (d.getMonth() + 1);
+                var day = d.getDate();
+                if (month < 10)
+                    month = "0" + month;
+                if (day < 10)
+                    day = "0" + day;
+
+                var date3 = day + '-' + month + '-' + d.getFullYear();
+                var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+                debugger;
 
                 $("#PriceInf").empty();
 
@@ -2511,13 +2436,13 @@
                 row += '#81418<br>';
                 row += '' + res.resSchemaModal.courtName + '<br>';
                 row += '' + date + ' ' + day + ' - ' + res.resSchemaModal.resStartTime + '<br>';
-                row += 'Kayıt Tarihi : 13.10.2021 12:26 ';
+
 
 
 
                 row += ' <div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">';
                 row += '' + res.resSchemaModal.nickName + '<br>';
-                row += '' + 'Kutay Karademir' + '<br>';
+                row += '' + res.resSchemaModal.fullName + '<br>';
                 row += '</div>';
 
 
@@ -2551,11 +2476,15 @@
                 row += '<tbody>';
                 row += '<tr>';
                 row += '<td>Nakit</td>';
-                row += '<td class="text-center sbold" style="width:100px; font-weight:bold">' + res.resSchemaModal.price + ' ' + '₺' + '</td>';
+                if (res.resSchemaModal.priceInf) {
+                    row += '<td class="text-center sbold" style="width:100px; font-weight:bold">' + res.resSchemaModal.price + ' ' + '₺' + '</td>';
+                }
+                else {
+                    row += '<td class="text-center sbold" style="width:100px; font-weight:bold">0</td>';
+                }
+
                 row += '</tbody>';
                 row += '</table>';
-
-
                 row += '<table class="table bordered" style="background-color:#fff;margin:0;width:100%">';
                 row += '<thead>';
                 row += '<tr>';
@@ -2571,7 +2500,8 @@
                 row += '13.10.2021 12:26:10';
                 row += '</td>';
                 row += '<td class="text-center sbold" style="width:100px;font-size: 12px;">';
-                row += 'merve<br>';
+
+                row += '' + date3 + '<br>';
                 row += '</td>';
                 row += '</tr>';
                 row += '</tbody>';
@@ -2597,7 +2527,7 @@
 
                 row += '<hr>';
                 row += '<p style="text-align: right;">';
-                row += '15.10.2021 11:43:02';
+                row += '' + date3 + ' , ' + time + '';
                 row += '</p>';
                 row += '</div>';
 

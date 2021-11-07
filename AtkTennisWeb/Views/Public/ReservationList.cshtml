@@ -237,7 +237,7 @@
 
                                                 else
                                                 {
-                                                    <td>Öde</td>
+                                                    <td><button class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>
                                                 }
 
 
@@ -272,7 +272,15 @@
                                                 }
                                                 else
                                                 {
-                                                    <td>Ödendi</td>
+                                                    if (item2.PriceInf == true)
+                                                    {
+                                                        <td>Ödendi</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Ödenmedi</td>
+                                                    }
+
                                                 }
 
 
@@ -297,7 +305,14 @@
 
                                                 else
                                                 {
-                                                    <td>İptal Edildi - Ödendi</td>
+                                                    if (item2.PriceInf == true)
+                                                    {
+                                                        <td>Ödendi</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td><button class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>
+                                                    }
                                                 }
 
                                             </tr>
@@ -335,7 +350,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <td>Öde</td>
+                                                    <td><button class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>
                                                 }
 
 
@@ -374,7 +389,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <td>Öde</td>
+                                                        <td><button class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>
                                                     }
 
                                                 }
@@ -408,7 +423,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <td>Öde</td>
+                                                        <td><button class="btn btn-outline-dark"><i class="fas fa-wallet"></i></button></td>
                                                     }
 
                                                 }

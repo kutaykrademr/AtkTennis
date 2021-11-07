@@ -3,6 +3,7 @@ using AtkTennisApp.Models;
 using AtkTennisApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -118,6 +119,53 @@ namespace AtkTennisApp.Controllers
             model.reservationCancel = db.reservationCancels.OrderBy(x => x.UserId).ToList();
             model.memberLists = db.memberLists.ToList();
             model.courts = db.courts.ToList();
+
+            return model;
+        }
+
+        public class CourtOccupancy
+        {
+            public List<Reservation> myAL { get; set; } = new List<Reservation>();
+            public List<Court> court { get; set; } = new List<Court>();
+        }
+
+        [HttpGet("GetResOccupancy", Name = "GetResOccupancy")]
+        public CourtOccupancy GetResOccupancy(string firstDate, string secDate)
+        {
+            List<Reservation> res = new List<Reservation>();
+            CourtOccupancy model = new CourtOccupancy();
+
+            model.court = db.courts.ToList();
+
+            DateTime startDate = Convert.ToDateTime(firstDate);
+            DateTime finishDate = Convert.ToDateTime(secDate);
+
+            List<string> allDates = new List<string>();
+            ArrayList myAL = new ArrayList();
+
+            for (var date = startDate; date <= finishDate; date = date.AddDays(1))
+            {
+
+                allDates.Add(date.ToString("yyyy-MM-dd"));
+            }
+            for (int i = 0; i < allDates.Count(); i++)
+            {
+                res = db.reservations.Where(x => x.ResDate == allDates[i]).ToList();
+
+                if (res.Count != 0)
+                {
+                    model.myAL.AddRange(res);
+                }
+
+            }
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return model;
         }

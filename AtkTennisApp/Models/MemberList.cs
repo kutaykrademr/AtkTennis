@@ -12,7 +12,7 @@ namespace AtkTennisApp.Models
         public int Id { get; set; }
         public string UserId { get; set; }
         public string NickName { get; set; }
-        public string FullName { get; set; }        
+        public string FullName { get; set; }
         public string Gender { get; set; }
         public string UserName { get; set; }
         public string StartDate { get; set; }
@@ -42,19 +42,19 @@ namespace AtkTennisApp.Models
         public string DetailAddress { get; set; }
         public string ReferenceMember1 { get; set; }
         public string ReferenceMember2 { get; set; }
-        
+        public string CompanyId { get; set; }
+   
+        public string RoleId { get; set; }
 
 
         public bool isPartner { get; set; }
-        public string PartnerFullName { get; set; }
-        public string PartnerIdentityNumber { get; set; }
-        public string PartnerPhone { get; set; }
-        public string PartnerBirthDate  { get; set; }
+        public string PartnerId { get; set; }
+       
 
 
         public bool ActPas { get; set; }
-        
-        
+
+
     }
 }
 

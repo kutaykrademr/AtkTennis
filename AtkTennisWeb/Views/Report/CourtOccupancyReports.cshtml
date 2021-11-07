@@ -1,0 +1,170 @@
+﻿
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="card">
+                <div class="d-flex justify-content-between">
+
+                    <div style="margin:8px" id="TimeInf"><h4 id="timeInfH4" style="margin:auto; color:black"><i style="color:black" class="fas fa-flag nav-icon"></i> 05-10-2021  -  Salı </h4></div>
+
+                    <div style="margin-top:8px">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control float-right" id="reservation">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:8px; margin-right:8px">
+                        <button class="btn btn-outline-danger" onclick="courtOccupancyInf()">Getir</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <div id="secimdetay" class="portlet light" style="padding: 15px;">
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        <strong>Kort Doluluk Listesi!</strong> Tarih Alanını Seçerek İşleme Devam Ediniz.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Kort Doluluk Oranları</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table style="text-align:center" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Kort Adı</th>
+                                <th>Toplam Reservasyon</th>
+                                <th>Doluluk Barı</th>
+                                <th>Doluluk Sayısı</th>
+                                <th style="width: 40px">Yüzde</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableProgress">
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="~/adminRoot/js/moment.min.js"></script>
+<script src="~/adminRoot/js/daterangepicker.js"></script>
+<link href="~/adminRoot/plugins/daterangepicker.css" rel="stylesheet" />
+
+<script>
+
+    $('#reservation').daterangepicker({
+      
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
+
+
+    function courtOccupancyInf() {
+
+        var x = $('#reservation').val();
+        var firstDate = x.split("-")[0];
+        var secDate = x.split("-")[1];
+
+        firstDate = firstDate.split("/")[2] + "/" + firstDate.split("/")[1] + "/" + firstDate.split("/")[0];
+        secDate = secDate.split("/")[2] + "/" + secDate.split("/")[1] + "/" + secDate.split("/")[0];
+   
+     
+
+        debugger;
+
+        $.ajax({
+
+            type: "Get",
+            url: '../Report/GetResOccupancy',
+            cache: false,
+            data: { 'firstDate': firstDate, 'secDate': secDate },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                debugger;
+
+              
+                $("#tableProgress").empty();
+
+                row = "";
+
+                for (var i = 0; i < res.court.length; i++) {
+                    var count = 0;
+
+                    row += '<tr>';                   
+                    row += '<td>' + res.court[i].courtName + '</td>';
+                    row += '<td>' + res.myAL.length + '</td>';
+                    row += '<td>';
+
+                    for (var c = 0; c < res.myAL.length; c++) {
+
+                        if (res.myAL[c].court.courtId == res.court[i].courtId) {
+
+                            count++;
+               
+                        }                           
+                    }
+
+                    var percent = parseInt((count * 100) / res.myAL.length);
+
+                    row += '<div class="progress progress-xs">';
+                    row += '<div class="progress-bar progress-bar-danger" style="width:' + percent + '%' + '"></div>';
+                    row += '</div>';
+                    row += '</td>';
+                    row += '<td>' + count +'</td>';
+                    row += '<td><span class="badge bg-danger">' + percent + '%' + '</span></td>';
+                    row += '</tr>';
+
+                   
+                }
+                $("#tableProgress").append(row);
+                
+
+            },
+
+            error: function (textStatus, errorThrown) {
+
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+
+            }
+        });
+
+    }
+   
+
+</script>

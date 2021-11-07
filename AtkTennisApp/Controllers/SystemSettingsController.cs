@@ -281,6 +281,16 @@ namespace AtkTennisApp.Controllers
                     else
                         model2.Dashboard = false;
 
+                    if (activeAuth.Contains("Reports"))
+                        model2.Reports = true;
+                    else
+                        model2.Reports = false;
+
+                    if (activeAuth.Contains("MemberDebtList"))
+                        model2.MemberDebtList = true;
+                    else
+                        model2.MemberDebtList = false;
+
                     db.Update(model2);
                     db.SaveChanges();
 

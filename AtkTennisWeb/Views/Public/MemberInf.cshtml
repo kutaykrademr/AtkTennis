@@ -8,6 +8,7 @@
 
 @{
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 
 }
 
@@ -108,7 +109,7 @@
                                 <div class="inner">
                                     <h3 style="font-size:1.2rem">
                                         @{
-                                            var a = item.Role.ToLower();
+                                            var a = Role.ToLower();
 
                                         }
                                         @Char.ToUpperInvariant(a[0])@a.Substring(1)

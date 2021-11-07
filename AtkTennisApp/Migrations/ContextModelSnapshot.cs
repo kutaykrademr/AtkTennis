@@ -26,6 +26,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
@@ -58,6 +61,12 @@ namespace AtkTennisApp.Migrations
 
                     b.Property<int>("RemainingPrice")
                         .HasColumnType("int");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
@@ -125,11 +134,20 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("CabinetWho")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PriceCondition")
                         .HasColumnType("bit");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CabinetOpId");
 
@@ -147,6 +165,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CabinetOpTypes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CabinetOpId");
@@ -167,6 +188,9 @@ namespace AtkTennisApp.Migrations
                     b.Property<int>("CabinetTypesPrice")
                         .HasColumnType("int");
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CabinetId");
 
                     b.ToTable("cabinetTypes");
@@ -178,6 +202,9 @@ namespace AtkTennisApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CourtConditions")
                         .HasColumnType("int");
@@ -211,6 +238,9 @@ namespace AtkTennisApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Condition")
                         .HasColumnType("nvarchar(max)");
@@ -251,6 +281,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CourtRecipeTypes")
                         .HasColumnType("nvarchar(max)");
 
@@ -270,6 +303,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -326,6 +362,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
@@ -343,6 +382,9 @@ namespace AtkTennisApp.Migrations
 
                     b.Property<bool>("CancelCondition")
                         .HasColumnType("bit");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
@@ -377,6 +419,12 @@ namespace AtkTennisApp.Migrations
                     b.Property<int>("RemainingPrice")
                         .HasColumnType("int");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("MemberDuesInfTableId");
 
                     b.ToTable("memberDuesInfTables");
@@ -391,6 +439,9 @@ namespace AtkTennisApp.Migrations
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Discount")
                         .HasColumnType("int");
@@ -420,6 +471,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Condition")
@@ -467,16 +521,7 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PartnerBirthDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PartnerFullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PartnerIdentityNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PartnerPhone")
+                    b.Property<string>("PartnerId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -507,6 +552,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StartDate")
@@ -626,6 +674,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ResTimes")
                         .HasColumnType("nvarchar(max)");
 
@@ -651,6 +702,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CancelResUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CourtId")
@@ -692,6 +746,12 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("ResTime")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -719,6 +779,9 @@ namespace AtkTennisApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CancelResUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CourtId")
@@ -760,6 +823,12 @@ namespace AtkTennisApp.Migrations
                     b.Property<string>("ResTime")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -774,6 +843,9 @@ namespace AtkTennisApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReservationSettingsInf")
                         .HasColumnType("nvarchar(max)");
@@ -925,10 +997,19 @@ namespace AtkTennisApp.Migrations
                     b.Property<bool>("Advisory")
                         .HasColumnType("bit");
 
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Dashboard")
                         .HasColumnType("bit");
 
                     b.Property<bool>("DebtandPayment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MemberDebtList")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Reports")
                         .HasColumnType("bit");
 
                     b.Property<bool>("Reservations")

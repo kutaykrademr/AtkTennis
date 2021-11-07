@@ -11,6 +11,8 @@ namespace AtkTennisApp.Models
         public string ResTimes { get; set; }
         public int ResTimes30 { get; set; }
         public int Restimes60 { get; set; }
-        
+        public string CompanyId { get; set; }
+
+
     }
 }

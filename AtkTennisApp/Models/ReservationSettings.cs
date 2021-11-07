@@ -12,5 +12,7 @@ namespace AtkTennisApp.Models
         public int? ReservationSettingsId { get; set; }
         public string ReservationSettingsInf { get; set; }
         public string ReservationValue { get; set; }
+        public string CompanyId { get; set; }
+
     }
 }

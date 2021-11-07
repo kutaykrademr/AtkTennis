@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtkTennisWeb", "AtkTennisWeb\AtkTennisWeb.csproj", "{5E1627AE-E5D1-4EA5-BB34-E1A753DA49CC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityApp", "IdentityApp\IdentityApp.csproj", "{934F2333-E467-47E9-8F70-5C0F413953C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5E1627AE-E5D1-4EA5-BB34-E1A753DA49CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E1627AE-E5D1-4EA5-BB34-E1A753DA49CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E1627AE-E5D1-4EA5-BB34-E1A753DA49CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{934F2333-E467-47E9-8F70-5C0F413953C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{934F2333-E467-47E9-8F70-5C0F413953C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{934F2333-E467-47E9-8F70-5C0F413953C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{934F2333-E467-47E9-8F70-5C0F413953C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

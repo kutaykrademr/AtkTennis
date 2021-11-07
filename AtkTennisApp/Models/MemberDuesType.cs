@@ -13,5 +13,7 @@ namespace AtkTennisApp.Models
         public int Age { get; set; }
         public int Year { get; set; }
         public int Discount { get; set; }
+        public string CompanyId { get; set; }
+
     }
 }

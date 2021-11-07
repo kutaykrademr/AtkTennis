@@ -13,16 +13,24 @@
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
-    var times = Model.resTimes.Where(x => x.Restimes60 == 60).ToList();
+    var RoleId = HttpContextAccessor.HttpContext.Session.GetString("RoleId");
+    var times = Model.resTimes.Where(x => x.Restimes60 == 00 && x.ResTimes30 == 00).ToList();
     var x = times.Count * 4;
 
     var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
     var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
     var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
+    var resSettingsTime2 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Antrenör)").FirstOrDefault();
+    var resSettingsTime3 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Üye)").FirstOrDefault();
+    var resSettingsTime4 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Gün içerisinde Üye için Max Rezervasyon Saati").FirstOrDefault();
 
     var startTime = start.ReservationValue;
     var finishTime = finish.ReservationValue;
     var resSetTime = resSettingsTime.ReservationValue;
+
+    var antNextDay = resSettingsTime2.ReservationValue;
+    var memNextDay = resSettingsTime3.ReservationValue;
+    var memMaxRes = resSettingsTime4.ReservationValue;
 
 }
 
@@ -89,12 +97,19 @@
 <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
 <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
 
+<div style="display: none;"><input id="userIdMember" value="@userId" /></div>
+<div style="display: none;"><input id="antNextDay" value="@antNextDay" /></div>
+<div style="display: none;"><input id="memNextDay" value="@memNextDay" /></div>
+<div style="display: none;"><input id="memMaxRes" value="@memMaxRes" /></div>
+<div style="display: none;"><input id="RoleSes" value="@Role" /></div>
+<div style="display: none;"><input id="RoleSesId" value="@RoleId" /></div>
+
 
 @{
     var date = DateTime.Now;
     var resCount = Model.reservations.Where(x => x.UserId == userId && x.ResDate == date.ToString("yyyy-MM-dd")).ToList().Count();
-    var totalDebtList = Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false).ToList();
-    var totalDebtCancelList = Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false).ToList();
+    var totalDebtList = Model.res.Where(x => x.UserId == userId && x.PriceInf == false).ToList();
+    var totalDebtCancelList = Model.resCan.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false).ToList();
     float totalFirstDebt;
     float totalSecDebt;
 
@@ -137,72 +152,33 @@
     var debt2 = String.Format("{0:n}", debt);
 }
 
+
 <div class="content-wrapper">
-
-
-
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div style="margin-top:10px" class="inner">
-                            <h3>
-                                @resCount
-                            </h3>
-                            <p>Bugüne Ait Reservasyon Sayısı</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-3 col-6">
+            <div class="card" style="border-radius:40px; margin-top:15px">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                                <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
+                            </div>
+                            <div class="media-body">
+                                @{
+                                    var person = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault();
+                                }
 
-                    <div style="background-color:#337ab7 !important" class="small-box bg-info">
-                        <div style="margin-top:10px" class="inner">
-                            <h3>
-                                @debt2 ₺
-                            </h3>
-                            <p>Toplam Rezervasyon Borcu</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                    </div>
-                </div>
+                                <h4>@person.FullName - @person.NickName - @person.MemberNumber</h4>
 
-                <div class="col-lg-3 col-6">
+                                <span>@person.UserName</span>
+                            </div>
 
-                    <div class="small-box bg-success">
-                        <div style="margin-top:10px" class="inner">
 
-                            <h3>
 
-                                10
-                            </h3>
-                            <p>Aidat Borcum</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-
-                    <div class="small-box bg-danger">
-                        <div style="margin-top:10px" class="inner">
-                            <h3>
-
-                                93
-                            </h3>
-
-                            <p>İptal Edilen Rezervasyon Sayısı</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
+                            <div class="align-self-center">
+                                <h3>Toplam Bakiye: @person.Price ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -210,7 +186,7 @@
 
 
             <div class="row">
-                <div class="col-12">
+                <div class="col-9">
                     <div class="card">
 
                         <div class="card-header d-flex justify-content-between">
@@ -246,20 +222,23 @@
                                 </nav>
                             </div>
                         </div>
-                        <div class="card">
+
+                        <div class="card ">
                             <div class="card-body">
                                 <table id="tablecount" style="text-align:center" class="table table-bordered2">
                                     <thead>
                                         <tr>
-                                            <th style="background-color:#f5f8fd; font-weight:" scope="col">
+                                            <th style="background-color:#f5f8fd; font-weight:bold" scope="col">
 
                                             </th>
 
                                             @for (int i = 0; i < times.Count; i++)
 
-                                            {
-                                            <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
-                                            }
+                                                if (times[i].ResTimes.Split(":")[1] != "45")
+                                                {
+                                                    <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+                                                }
+
 
                                         </tr>
                                     </thead>
@@ -274,14 +253,12 @@
                                             if (item.CourtConditions == 1)
                                             {
 
-                                        <tr>
+                                                <tr>
 
-                                            <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
+                                                    <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
 
-                                            @for (int i = 0; i < Model.resTimes.Count; i++)
+                                                    @for (int i = 0; i < Model.resTimes.Count; i++)
                                                     {
-
-
 
                                                         var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
 
@@ -292,7 +269,22 @@
                                                         if (res != null)
                                                         {
 
-                                                            var colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+                                                            double colspanVal = 0;
+
+                                                            if (res.ResFinishTime.Split(":")[0] == "24")
+                                                            {
+                                                                var c = res.ResFinishTime.Split(":");
+                                                                var d = res.ResStartTime.Split(":");
+                                                                var fTimeS = Convert.ToInt32(c[0] + c[1]);
+                                                                var sTimeS = Convert.ToInt32(d[0] + d[1]);
+                                                                colspanVal = (fTimeS - sTimeS) * 4;
+                                                            }
+
+                                                            else
+                                                            {
+                                                                colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+                                                            }
+
                                                             var mem = Model.memberLists.FirstOrDefault(x => x.UserId == res.UserId);
                                                             var scale = Model.courtScales.FirstOrDefault(x => x.Code == res.NickName);
 
@@ -300,25 +292,66 @@
                                                             {
                                                                 if (res.UserId == userId)
                                                                 {
-                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                    <a style="padding:0;color:#fff;">
-                                                        @res.NickName
-                                                    </a>
+                                                                    DateTime startT = Convert.ToDateTime(startTime);
+                                                                    DateTime finishT = DateTime.Now;
+                                                                    var tHours = (startT - finishT).TotalHours;
 
-                                                </div>
-                                            </td>
+                                                                    if (res.PrivRes == true && tHours < 0)
+                                                                    {
+                                                                        <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                <a style="padding:0;color:#fff;">
+                                                                                    @res.NickName
+                                                                                </a>
+
+                                                                            </div>
+                                                                        </td>
+                                                                    }
+
+                                                                    else if (res.PrivRes == false)
+                                                                    {
+                                                                        <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                <a style="padding:0;color:#fff;">
+                                                                                    @res.NickName
+                                                                                </a>
+
+                                                                            </div>
+                                                                        </td>
+                                                                    }
+
                                                                 }
+
                                                                 else
                                                                 {
-                                            <td borderRes="@res.ResStartTime , @period" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                    <a style="padding:0;color:#fff;">
-                                                        @res.NickName
-                                                    </a>
+                                                                    DateTime startT = Convert.ToDateTime(startTime);
+                                                                    DateTime finishT = DateTime.Now;
+                                                                    var tHours = (startT - finishT).TotalHours;
 
-                                                </div>
-                                            </td>
+
+                                                                    if (res.PrivRes == true && tHours < 0)
+                                                                    {
+                                                                        <td borderRes="@res.ResStartTime , @period" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                <a style="padding:0;color:#fff;">
+                                                                                    @res.NickName
+                                                                                </a>
+
+                                                                            </div>
+                                                                        </td>
+                                                                    }
+
+                                                                    else if (res.PrivRes == false)
+                                                                    {
+                                                                        <td borderRes="@res.ResStartTime , @period" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                <a style="padding:0;color:#fff;">
+                                                                                    @res.NickName
+                                                                                </a>
+
+                                                                            </div>
+                                                                        </td>
+                                                                    }
                                                                 }
 
                                                             }
@@ -326,14 +359,14 @@
                                                             else
                                                             {
 
-                                            <td borderRes="@res.ResStartTime , @period" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:@scale.Color!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                <div style="background-color:@scale.Color!important;color:#ffffff!important;">
-                                                    <a style="padding:0;color:#fff;">
-                                                        @res.NickName
-                                                    </a>
+                                                                <td borderRes="@res.ResStartTime , @period" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:@scale.Color!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                    <div style="background-color:@scale.Color!important;color:#ffffff!important;">
+                                                                        <a style="padding:0;color:#fff;">
+                                                                            @res.NickName
+                                                                        </a>
 
-                                                </div>
-                                            </td>
+                                                                    </div>
+                                                                </td>
                                                             }
 
 
@@ -346,17 +379,17 @@
                                                         {
                                                             if (period == 4)
                                                             {
-                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                             }
 
                                                             else if (period == 2)
                                                             {
-                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                                 i = i + 1;
                                                             }
                                                             else if (period == 1)
                                                             {
-                                            <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                                 i = i + 3;
                                                             }
 
@@ -364,7 +397,7 @@
 
                                                     }
 
-                                        </tr>
+                                                </tr>
                                             }
                                         }
 
@@ -372,7 +405,105 @@
                                 </table>
                             </div>
                         </div>
+
+
                     </div>
+
+                </div>
+
+                <div class="col-3">
+
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>
+                                @resCount
+                            </h3>
+                            <p>Bugüne Ait Reservasyon Sayısı</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                    </div>
+
+                    <div style="background-color:#337ab7 !important" class="small-box bg-info">
+                        <div class="inner">
+                            <h3>
+                                @debt2 ₺
+                            </h3>
+                            <p>Toplam Rezervasyon Borcu</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                    </div>
+
+                    <div class="small-box bg-success">
+                        <div class="inner">
+
+                            @{
+                                var debtList = Model.memberDues.Where(x => x.MemberId == userId).ToList();
+
+                                var priceNum = 0;
+
+                                for (int i = 0; i < debtList.Count; i++)
+                                {
+                                    var xc = debtList[i].RemainingPrice;
+
+                                    priceNum = priceNum + xc;
+                                }
+                            }
+
+                            <h3>
+                                @priceNum ₺
+                            </h3>
+
+                            <p>Üyelik Aidat Borcum</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                    </div>
+
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+
+                            @{
+                                var debtList2 = Model.memberDues.Where(x => x.MemberId == userId && x.DuesInfType == true).ToList();
+
+                                var priceNum2 = 0;
+
+                                for (int i = 0; i < debtList2.Count; i++)
+                                {
+                                    var xc = debtList2[i].RemainingPrice;
+
+                                    priceNum2 = priceNum2 + xc;
+                                }
+                            }
+
+                            <h3>
+                                @priceNum2 ₺
+                            </h3>
+
+                            <p>Dolap Aidat Borcum</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                    </div>
+
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>
+                                @Model.resCan.Where(x => x.UserId == userId).ToList().Count()
+                            </h3>
+
+                            <p>İptal Edilen Toplam Rezervasyon Sayısı</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
@@ -442,7 +573,6 @@
                                             </thead>
 
                                             <tbody id="PriceNI">
-
                                             </tbody>
 
                                             <tfoot>
@@ -461,17 +591,9 @@
                                 <div class="info-box shadow-lg">
                                     <div class="info-box-content">
                                         <div class="row">
-                                            <div style="margin-right:7px">
+                                            <div class="col-md-12">
                                                 <button style="font-size:15px; background-color:#ffc107" type="button" class="btn btn-dark">Ödeme</button>
                                             </div>
-
-                                            <div style="margin-right:7px">
-                                                <button style="font-size:15px;" type="button" class="btn btn-danger">Toplu Ödeme</button>
-                                            </div>
-
-                                            <div style="margin-right:7px">
-                                                <button style="font-size:15px; background-color:#17a2b8" type="button" class="btn btn-dark"><i class="fas fa-print"></i> </button>
-                                            </div>                                         
                                         </div>
                                     </div>
                                 </div>
@@ -511,7 +633,7 @@
 </div>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="priceModal">
-    <div class="modal-dialog modal-dialog-bottom modal-lg">
+    <div class="modal-dialog modal-dialog-bottom modal-lg" style="top:35% !important">
         <div class="modal-content">
 
 
@@ -685,8 +807,10 @@
     }
 
     //Rezervasyon Yap
-    function openResModal(id ) {
+    function openResModal(id) {
 
+        var tm = $("#timeNow").val();
+        var uI = $('#userIdMember').val();
 
 
         var a = id.split(",");
@@ -704,6 +828,7 @@
         {
             var time = "0" +  hours + ":" + min;
         }
+
         else if (min < 10) {
             var time = hours + ":" + "0" +  min;
         }
@@ -723,19 +848,44 @@
         var sTime = b[0] + b[1]; //2109
         var fTime = c[0] + c[1]; //2209
 
+        debugger;
 
-        if (sTime <= nowTime && fTime >= nowTime) {
+        $.ajax({
+            type: "POST",
+            url: '../Public/GetResList2',
+            cache: false,
+            data: { "date": tm, "userId": uI },
+            dataType: "json",
+            async: false,
+            success: function (res) {
 
-            getCourtTime(courtId, courtName , checkTime);
-        }
+                debugger;
 
+                if (res.length >= parseInt($("#memMaxRes").val())) {
+            
+                    swal("Üye İçin Gün İçinde Max Rezervasyon Saatini Aştınız!", "Rezervasyonunuzun Tamamlanmasını Bekleyiniz", "warning", {
+                        button: "Tamam",
+                    });
+                }
 
-        else {
+               else if (sTime <= nowTime && fTime >= nowTime) {
 
-            swal("Rezervasyon Saatleri Dışındasınız !", "Rezervasyon Saatleri: " + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.", "warning", {
-                button: "Tamam",
-            });
-        }
+                    getCourtTime(courtId, courtName, checkTime);
+                }
+
+                else 
+
+                    swal("Rezervasyon Saatleri Dışındasınız !", "Rezervasyon Saatleri: " + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.", "warning", {
+                        button: "Tamam",
+                    });
+                
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
     }
 
     function getCourtTime(courtId , courtName , checkTime) {
@@ -794,7 +944,13 @@
         var x = today;
         var y = $("#timeNow").val();
 
+        var antNextDay = parseInt($("#antNextDay").val());
+        var memNextDay = parseInt($("#memNextDay").val());
+
+
         var diff = datediff(parseDate(x), parseDate(y));
+
+
 
         if ($("#timeNow").val() < today) {
 
@@ -805,17 +961,18 @@
             $("#timeNow").val(today)
         }
 
-        else if ($("#RoleName").val() == "Üye" && diff > 3 ) {
+
+        else if ($("#RoleName").val() == "Üye" && diff > memNextDay) {
 
 
-                swal("Uyarı !", "En Fazla 3 Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
+            swal("Uyarı !", "En Fazla " + memNextDay + " Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
                     button: "Tamam",
-                });
+            });
 
                 $("#dateInf").val(today)
         }
 
-        else if ($("#RoleName").val() == "Antrenör" && diff > 6) {
+        else if ($("#RoleName").val() == "Antrenör" && diff > antNextDay) {
 
                 swal("Uyarı !", "En Fazla 6 Gün Sonraya Rezervasyon Yapabilirsiniz  !!", "warning", {
                     button: "Tamam",
@@ -924,7 +1081,6 @@
 
     function getPrice() {
 
-        debugger;
 
         var price = [];
         $('#checkPriceTables input:checked').each(function () {
@@ -947,7 +1103,7 @@
 
     function ApproveAll(id) {
 
-        debugger;
+
 
         var checkTimeList = [];
 
@@ -1074,7 +1230,9 @@
             ResTime: '',
             ResNowDate: '',
             Price: '',
-            PriceIds:'',
+            PriceIds: '',
+            RoleId: '',
+            RoleName: '',
         }
 
         resobject.ResNowDate = today;
@@ -1088,6 +1246,11 @@
         resobject.userId = $("#userId").text();
         resobject.ResEvent = "event-1"
         resobject.CourtId = id;
+        resobject.CourtId = id;
+        resobject.RoleId = $("#RoleSesId").val();
+        resobject.RoleName = $("#RoleSes").val();
+
+        debugger;
 
         if (times.length == 0) {
 
@@ -1261,7 +1424,7 @@
 
                 if (res != null) {
 
-                    debugger;
+
 
                     $("#nickAndFullName").text(res.resSchemaModal.nickName + ' - ' + res.resSchemaModal.fullName);
                     $("#courtName").text('Kort Adı:' + ' ' + res.resSchemaModal.courtName);
@@ -1444,6 +1607,7 @@
 
     }
 
+
     $("#tablecount td").each(function () {
 
 
@@ -1455,27 +1619,39 @@
 
             $(this).addClass("hourborder");
 
+        else if (time == "15" && per == "1") {
+            $(this).addClass("hourborder");
+        }
+
         else if (time == "00" && per == "2") {
             $(this).addClass("hourborder");
         }
 
-        else if (time == "00" && per == "4") {
-
+        else if (time == "15" && per == "2") {
             $(this).addClass("hourborder");
         }
+
+
+        else if (time == "15" && per == "4") {
+            $(this).addClass("hourborder");
+        }
+
+
+        //else if (time == "00" && per == "4") {
+
+        //    $(this).addClass("hourborder");
+        //}
+
 
         else {
             $(this).addClass("");
         }
 
-       /* $(this).css("width", "15px");*/
-
+        $(this).css("width", "15px");
 
     });
 
     function checkMe(id) {
-
-        debugger;
 
         var checkID = "";
 
@@ -1509,6 +1685,7 @@
         });
 
         if (checkTrueList.length > 0) {
+
             for (var i = 0; i < checkTrueList.length; i++) {
 
                 var x = checkTrueList[i];
@@ -1520,8 +1697,6 @@
 
             }
             checkList.push(id);
-
-
 
             if (per == 15) {
 

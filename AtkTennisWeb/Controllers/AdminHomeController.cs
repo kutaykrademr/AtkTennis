@@ -139,6 +139,8 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+
+
         public IActionResult CabinetListUser()
         {
 
@@ -200,7 +202,32 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+        public IActionResult SingleDebtMember()
+        {
+           
+            return View();
+        }
+
         public IActionResult DuesDebtList()
+        {
+
+            GeneralDebtViewDto model = new GeneralDebtViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<GeneralDebtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/DuesDebtList"));
+                if (model == null)
+
+                    model = new GeneralDebtViewDto();
+            }
+            catch (Exception)
+            {
+                model = new GeneralDebtViewDto();
+            }
+
+            return View(model);
+        }
+
+        public IActionResult DuesCabinetList()
         {
 
             GeneralDebtViewDto model = new GeneralDebtViewDto();
@@ -249,6 +276,26 @@ namespace AtkTennisWeb.Controllers
         public IActionResult CabinetDebtOperations()
         {
             return View();
+        }
+
+        public IActionResult ReservationDebtList()
+        {
+            ReservationListViewDto model = new ReservationListViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationListViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/ReservationDebtList"));
+
+                if (model == null)
+
+                    model = new ReservationListViewDto();
+            }
+            catch (Exception)
+            {
+                model = new ReservationListViewDto();
+            }
+
+            return View(model);
+     
         }
 
         public IActionResult ReservationDebtOperations()
@@ -361,12 +408,18 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
-        public JsonResult Register(string detailAddress ,string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, string nickName, int memberNumber, string partnerBirthdate , string partnerIdNumber , string partnerPhone , string partnerName , bool isPartner , string refmem1 , string refmem2)
+        public JsonResult Register(string detailAddress ,string name, string username, string startDate, string finishDate, string condition,
+            string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email,
+            string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, 
+            string note, string phone, string password, string birthdate, string gender, string role, string nickName, 
+            int memberNumber, string partnerBirthdate , string partnerIdNumber , string partnerPhone , string partnerName , 
+            bool isPartner , string refmem1 , string refmem2 , string nickName2 , string username2 , string startDate2 , 
+            string finishDate2 , string memberNumber2 , string password2)
         {
             AppIdentityUserDto model = new AppIdentityUserDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewRegister?name=" + name + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
+                model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewRegister?name=" + name +  "&nickName2=" + nickName2 + "&password2=" + password2 + "&memberNumber2=" + memberNumber2 + "&startDate2=" + startDate2 + "&finishDate2=" + finishDate2 + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
                     "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
                     "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&detailAddress=" + detailAddress + "&refmem1=" + refmem1 + "&refmem2=" + refmem2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber + "&partnerBirthdate=" + partnerBirthdate + "&partnerIdNumber=" + partnerIdNumber + "&partnerPhone=" + partnerPhone + "&partnerName=" + partnerName + "&isPartner=" + isPartner));
 
@@ -381,22 +434,53 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
-
-
-        public JsonResult NewReservationAdmin(ReservationDto res)
+        public JsonResult AddPartner(string id ,string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
+          string nickName2, string username2, string startDate2,
+          string finishDate2, string memberNumber2, string password2)
         {
-            var model = new ReservationViewDto();
+            MemberListDto model = new MemberListDto();
+
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewReservationAdmin?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&UserName=" + res.UserName + "&PrivRes=" + res.PrivRes));
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddPartner?partnerBirthdate=" + partnerBirthdate +
+                    "&partnerIdNumber=" + partnerIdNumber + "&partnerPhone=" + partnerPhone + "&partnerName=" + partnerName + "&id=" + id + "&nickName2=" + nickName2 + "&username2=" + username2 + "&startDate2=" + startDate2 +
+                    "&finishDate2=" + finishDate2 + "&memberNumber2=" + memberNumber2 + "&password2=" + password2));
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new MemberListDto());
+            }
+
+        }
+
+        public JsonResult NewReservationAdmin(ReservationDto res)
+        {
+            var model = new ReservationDto();
+            try
+
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewReservationAdmin?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&UserName=" + res.UserName + "&PrivRes=" + res.PrivRes));
 
             }
+
+            
             catch (Exception)
             {
                 return Json(new ReservationViewDto());
             }
 
+           
+         
             if (model == null)
             {
                 return Json(false);
@@ -563,7 +647,6 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-
         public JsonResult GetPriceList(int id , string day , string month , string time)
         {
             CourtPriceListViewModel model = new CourtPriceListViewModel();
@@ -603,9 +686,6 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
 
         }
-
-
-
 
         public JsonResult UpdateMemberList(string id, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role, string checkpass)
         {
@@ -905,6 +985,27 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult AddDuesSingle(int duesYear, string duesType, int duesPrice, string explain, int memNum)
+        {
+            AddDuesViewDto model = new AddDuesViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<AddDuesViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddDuesSingle?duesYear=" + duesYear + "&memNum=" + memNum + "&duesType=" + duesType + "&duesPrice=" + duesPrice + "&explain=" + explain));
+
+                if (model.memberLists.Count != 0)
+
+                    return Json(model);
+            }
+
+            catch (Exception)
+            {
+                return Json(new AddDuesViewDto());
+            }
+
+            return Json(false);
+
+        }
+
         public JsonResult AddGenCabinetDebt(int cabinetDuesYear, string cabinetType, string cabinetExplain)
         {
             AddDuesViewDto model = new AddDuesViewDto();
@@ -1082,10 +1183,6 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
 
         }
-
-
-
-     
 
     }
 }

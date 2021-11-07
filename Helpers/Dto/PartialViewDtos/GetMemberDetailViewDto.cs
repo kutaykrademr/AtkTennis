@@ -17,6 +17,7 @@ namespace Helpers.Dto.PartialViewDtos
         public List<AppIdentityRoleDto> AppIdentityRoles { get; set; } = new List<AppIdentityRoleDto>();
 
         public MemberListDto memberLists { get; set; } = new MemberListDto();
+        public List<MemberListDto> memberLists2 { get; set; } = new List<MemberListDto>();
         public int totalPrice { get; set; }
     }
 }

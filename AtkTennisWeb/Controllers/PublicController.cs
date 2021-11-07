@@ -20,14 +20,46 @@ namespace AtkTennisWeb.Controllers
 
             return View();
         }
-      
+
         [HttpGet]
-        public JsonResult SignInReq(string UserName, string Password)
+        public JsonResult GetRoles(string UserName, string Password)
+        {
+            SignInDto model = new SignInDto();
+            try
+            {
+                var url = Mutuals.AppUrl + "Public/GetRoles?Username=" + UserName + "&Password=" + Password ;
+
+                model = Helpers.Serializers.DeserializeJson<Helpers.Dto.SignInDto>(Helpers.Request.Get(url));
+
+                if (model == null)
+                {
+                    return Json("false");
+                }
+                else if (model.custom_role.Count > 0)
+                {
+                    return Json(model);
+                }
+                else
+                
+                    return Json("false");
+                
+              
+            }
+            catch (Exception ex)
+            {
+                return Json("false");
+            }
+
+            return Json("true");
+        }
+
+        [HttpGet]
+        public JsonResult SignInReq(string UserName, string Password , string RoleName, string RoleId)
         {
 
             try
             {
-                var url = Mutuals.AppUrl + "Public/SignIn?Username=" + UserName + "&Password=" + Password;
+                var url = Mutuals.AppUrl + "Public/SignIn?Username=" + UserName + "&Password=" + Password + "&RoleName=" + RoleName + "&RoleId=" + RoleId;
 
                 var model = Helpers.Serializers.DeserializeJson<Helpers.Dto.SignInDto>(Helpers.Request.Get(url));
 
@@ -42,9 +74,10 @@ namespace AtkTennisWeb.Controllers
                         HttpContext.Session.SetString("UserName", model.UserName);
                         HttpContext.Session.SetString("UserId", model.custom_userid);
                         HttpContext.Session.SetString("FullName", model.custom_name);
-                        HttpContext.Session.SetString("Role", model.custom_role);
-                        HttpContext.Session.SetString("RoleId", model.custom_roleId);
+                        HttpContext.Session.SetString("Role", model.custom_role[0]);
+                        HttpContext.Session.SetString("RoleId", model.custom_roleId[0]);
                         HttpContext.Session.SetString("NickName", model.custom_nickName);
+                        HttpContext.Session.SetString("CompId", model.comp_Id);
 
                         return Json(model);
                     }
@@ -62,6 +95,8 @@ namespace AtkTennisWeb.Controllers
             return Json("true");
 
         }
+
+      
 
         public IActionResult Reservation(string date)
         {
@@ -100,6 +135,48 @@ namespace AtkTennisWeb.Controllers
             catch (Exception)
             {
                 model = new ReservationListViewDto();
+            }
+
+            return View(model);
+        }
+
+        public IActionResult GetMemberDebt(string userId)
+        {
+
+            List<MemberDuesInfTableDto> model = new List<MemberDuesInfTableDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<MemberDuesInfTableDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetMemberDebt?userId=" + userId));
+
+                if (model == null)
+
+                    model = new List<MemberDuesInfTableDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<MemberDuesInfTableDto>();
+            }
+
+            return View(model);
+        }
+      
+    
+
+        public IActionResult GetCabinetDebt(string userId)
+        {
+
+            CabinetViewDto model = new CabinetViewDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetCabinetDebt?userId=" + userId));
+
+                if (model == null)
+
+                    model = new CabinetViewDto();
+            }
+            catch (Exception)
+            {
+                model = new CabinetViewDto();
             }
 
             return View(model);
@@ -162,6 +239,33 @@ namespace AtkTennisWeb.Controllers
                 model = new IdentityPartialViewDto();
             }
             return Json(model);
+        }
+
+        public JsonResult GetResList2(string date , string userId)
+        {
+
+            List<ReservationDto> model = new List<ReservationDto>();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<ReservationDto>>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetResList2?date=" + date + "&userId=" + userId));
+
+                if (model == null)
+
+                    model = new List<ReservationDto>();
+            }
+            catch (Exception)
+            {
+                model = new List<ReservationDto>();
+            }
+            return Json(model);
+        }
+
+        public IActionResult Error403()
+        {
+
+       
+            return View();
         }
 
         public JsonResult GetUserListModal( string id)
@@ -288,7 +392,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds ));
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&RoleName=" + res.RoleName + "&RoleId=" + res.RoleId ));
 
             }
             catch (Exception)

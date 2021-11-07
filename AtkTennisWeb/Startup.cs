@@ -16,12 +16,17 @@ namespace AtkTennisWeb
     {
         public Startup(IConfiguration configuration)
         {
+
+
+
             Configuration = configuration;
             try
             {
+            
+
                 Mutuals.AppUrl = Configuration.GetValue<string>("AppUrl");
-                Worker.SettingsWorker.getSettings();
-                Worker.SettingsWorker.StartTimers();
+                //Worker.SettingsWorker.getSettings();
+                //Worker.SettingsWorker.StartTimers();
             }
             catch (Exception)
             {
@@ -32,6 +37,7 @@ namespace AtkTennisWeb
 
         public IConfiguration Configuration { get; }
 
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {

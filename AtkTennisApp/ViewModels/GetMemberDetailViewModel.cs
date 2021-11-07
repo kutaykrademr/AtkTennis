@@ -19,6 +19,7 @@ namespace AtkTennisApp.ViewModels
         public List<AppIdentityRole> AppIdentityRoles { get; set; } = new List<AppIdentityRole>();
 
         public MemberList memberLists { get; set; } = new MemberList();
+        public List<MemberList> memberLists2 { get; set; } = new List<MemberList>();
         public int totalPrice {get ;set;}
     }
 }

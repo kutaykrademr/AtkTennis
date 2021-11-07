@@ -17,5 +17,7 @@ namespace AtkTennisApp.Models
         public string MonthInf { get; set; }
         public string DayInf { get; set; }
         public string TimeInf { get; set; }
+        public string CompanyId { get; set; }
+     
     }
 }

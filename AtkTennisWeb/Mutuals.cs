@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AtkTennisWeb
 {
-    public static class Mutuals
+    public class Mutuals
     {
         public static string AppUrl { get; set; }
 

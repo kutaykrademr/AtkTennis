@@ -288,7 +288,7 @@
                             <div class="card-body">
                                 <p class="login-box-msg">Zorunlu Alan (Eş Bilgileri) </p>
                                 <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
+                                    <div class="input-group mb-3 col-md-4">
                                         <input type="text" class="form-control" id="partnerName" placeholder="Eş Adı Soyadı" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
@@ -297,11 +297,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="email" class="form-control" placeholder="Eş T.C Kimlik" id="partnerIdNumber" autocomplete="new-password">
+                                    <div class="input-group mb-3 col-md-4">
+                                        <input type="text" class="form-control" id="nickname2" disabled="" placeholder="Rumuz" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
-                                                <span class="fas fa-envelope"></span>
+                                                <a style="cursor:pointer" onclick="getNickName2()" class="fas fa-sync-alt"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="input-group mb-3 col-md-4">
+                                        <input type="text" class="form-control" id="username2" disabled="" placeholder="Kullanıcı Adı" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <a style="cursor:pointer" onclick="getUserName2()" class="fas fa-sync-alt"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -309,16 +320,76 @@
 
                                 <div class="row">
                                     <div class="input-group mb-3 col-md-6">
+                                        <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate2" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input placeholder="Bitiş Tarihi" type="text" class="form-control" id="finishDate2" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input type="text" class="form-control" id="memberNum2" disabled="" placeholder="Üye Numarası" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <a style="cursor:pointer" onclick="getMemberNumber2()" class="fas fa-sync-alt"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group col-md-6">
+                                        <select id="webReservation2" class="form-control">
+                                            <option disabled="disabled" selected="">Web Rezervasyon</option>
+
+                                            <option value="1">Yapabilir</option>
+                                            <option value="2">Yapamaz</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="input-group mb-3 col-md-4">
+                                        <input type="email" class="form-control" placeholder="Eş T.C Kimlik" id="partnerIdNumber" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-envelope"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-3 col-md-4">
                                         <input placeholder="Eş Telefon No" id="partnerPhone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                         </div>
                                     </div>
 
-                                    <div class="input-group mb-3 col-md-6">
+                                    <div class="input-group mb-3 col-md-4">
                                         <input placeholder="Eş Doğum Tarihi" id="partnerBirthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="password2" disabled placeholder="Şifre" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a style="cursor:pointer" onclick="getPassword2()" class="fas fa-lock"></a>
                                         </div>
                                     </div>
                                 </div>
@@ -427,24 +498,32 @@
         refmem1: null,
         refmem2: null,
         detailAddress: null,
+        memberNumber:null,
 
+        memberNumber2: null,
+        nickName2: null,
+        username2: null,
+        webReservation2: null,
+        startDate2: null,
+        finishDate2: null,
         isPartner: null,
         partnerName: null,
         partnerPhone: null,
         partnerIdNumber: null,
         partnerBirthDate: null,
+        password2:null,
 
     };
 
     function register() {
 
-
+        
         userObj.name = $("#name").val();
         userObj.username = $("#username").val();
         userObj.nickName = $("#nickname").val();
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
-        userObj.role = "ÜYE";
+        userObj.role = "Üye";
         userObj.condition = $("#condition option:selected").text();
         userObj.identificationNumber = $("#identificationNumber").val();
         userObj.webReservation = $("#webReservation option:selected").val();
@@ -467,15 +546,20 @@
         userObj.memberNumber = $("#memberNum").val();
         userObj.refmem1 = $("#refmem1").val();
         userObj.refmem2 = $("#refmem2").val();
-        userObj.refmem2 = $("#detailAddress").val();
+        userObj.detailAddress = $("#detailAddress").val();
 
 
         debugger;
 
-        var xasd = $("#refmem1").val();
 
         if ($('#part').is(":checked")) {
 
+            userObj.nickName2 = $("#nickname2").val();
+            userObj.username2 = $("#username2").val();
+            userObj.startDate2 = $("#startDate2").val();
+            userObj.finishDate2 = $("#finishDate2").val();
+            userObj.memberNumber2 = $("#memberNum2").val();
+            userObj.password2 = $("#password2").val();
             userObj.isPartner = true;
             userObj.partnerBirthDate = $("#partnerBirthdate").val();
             userObj.partnerIdNumber = $("#partnerIdNumber").val();
@@ -497,11 +581,18 @@
                 alert("Eş Bilgisi Seçimi Yapılıp Bilgiler Boş Bırakılmış , Lütfen Bilgileri Doldurunuz !!!");
             }
 
+            else if (userObj.nickName2 == userObj.nickName || userObj.username == userObj.username2 || userObj.memberNumber == userObj.memberNumber2) {
+
+                alert("Eş Bilgisi ve Üye Bilgisi Kullanıcı Adı / Üye Numarası / Rumuz Aynı Değişiklik Yapınız !!!");
+
+            }
+
             else {
 
                 saveUser(userObj);
             }
         }
+
 
 
         else 
@@ -688,6 +779,155 @@
                 if (res == true) {
 
                     $("#username").val(userName);
+                }
+                else {
+
+                    getUserName()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+
+    function getNickName2() {
+
+        var name = $("#partnerName").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = ad[0][0];
+        var soyad1 = ad[1][0];
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 3; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var nick = (ad1 + soyad1 + text).toLowerCase();
+
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlNickName',
+            cache: false,
+            data: { "nickName": nick },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#nickname2").val(nick);
+                }
+                else {
+
+                    getNickName()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getMemberNumber2() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var memberNumber = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlMemberNumber',
+            cache: false,
+            data: { "memberNumber": memberNumber },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#memberNum2").val(memberNumber);
+                }
+                else {
+
+                    getMemberNumber()
+
+                }
+
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getPassword2() {
+        
+        var name = $("#partnerName").val();
+
+        var ad = name.split(" ");
+
+        var ad1 = (ad[0][0]).toUpperCase();
+        var soyad1 = (ad[1][0]).toLowerCase();
+
+        var text = "123";
+        var char = ".";
+
+        var password = (ad1 + soyad1 + text + char);
+
+        $("#password2").val(password);
+
+    }
+
+    function getUserName2() {
+
+
+        var text = "";
+        var possible = "0123456789";
+
+        for (var i = 0; i < 5; i++)
+
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        var userName = text;
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/ControlUserName',
+            cache: false,
+            data: { "userName": userName },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res == true) {
+
+                    $("#username2").val(userName);
                 }
                 else {
 

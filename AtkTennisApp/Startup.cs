@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static AtkTennisApp.Program; 
 
 namespace AtkTennisApp
 {
@@ -25,17 +26,20 @@ namespace AtkTennisApp
 
             try
             {
-                
+                var IpAdress = configuration.GetSection("MyIpAdress");
+                IpAdress.Bind(set);
+                set.MyIpAdress = IpAdress.Value;
 
                 Mutuals.DbUrl = Configuration.GetValue<string>("DbUrl");
+                Mutuals.IdUrl = Configuration.GetValue<string>("IdUrl");
                 Mutuals.AdminUrl = Configuration.GetValue<string>("AdminURL");
 
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
                 IPAddress ipAddress = ipHostInfo.AddressList[1];
                 Mutuals.MyIp = ipAddress.ToString();
 
-                Worker.SettingsWorker.getSettings();
-                Worker.SettingsWorker.StartTimers();
+                //Worker.SettingsWorker.getSettings();
+                //Worker.SettingsWorker.StartTimers();
 
                 
                 Mutuals.monitizer.startSuccesful = 1;

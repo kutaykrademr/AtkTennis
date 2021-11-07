@@ -76,8 +76,35 @@
 
         </div>
     </div>
-
 </body>
+
+
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div class=" modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="text-align:center; color:orangered" class="modal-title">Giriş Yapacağınız Rolünüzü Seçiniz</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div style="margin-top:1rem" class="form-group col-md-12">
+               
+                <div class="input-group">
+                    <select id="roles" class="form-control">
+                     
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="signIn2()">Giriş Yap</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -99,64 +126,7 @@
     var today = now.getFullYear() + '-' + month + '-' + day;
 
     $(document).ready(function () {
-        $(function () {
-            if (localStorage.getItem("loginCheck") == "true") {
-                $("#checkLocal").prop('checked', true);
 
-                if (localStorage.userName && localStorage.password) {
-
-                    $("#username").val(localStorage.getItem("userName"));
-                    $("#password").val(localStorage.getItem("password"));
-                    
-
-                    var a = localStorage.getItem("userName")
-                    var b = localStorage.getItem("password")
-
-                   
-
-                    $.ajax({
-                        type: "Get",
-                        url: '../Public/SignInReq',
-                        cache: false,
-                        data: { "UserName": a , "Password": b },
-                        dataType: "json",
-                        async: true,
-                        success: function (res) {
-
-                            debugger;
-
-                            if (res.NAME <= 0) {
-                                $.confirm({
-                                    title: "Uyarı",
-                                    content: "Kullanıcı Adı ve/veya Şifre Hatalı.",
-                                    buttons: {
-                                        TAMAM: function () {
-                                           
-                                        }
-                                    }
-                                });
-
-                                
-                            }
-
-
-
-                            else {
-
-                                if (res.custom_role != "Yönetici") {
-
-                                    window.location.href = "../Public/Reservation?date=" + today;
-                                }
-                                else
-                                window.location.href = "../AdminHome/Index";
-                            }
-                        }
-                    });
-
-                }
-            }
-
-        })
     });
 
     $('#loginButtons').keypress(function (e) {
@@ -165,17 +135,71 @@
         {
             signIn();
         }
-    });   
+    });
+
+  
+
+    function getsettings(id , role) {
+
+        $.ajax({
+        type: "Get",
+            url: '../Settings/GetSettings',
+            cache: false,
+            data: { "companyId": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (role != "Yönetici" && role != "Sekreterya") {
+
+                    window.location.href = "../Public/Reservation?date=" + today;
+                }
+                else
+                    window.location.href = "../AdminHome/Index";
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+
+    //function signIn2() {
+
+    //    $.ajax({
+    //    type: "Get",
+    //        url: '../Public/SignInReq',
+    //        cache: false,
+    //        data: { "UserName": $("#username").val(), "Password": $("#password").val(), "RoleName": $("#roles option:selected").text(), "RoleId":$("#roles option:selected").val()},
+    //        dataType: "json",
+    //        async: true,
+    //        success: function (res) {
+               
+    //            getsettings(res.companyId);
+
+    //            if (res.custom_role != "Yönetici" && res.custom_role != "Sekreterya") {
+
+    //                window.location.href = "../Public/Reservation?date=" + today;
+    //            }
+    //            else
+    //                window.location.href = "../AdminHome/Index";
+
+    //        },
+    //        error: function (textStatus, errorThrown) {
+    //            console.log(JSON.stringify(textStatus));
+    //            console.log(textStatus);
+    //        }
+    //    });
+    //}
 
     function signIn() {
 
-      
-      
-
         try {
             $.ajax({
-                type: "Get",
-                url: '../Public/SignInReq',
+            type: "Get",
+                url: '../Public/GetRoles',
                 cache: false,
                 data: { "UserName": $("#username").val(), "Password": $("#password").val() },
                 dataType: "json",
@@ -184,49 +208,105 @@
 
                     debugger;
 
-                    if (res != "false") {
+                    if (res == "false") {
 
-                        localStorage.setItem("userName", $("#username").val());
-                        localStorage.setItem("password", $("#password").val());
-
-                        if ($("#checkLocal").is(':checked')) {
-
-                            var check = "true"
-
-                        }                  
-
-                        else {
-
-                            var check = "false"
-                        }
-
-                       
-                        localStorage.setItem("loginCheck", check);
-
-
-                        if (res.custom_role != "Yönetici") {
-
-                            window.location.href = "../Public/Reservation?date=" + today;
-                        }
-                        else
-                            window.location.href = "../AdminHome/Index";
-
-                    }
-
-                    else
                         $.confirm({
-                            title: "Uyarı",
-                            content: "Kullanıcı Adı/Şifre Hatalı.",
+                        title: "Uyarı",
+                            content: "Kullanıcı Adı ve/veya Şifre Hatalı.",
                             buttons: {
-                                TAMAM: function () {
-
-                                   
+                            TAMAM: function () {
 
                                 }
                             }
                         });
+                    }
 
-                    
+                    if (res.custom_role.length > 1) {
+
+                        row = "";
+
+                        $("#roles").empty();
+
+                        for (var i = 0; i < res.custom_role.length; i++) {
+
+                            row += '<option value="'+res.custom_roleId[i] +'">' + res.custom_role[i] + '</option>';
+
+                            $("#roles").append(row);
+                        }
+
+                        $('#myModal').modal('toggle')
+                    }
+
+                    else if (res.custom_role.length == 1)
+
+                    {
+
+                        $.ajax({
+                        type: "Get",
+                            url: '../Public/SignInReq',
+                            cache: false,
+                            data: { "UserName": $("#username").val(), "Password": $("#password").val(), "RoleName": res.custom_role[0], "RoleId":res.custom_roleId[0] },
+                            dataType: "json",
+                            async: false,
+                            success: function (res) {
+
+                                debugger;
+
+                                if (res.comp_Id != "") {
+                                    getsettings(res.comp_Id, res.custom_role);
+                                } 
+
+                            },
+                            error: function (textStatus, errorThrown) {
+                                console.log(JSON.stringify(textStatus));
+                                console.log(textStatus);
+                            }
+                        });
+                    }
+
+                    //if (res != "false") {
+
+                    //    localStorage.setItem("userName", $("#username").val());
+                    //    localStorage.setItem("password", $("#password").val());
+
+                    //    if ($("#checkLocal").is(':checked')) {
+
+                    //        var check = "true"
+
+                    //    }
+
+                    //    else {
+
+                    //        var check = "false"
+                    //    }
+
+
+                    //    localStorage.setItem("loginCheck", check);
+
+
+                    //    if (res.custom_role != "Yönetici" && res.custom_role != "Sekreterya") {
+
+                    //        window.location.href = "../Public/Reservation?date=" + today;
+                    //    }
+                    //    else
+                    //        window.location.href = "../AdminHome/Index";
+
+                    //}
+
+                    //else
+                    //    $.confirm({
+                    //        title: "Uyarı",
+                    //        content: "Kullanıcı Adı/Şifre Hatalı.",
+                    //        buttons: {
+                    //            TAMAM: function () {
+
+
+
+                    //            }
+                    //        }
+                    //    });
+
+
                 },
                 error: function (textStatus, errorThrown) {
                     console.log(JSON.stringify(textStatus));
