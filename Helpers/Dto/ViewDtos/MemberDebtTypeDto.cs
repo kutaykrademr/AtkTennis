@@ -8,5 +8,6 @@ namespace Helpers.Dto.ViewDtos
     {
         public int MemberDebtTypeId { get; set; }
         public string Type { get; set; }
+        public string CompanyId { get; set; }
     }
 }

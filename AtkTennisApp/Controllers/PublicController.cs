@@ -115,7 +115,6 @@ namespace AtkTennisApp.Controllers
           
         }
 
-
         [HttpGet("SignIn", Name = "SignIn")]
         public async Task<SignIn> SignIn(string UserName, string Password ,string RoleName, string RoleId)
         {
@@ -185,7 +184,7 @@ namespace AtkTennisApp.Controllers
 
             try
             {
-                model.resTimes = db.resTimes.ToList();
+                model.resTimes = db.resTimes.OrderBy(x=>x.ResTimes).ToList();
                 model.courts = db.courts.ToList();
                 model.courtPriceLists = db.courtPriceLists.ToList();
                 model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
@@ -313,7 +312,6 @@ namespace AtkTennisApp.Controllers
             return model;
 
         }
-
 
         [HttpGet("GetResTime", Name = "GetResTime")]
         public JsonResult GetResTime(int courtId, string dateInf)
@@ -444,15 +442,15 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservation", Name = "NewReservation")]
-        public JsonResult NewReservation(string ResDate, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds , string RoleName , string RoleId)
+        public JsonResult NewReservation(string ResDate, string CompanyId, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds , string RoleName , string RoleId)
         {
             var model = new Reservation();
             Reservation res = new Reservation();
             Court court = new Court();
             MemberList mem = new MemberList();
             ReservationTotal model4 = new ReservationTotal();
-
-            court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId).CourtTimePeriod;
+            var canDebt = db.memberCanDebts.FirstOrDefault(x => x.CompanyId == CompanyId).CanDebt;
+            court.CourtTimePeriod = db.courts.SingleOrDefault(x => x.CourtId == CourtId && x.CompanyId == CompanyId).CourtTimePeriod;
 
             var x = ResFinishTime.Split(":");
             var h = Convert.ToInt32(x[0]);
@@ -516,11 +514,27 @@ namespace AtkTennisApp.Controllers
 
                 if (h < 10)
                 {
-                    ResFinishTime = "0" + h + ":" + m;
+                    if (m == 0)
+                    {
+                        ResFinishTime = "0" + h + ":" + "00";
+                    }
+                    else
+                    {
+                        ResFinishTime = "0" + h + ":" + m;
+                    }
+                    
                 }
                 else
                 {
-                    ResFinishTime = h + ":" + m;
+                    if (m == 0)
+                    {
+                        ResFinishTime = h + ":" + "00";
+                    }
+                    else
+                    {
+                        ResFinishTime = h + ":" + m;
+                    }
+                   
                 }
 
             }
@@ -535,10 +549,10 @@ namespace AtkTennisApp.Controllers
             {
                 try
                 {
-                    model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false).FirstOrDefault();
-                    court = db.courts.SingleOrDefault(x => x.CourtId == CourtId);
-                    mem = db.memberLists.FirstOrDefault(x => x.UserId == UserId);
-
+                    model = db.reservations.Where(x => x.Court.CourtId == CourtId && x.ResStartTime == ResStartTime && x.ResDate == ResDate && x.CancelRes == false && x.CompanyId == CompanyId).FirstOrDefault();
+                    court = db.courts.SingleOrDefault(x => x.CourtId == CourtId && x.CompanyId == CompanyId);
+                    mem = db.memberLists.FirstOrDefault(x => x.UserId == UserId && x.CompanyId == CompanyId);
+                  
                 }
 
                 catch (Exception e)
@@ -550,12 +564,16 @@ namespace AtkTennisApp.Controllers
 
             if (model == null)
             {
-                var memberPrice = db.memberLists.Where(x => x.UserId == UserId).FirstOrDefault().Price; // 1500
+                var memberPrice = db.memberLists.Where(x => x.UserId == UserId && x.CompanyId == CompanyId).FirstOrDefault().Price; // 1500
 
                 var resDebt = Price;
 
+             
+
                 try
                 {
+
+
                     if (memberPrice - resDebt >= 0)
                     {
                         var newMemberPrice = memberPrice - resDebt;
@@ -578,6 +596,7 @@ namespace AtkTennisApp.Controllers
                         res.PriceIds = PriceIds;
                         res.RoleId = RoleId;
                         res.RoleName = RoleName;
+                        res.CompanyId = CompanyId;
 
 
 
@@ -588,27 +607,36 @@ namespace AtkTennisApp.Controllers
 
                     else
                     {
-                        res.PriceInf = false;
-                        res.NickName = mem.NickName;
-                        res.Court = court;
-                        res.ResFinishTime = ResFinishTime;
-                        res.ResStartTime = ResStartTime;
-                        res.ResDate = ResDate;
-                        res.ResEvent = ResEvent;
-                        res.ResTime = ResTime;
-                        res.UserId = UserId;
-                        res.doResUserId = UserId;
-                        res.ResNowDate = ResNowDate;
-                        res.Price = Price;
-                        res.PriceIds = PriceIds;
-                        res.RoleName = RoleName;
-                        res.RoleId = RoleId;
+                        if (canDebt)
+                        {
+                            return Json("false");
+                        }
+                        else
+                        {
+                            res.PriceInf = false;
+                            res.NickName = mem.NickName;
+                            res.Court = court;
+                            res.ResFinishTime = ResFinishTime;
+                            res.ResStartTime = ResStartTime;
+                            res.ResDate = ResDate;
+                            res.ResEvent = ResEvent;
+                            res.ResTime = ResTime;
+                            res.UserId = UserId;
+                            res.doResUserId = UserId;
+                            res.ResNowDate = ResNowDate;
+                            res.Price = Price;
+                            res.PriceIds = PriceIds;
+                            res.RoleName = RoleName;
+                            res.RoleId = RoleId;
+                            res.CompanyId = CompanyId;
 
 
 
-                        db.memberLists.Update(mem);
-                        db.reservations.Add(res);
-                        db.SaveChanges();
+                            db.memberLists.Update(mem);
+                            db.reservations.Add(res);
+                            db.SaveChanges();
+                        }
+                      
                     }
 
 

@@ -1,5 +1,16 @@
 ﻿@model List<Helpers.Dto.AppIdentityRoleDto>
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
+<h2 style="display:none" id="compId">@compId</h2>
+
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid d-flex justify-content-center">
@@ -72,8 +83,8 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            
+
+
                             <div class="row">
 
                                 <div class="input-group mb-3 col-md-6">
@@ -498,7 +509,7 @@
         refmem1: null,
         refmem2: null,
         detailAddress: null,
-        memberNumber:null,
+        memberNumber: null,
 
         memberNumber2: null,
         nickName2: null,
@@ -511,13 +522,14 @@
         partnerPhone: null,
         partnerIdNumber: null,
         partnerBirthDate: null,
-        password2:null,
+        password2: null,
+        companyId: null,
 
     };
 
     function register() {
 
-        
+        userObj.companyId = $("#compId").text();
         userObj.name = $("#name").val();
         userObj.username = $("#username").val();
         userObj.nickName = $("#nickname").val();
@@ -595,9 +607,9 @@
 
 
 
-        else 
+        else
             saveUser(userObj);
-        
+
     }
 
     function saveUser(userObj) {
@@ -796,7 +808,6 @@
 
     }
 
-
     function getNickName2() {
 
         var name = $("#partnerName").val();
@@ -887,7 +898,7 @@
     }
 
     function getPassword2() {
-        
+
         var name = $("#partnerName").val();
 
         var ad = name.split(" ");

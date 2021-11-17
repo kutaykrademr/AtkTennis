@@ -18,6 +18,7 @@ namespace Helpers.Dto.ViewDtos
         public bool DebtandPayment { get; set; }
         public bool SystemSettings { get; set; }
         public bool Reports { get; set; }
+        public string CompanyId { get; set; }
 
     }
 }

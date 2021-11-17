@@ -1,5 +1,11 @@
 ﻿@model Helpers.Dto.PartialViewDtos.IdentityPartialViewDto;
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
     <style>
         button {
             border: none !important;
@@ -74,7 +80,7 @@
 
                                         @foreach (var item in Model.memberLists)
                                         {
-                                            if (item.ActPas == false)
+                                            if (item.ActPas == true && item.CompanyId == CompId)
                                             {
                                                 <tr style="text-align:center" id="">
 
@@ -88,7 +94,7 @@
 
 
                                                     <td>
-                                                        
+
                                                         <button class="btn btn-outline-warning" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
                                                         <button class="btn btn-outline-danger" id="@item.UserId" onclick="openDeleteUserModal(this.id) "><i class="fas fa-trash"></i></button>
 
@@ -200,7 +206,11 @@
                                             <option disabled="disabled" selected>Türü</option>
                                             @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
                                             {
-                                                <option>@Model.AppIdentityRoles[i].NormalizedName</option>
+                                                if (Model.AppIdentityRoles[i].CompanyId == CompId)
+                                                {
+                                                    <option>@Model.AppIdentityRoles[i].NormalizedName</option>
+                                                }
+
                                             }
 
                                         </select>
@@ -482,7 +492,7 @@
                             buttons: {
                                 TAMAM: function () {
 
-                                    window.location.href = "ListUser"
+                                    window.location.href = "ListMember"
                                 }
                             }
                         });

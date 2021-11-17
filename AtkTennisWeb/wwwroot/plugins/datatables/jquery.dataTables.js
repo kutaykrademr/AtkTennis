@@ -11507,7 +11507,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sEmptyTable": "No data available in table",
+			"sEmptyTable": "Veri Yok Liste Bulunamamıştır !",
 	
 	
 			/**

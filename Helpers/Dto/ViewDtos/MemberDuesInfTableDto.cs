@@ -19,5 +19,6 @@ namespace Helpers.Dto.ViewDtos
         public bool DuesInfType { get; set; }
         public bool PriceCondition { get; set; }
         public bool CancelCondition { get; set; }
+        public string CompanyId { get; set; }
     }
 }

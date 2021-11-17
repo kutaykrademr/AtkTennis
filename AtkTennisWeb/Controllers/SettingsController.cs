@@ -18,13 +18,20 @@ namespace AtkTennisWeb.Controllers
                 
               var model = Helpers.Serializers.DeserializeJson<MutualsConstantsDto>(Helpers.Request.Get(Mutuals.AppUrl + "Settings/GetMySettings2?companyId=" + companyId));
 
-                Mutuals.CompName = model.CompanyName;
-                Mutuals.M1 = model.M1;
-                Mutuals.M2 = model.M2;
-                Mutuals.M3 = model.M3;
-                Mutuals.M4 = model.M4;
-                Mutuals.M5 = model.M5;
-                Mutuals.M6 = model.M6;
+                if (model != null)
+                {
+                    Mutuals.CompName = model.CompanyName;
+                    Mutuals.M1 = model.M1;
+                    Mutuals.M2 = model.M2;
+                    Mutuals.M3 = model.M3;
+                    Mutuals.M4 = model.M4;
+                    Mutuals.M5 = model.M5;
+                    Mutuals.M6 = model.M6;
+                }
+                else
+                {
+                    return Json("false");
+                }
 
                 foreach (var item in model.UserSettingsList)
                 {

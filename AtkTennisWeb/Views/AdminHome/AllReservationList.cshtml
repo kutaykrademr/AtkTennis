@@ -10,8 +10,10 @@
 
 @{
     var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 <h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@compId</h2>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -206,6 +208,7 @@
 
                     for (var i = 0; i < res.reservations.length; i++) {
 
+
                         var memberInf = Enumerable.from(res.memberLists)
                             .where(function (x) { return x.userId == res.reservations[i].userId })
                             .select(function (x) { return x }).toArray();
@@ -216,32 +219,33 @@
 
                         debugger;
 
+                        var compId = $("#compId").text();
+
+                        if (res.reservations[i].companyId == compId) {
+
+                            row += '<tr style="text-align:center" id="">';
+                            row += '<td>' + res.reservations[i].resId + '</td>';
+                            row += '<td>' + memberInf[0].memberNumber + '</td>';
+                            row += '<td>' + memberInf[0].fullName + '</td>';
+                            row += '<td>' + res.reservations[i].court.courtName + '</td>';
+                            row += '<td>' + res.reservations[i].resDate + '</td>';
+                            row += '<td>' + res.reservations[i].resStartTime + '</td>';
+                            row += '<td>' + res.reservations[i].resFinishTime + '</td>';
+                            row += '<td>' + res.reservations[i].price + '</td>';
 
 
-                     
-                        row += '<tr style="text-align:center" id="">';
-                        row += '<td>' + res.reservations[i].resId + '</td>';
-                        row += '<td>' + memberInf[0].memberNumber + '</td>';
-                        row += '<td>' + memberInf[0].fullName + '</td>';
-                        row += '<td>' + res.reservations[i].court.courtName + '</td>';
-                        row += '<td>' + res.reservations[i].resDate + '</td>';
-                        row += '<td>' + res.reservations[i].resStartTime + '</td>';
-                        row += '<td>' + res.reservations[i].resFinishTime + '</td>';
-                        row += '<td>' + res.reservations[i].price + '</td>';
+                            if (res.reservations[i].priceInf == true) {
+                                row += '<td>' + "Ödendi" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Ödenmedi" + '</td>';
+                            }
+
+                            row += '<td>' + doResMember[0].fullName + '</td>';
 
 
-                        if (res.reservations[i].priceInf == true) {
-                            row += '<td>' + "Ödendi" + '</td>';
+                            row += '</tr>';
                         }
-                        else {
-                            row += '<td>' + "Ödenmedi" + '</td>';
-                        }
-
-                        row += '<td>' + doResMember[0].fullName + '</td>';
-
-
-                        row += '</tr>';
-                       
 
                     }
                     row += '</tbody>';

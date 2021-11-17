@@ -11,5 +11,6 @@ namespace AtkTennisApp.ViewModels
         public List<CabinetType> cabinetTypes { get; set; } = new List<CabinetType>();
         public List<CabinetOperations> cabinetOperations { get; set; } = new List<CabinetOperations>();
         public List<MemberDuesType> memberDuesTypes { get; set; } = new List<MemberDuesType>();
+        public List<MemberCanDebt> memberCanDebts { get; set; } = new List<MemberCanDebt>();
     }
 }

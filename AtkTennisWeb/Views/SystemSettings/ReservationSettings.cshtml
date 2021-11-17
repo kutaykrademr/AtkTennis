@@ -1,11 +1,17 @@
 ﻿@model Helpers.Dto.PartialViewDtos.ReservationSettingsViewDto;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
-    <style>
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 
-        button {
-            border: none !important;
-        }
-    </style>
+}
+<style>
+
+    button {
+        border: none !important;
+    }
+</style>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -37,7 +43,7 @@
                             <div>
 
                                 @*<button type="button" class="btn btn-outline-primary"  data-toggle="modal" data-target="#addResSettings">Ekle</button>*@
-                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#openUpdateResSetModal" ><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#openUpdateResSetModal"><i class="fas fa-edit"></i></button>
 
                             </div>
                         </div>
@@ -58,14 +64,17 @@
 
                                     @for (int i = 0; i < Model.reservationSettings.Count; i++)
                                     {
-                                        
-                                    <tr style="text-align:center">
-                                        <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
-                                        <td>@Model.reservationSettings[i].ReservationValue</td>
-                                        @*<td>
-            <button type="button" class="btn btn-outline-danger" id="@Model.reservationSettings[i].ReservationSettingsId" onclick="deleteResSetOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-        </td>*@
-                                    </tr>
+                                        if (Model.reservationSettings[i].CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center">
+                                                <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
+                                                <td>@Model.reservationSettings[i].ReservationValue</td>
+                                                @*<td>
+                                                        <button type="button" class="btn btn-outline-danger" id="@Model.reservationSettings[i].ReservationSettingsId" onclick="deleteResSetOpenModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                    </td>*@
+                                            </tr>
+                                        }
+
                                     }
 
                                 </tbody>
@@ -151,10 +160,14 @@
 
                         @for (int i = 0; i < Model.reservationSettings.Count; i++)
                         {
-                            <tr style="text-align:center">
-                                <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
-                                <td><input class="update" id="@Model.reservationSettings[i].ReservationSettingsId" style="text-align:center" value="@Model.reservationSettings[i].ReservationValue"></td>
-                            </tr>
+                            if (Model.reservationSettings[i].CompanyId == CompId)
+                            {
+                                <tr style="text-align:center">
+                                    <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
+                                    <td><input class="update" id="@Model.reservationSettings[i].ReservationSettingsId" style="text-align:center" value="@Model.reservationSettings[i].ReservationValue"></td>
+                                </tr>
+                            }
+
                         }
 
                     </tbody>
@@ -191,7 +204,7 @@
 
 
     function saveReservationSettings() {
-        if ($("#setInf").val() == "" || $("#setVal").val() == "" ) {
+        if ($("#setInf").val() == "" || $("#setVal").val() == "") {
             $.confirm({
                 title: "Bilgilendirme",
                 content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
@@ -320,7 +333,7 @@
                 dataType: "json",
                 async: true,
                 success: function (res) {
-                   
+
                     if (res != false) {
 
                         $.confirm({

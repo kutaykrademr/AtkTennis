@@ -10,9 +10,10 @@
 
 @{
     var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 
-<h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@compId</h2>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -160,7 +161,7 @@
 
 
 
-
+    var compId = $("#compId").text();
 
     function memberDuesDebtList() {
 
@@ -201,7 +202,11 @@
                 row += '<tbody>';
                 for (var i = 0; i < res.length; i++) {
 
-                    if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice) {
+                    //burası 
+
+                    debugger;
+
+                    if (res[i].priceCondition == true && res[i].duesPrice != res[i].remainingPrice && res[i].companyId == compId) {
 
                         if (res[i].duesInfType == false) {
                             row += '<tr style="text-align:center" id="">';
@@ -267,7 +272,7 @@
 
                 for (var i = 0; i < res.length; i++) {
 
-                    if (res[i].priceCondition == false && res[i].duesInfType == false) {
+                    if (res[i].priceCondition == false && res[i].duesInfType == false && res[i].companyId == compId) {
 
 
                         row += '<tr style="text-align:center" id="">';
@@ -358,7 +363,7 @@
 
                     if (res[i].duesInfType == true) {
 
-                        if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice) {
+                        if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice && res[i].companyId == compId) {
 
 
                             row += '<tr style="text-align:center" id="">';
@@ -421,7 +426,7 @@
 
                 for (var i = 0; i < res.length; i++) {
 
-                    if (res[i].priceCondition == false && res[i].duesInfType == true) {
+                    if (res[i].priceCondition == false && res[i].duesInfType == true && res[i].companyId == compId) {
 
 
                         row += '<tr style="text-align:center" id="">';
@@ -485,6 +490,7 @@
                 row = "";
                 $("#appendResInf").empty();
 
+                debugger;
 
                 row += '<div i class="card-body">';
                 row += '<h4>Ödeme Alınanlar</h4>';
@@ -504,51 +510,47 @@
                 row += '<th>Açıklama</th>';
                 row += '</tr>';
                 row += '</thead>';
-
+                row += '<tbody>';
 
                 for (var i = 0; i < res.duesInf.length; i++) {
 
+                    if (res.duesInf[i].res.companyId == compId) {
+                        var memberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.duesInf[i].res.userId })
+                            .select(function (x) { return x }).toArray();
+
+                        var getPayment = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                            .select(function (x) { return x }).toArray();
+
+         
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
+
+                        if (res.duesInf[i].res.priceInf) {
+                            row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        }
+                        else {
+                            row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        }
+
+                        row += '<td>' + memberInf[0].memberNumber + '</td>';
+                        row += '<td>' + memberInf[0].fullName + '</td>';
+                        row += '<td>' + "Rezervasyon Ödemesi" + '</td>';
+                        row += '<td>' + res.duesInf[i].res.resDate + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                        row += '<td>' + getPayment[0].fullName + '</td>';
+                        row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                        row += '<td>' + res.duesInf[i].paymentLog.explain + '</td>';
 
 
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].res.userId })
-                        .select(function (x) { return x }).toArray();
-
-                    var getPayment = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
-                        .select(function (x) { return x }).toArray();
-
-
-
-
-                    row += '<tbody>';
-                    row += '<tr style="text-align:center" id="">';
-                    row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
-
-                    if (res.duesInf[i].res.priceInf) {
-                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-                    else {
-                        row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-
-                    row += '<td>' + memberInf[0].memberNumber + '</td>';
-                    row += '<td>' + memberInf[0].fullName + '</td>';
-                    row += '<td>' + "Rezervasyon Ödemesi" + '</td>';
-                    row += '<td>' + res.duesInf[i].res.resDate + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
-                    row += '<td>' + getPayment[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
-                    row += '<td>' + res.duesInf[i].paymentLog.explain + '</td>';
-
-
-                    row += '</tr>';
-                    row += '</tbody>';
-
+                        row += '</tr>';
+                       
+                    }          
                 }
-
+                row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
                 row += '</div>';
@@ -600,29 +602,35 @@
                 row += '</thead>';
                 row += '<tbody>';
 
+                debugger;
 
 
                 for (var i = 0; i < res.reservation.length; i++) {
 
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.reservation[i].userId })
-                        .select(function (x) { return x }).toArray();
+                    if (res.reservation[i].userId != null && res.reservation[i].companyId == compId) {
 
-                    if (res.reservation[i].priceInf == false && res.reservation[i].procedure == false) {
+                        var memberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.reservation[i].userId })
+                            .select(function (x) { return x }).toArray();
 
-                        row += '<tr style="text-align:center" id="">';
-                        row += '<td style="display:none" id="userId">' + res.reservation[i].userId + '</td>';
-                        row += '<td style="background-color:#EF5350">' + res.reservation[i].resId + '</td>';
-                        row += '<td>' + memberInf[0].memberNumber + '</td>';
-                        row += '<td>' + memberInf[0].fullName + '</td>';
-                        row += '<td>' + res.reservation[i].court.courtName + '</td>';
-                        row += '<td>' + res.reservation[i].resDate + '</td>';
-                        row += '<td>' + res.reservation[i].resStartTime + '</td>';
-                        row += '<td>' + res.reservation[i].price + '</td>';
-                        row += '<td>' + "Ödenmedi" + '</td>';
-                        row += '</tr>';
+                        if (res.reservation[i].priceInf == false && res.reservation[i].procedure == false) {
 
+                            row += '<tr style="text-align:center" id="">';
+                            row += '<td style="display:none" id="userId">' + res.reservation[i].userId + '</td>';
+                            row += '<td style="background-color:#EF5350">' + res.reservation[i].resId + '</td>';
+                            row += '<td>' + memberInf[0].memberNumber + '</td>';
+                            row += '<td>' + memberInf[0].fullName + '</td>';
+                            row += '<td>' + res.reservation[i].court.courtName + '</td>';
+                            row += '<td>' + res.reservation[i].resDate + '</td>';
+                            row += '<td>' + res.reservation[i].resStartTime + '</td>';
+                            row += '<td>' + res.reservation[i].price + '</td>';
+                            row += '<td>' + "Ödenmedi" + '</td>';
+                            row += '</tr>';
+
+                        }
                     }
+
+
                 }
                 row += '</tbody>';
                 row += '</table>';
@@ -660,29 +668,32 @@
 
                 for (var i = 0; i < res.reservationCancel.length; i++) {
 
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.reservationCancel[i].userId })
-                        .select(function (x) { return x }).toArray();
+                    if (res.reservationCancel[i].userId != null && res.reservationCancel[i].companyId == compId) {
 
-                    if (res.reservationCancel[i].priceInf == false && res.reservationCancel[i].procedure == false) {
+                        var memberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.reservationCancel[i].userId })
+                            .select(function (x) { return x }).toArray();
+
+                        if (res.reservationCancel[i].priceInf == false && res.reservationCancel[i].procedure == false) {
 
 
-                        newRow += '<tr style="text-align:center" id="">';
-                        newRow += '<td style="display:none" id="userId">' + res.reservationCancel[i].userId + '</td>';
-                        newRow += '<td style="background-color:#EF5350">' + res.reservationCancel[i].resId + '</td>';
-                        newRow += '<td>' + memberInf[0].memberNumber + '</td>';
-                        newRow += '<td>' + memberInf[0].fullName + '</td>';
-                        for (var x = 0; x < res.courts.length; x++) {
-                            if (res.reservationCancel[i].courtId == res.courts[x].courtId) {
-                                newRow += '<td>' + res.courts[x].courtName + '</td>';
+                            newRow += '<tr style="text-align:center" id="">';
+                            newRow += '<td style="display:none" id="userId">' + res.reservationCancel[i].userId + '</td>';
+                            newRow += '<td style="background-color:#EF5350">' + res.reservationCancel[i].resId + '</td>';
+                            newRow += '<td>' + memberInf[0].memberNumber + '</td>';
+                            newRow += '<td>' + memberInf[0].fullName + '</td>';
+                            for (var x = 0; x < res.courts.length; x++) {
+                                if (res.reservationCancel[i].courtId == res.courts[x].courtId) {
+                                    newRow += '<td>' + res.courts[x].courtName + '</td>';
+                                }
                             }
-                        }
-                        newRow += '<td>' + res.reservationCancel[i].resDate + '</td>';
-                        newRow += '<td>' + res.reservationCancel[i].resStartTime + '</td>';
-                        newRow += '<td>' + res.reservationCancel[i].price + '</td>';
-                        newRow += '<td>' + "Ödenmedi" + '</td>';
-                        newRow += '</tr>';
+                            newRow += '<td>' + res.reservationCancel[i].resDate + '</td>';
+                            newRow += '<td>' + res.reservationCancel[i].resStartTime + '</td>';
+                            newRow += '<td>' + res.reservationCancel[i].price + '</td>';
+                            newRow += '<td>' + "Ödenmedi" + '</td>';
+                            newRow += '</tr>';
 
+                        }
                     }
                 }
 
@@ -717,7 +728,7 @@
             async: true,
             success: function (res) {
 
-
+                debugger;
 
                 row = "";
                 $("#duesInf2x").empty();
@@ -741,50 +752,49 @@
                 row += '<th>Açıklama</th>';
                 row += '</tr>';
                 row += '</thead>';
-
+                row += '<tbody>';
 
 
                 for (var i = 0; i < res.duesInf.length; i++) {
 
+                    if (res.companyId == compId) {
+                        var memberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
+                            .select(function (x) { return x }).toArray();
 
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
-                        .select(function (x) { return x }).toArray();
-
-                    var getPayment = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
-                        .select(function (x) { return x }).toArray();
-
-
+                        var getPayment = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                            .select(function (x) { return x }).toArray();
 
 
-                    row += '<tbody>';
-                    row += '<tr style="text-align:center" id="">';
-                    row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
-                    if (res.duesInf[i].dues.priceCondition) {
-                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+
+
+                        
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td style="display:none" id="userId">' + memberInf[0].userId + '</td>';
+                        if (res.duesInf[i].dues.priceCondition) {
+                            row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        }
+                        else {
+                            row += '<td style="background-color:#FBC02D">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        }
+
+                        row += '<td>' + memberInf[0].memberNumber + '</td>';
+                        row += '<td>' + memberInf[0].fullName + '</td>';
+                        row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
+                        row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                        row += '<td>' + getPayment[0].fullName + '</td>';
+                        row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                        row += '<td>' + res.duesInf[i].dues.explain + '</td>';
+                        row += '</tr>';
+                   
                     }
-                    else {
-                        row += '<td style="background-color:#FBC02D">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-
-                    row += '<td>' + memberInf[0].memberNumber + '</td>';
-                    row += '<td>' + memberInf[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
-                    row += '<td>' + getPayment[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
-
-
-                    row += '</tr>';
-                    row += '</tbody>';
 
                 }
-
+                row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
                 row += '</div>';
@@ -842,50 +852,50 @@
                 row += '</tr>';
                 row += '</thead>';
                 row += '<tbody>';
-                debugger;
+                
 
                 for (var i = 0; i < res.duesInf.length; i++) {
 
-                    debugger;
+                    if (res.compId == compId) {
 
-                    var memberInf = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
-                        .select(function (x) { return x }).toArray();
+                        var memberInf = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
+                            .select(function (x) { return x }).toArray();
 
-                    var getPayment = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
-                        .select(function (x) { return x }).toArray();
-
-
+                        var getPayment = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
+                            .select(function (x) { return x }).toArray();
 
 
 
-                    row += '<tr style="text-align:center" id="">';
-                    row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
 
-                    if (res.duesInf[i].dues.priceCondition) {
-                        row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td style="display:none" id="userId2">' + memberInf[0].userId + '</td>';
+
+                        if (res.duesInf[i].dues.priceCondition) {
+                            row += '<td style="background-color:#8BC34A">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        }
+                        else {
+                            row += '<td style="background-color:#FBC02D">' + res.duesInf[i].paymentLog.refId + '</td>';
+                        }
+
+                        row += '<td>' + memberInf[0].memberNumber + '</td>';
+                        row += '<td>' + memberInf[0].fullName + '</td>';
+                        row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
+                        row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
+                        row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
+                        row += '<td>' + getPayment[0].fullName + '</td>';
+                        row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
+                        row += '<td>' + res.duesInf[i].dues.explain + '</td>';
+
+
+                        row += '</tr>';
                     }
-                    else {
-                        row += '<td style="background-color:#FBC02D">' + res.duesInf[i].paymentLog.refId + '</td>';
-                    }
-
-                    row += '<td>' + memberInf[0].memberNumber + '</td>';
-                    row += '<td>' + memberInf[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesType + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.duesYear + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.price + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.paidPrice + "₺" + '</td>';
-                    row += '<td style="font-weight:bold">' + res.duesInf[i].paymentLog.remainingPrice + "₺" + '</td>';
-                    row += '<td>' + getPayment[0].fullName + '</td>';
-                    row += '<td>' + res.duesInf[i].paymentLog.date + '</td>';
-                    row += '<td>' + res.duesInf[i].dues.explain + '</td>';
-
-
-                    row += '</tr>';
-
-
                 }
+
                 row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
@@ -893,8 +903,6 @@
 
 
                 $("#cabinetInf2x").append(row);
-
-
                 $('#exampleModal2').modal('toggle');
             },
 

@@ -27,9 +27,10 @@ namespace Helpers.Dto.ViewDtos
         public bool PrivRes { get; set; }
         public string RoleName { get; set; }
         public string RoleId { get; set; }
-       
+        public string CompanyId { get; set; }
 
-        
+
+
         public CourtDto Court { get; set; }
 
       

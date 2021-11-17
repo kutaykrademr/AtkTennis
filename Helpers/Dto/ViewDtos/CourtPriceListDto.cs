@@ -16,5 +16,6 @@ namespace Helpers.Dto.ViewDtos
         public string MonthInf { get; set; }
         public string DayInf { get; set; }
         public string TimeInf { get; set; }
+        public string CompanyId { get; set; }
     }
 }

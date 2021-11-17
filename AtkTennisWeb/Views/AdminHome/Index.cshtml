@@ -18,22 +18,31 @@
     var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 
 
-    var debtDuesList = Model.memberDuesInf.Where(x => x.PriceCondition == false && x.CancelCondition == false).ToList();
+    var debtDuesList = Model.memberDuesInf.Where(x => x.PriceCondition == false && x.CancelCondition == false && x.CompanyId == CompId).ToList();
 
-    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30).OrderBy(x=> x.ResTimes).ToList();
+    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30 && x.CompanyId == CompId).OrderBy(x => x.ResTimes).ToList();
 
     var x = times.Count * 4;
 
-    var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
-    var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
-    var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
 
-    var startTime = start.ReservationValue;
-    var finishTime = finish.ReservationValue;
-    var resSetTime = resSettingsTime.ReservationValue;
+    var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati" && x.CompanyId == CompId).FirstOrDefault();
+    var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)" && x.CompanyId == CompId).FirstOrDefault();
+    var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)" && x.CompanyId == CompId).FirstOrDefault();
 
-    var TotalResPriceList = Model.reservations.Where(x => x.PriceInf == false).ToList();
-    var TotalResCanPriceList = Model.reservationCancels.Where(x => x.PriceInf == false && x.Procedure == false).ToList();
+    var startTime = "";
+    var finishTime = "";
+    var resSetTime = "";
+
+    if (start != null || finish != null || resSettingsTime != null)
+    {
+         startTime = start.ReservationValue;
+         finishTime = finish.ReservationValue;
+         resSetTime = resSettingsTime.ReservationValue;
+    }
+ 
+
+    var TotalResPriceList = Model.reservations.Where(x => x.PriceInf == false && x.CompanyId == CompId).ToList();
+    var TotalResCanPriceList = Model.reservationCancels.Where(x => x.PriceInf == false && x.Procedure == false && x.CompanyId == CompId).ToList();
 
     float firstDebt;
     float secDebt;
@@ -140,6 +149,7 @@
     }
 </style>
 
+<h2 style="display:none" id="compId">@CompId</h2>
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid">
@@ -191,12 +201,12 @@
 
                                 @if (Model.TodayResCount == null)
                                 {
-                                @Html.Raw("-") ;
+                                    @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                @Model.TodayResCount
+                                    @Model.TodayResCount
 
                             </h3>
                             <p>Bugüne Ait Rezervasyon Sayısı</p>
@@ -216,12 +226,12 @@
 
                                 @if (Model.TotalResCount == null)
                                 {
-                                @Html.Raw("-") ;
+                                    @Html.Raw("-") ;
                                 }
 
                                 else
 
-                                @Model.TotalResCount
+                                    @Model.TotalResCount
 
                             </h3>
 
@@ -288,7 +298,7 @@
                                         {
                                             if (times[i].ResTimes.Split(":")[1] != "45")
                                             {
-                                        <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
+                                                <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
                                             }
 
                                         }
@@ -306,9 +316,13 @@
 
                                         @foreach (var item in Model.courtScaleLists)
                                         {
-                                        <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
-                                            @item.Code
-                                        </div>
+                                            if (item.CompanyId == CompId)
+                                            {
+                                                <div data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.Name" style="font-size: 13px; cursor:pointer; font-weight: 300;width:50px; text-align:center;float:left; background-color:@item.Color!important;color:white!important;">
+                                                    @item.Code
+                                                </div>
+                                            }
+
                                         }
 
                                     </div>
@@ -460,7 +474,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                            <option value="@item.CourtId">@item.CourtName</option>
+                                <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -629,7 +643,7 @@
 
                             @foreach (var item in Model.courts)
                             {
-                            <option value="@item.CourtId">@item.CourtName</option>
+                                <option value="@item.CourtId">@item.CourtName</option>
 
                             }
 
@@ -844,6 +858,8 @@
 
 <script>
 
+    var compId = $("#compId").text();
+
     $(document).ready(function () {
 
         $("#example1").DataTable({
@@ -859,8 +875,10 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
-        });
 
+
+
+        });
 
         //Rezervasyon Şema Tarih
         var dt = new Date();
@@ -880,6 +898,8 @@
             resSchemaDetail();
 
         });
+
+      
 
     });
 
@@ -981,24 +1001,40 @@
             async: true,
             success: function (res) {
 
+                debugger;
+
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+
+                    debugger;
+
+                    var arrayMem = (res.memberLists[i].role.indexOf("Üye") > -1);
+                    var arrayAnt = (res.memberLists[i].role.indexOf("Antrenör") > -1);
+
+                    if (res.memberLists[i].companyId == compId) {
+                        if (arrayMem || arrayAnt ) {
+
+                        }
+                        mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                    }
+                 
                 }
 
 
                 for (var i = 0; i < res.courtScales.length; i++) {
 
+                    if (res.courtScales[i].companyId == compId) {
 
-                    var checkRole = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
-                        .select(function (x) { return x }).toArray();
+                        var checkRole = Enumerable.from(res.memberLists)
+                            .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
+                            .select(function (x) { return x }).toArray();
 
-                    if (checkRole.length == 0) {
-                        mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
+                        if (checkRole.length == 0) {
+                            mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
+                        }
+
                     }
-
 
                 }
 
@@ -1066,40 +1102,44 @@
 
                 for (var i = 0; i < res.courts.length; i++) {
 
-                    NewRow += '<li style="background-color:#e0ebf9; padding: 0.1rem 0.5rem; color:black; text-align:center;" class="list-group-item list-group-item-info">' + res.courts[i].courtName + '</li>';
-
-                    for (var a = 0; a < res.reservations.length; a++) {
-
-                        if (res.reservations[a].court.courtId == res.courts[i].courtId) {
+              
 
 
-                            NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item"><div class="d-flex">';
+                    if (res.courts[i].companyId == compId) {
 
-                            if (res.reservations[a].userId != null) {
-                                for (var x = 0; x < res.memberLists.length; x++) {
-                                    if (res.reservations[a].userId == res.memberLists[x].userId) {
-                                        NewRow += '<div class="col-md-2 text-align-left"><span style="background:#337ab7;color:white;">' + res.memberLists[x].nickName + '</span></div>';
-                                        NewRow += '<div class="col-md-6 text-align-left">' + res.memberLists[x].fullName + '</div>';
+                        NewRow += '<li style="background-color:#e0ebf9; padding: 0.1rem 0.5rem; color:black; text-align:center;" class="list-group-item list-group-item-info">' + res.courts[i].courtName + '</li>';
+
+                        for (var a = 0; a < res.reservations.length; a++) {
+
+                            if (res.reservations[a].court.courtId == res.courts[i].courtId && res.reservations[a].companyId ==  compId) {
+
+
+                                NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item"><div class="d-flex">';
+
+                                if (res.reservations[a].userId != null) {
+                                    for (var x = 0; x < res.memberLists.length; x++) {
+                                        if (res.reservations[a].userId == res.memberLists[x].userId) {
+                                            NewRow += '<div class="col-md-2 text-align-left"><span style="background:#337ab7;color:white;">' + res.memberLists[x].nickName + '</span></div>';
+                                            NewRow += '<div class="col-md-6 text-align-left">' + res.memberLists[x].fullName + '</div>';
+                                        }
                                     }
                                 }
-                            }
-                            else {
+                                else {
 
-                                for (var c = 0; c < res.courtScales.length; c++) {
-                                    if (res.reservations[a].nickName == res.courtScales[c].code) {
+                                    for (var c = 0; c < res.courtScales.length; c++) {
+                                        if (res.reservations[a].nickName == res.courtScales[c].code) {
 
-                                        NewRow += '<div class="col-md-2 text-align-left"><span style="background:#337ab7;color:white;">' + res.courtScales[c].code + '</span></div>';
-                                        NewRow += '<div class="col-md-6 text-align-left">' + res.courtScales[c].name + '</div>';
+                                            NewRow += '<div class="col-md-2 text-align-left"><span style="background:#337ab7;color:white;">' + res.courtScales[c].code + '</span></div>';
+                                            NewRow += '<div class="col-md-6 text-align-left">' + res.courtScales[c].name + '</div>';
+                                        }
                                     }
                                 }
-                            }
 
-                            NewRow += '<div class="label label-sm label-primary col-md-4 text-align-left">' + res.reservations[a].resStartTime + '</div>';
-                            NewRow += ' </div></li></ul>';
+                                NewRow += '<div class="label label-sm label-primary col-md-4 text-align-left">' + res.reservations[a].resStartTime + '</div>';
+                                NewRow += ' </div></li></ul>';
+                            }
                         }
                     }
-
-
                 }
 
 
@@ -1117,6 +1157,7 @@
     }
 
     // Rezervasyon Şema Tarih
+
 
     function nextDate() {
 
@@ -1242,6 +1283,7 @@
         var courtId = a[0];
         var courtName = a[1];
         var clcTime = a[2];
+      
 
 
         var resStartTime = $('#doRes').attr('start');
@@ -1291,8 +1333,6 @@
 
             $('#rsvModal').modal('toggle');
         }
-
-
 
         $("#selectCourt option:selected").text(courtName);
 
@@ -1444,7 +1484,6 @@
                                 NewRow += '</div></div>';
                             }
 
-
                             $("#ResModal").append(NewRow);
                         }
 
@@ -1497,7 +1536,7 @@
 
         }
 
-        $("#selectedCourt option:selected").text(courtName);
+       /* $("#selectedCourt option:selected").text(courtName);*/
 
         $('#selectedCourt').on('change', function () {
 
@@ -1665,7 +1704,6 @@
 
         var courtId = $("#selectedCourt option:selected").val();
 
-
         var times = [];
         $('#checkTimeUpdTable input:checked:not(:disabled)').each(function () {
             times.push(this.name);
@@ -1742,7 +1780,7 @@
             success: function (res) {
 
 
-                debugger;
+
 
                 $("#xyz").empty();
 
@@ -1751,148 +1789,149 @@
                 for (var i = 0; i < res.courts.length; i++) {
 
 
-                    if (res.courts[i].courtConditions == 1) {
+
+                    if (res.courts[i].courtConditions == 1 && res.courts[i].companyId == compId) {
 
 
                         row += '<tr>';
                         row += ' <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">' + res.courts[i].courtName + '</th>';
 
-                        for (var a = 0; a < res.resTimes.length; a++) {
+                        for (var a = 0; a < res.resTimes.length; a++) {                         
 
+                            if (res.resTimes[a].companyId == compId) {
 
-                            var Res = Enumerable.from(res.reservations)
-                                .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.court.courtId == res.courts[i].courtId })
-                                .select(function (x) { return x }).toArray();
+                                var Res = Enumerable.from(res.reservations)
+                                    .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.court.courtId == res.courts[i].courtId && x.companyId == compId })
+                                    .select(function (x) { return x }).toArray();
 
-                            var resCancel = Enumerable.from(res.reservationCancels)
-                                .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.courtId == res.courts[i].courtId })
-                                .select(function (x) { return x }).toArray();
-
-
-                            var asd = res.courts[i].courtTimePeriod;
-                            var period = (60 / parseInt(asd));
-
-
-
-                            if (Res.length > 0) {
-
-                                var mem = Enumerable.from(res.memberLists)
-
-                                    .where(function (x) { return x.userId == Res[0].userId })
-                                    .select(function (x) { return x.fullName }).toArray();
-                            }
-
-                            if (Res.length > 0) {
-
-                                var xyz = Res[0].resStartTime.split(":");
-                                var xyzd = Res[0].resFinishTime.split(":");
-                                var sTimeSpl = parseInt((xyz[0] + xyz[1]));
-                                var fTimeSpl = parseInt((xyzd[0] + xyzd[1]));
-
-                                if ((fTimeSpl - sTimeSpl) >= 1000) {
-                                    var colspanVal = (fTimeSpl - sTimeSpl) * 4 / 1000;
-                                }
-                                else {
-                                    colspanVal = (fTimeSpl - sTimeSpl) * 4 / 100;
-                                }
-                            }
-
-
-                            if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
-
-                                var scaleList = Enumerable.from(res.courtScaleLists)
-                                    .where(function (x) { return x.code == Res[0].nickName })
+                                var resCancel = Enumerable.from(res.reservationCancels)
+                                    .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.courtId == res.courts[i].courtId && x.companyId == compId })
                                     .select(function (x) { return x }).toArray();
 
 
-                                var scaleList2 = Enumerable.from(res.courtScaleLists)
-
-                                    .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
-                                    .select(function (x) { return x }).toArray();
+                                var asd = res.courts[i].courtTimePeriod;
+                                var period = (60 / parseInt(asd));
 
 
-                                debugger;
+                                if (Res.length > 0) {
 
-                                if (scaleList.length > 0) {
-                                    row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
-                                    row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
-                                }
-                                else {
-                                    row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
-                                    row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
+                                    var mem = Enumerable.from(res.memberLists)
+
+                                        .where(function (x) { return x.userId == Res[0].userId })
+                                        .select(function (x) { return x.fullName }).toArray();
                                 }
 
-                                row += '<a style="padding:0;color:#fff;">';
-                                row += Res[0].nickName;
-                                row += '</a>';
-                                row += '<small style="right: -3px;top: -10px;position:relative; color:black">';
-                                row += 'w';
-                                row += '</small>';
-                                row += '</div>';
-                                row += '</td>';
+                                if (Res.length > 0) {
 
-                                a = a + parseInt(colspanVal) - 1;
-                            }
+                                    var xyz = Res[0].resStartTime.split(":");
+                                    var xyzd = Res[0].resFinishTime.split(":");
+                                    var sTimeSpl = parseInt((xyz[0] + xyz[1]));
+                                    var fTimeSpl = parseInt((xyzd[0] + xyzd[1]));
 
-                            else if (Res.length != 0) {
-
-                                debugger;
-
-                                var scaleList = Enumerable.from(res.courtScaleLists)
-                                    .where(function (x) { return x.code == Res[0].nickName })
-                                    .select(function (x) { return x }).toArray();
+                                    if ((fTimeSpl - sTimeSpl) >= 1000) {
+                                        var colspanVal = (fTimeSpl - sTimeSpl) * 4 / 1000;
+                                    }
+                                    else {
+                                        colspanVal = (fTimeSpl - sTimeSpl) * 4 / 100;
+                                    }
+                                }
 
 
+                                if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
 
-                                if (scaleList.length == 0) {
+                                    var scaleList = Enumerable.from(res.courtScaleLists)
+                                        .where(function (x) { return x.code == Res[0].nickName  })
+                                        .select(function (x) { return x }).toArray();
 
 
                                     var scaleList2 = Enumerable.from(res.courtScaleLists)
 
-                                        .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
+                                        .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase()  })
                                         .select(function (x) { return x }).toArray();
 
+
+
+                                    if (scaleList.length > 0) {
+                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
+                                        row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
+                                    }
+                                    else {
+                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                        row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
+                                    }
+
+                                    row += '<a style="padding:0;color:#fff;">';
+                                    row += Res[0].nickName;
+                                    row += '</a>';
+                                    row += '<small style="right: -3px;top: -10px;position:relative; color:black">';
+                                    row += 'w';
+                                    row += '</small>';
+                                    row += '</div>';
+                                    row += '</td>';
+
+                                    a = a + parseInt(colspanVal) - 1;
                                 }
 
+                                else if (Res.length != 0) {
+
+                              
+
+                                    var scaleList = Enumerable.from(res.courtScaleLists)
+                                        .where(function (x) { return x.code == Res[0].nickName })
+                                        .select(function (x) { return x }).toArray();
 
 
-                                if (scaleList.length > 0) {
-                                    row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + scaleList[0].name + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
-                                    row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
+
+                                    if (scaleList.length == 0) {
+
+
+                                        var scaleList2 = Enumerable.from(res.courtScaleLists)
+
+                                            .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
+                                            .select(function (x) { return x }).toArray();
+
+                                    }
+
+
+
+                                    if (scaleList.length > 0) {
+                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + scaleList[0].name + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
+                                        row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
+                                    }
+
+                                    else {
+                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                        row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
+                                    }
+
+                                    row += '<a style="padding:0;color:#fff;">';
+                                    row += Res[0].nickName;
+                                    row += '</a>';
+                                    row += '</div>';
+                                    row += '</td>';
+
+                                    a = a + parseInt(colspanVal) - 1;
                                 }
 
-                                else {
-                                    row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
-                                    row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
-                                }
+                                else
+                                    if (period == 4) {
 
-                                row += '<a style="padding:0;color:#fff;">';
-                                row += Res[0].nickName;
-                                row += '</a>';
-                                row += '</div>';
-                                row += '</td>';
+                                        row += '<td  borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+                                    }
 
-                                a = a + parseInt(colspanVal) - 1;
+                                    else if (period == 2) {
+                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+
+                                        a = a + 1;
+                                    }
+
+                                    else if (period == 1) {
+                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+
+                                        a = a + 3;
+                                    }
+
                             }
-
-                            else
-                                if (period == 4) {
-
-                                    row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
-                                }
-
-                                else if (period == 2) {
-                                    row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
-
-                                    a = a + 1;
-                                }
-
-                                else if (period == 1) {
-                                    row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
-
-                                    a = a + 3;
-                                }
-
 
                         }
 
@@ -2165,6 +2204,7 @@
             PriceIds: '',
             UserName: '',
             PrivRes: '',
+            CompId:'',
 
         }
 
@@ -2188,6 +2228,7 @@
         resobject.userId = $("#userId").text();
         resobject.ResEvent = "event-1"
         resobject.CourtId = id;
+        resobject.CompanyId = $("#compId").text();
 
 
         if (times.length == 0) {
@@ -2232,7 +2273,7 @@
                     async: true,
                     success: function (res) {
 
-                        debugger;
+                        
 
                         if (res == true) {
 
@@ -2255,6 +2296,7 @@
                         else {
 
                             $('#rsvModal').modal('toggle');
+                            $('#priceModal').modal('toggle');
 
                             swal({
                                 title: "Rezervasyon Onaylanmadı",
@@ -2316,7 +2358,7 @@
 
                 var date3 = day + '-' + month + '-' + d.getFullYear();
                 var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-                debugger;
+            
 
                 $("#PriceInf").empty();
 
@@ -2613,7 +2655,7 @@
                         type: "GET",
                         url: '../AdminHome/CancelResAdmin',
                         cache: false,
-                        data: { "id": id, "userId": userId, "procedure": procedure, "cancelReasons": cancelReasons },
+                        data: { "id": id, "userId": userId, "procedure": procedure, "cancelReasons": cancelReasons , "compId":compId },
                         dataType: "json",
                         async: true,
                         success: function (res) {
@@ -2657,7 +2699,7 @@
 
     function checkMe(id) {
 
-        debugger;
+     
 
         var checkID = "";
 

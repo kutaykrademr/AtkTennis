@@ -2,11 +2,14 @@
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
 
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+}
 <style>
 
-    input{
-
-        border-color:#f0b800 !important;
+    input {
+        border-color: #f0b800 !important;
     }
 
     .reservationForm {
@@ -29,13 +32,11 @@
         left: 0.8rem !important;
     }
 </style>
-@{
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-}
+
 <div style="display:none" class="modal-footer">
     <textbox style="color:black; " id="userId">@userId</textbox>
 </div>
-
+<h2 style="display:none" id="compId">@CompId</h2>
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -55,10 +56,10 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <div class="sticky-top mb-3">
                         <div class="card">
-                            <div style="background-color:#c1ea00" class="card-header">
+                            <div style="background-color:#343a40; color:white;" class="card-header">
                                 <h4 class="card-title">Çoklu Rezervasyon Kontrol</h4>
                             </div>
                             <div class="card-body">
@@ -68,7 +69,11 @@
                                     <select id="courtInf" class="form-control">
                                         @foreach (var item in Model)
                                         {
-                                            <option value="@item.CourtId">@item.CourtName</option>
+                                            if (item.CompanyId == CompId)
+                                            {
+                                                <option value="@item.CourtId">@item.CourtName</option>
+                                            }
+
                                         }
 
 
@@ -117,7 +122,6 @@
                                         <input type="checkbox" class="custom-control-input" value="Pazar" id="sun">
                                         <label class="custom-control-label" for="sun">Pazar</label>
                                     </div>
-
                                 </div>
 
                                 <div class="card-header">
@@ -128,6 +132,22 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="portlet-body col-md-8">
+
+                    <div class="portlet light" style="padding: 15px;">
+                        <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">
+                            <strong>Çoklu Rezervasyon Yap!</strong> İlgili Alanları Doldurarak İşleme Devam Ediniz.                            
+                        </div>
+                    </div>
+
+                    <div class="portlet light" style="padding: 15px;">
+                        <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">          
+                            <strong>Önemli!</strong> Gün Bilgileri Boş Bırakılamaz.. Seçtiğiniz Tarihler arasındaki hangi günlere rezervasyon yapmak istiyorsanız lütfen işaretleyiniz !
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -206,6 +226,8 @@
 
     });
 
+    var compId = $("#compId").text();
+
     function findMember() {
 
 
@@ -217,7 +239,7 @@
             async: true,
             success: function (res) {
 
-          
+
                 var mem = [];
 
                 debugger;
@@ -225,16 +247,18 @@
                 for (var i = 0; i < res.courtScales.length; i++) {
 
 
+                    //var checkRole = Enumerable.from(res.memberLists)
+                    //    .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
+                    //    .select(function (x) { return x }).toArray();
+                    if (res.courtScales[i].companyId == compId) {
 
-                    var checkRole = Enumerable.from(res.memberLists)
-                        .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
-                        .select(function (x) { return x }).toArray();
+                        if (res.courtScales[i].name != "Üye" && res.courtScales[i].name != "Antrenör" && res.courtScales[i].name != "Sekreterya" && res.courtScales[i].name != "Yönetici") {
 
-                    if (checkRole.length == 0) {
-                        mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
+                            mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
+
+                        }
                     }
-
-
+                  
                 }
 
 
@@ -369,9 +393,6 @@
         }
 
     }
-
-
-
 
     function checkMe(id) {
 
@@ -541,12 +562,11 @@
             }
     }
 
-
     function Approve(id) {
 
-        debugger;
+     
 
-
+        
         // seçilen saatler
         var times = [];
         $('#checkTimeTable input:checked:not(:disabled)').each(function () {
@@ -622,6 +642,7 @@
                         "Date2": date2,
                         "userId": $("#userId").text(),
                         "day": lastDays,
+                        "compId": compId,
 
                     },
                     dataType: "json",

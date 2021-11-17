@@ -10,9 +10,12 @@
 
 @{
     var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 
 <h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@CompId</h2>
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -152,6 +155,7 @@
 <script>
 
     findMemberTotal();
+    var compId = $("#compId").text();
 
     function dataTable() {
 
@@ -164,7 +168,7 @@
             "autoWidth": false,
             "responsive": true,
             "pageLength": 15,
-            buttons: [{ extend: 'pdf', title: 'Rezervasyon  Borçları' }, { extend: 'print', title: 'Rezervasyon  Borçları'}]
+            buttons: [{ extend: 'pdf', title: 'Rezervasyon  Borçları' }, { extend: 'print', title: 'Rezervasyon  Borçları' }]
         })
             .buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
 
@@ -177,7 +181,7 @@
             "autoWidth": false,
             "responsive": true,
             "pageLength": 15,
-           buttons: [{ extend: 'pdf', title: 'Rezervasyon İptal Borçları' }, { extend: 'print', title: 'Rezervasyon İptal  Borçları'}]
+            buttons: [{ extend: 'pdf', title: 'Rezervasyon İptal Borçları' }, { extend: 'print', title: 'Rezervasyon İptal  Borçları' }]
         })
             .buttons().container().appendTo('#resList2_wrapper .col-md-6:eq(0)');
     }
@@ -197,7 +201,12 @@
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+
+                    if (res.memberLists[i].companyId == compId) {
+
+                        mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                    }
+
                 }
 
                 $("#findMembers").autocomplete({
@@ -239,17 +248,16 @@
             data: { "id": id },
             async: true,
             success: function (res) {
+
                 debugger;
 
-                if (res.reservation.price != 0) {
+                if (res.reservation != null) {
 
                     $("#price").val(res.reservation.price)
                 }
                 else {
                     $("#price").val(res.reservationCancel.price)
-                }        
-               
-
+                }
             },
 
             error: function (textStatus, errorThrown) {
@@ -272,8 +280,6 @@
             userId = $("#userId2").val();
         }
 
-        debugger;
-        
         var paymentType = $("#currentUserId option:selected").val();
         var currentUserId = $("#currentUserId").text();
         var price = $("#price").val();
@@ -282,11 +288,12 @@
         var receiptNo = $("#receiptNo").val();
         var receiptDate = $("#receiptDate").val();
         var explain = $("#explain").val();
-        
+        var compId = $("#compId").text();
 
         if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || remainingPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
             alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
         }
+
         else {
 
             $.ajax({
@@ -294,7 +301,7 @@
                 url: '../AdminHome/GetPaid',
                 cache: false,
                 dataType: "json",
-                data: { "userId": userId, "refId": id, "refType": 1, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": paymentType, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                data: { "userId": userId, "compId": compId, "refId": id, "refType": 1, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": paymentType, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
                 async: true,
                 success: function (res) {
 
@@ -306,6 +313,7 @@
                             icon: "success",
                             button: "Tamam",
                             timer: 500,
+
                         }).then((value) => {
 
                             $('#exampleModal').modal('toggle')
@@ -365,13 +373,26 @@
 
                             $("#appendResInf").empty();
 
+                            var totalPrice = 0;
+
+                            for (var i = 0; i < res.reservationslength; i++) {
+
+                                if (res.reservations[i].companyId == compId) {
+
+                                    var firstPrice = res.reservations[i].price;
+                                    var totalPrice = firstPrice + totalPrice;
+                                }
+                            }
 
                             row = "";
-                            row += '<div id="asd" class="card-body">';
+                            row += '<div id="asd" class="card-body ">';
+                            row += '<div class="d-flex justify-content-between">';
                             row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
+                            row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon Borcu :' + totalPrice + '  ₺</h4>';
+                            row += '</div>';
                             row += '<table id="resList" class="table table-bordered table-hover">';
                             row += '<thead>';
-                            row += '<tr style="text-align:center">';               
+                            row += '<tr style="text-align:center">';
                             row += '<th>Üye Numarası</th>';
                             row += '<th>Adı - Soyadı</th>';
                             row += '<th>Rezervasyon Tarihi</th>';
@@ -389,9 +410,11 @@
 
                             for (var i = 0; i < res.reservations.length; i++) {
 
-                                if (res.reservations.length > 0 && res.reservations[i].priceInf == false) {
 
-                                    row += '<tr style="text-align:center" id="">';                                 
+                                if (res.reservations.length > 0 && res.reservations[i].priceInf == false && res.reservations[i].companyId == compId) {
+
+
+                                    row += '<tr style="text-align:center" id="">';
                                     row += '<td>' + res.memberLists[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberLists[0].fullName + '</td>';
                                     row += '<td>' + res.reservations[i].resDate + '</td>';
@@ -406,10 +429,10 @@
                                     row += '<button style="display:none" class="btn btn-outline-dark" value="' + res.memberLists[0].userId + '" id="userId"</button>';
                                     row += '</td>';
                                     row += '</tr>';
-                                
+
 
                                 }
-                                
+
                             }
 
                             row += '</tbody>';
@@ -418,14 +441,28 @@
                             row += '</div>';
 
                             $("#appendResInf").append(row);
-                    
+
 
                             $("#append").empty();
 
 
+                            var totalPrice2 = 0;
+
+                            for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                                if (res.reservationCancels[i].companyId == compId) {
+
+                                    var firstPrice2 = res.reservationCancels[i].price;
+                                    var totalPrice2 = firstPrice2  + totalPrice2;
+                                }
+                            }
+
                             row = "";
                             row += '<div id="asd" class="card-body">';
-                            row += '<h4 style="margin-bottom:30px">Rezervasyon İptal Borçları</h4>';
+                            row += '<div class="d-flex justify-content-between">';
+                            row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
+                            row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon Borcu : ' + totalPrice2 + ' ₺</h4>';
+                            row += '</div>';
                             row += '<table id="resList2" class="table table-bordered table-hover">';
                             row += '<thead>';
                             row += '<tr style="text-align:center">';
@@ -445,14 +482,15 @@
 
                             for (var i = 0; i < res.reservationCancels.length; i++) {
 
-                                if (res.reservationCancels.length > 0 && res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false) {
+                                if (res.reservationCancels.length > 0 && res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false && res.reservationCancels[i].companyId == compId) {
 
                                     row += '<tbody>';
-                                    row += '<tr style="text-align:center" id="">';                                   
+                                    row += '<tr style="text-align:center" id="">';
                                     row += '<td id="userId2" value="' + res.memberLists[0].userId + '">' + res.memberLists[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberLists[0].fullName + '</td>';
                                     row += '<td>' + res.reservationCancels[i].resDate + '</td>';
                                     row += '<td>' + res.reservationCancels[i].resStartTime + ' - ' + res.reservationCancels[i].resFinishTime + '</td>';
+
                                     for (var c = 0; c < res.courts.length; c++) {
                                         if (res.courts[c].courtId == res.reservationCancels[i].courtId) {
                                             row += '<td>' + res.courts[c].courtName + '</td>';
@@ -462,7 +500,7 @@
                                     row += '<td>' + "Ödenmedi" + '</td>';
                                     row += '<td>' + res.reservationCancels[i].price + '₺' + '</td>';
                                     row += '<td>';
-                                    row += '<button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button>';
+                                    row += '<button class="btn btn-outline-dark" id="' + res.reservationCancels[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button>';
                                     row += '<button style="display:none" class="btn btn-outline-dark" value="' + res.memberLists[0].userId + '" id="userId2"</button>';
                                     row += '</td>';
                                     row += '</tr>';

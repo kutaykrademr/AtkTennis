@@ -1,4 +1,14 @@
 ﻿@model List<Helpers.Dto.AppIdentityRoleDto>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
+<h2 style="display:none" id="compId">@compId</h2>
 
 <div class="content-wrapper">
     <section class="content">
@@ -8,6 +18,7 @@
                     <div class="card" style="margin-bottom:20px; border:1px solid brown">
                         <div class="card-body">
                             <p class="login-box-msg">Zorunlu Alan </p>
+
                             <div class="row">
                                 <div class="input-group mb-3 col-md-4">
                                     <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
@@ -17,6 +28,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="input-group mb-3 col-md-4">
                                     <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
                                     <div class="input-group-append">
@@ -25,6 +37,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="input-group mb-3 col-md-4">
                                     <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
                                     <div class="input-group-append">
@@ -37,7 +50,6 @@
 
 
                             <div class="row">
-
                                 <div class="input-group mb-3 col-md-4">
                                     <input type="text" class="form-control" id="memberNum" placeholder="Üye Numarası" autocomplete="new-password">
                                     <div class="input-group-append">
@@ -47,23 +59,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group col-md-4">
-                                    <select id="RegistersRole" class="form-control">
-                                        <option disabled="disabled" selected>Türü</option>
-                                        @for (int i = 0; i < Model.Count(); i++)
-                                        {
 
-                                            var y = Model[i].Name.ToLower().Trim();
-
-                                            if (Model[i].Name.ToLower().Trim() != "üye" && y != "öğrenci")
-                                            {
-                                                <option>@Model[i].Name</option>
-                                            }
-
-                                        }
-
-                                    </select>
-                                </div>
                                 <div class="form-group col-md-4">
                                     <select id="webReservation" class="form-control">
                                         <option disabled="disabled" selected>Web Rezervasyon</option>
@@ -73,15 +69,35 @@
 
                                     </select>
                                 </div>
+
+                                <div class="input-group mb-3 col-md-4">
+
+                                    <input type="text" class="form-control" id="password" placeholder="Şifre" autocomplete="new-password">
+
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="password" placeholder="Şifre" autocomplete="new-password">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <select id="RegistersRole" class="select2bs4" multiple="multiple" data-placeholder="Role Seçimi Yapınız" style="width: 100%;">
+
+                                    @for (int i = 0; i < Model.Count(); i++)
+                                    {
+                                        var y = Model[i].Name.ToLower().Trim();
+
+                                        if (y != "öğrenci")
+                                        {
+                                            <option value="@Model[i].Name,">@Model[i].Name</option>
+                                        }
+                                    }
+
+                                </select>
                             </div>
 
                             <p class="login-box-msg">Not: Şifre en az bir Büyük , Bir Küçük Harf , Sayı ve Karakter Gerektirir ve En az "7" Haneli Olmalıdır. </p>
@@ -102,7 +118,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <div class="row">
                         <div class="input-group mb-3 col-md-6">
@@ -265,14 +280,13 @@
 
                     <div class="row" style="justify-content:end">
                         <div class="col-4">
-                            <button type="submit" class="btn btn-success btn-block" onclick="register()"><i class="fas fa-save"></i>Kaydet</button>
+                            <button type="submit" class="btn btn-success btn-block" onclick="selectRoles()"><i class="fas fa-save"></i>Kaydet</button>
                         </div>
 
                     </div>
 
                 </div>
             </div>
-
         </div>
     </section>
 </div>
@@ -281,6 +295,12 @@
 
 <script>
 
+    $(document).ready(function () {
+
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+    });
 
     $(function () {
 
@@ -292,6 +312,8 @@
             format: 'L'
         });
     })
+
+
 
     userObj = {
 
@@ -322,20 +344,40 @@
         nickName: null,
         memberNumber: null,
         detailAddress: null,
-
+        companyId: null,
 
     };
 
-    function register() {
+    
 
+    function selectRoles() {
 
+        var role = $("#RegistersRole").val();
 
+        debugger;
+
+        var roles = "";
+
+        for (var i = 0; i < role.length; i++) {
+            var firstRole = role[i];
+            roles = firstRole + roles;
+
+        }
+
+        register(roles);
+    }
+
+    function register(roles) {
+
+        debugger;
+
+        userObj.companyId = $("#compId").text();
         userObj.name = $("#name").val();
         userObj.username = $("#username").val();
         userObj.nickName = $("#nickname").val();
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
-        userObj.role = $("#RegistersRole option:selected").text();
+        userObj.role = roles; 
         userObj.condition = $("#condition option:selected").text();
         userObj.identificationNumber = $("#identificationNumber").val();
         userObj.webReservation = $("#webReservation option:selected").val();
@@ -357,6 +399,8 @@
         userObj.gender = "Male";
         userObj.memberNumber = $("#memberNum").val();
         userObj.detailAddress = $("#detailAddress").val();
+
+     
 
         try {
             $.ajax({
@@ -405,7 +449,6 @@
             console.log(e.message);
         }
     }
-
 
     function GetNickName() {
 

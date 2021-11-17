@@ -1,6 +1,12 @@
 ﻿
 @model Helpers.Dto.PartialViewDtos.MemberSettingsViewDto;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+
+}
 <style>
 
     button {
@@ -8,9 +14,46 @@
     }
 </style>
 
+<h2 style="display:none" id="compId">@CompId</h2>
+
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid">
+
+            <div class="card" style="margin-top:15px">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="card-title">
+                        <h3>Üye Borç Ayarları</h3>
+                    </div>
+
+                    @foreach (var item in Model.memberCanDebts)
+                    {
+                        if (item.CompanyId == CompId && item.CanDebt == true)
+
+                        {  <div class="custom-control custom-switch">
+                                <input style="cursor:pointer" type="checkbox" checked class="custom-control-input" value="Pazar" id="sun">
+                                <label style="cursor:pointer" class="custom-control-label" for="sun">Üye Borç Yapabilecekse Lütfen Açık Konuma Alıp Kaydediniz !!!</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="custom-control custom-switch">
+                                <input style="cursor:pointer" type="checkbox" class="custom-control-input" value="Pazar" id="sun">
+                                <label style="cursor:pointer" class="custom-control-label" for="sun">Üye Borç Yapabilecekse Lütfen Açık Konuma Alıp Kaydediniz !!!</label>
+                            </div>
+                        }
+
+                    }
+
+
+                    <div>
+
+                        <button class="btn btn-outline-primary" onclick="saveMemberDuesInf()"><i style="margin-right:15px" class="fas fa-plus-square"></i>Kaydet</button>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row" style="margin-top:15px">
 
                 <div class="col-md-6">
@@ -38,15 +81,19 @@
 
                                     @foreach (var item in Model.cabinetTypes)
                                     {
-                                        <tr style="text-align:center" id="">
-                                            <td>@item.CabinetTypes</td>
-                                            <td>@item.CabinetTypesPrice</td>
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.CabinetTypes</td>
+                                                <td>@item.CabinetTypesPrice</td>
 
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item.CabinetId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.CabinetId" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.CabinetId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.CabinetId" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+
                                     }
 
                                 </tbody>
@@ -79,17 +126,21 @@
                                 <tbody>
                                     @foreach (var item in Model.cabinetOperations)
                                     {
-                                        <tr style="text-align:center" id="">
-                                            <td>@item.CabinetCode</td>
-                                            <td>@item.CabinetOpTypes</td>
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.CabinetCode</td>
+                                                <td>@item.CabinetOpTypes</td>
 
-                                            <td>
+                                                <td>
 
-                                                <button class="btn btn-outline-success" id="@item.CabinetOpId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.CabinetOpId" onclick="deleteCabinetSet(this.id) "><i class="fas fa-trash"></i></button>
-                                            </td>
+                                                    <button class="btn btn-outline-success" id="@item.CabinetOpId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.CabinetOpId" onclick="deleteCabinetSet(this.id) "><i class="fas fa-trash"></i></button>
+                                                </td>
 
-                                        </tr>
+                                            </tr>
+                                        }
+
                                     }
                                 </tbody>
                             </table>
@@ -98,48 +149,58 @@
                 </div>
             </div>
 
-      
 
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="card-title">
-                        <h3>Üye Aidat İndirim Ayarları</h3>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddDuesDiscount"><i class="fas fa-plus-square"></i></button>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Üye Aidat İndirim Ayarları</h3>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddDuesDiscount"><i class="fas fa-plus-square"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+
+                                        <th>Yaşa Göre</th>
+                                        <th>Kaç Yıllık Üye</th>
+                                        <th>İndirim (%)</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.memberDuesTypes)
+                                    {
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.Age (Yaş)</td>
+                                                <td>@item.Year (Yıl)</td>
+                                                <td>@item.Discount (%)</td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.MemberDuesTypeId" onclick="deleteDiscount(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                            <tr style="text-align:center">
 
-                                <th>Yaşa Göre</th>
-                                <th>Kaç Yıllık Üye</th>
-                                <th>İndirim (%)</th>
-                                <th>İşlemler</th>
-                            </tr>
-                        </thead>
-                        <tbody>
 
-                            @foreach (var item in Model.memberDuesTypes)
-                            {
-                                <tr style="text-align:center" id="">
-                                    <td>@item.Age (Yaş)</td>
-                                    <td>@item.Year (Yıl)</td>
-                                    <td>@item.Discount (%)</td>
-
-                                    <td>
-                                        <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                        <button class="btn btn-outline-danger" id="@item.MemberDuesTypeId" onclick="deleteDiscount(this.id)"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </section>
@@ -199,7 +260,11 @@
 
                                 @foreach (var item in Model.cabinetTypes)
                                 {
-                                    <option> @item.CabinetTypes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option> @item.CabinetTypes</option>
+                                    }
+
                                 }
 
 
@@ -256,6 +321,8 @@
 
 <script>
 
+    var compId = $("#compId").text();
+
     $(document).ready(function () {
 
 
@@ -282,18 +349,50 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
-            "pageLength":3,
+            "pageLength": 3,
         });
 
     });
 
+
+    function saveMemberDuesInf() {
+
+        debugger;
+
+        var isChecked = $('#sun').prop('checked');
+
+        $.ajax({
+            type: "POST",
+            url: '../SystemSettings/ControlMemberDebtSettings',
+            cache: false,
+            data: { "isChecked": isChecked, "compId": compId },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res) {
+                    alert("Başarı İle Kaydedildi");
+                }
+                else {
+                    alert("Bir sorun oluştu");
+                }
+
+                location.reload();
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
 
     function addCabinetType() {
 
         var type = $("#cabinetType").val();
         var price = $("#cabinetPrice").val();
 
-        debugger;
+
 
         if (type == "" || price == 0) {
             $.confirm({
@@ -311,7 +410,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddCabinetType',
                 cache: false,
-                data: { "type": type, "price": price },
+                data: { "type": type, "price": price, "compId": compId },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -358,7 +457,6 @@
 
     function deleteCabinetType(id) {
 
-        debugger;
 
         if (id == "") {
             swal("Başarısız!", "Bir Hata Oluştu", "warning");
@@ -439,13 +537,13 @@
         var code = $("#cabinetCode").val();
         var cabType = $("#cabinetTypeOption option:selected").text();
 
-        debugger;
+
 
         $.ajax({
             type: "POST",
             url: '../SystemSettings/AddCabinets',
             cache: false,
-            data: { "cabType": cabType, "code": code },
+            data: { "cabType": cabType, "code": code, "compId": compId },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -500,7 +598,6 @@
 
     function deleteCabinetSet(id) {
 
-        debugger;
 
         if (id == "") {
             swal("Başarısız!", "Bir Hata Oluştu", "warning");
@@ -576,14 +673,13 @@
     }
 
 
-
     function addDiscount() {
 
         var age = $("#age").val();
         var year = $("#year").val();
         var discount = $("#discount").val();
 
-        debugger;
+
 
         if (age == "" || year == "" || discount == "") {
             $.confirm({
@@ -601,7 +697,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddDiscountType',
                 cache: false,
-                data: { "age": age, "year": year, "discount": discount },
+                data: { "age": age, "year": year, "discount": discount, "compId": compId },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -648,7 +744,6 @@
 
     function deleteDiscount(id) {
 
-        debugger;
 
         if (id == "") {
             swal("Başarısız!", "Bir Hata Oluştu", "warning");

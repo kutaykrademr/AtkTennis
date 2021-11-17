@@ -15,6 +15,7 @@ namespace Helpers.Dto.ViewDtos
         public string CourtStartTime { get; set; }
         public string CourtFinishTime { get; set; }
         public string CourtTimePeriod { get; set; }
+        public string CompanyId { get; set; }
 
     }
 }

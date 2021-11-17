@@ -1,13 +1,23 @@
 ﻿@model Helpers.Dto.PartialViewDtos.GeneralDebtViewDto;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 
 @{
+    var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+
     var dateList = Model.memberDuesInfTables.Select(x => x.DuesYear).ToList();
     var typeList = Model.memberDuesInfTables.Select(x => x.DuesType).ToList();
 
     var date = dateList.Distinct().OrderByDescending(x => x).ToList();
     var type = typeList.Distinct().OrderByDescending(x => x).ToList();
 }
+<h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@compId</h2>
+
+
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -29,7 +39,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="card card-gray" >
+                    <div class="card card-gray">
 
                         <div class="card-header" style="margin:15px;">
                             <h3 class="card-title">! Lütfen gerekli alanları formatına uygun ve eksiksiz bir şekilde doldurunuz.</h3>
@@ -49,7 +59,11 @@
 
                                         @foreach (var item in Model.memberDebtTypes)
                                         {
-                                            <option>@item.Type</option>
+                                            if (item.CompanyId == compId)
+                                            {
+                                                <option>@item.Type</option>
+                                            }
+
                                         }
 
                                     </select>
@@ -182,41 +196,43 @@
 
                                     @if (item != null)
                                     {
-                                        @if (item.DuesYear == date[i])
+                                        if (item.CompanyId == compId)
                                         {
-                                            @if (item.DuesType == type[a])
+                                            @if (item.DuesYear == date[i])
                                             {
+                                                @if (item.DuesType == type[a])
+                                                {
 
 
-                                                <tr style="text-align:center" id="">
-                                                    <td>@date[i]</td>
-                                                    <td>@type[a]</td>
-                                                    @{
-                                                        if (item.DuesInfType == true)
-                                                        {
-                                                            <td>Mevcut Dolap Fiyatlarına Göre Borçlandırılmıştır.</td>
+                                                    <tr style="text-align:center" id="">
+                                                        <td>@date[i]</td>
+                                                        <td>@type[a]</td>
+                                                        @{
+                                                            if (item.DuesInfType == true)
+                                                            {
+                                                                <td>Mevcut Dolap Fiyatlarına Göre Borçlandırılmıştır.</td>
+                                                            }
+
+                                                            else
+                                                            {
+                                                                <td>@item.DuesPrice</td>
+                                                            }
                                                         }
 
-                                                        else
-                                                        {
-                                                            <td>@item.DuesPrice</td>
-                                                        }
-                                                    }
+                                                        <td>@item.Date</td>
+                                                        <td>@item.Explain</td>
+                                                        <td>@count</td>
 
-                                                    <td>@item.Date</td>
-                                                    <td>@item.Explain</td>
-                                                    <td>@count</td>
-
-                                                    <td>
-                                                        <button class="btn btn-outline-success" id="" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                        <button class="btn btn-outline-danger" id="" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
-                                                    </td>
-                                                </tr>
+                                                        <td>
+                                                            <button class="btn btn-outline-success" id="" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                            <button class="btn btn-outline-danger" id="" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                }
                                             }
                                         }
                                     }
                                 }
-
 
                             </tbody>
                         </table>
@@ -230,6 +246,7 @@
 </div>
 
 <script>
+    var compId = $("#compId").text();
 
     function addDues() {
 
@@ -237,7 +254,7 @@
         var duesYear = $("#duesYear option:selected").val();
         var duesPrice = $("#duesPrice").val();
         var explain = $("#explain").val();
-
+       
 
         if (duesType == "" || duesYear == "" || duesPrice == "" || explain == "") {
 
@@ -259,7 +276,7 @@
                 type: "GET",
                 url: '../AdminHome/AddDues',
                 cache: false,
-                data: { "duesType": duesType, "duesPrice": duesPrice, "duesYear": duesYear, "explain": explain },
+                data: { "duesType": duesType, "compId": compId, "duesPrice": duesPrice, "duesYear": duesYear, "explain": explain },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -333,7 +350,7 @@
                 type: "GET",
                 url: '../AdminHome/AddGenCabinetDebt',
                 cache: false,
-                data: { "cabinetDuesYear": cabinetDuesYear, "cabinetType": cabinetType, "cabinetExplain": cabinetExplain },
+                data: { "cabinetDuesYear": cabinetDuesYear, "compId": compId, "cabinetType": cabinetType, "cabinetExplain": cabinetExplain },
                 dataType: "json",
                 async: true,
                 success: function (res) {

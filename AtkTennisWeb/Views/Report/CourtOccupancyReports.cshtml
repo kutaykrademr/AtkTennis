@@ -1,4 +1,13 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+
+@{
+    
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
+<h2 style="display:none" id="compId">@compId</h2>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -85,12 +94,13 @@
 <script>
 
     $('#reservation').daterangepicker({
-      
+
         locale: {
             format: 'DD/MM/YYYY'
         }
     });
 
+    var compId = $("#compId").text();
 
     function courtOccupancyInf() {
 
@@ -100,10 +110,8 @@
 
         firstDate = firstDate.split("/")[2] + "/" + firstDate.split("/")[1] + "/" + firstDate.split("/")[0];
         secDate = secDate.split("/")[2] + "/" + secDate.split("/")[1] + "/" + secDate.split("/")[0];
-   
-     
 
-        debugger;
+
 
         $.ajax({
 
@@ -117,42 +125,45 @@
 
                 debugger;
 
-              
+
                 $("#tableProgress").empty();
 
                 row = "";
 
                 for (var i = 0; i < res.court.length; i++) {
-                    var count = 0;
 
-                    row += '<tr>';                   
-                    row += '<td>' + res.court[i].courtName + '</td>';
-                    row += '<td>' + res.myAL.length + '</td>';
-                    row += '<td>';
+                    if (res.court[i].companyId == compId) {
 
-                    for (var c = 0; c < res.myAL.length; c++) {
+                        var count = 0;
 
-                        if (res.myAL[c].court.courtId == res.court[i].courtId) {
+                        row += '<tr>';
+                        row += '<td>' + res.court[i].courtName + '</td>';
+                        row += '<td>' + res.myAL.length + '</td>';
+                        row += '<td>';
 
-                            count++;
-               
-                        }                           
+                        for (var c = 0; c < res.myAL.length; c++) {
+
+                            if (res.myAL[c].court.courtId == res.court[i].courtId) {
+
+                                count++;
+
+                            }
+                        }
+
+                        var percent = parseInt((count * 100) / res.myAL.length);
+
+                        row += '<div class="progress progress-xs">';
+                        row += '<div class="progress-bar progress-bar-danger" style="width:' + percent + '%' + '"></div>';
+                        row += '</div>';
+                        row += '</td>';
+                        row += '<td>' + count + '</td>';
+                        row += '<td><span class="badge bg-danger">' + percent + '%' + '</span></td>';
+                        row += '</tr>';
+
                     }
 
-                    var percent = parseInt((count * 100) / res.myAL.length);
-
-                    row += '<div class="progress progress-xs">';
-                    row += '<div class="progress-bar progress-bar-danger" style="width:' + percent + '%' + '"></div>';
-                    row += '</div>';
-                    row += '</td>';
-                    row += '<td>' + count +'</td>';
-                    row += '<td><span class="badge bg-danger">' + percent + '%' + '</span></td>';
-                    row += '</tr>';
-
-                   
                 }
                 $("#tableProgress").append(row);
-                
 
             },
 
@@ -165,6 +176,6 @@
         });
 
     }
-   
+
 
 </script>

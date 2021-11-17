@@ -1,5 +1,13 @@
 ﻿@model Helpers.Dto.PartialViewDtos.ReservationListViewDto;
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+
+}
+
 <style>
     button {
         border: none !important;
@@ -17,7 +25,7 @@
                             <div class="card-title">
                                 <h3>Rezervasyon  Borçları</h3>
                             </div>
-                         
+
                         </div>
                         <div class="card-body">
                             <table id="example2" class="table table-bordered table-hover">
@@ -37,38 +45,37 @@
 
                                     @foreach (var item in Model.reservations)
                                     {
-                                        if (item.PriceInf == false && item.Procedure == false)
+                                        if (item.CompanyId == CompId)
                                         {
-                                            <tr style="text-align:center" id="">
+                                            if (item.PriceInf == false && item.Procedure == false && item.UserId != null)
+                                            {
+                                                <tr style="text-align:center" id="">
 
-                                                @{
-                                                    var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.UserId);
-                                                    if (t != null)
-                                                    {
-                                                        <td>@t.MemberNumber</td>
+                                                    @{
+                                                        var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.UserId);
+                                                        if (t != null)
+                                                        {
+                                                            <td>@t.MemberNumber</td>
 
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>-</td>
+                                                        }
+
+                                                        var courtName = Model.courts.FirstOrDefault(x => x.CourtId == Convert.ToInt32(item.Court.CourtId)).CourtName;
                                                     }
-                                                    else
-                                                    {
-                                                        <td>-</td>
-                                                    }
 
-                                                    var courtName = Model.courts.FirstOrDefault(x => x.CourtId == Convert.ToInt32(item.Court.CourtId)).CourtName;
-                                                }
+                                                    <td>@t.FullName</td>
+                                                    <td>@item.ResDate</td>
+                                                    <td>@courtName</td>
+                                                    <td>@item.ResStartTime</td>
+                                                    <td style="font-weight:bold">@item.Price ₺</td>
 
-
-
-                                                <td>@t.FullName</td>
-                                                <td>@item.ResDate</td>
-                                                <td>@courtName</td>
-                                                <td>@item.ResStartTime</td>
-                                                <td style="font-weight:bold">@item.Price ₺</td>
-
-                                            </tr>
+                                                </tr>
+                                            }
                                         }
-
                                     }
-
 
                                 </tbody>
                             </table>
@@ -84,8 +91,8 @@
                             <div class="card-title">
                                 <h3>Rezervasyon İptal Borçları</h3>
                             </div>
-                 
                         </div>
+
                         <div class="card-body">
                             <table id="example3" class="table table-bordered table-hover">
                                 <thead>
@@ -99,42 +106,42 @@
                                         <th>Ücreti</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
 
                                     @foreach (var item in Model.reservationCancels)
                                     {
-                                        if (item.PriceInf == false && item.Procedure == false)
+                                        if (item.CompanyId == CompId)
                                         {
-                                            <tr style="text-align:center" id="">
+                                            if (item.PriceInf == false && item.Procedure == false)
+                                            {
+                                                <tr style="text-align:center" id="">
 
-                                                @{
-                                                    var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.UserId);
-                                                    if (t != null)
-                                                    {
-                                                        <td>@t.MemberNumber</td>
+                                                    @{
+                                                        var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.UserId);
+                                                        if (t != null)
+                                                        {
+                                                            <td>@t.MemberNumber</td>
 
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>-</td>
+                                                        }
+
+                                                        var courtName = Model.courts.Where(x => x.CourtId == Convert.ToInt32(item.CourtId)).FirstOrDefault().CourtName;
                                                     }
-                                                    else
-                                                    {
-                                                        <td>-</td>
-                                                    }
 
-                                                    var courtName = Model.courts.Where(x => x.CourtId == Convert.ToInt32(item.CourtId)).FirstOrDefault().CourtName;
-                                                }
+                                                    <td>@t.FullName</td>
+                                                    <td>@item.ResDate</td>
+                                                    <td>@courtName</td>
+                                                    <td>@item.ResStartTime</td>
+                                                    <td style="font-weight:bold">@item.Price ₺</td>
 
-
-
-                                                <td>@t.FullName</td>
-                                                <td>@item.ResDate</td>
-                                                <td>@courtName</td>
-                                                <td>@item.ResStartTime</td>
-                                                <td style="font-weight:bold">@item.Price ₺</td>
-
-                                            </tr>
+                                                </tr>
+                                            }
                                         }
-
                                     }
-
 
                                 </tbody>
                             </table>

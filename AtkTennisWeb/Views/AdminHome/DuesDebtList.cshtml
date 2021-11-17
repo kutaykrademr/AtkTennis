@@ -1,5 +1,11 @@
 ﻿@model Helpers.Dto.PartialViewDtos.GeneralDebtViewDto;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+
+}
 <style>
     button {
         border: none !important;
@@ -31,7 +37,6 @@
                                         <th>Aidat Yılı</th>
                                         <th>Açıklama</th>
                                         <th>Borç Durumu</th>
-                                        <th>Öde</th>
 
 
                                     </tr>
@@ -40,43 +45,47 @@
 
                                     @foreach (var item in Model.memberDuesInfTables)
                                     {
-                                        if (item.PriceCondition == false && item.DuesInfType == false)
+                                        if (item.CompanyId == CompId)
                                         {
-                                            <tr style="text-align:center" id="">
+                                            if (item.PriceCondition == false && item.DuesInfType == false)
+                                            {
+                                                <tr style="text-align:center" id="">
 
-                                                @{
-                                                    var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.MemberId);
-                                                    if (t != null)
+                                                    @{
+                                                        var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.MemberId);
+                                                        if (t != null)
+                                                        {
+                                                            <td>@t.MemberNumber</td>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>-</td>
+                                                        }
+
+                                                    }
+
+
+                                                    <td>@item.MemberFullName</td>
+                                                    <td>@item.Date</td>
+                                                    <td>@item.DuesPrice</td>
+                                                    <td>@item.DuesType</td>
+                                                    <td>@item.DuesYear</td>
+                                                    <td>@item.Explain</td>
+
+                                                    @if (@item.PriceCondition)
                                                     {
-                                                        <td>@t.MemberNumber</td>
-
+                                                        <td>Ödendi</td>
                                                     }
                                                     else
                                                     {
-                                                        <td>-</td>
+                                                        <td>Ödenmedi</td>
                                                     }
 
-                                                }
-
-
-                                                <td>@item.MemberFullName</td>
-                                                <td>@item.Date</td>
-                                                <td>@item.DuesPrice</td>
-                                                <td>@item.DuesType</td>
-                                                <td>@item.DuesYear</td>
-                                                <td>@item.Explain</td>
-
-                                                @if (@item.PriceCondition)
-                                                {
-                                                    <td>Ödendi</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>Ödenmedi</td>
-                                                }
-                                                <td><i style="cursor:pointer" class="fas fa-wallet"></i></td>
-                                            </tr>
+                                                </tr>
+                                            }
                                         }
+
 
                                     }
 

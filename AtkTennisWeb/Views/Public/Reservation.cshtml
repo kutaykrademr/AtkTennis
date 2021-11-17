@@ -14,15 +14,16 @@
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
     var RoleId = HttpContextAccessor.HttpContext.Session.GetString("RoleId");
-    var times = Model.resTimes.Where(x => x.Restimes60 == 00 && x.ResTimes30 == 00).ToList();
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30).OrderBy(x=>x.ResTimes).ToList();
     var x = times.Count * 4;
 
-    var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati").FirstOrDefault();
-    var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)").FirstOrDefault();
-    var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)").FirstOrDefault();
-    var resSettingsTime2 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Antrenör)").FirstOrDefault();
-    var resSettingsTime3 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Üye)").FirstOrDefault();
-    var resSettingsTime4 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Gün içerisinde Üye için Max Rezervasyon Saati").FirstOrDefault();
+    var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati" && x.CompanyId == CompId).FirstOrDefault();
+    var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)" && x.CompanyId == CompId).FirstOrDefault();
+    var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)" && x.CompanyId == CompId).FirstOrDefault();
+    var resSettingsTime2 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Antrenör)" && x.CompanyId == CompId).FirstOrDefault();
+    var resSettingsTime3 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Üye)" && x.CompanyId == CompId).FirstOrDefault();
+    var resSettingsTime4 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Gün içerisinde Üye için Max Rezervasyon Saati" && x.CompanyId == CompId).FirstOrDefault();
 
     var startTime = start.ReservationValue;
     var finishTime = finish.ReservationValue;
@@ -152,6 +153,7 @@
     var debt2 = String.Format("{0:n}", debt);
 }
 
+<h2 style="display:none" id="compId">@CompId</h2>
 
 <div class="content-wrapper">
     <section class="content">
@@ -164,6 +166,7 @@
                             <div class="align-self-center">
                                 <i style="font-size:60px; margin-right:20px ; color:darkmagenta" class="fas fa-id-card"></i>
                             </div>
+
                             <div class="media-body">
                                 @{
                                     var person = Model.memberLists.Where(x => x.UserId == userId).FirstOrDefault();
@@ -173,8 +176,6 @@
 
                                 <span>@person.UserName</span>
                             </div>
-
-
 
                             <div class="align-self-center">
                                 <h3>Toplam Bakiye: @person.Price ₺<i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-tags"></i></h3>
@@ -239,7 +240,6 @@
                                                     <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
                                                 }
 
-
                                         </tr>
                                     </thead>
 
@@ -252,9 +252,7 @@
                                         {
                                             if (item.CourtConditions == 1)
                                             {
-
                                                 <tr>
-
                                                     <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
 
                                                     @for (int i = 0; i < Model.resTimes.Count; i++)
@@ -1233,12 +1231,13 @@
             PriceIds: '',
             RoleId: '',
             RoleName: '',
+            CompanyId:'',
         }
 
         resobject.ResNowDate = today;
         resobject.ResStartTime = times[0];
         resobject.ResFinishTime = times[(times.length - 1)];
-
+        resobject.CompanyId = $("#compId").text();
         resobject.Price = $("#sumOfPrice").html();
         resobject.ResDate = $("#timeNow").val();
         resobject.ResTime = time;
@@ -1297,6 +1296,7 @@
                         else {
 
                             $('#rsvModal').modal('toggle');
+                            $('#priceModal').modal('toggle');
 
                             swal({
                                 title: "Rezervasyon Onaylanmadı",

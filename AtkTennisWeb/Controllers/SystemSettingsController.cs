@@ -56,12 +56,12 @@ namespace AtkTennisWeb.Controllers
             }
         }
 
-        public JsonResult AddNewRole(string roleName)
+        public JsonResult AddNewRole(string roleName , string compId)
         {
             AppIdentityRoleDto model = new AppIdentityRoleDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewRole?roleName=" + roleName));
+                model = Helpers.Serializers.DeserializeJson<AppIdentityRoleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewRole?roleName=" + roleName + "&compId=" + compId));
 
                 if (model.NormalizedName == null)
 
@@ -177,12 +177,12 @@ namespace AtkTennisWeb.Controllers
 
         //Kort Ayarları
 
-        public JsonResult AddNewCourtType(string courtTypeName)
+        public JsonResult AddNewCourtType(string courtTypeName , string compId)
         {
             CourtRecipeTypeDto model = new CourtRecipeTypeDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtRecipeTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtType?courtTypeName=" + courtTypeName));
+                model = Helpers.Serializers.DeserializeJson<CourtRecipeTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtType?courtTypeName=" + courtTypeName + "&compId=" + compId));
 
                 if (model != null)
 
@@ -257,12 +257,14 @@ namespace AtkTennisWeb.Controllers
         }
 
 
-        public JsonResult AddNewCourt(string courtName, string courtType, int AddcourtCondition, int AddcourtWebCondition, string courtStartTime, string courtFinishTime, string courtTimePeriod)
+
+
+        public JsonResult AddNewCourt(string courtName, string courtType, string compId , int AddcourtCondition, int AddcourtWebCondition, string courtStartTime, string courtFinishTime, string courtTimePeriod)
         {
             CourtDto model = new CourtDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourt?courtName=" + courtName + "&courtType=" + courtType + "&courtCondition=" + AddcourtCondition + "&courtWebCondition=" + AddcourtWebCondition
+                model = Helpers.Serializers.DeserializeJson<CourtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourt?courtName=" + courtName + "&courtType=" + courtType + "&compId=" + compId + "&courtCondition=" + AddcourtCondition + "&courtWebCondition=" + AddcourtWebCondition
                     + "&courtStartTime=" + courtStartTime + "&courtFinishTime=" + courtFinishTime + "&courtTimePeriod=" + courtTimePeriod));
 
                 if (model.CourtName == null)
@@ -343,12 +345,12 @@ namespace AtkTennisWeb.Controllers
 
 
         //Kort Ücret Ayarları
-        public JsonResult AddNewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition , string month , string time, string day , string recipeTypeId)
+        public JsonResult AddNewCourtPriceList(string recipeName, string compId , int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition , string month , string time, string day , string recipeTypeId)
         {
             CourtPriceListDto model = new CourtPriceListDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtPriceListDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtPriceList?recipeName=" + recipeName + "&recipeTypeId=" + recipeTypeId + "&time=" + time + "&day=" + day + "&month=" + month + "&recipePrice=" + recipePrice + "&recipePriceType=" + recipePriceType + "&courtRecipeType=" + courtRecipeType + "&recipeCondition=" + recipeCondition));
+                model = Helpers.Serializers.DeserializeJson<CourtPriceListDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/NewCourtPriceList?recipeName=" + recipeName + "&recipeTypeId=" + recipeTypeId + "&time=" + time + "&compId=" + compId + "&day=" + day + "&month=" + month + "&recipePrice=" + recipePrice + "&recipePriceType=" + recipePriceType + "&courtRecipeType=" + courtRecipeType + "&recipeCondition=" + recipeCondition));
 
                 if (model == null)
 
@@ -488,12 +490,12 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult AddNewCourtScale(string scaleColor, string scaleName , string scaleCode)
+        public JsonResult AddNewCourtScale(string scaleColor, string compId , string scaleName , string scaleCode)
         {
             CourtScaleDto model = new CourtScaleDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CourtScaleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddNewCourtScale?scaleColor=" + scaleColor.Replace("#" , "") + "&scaleName=" + scaleName + "&scaleCode=" + scaleCode));
+                model = Helpers.Serializers.DeserializeJson<CourtScaleDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddNewCourtScale?scaleColor=" + scaleColor.Replace("#" , "") + "&scaleName=" + scaleName + "&compId=" + compId + "&scaleCode=" + scaleCode));
 
                 if (model == null)
 
@@ -1139,13 +1141,13 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
-        public JsonResult AddCabinetType(string type, int price)
+        public JsonResult AddCabinetType(string type, int price ,string compId)
 
         {
             CabinetTypesDto model = new CabinetTypesDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddCabinetType?type=" + type + "&price=" + price));
+                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddCabinetType?type=" + type + "&price=" + price + "&compId=" + compId ));
 
                 if (model == null)
 
@@ -1206,13 +1208,13 @@ namespace AtkTennisWeb.Controllers
 
 
 
-        public JsonResult AddCabinets(string code, string cabType)
+        public JsonResult AddCabinets(string code, string cabType , string compId)
 
         {
             CabinetOperationsDto model = new CabinetOperationsDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CabinetOperationsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddCabinets?code=" + code + "&cabType=" + cabType));
+                model = Helpers.Serializers.DeserializeJson<CabinetOperationsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddCabinets?code=" + code + "&cabType=" + cabType + "&compId=" + compId));
 
                 if (model == null)
 
@@ -1245,15 +1247,30 @@ namespace AtkTennisWeb.Controllers
             return Json(true);
         }
 
+        public JsonResult ControlMemberDebtSettings(string isChecked , string compId)
+        {
+            MemberCanDebtDto model = new MemberCanDebtDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberCanDebtDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/ControlMemberDebtSettings?isChecked=" + isChecked + "&compId=" + compId));
+                if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new MemberCanDebtDto();
+            }
 
+            return Json(true);
+        }
 
-        public JsonResult AddDiscountType(int age, int year , int discount)
+        public JsonResult AddDiscountType(int age, int year , int discount , string compId)
 
         {
             MemberDuesTypeDto model = new MemberDuesTypeDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddDiscountType?age=" + age + "&year=" + year + "&discount=" + discount));
+                model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/AddDiscountType?age=" + age + "&year=" + year + "&discount=" + discount + "&compId=" + compId));
 
                 if (model == null)
 
@@ -1288,6 +1305,7 @@ namespace AtkTennisWeb.Controllers
         }
 
         #endregion
+
     }
 }
 

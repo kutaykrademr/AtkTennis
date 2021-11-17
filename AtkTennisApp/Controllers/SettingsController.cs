@@ -30,9 +30,18 @@ namespace AtkTennisApp.Controllers
             {
 
 
-
                 appLogList = Serializers.DeserializeJson<MutualsConstantsDto>(Helpers.Request.Get(Mutuals.AdminUrl + "Product/GetMySettings?MyIp=" + companyId));
-                appLogList.UserSettingsList = new List<Helpers.Dto.ViewDtos.UserSettingsDto>();
+
+                if (appLogList != null)
+                {
+                    appLogList.UserSettingsList = new List<Helpers.Dto.ViewDtos.UserSettingsDto>();
+                }
+
+                else
+                {
+                    return Json("false");
+                }
+              
                 var a = db.userSettings.ToList();
                 foreach (var item in a)
                 {

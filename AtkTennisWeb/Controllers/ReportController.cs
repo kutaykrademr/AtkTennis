@@ -33,6 +33,7 @@ namespace AtkTennisWeb.Controllers
             public List<MemberListDto> memberLists { get; set; } = new List<MemberListDto>();
             public List<DuesPaymentInfoDto> duesInf { get; set; } = new List<DuesPaymentInfoDto>();
             public List<ReservationDto> res { get; set; } = new List<ReservationDto>();
+           
         }
 
         public JsonResult GetDuesPayment(int id)

@@ -22,6 +22,7 @@ namespace AtkTennisApp.Controllers
             public List<MemberList> memberLists { get; set; } = new List<MemberList>();
             public List<DuesPaymentInfo> duesInf { get; set; } = new List<DuesPaymentInfo>();
             public List<Reservation> res { get; set; } = new List<Reservation>();
+           
         }
 
         public class DuesPaymentInfo

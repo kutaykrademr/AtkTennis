@@ -109,18 +109,54 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="card card-white register-card-body">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between">
                             <h3 style="color:gray" class="card-title">Kişisel Bilgiler</h3>
+
+                            @{
+                                if (Model.memberLists.ActPas == false)
+                                {
+                                    <div id="actChecked" class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="act">
+                                        <label class="custom-control-label" for="act">Pasif</label>
+
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div id="actChecked" class="custom-control custom-switch">
+                                        <input checked type="checkbox" class="custom-control-input" id="act">
+                                        <label class="custom-control-label" for="act">Aktif</label>
+                                    </div>
+                                }
+
+                            }
+
                         </div>
                         <div class="row">
 
                             <div class="card-body col-lg-6">
-                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı / Rolü</strong>
 
+                                <strong><i class="fas fa-book mr-1"></i>Rolü</strong>
+
+                                <div class="form-group">
+
+                                    <select id="RegistersRole" class="select2bs4" multiple="multiple" data-placeholder="Role Seçimi Yapınız" style="width: 100%;">
+                                        <option disabled="disabled" selected>@Model.memberLists.Role,</option>
+                                    
+                                        @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                                        {
+                                            <option value="@Model.AppIdentityRoles[i].Name">@Model.AppIdentityRoles[i].Name,</option>
+                                        }
+
+                                    </select>
+                                </div>
+
+                                <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı </strong>
                                 <div class="row">
-                                    <div class="input-group col-md-7">
+                                    <div class="input-group col-md-12">
                                         <input type="text" class="form-control" placeholder="Adı - Soyadı" id="name" value="@Model.memberLists.FullName" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
@@ -129,16 +165,30 @@
                                         </div>
                                     </div>
 
-                                    <div class="input-group col-md-5">
-                                        <select id="RegistersRole" class="form-control">
-                                            <option disabled="disabled" selected>@Model.memberLists.Role</option>
-                                            @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
-                                            {
-                                                <option>@Model.AppIdentityRoles[i].Name</option>
-                                            }
 
-                                        </select>
-                                    </div>
+                                    @*<div class="form-group col-md-5">
+                <select id="RegistersRole" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Role Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
+
+                    <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                    @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                    {
+                        <option>@Model.AppIdentityRoles[i].Name</option>
+                    }
+
+                </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--focus" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Role Seçimi Yapınız" style="width: 815px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+            </div>*@
+
+                                    @*<div class="input-group col-md-5">
+                <select id="RegistersRole" class="form-control">
+                    <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                    @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                    {
+                        <option>@Model.AppIdentityRoles[i].Name</option>
+                    }
+
+                </select>
+            </div>*@
+
                                 </div>
 
 
@@ -478,7 +528,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-4">
 
                     <div class="card card-white">
                         <div class="card-header">
@@ -954,8 +1004,18 @@
             .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
 
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+
 
     });
+
+    $("input[data-bootstrap-switch]").each(function () {
+        $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    });
+
+
     function getNickName2() {
 
         var name = $("#partnerName").val();
@@ -1108,11 +1168,11 @@
 
     userObj = {
 
-    
+
 
         memberNumber2: null,
         nickName2: null,
-        username2: null,     
+        username2: null,
         startDate2: null,
         finishDate2: null,
         partnerName: null,
@@ -1120,17 +1180,17 @@
         partnerIdNumber: null,
         partnerBirthDate: null,
         password2: null,
-        id:null,
+        id: null,
 
     };
 
-   
+
     function addPartner(id) {
 
         $('#addPartnerModal').modal('toggle');
 
         $("#addPartOp button:nth-of-type(2)").attr("id", id);
- 
+
     }
 
     function addOpPartner(id) {
@@ -1363,11 +1423,12 @@
             password: null,
             gender: null,
             checkpass: null,
-
+            actChecked: null,
         };
 
         debugger;
-
+        
+        userObj.actPass = $("#actChecked input").prop('checked');
         userObj.checkpass = $("#password").val();
         userObj.id = id;
         userObj.name = $("#name").val();

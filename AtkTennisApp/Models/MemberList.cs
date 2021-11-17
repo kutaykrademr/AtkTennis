@@ -43,6 +43,7 @@ namespace AtkTennisApp.Models
         public string ReferenceMember1 { get; set; }
         public string ReferenceMember2 { get; set; }
         public string CompanyId { get; set; }
+        public bool whoPartner { get; set; }
    
         public string RoleId { get; set; }
 

@@ -9,6 +9,7 @@ namespace Helpers.Dto.ViewDtos
         public int CabinetOpId { get; set; }
         public string CabinetCode { get; set; }
         public string CabinetOpTypes { get; set; }
-    
+        public string CompanyId { get; set; }
+
     }
 }

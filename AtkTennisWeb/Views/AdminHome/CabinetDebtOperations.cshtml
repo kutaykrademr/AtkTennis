@@ -10,8 +10,10 @@
 
 @{
     var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 <h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@compId</h2>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -172,6 +174,8 @@
 
     findMemberTotal();
 
+    var compId = $("#compId").text();
+
     function dataTable() {
 
         $('#resList').DataTable({
@@ -188,7 +192,6 @@
             .buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
     }
 
-
     function findMemberTotal() {
 
         $.ajax({
@@ -204,7 +207,9 @@
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                    if (res.memberLists[i].companyId == compId) {
+                        mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                    }
                 }
 
                 $("#memFind").autocomplete({
@@ -223,8 +228,6 @@
 
     function getList() {
 
-
-
         $.ajax({
             type: "Get",
             url: '../Public/UserList',
@@ -240,7 +243,7 @@
 
 
                 var memberInf = Enumerable.from(res.memberLists)
-                    .where(function (x) { return x.memberNumber == memNum.trim() })
+                    .where(function (x) { return x.memberNumber == memNum.trim() && x.companyId == compId })
                     .select(function (x) { return x }).toArray();
 
 
@@ -288,7 +291,7 @@
 
                             for (var i = 0; i < res.memberDuesInfTables.length; i++) {
 
-                                if (res.memberDuesInfTables[i].duesInfType == true && res.memberDuesInfTables[i].priceCondition == false) {
+                                if (res.memberDuesInfTables[i].duesInfType == true && res.memberDuesInfTables[i].priceCondition == false && res.memberDuesInfTables[i].companyId == compId) {
 
                            
                                     row += '<tr style="text-align:center" id="">';
@@ -444,7 +447,7 @@
                     url: '../AdminHome/GetPaid',
                     cache: false,
                     dataType: "json",
-                    data: { "userId": userId, "refId": id, "refType": 3, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                    data: { "userId": userId, "compId": compId , "refId": id, "refType": 3, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
                     async: true,
                     success: function (res) {
 

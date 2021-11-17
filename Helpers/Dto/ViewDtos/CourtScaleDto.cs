@@ -10,5 +10,6 @@ namespace Helpers.Dto.ViewDtos
         public string Name { get; set; }
         public string Code { get; set; }
         public string Color { get; set; }
+        public string CompanyId { get; set; }
     }
 }

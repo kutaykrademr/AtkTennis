@@ -1,6 +1,13 @@
 ﻿
 @model List<Helpers.Dto.ViewDtos.MemberListDto>;
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
 <style>
     button {
         border: none !important;
@@ -33,7 +40,7 @@
 
                 <div class="col-md-12">
                     <div class="card">
-                        <section class="content">
+                        <section style="background-color:#408000c4; color:white;" class="content">
                             <div class="container-fluid">
                                 <div style="margin-top:10px" class="media-body">
                                     <h3>Aktif Kullanıcı Listeleri</h3>
@@ -59,18 +66,26 @@
 
                                     @foreach (var item in Model)
                                     {
-                                        <tr style="text-align:center" id="">
-                                            <td>@item.FullName</td>
-                                            <td>@item.Email</td>
-                                            <td>@item.Phone</td>
-                                            <td>@item.Role</td>
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            if (item.ActPas == true)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item.FullName</td>
+                                                    <td>@item.Email</td>
+                                                    <td>@item.Phone</td>
+                                                    <td>@item.Role</td>
 
 
-                                            <td>
-                                                <button class="btn btn-outline-dark" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
-                                            </td>
+                                                    <td>
+                                                        <button class="btn btn-outline-dark" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
+                                                    </td>
 
-                                        </tr>
+                                                </tr>
+                                            }
+                                        }
+
+
                                     }
 
 
@@ -85,7 +100,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <section class="content">
+                        <section class="content" style="background-color: #c10036;color: white;">
                             <div class="container-fluid">
                                 <div style="margin-top:10px" class="media-body">
                                     <h3>Pasif Kullanıcı Listeleri</h3>
@@ -95,7 +110,7 @@
 
 
                         <div class="card-body">
-                            <table id="example3" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover">
 
 
                                 <thead>
@@ -113,20 +128,25 @@
 
                                     @foreach (var item in Model)
                                     {
-                                        if (item.ActPas == true)
+                                        if (item.CompanyId == CompId)
                                         {
-                                            <tr style="text-align:center" id="">
-                                                <td>@item.FullName</td>
-                                                <td>@item.Email</td>
-                                                <td>@item.Phone</td>
-                                                <td>@item.Role</td>
+                                            if (item.ActPas == false)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item.FullName</td>
+                                                    <td>@item.Email</td>
+                                                    <td>@item.Phone</td>
+                                                    <td>@item.Role</td>
+                                                    <td>Pasif</td>
 
-                                                <td>
-                                                    <button class="btn btn-outline-dark" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
-                                                </td>
+                                                    <td>
+                                                        <button class="btn btn-outline-dark" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
+                                                    </td>
 
-                                            </tr>
+                                                </tr>
+                                            }
                                         }
+
                                     }
 
                                 </tbody>
@@ -134,8 +154,6 @@
                         </div>
                     </div>
                 </div>
-
-                
             </div>
         </div>
     </section>
@@ -158,20 +176,6 @@
             "buttons": ["print"]
         })
             .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
-
-
-        $('#example3').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "pageLength": 5,
-            "buttons": ["print"]
-        })
-            .buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
 
 
     });
@@ -249,10 +253,10 @@
     var options2 = {
         series: [{
             name: 'Aktif Sayısı',
-            data: [44 ,22, 33]
+            data: [44, 22, 33]
         }, {
             name: 'Pasif Sayısı',
-            data: [120 ,12 , 27]
+            data: [120, 12, 27]
         }],
 
         colors: ['#7CB342', '#558B2F'],
@@ -279,7 +283,7 @@
             colors: ['transparent']
         },
         xaxis: {
-            categories: ['Üyeler' , 'Öğrenciler' , 'Personeller'],
+            categories: ['Üyeler', 'Öğrenciler', 'Personeller'],
         },
         yaxis: {
             title: {

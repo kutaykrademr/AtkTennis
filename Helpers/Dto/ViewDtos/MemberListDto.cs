@@ -40,6 +40,7 @@ namespace Helpers.Dto.ViewDtos
         public string DetailAddress { get; set; }
         public string ReferenceMember1 { get; set; }
         public string ReferenceMember2 { get; set; }
+        public bool whoPartner { get; set; }
 
 
 
@@ -49,6 +50,7 @@ namespace Helpers.Dto.ViewDtos
 
 
         public bool ActPas { get; set; }
+        public string CompanyId { get; set; }
 
     }
 }

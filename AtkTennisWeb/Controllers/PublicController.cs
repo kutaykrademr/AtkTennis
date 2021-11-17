@@ -31,7 +31,7 @@ namespace AtkTennisWeb.Controllers
 
                 model = Helpers.Serializers.DeserializeJson<Helpers.Dto.SignInDto>(Helpers.Request.Get(url));
 
-                if (model == null)
+                if (model.custom_role == null)
                 {
                     return Json("false");
                 }
@@ -73,10 +73,20 @@ namespace AtkTennisWeb.Controllers
                     {
                         HttpContext.Session.SetString("UserName", model.UserName);
                         HttpContext.Session.SetString("UserId", model.custom_userid);
-                        HttpContext.Session.SetString("FullName", model.custom_name);
+
+                        if (model.custom_nickName == null || model.custom_name == null)
+                        {
+                            HttpContext.Session.SetString("FullName", "Sistem Kurulum");
+                            HttpContext.Session.SetString("NickName", "SS");
+                        }
+                        else
+                        {
+                            HttpContext.Session.SetString("FullName", model.custom_name);
+                            HttpContext.Session.SetString("NickName", model.custom_nickName);
+                        }
+                       
                         HttpContext.Session.SetString("Role", model.custom_role[0]);
                         HttpContext.Session.SetString("RoleId", model.custom_roleId[0]);
-                        HttpContext.Session.SetString("NickName", model.custom_nickName);
                         HttpContext.Session.SetString("CompId", model.comp_Id);
 
                         return Json(model);
@@ -392,7 +402,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&RoleName=" + res.RoleName + "&RoleId=" + res.RoleId ));
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/NewReservation?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&CompanyId=" + res.CompanyId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&RoleName=" + res.RoleName + "&RoleId=" + res.RoleId ));
 
             }
             catch (Exception)

@@ -1,5 +1,14 @@
 ﻿@model Helpers.Dto.PartialViewDtos.GeneralDebtViewDto;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
+
+@{
+    var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+<h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@compId</h2>
 
 
 <div class="content-wrapper">
@@ -33,7 +42,7 @@
                             <div class="card-body">
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Üye Ara:</label>                        
+                                    <label for="exampleInputEmail1">Üye Ara:</label>
                                     <input id="findMember" style="height:38px" type="search" class="form-control form-control-sm ui-autocomplete-input" placeholder="Üye Ara" aria-controls="example2" autocomplete="off">
                                 </div>
 
@@ -48,6 +57,7 @@
 
                                         <option>Yıllık Aidat Ücreti</option>
                                         <option>Yıllık Eş Aidat Ücreti</option>
+                                        <option>Geçiçi Üye Ücreti</option>
 
                                     </select>
                                 </div>
@@ -81,7 +91,7 @@
                             </div>
                         </div>
                     </div>
-                </div>        
+                </div>
             </div>
         </div>
     </section>
@@ -113,7 +123,7 @@
                     source: mem,
                 });
 
-               
+
 
             },
 
@@ -131,6 +141,7 @@
         var duesYear = $("#duesYear option:selected").val();
         var duesPrice = $("#duesPrice").val();
         var explain = $("#explain").val();
+        var compId = $("compId").text();
 
 
         if (duesType == "" || duesYear == "" || duesPrice == "" || explain == "" || memNum == "") {
@@ -153,7 +164,7 @@
                 type: "GET",
                 url: '../AdminHome/AddDuesSingle',
                 cache: false,
-                data: { "duesType": duesType, "duesPrice": duesPrice, "duesYear": duesYear, "explain": explain, "memNum": memNum },
+                data: { "duesType": duesType, "compId": compId, "duesPrice": duesPrice, "duesYear": duesYear, "explain": explain, "memNum": memNum },
                 dataType: "json",
                 async: true,
                 success: function (res) {

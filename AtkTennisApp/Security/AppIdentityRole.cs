@@ -10,7 +10,7 @@ namespace AtkTennisApp.Security
     public class AppIdentityRole : IdentityRole
     {
         public string Description { get; set; }
+        public string CompanyId { get; set; }
 
-   
     }
 }

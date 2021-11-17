@@ -24,5 +24,6 @@ namespace Helpers.Dto.ViewDtos
         public string? CancelResUserId { get; set; }
         public bool Procedure { get; set; }
         public string CancelReasons { get; set; }
+        public string CompanyId { get; set; }
     }
 }

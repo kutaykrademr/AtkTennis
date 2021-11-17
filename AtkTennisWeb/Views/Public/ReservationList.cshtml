@@ -12,6 +12,7 @@
     var nickname = HttpContextAccessor.HttpContext.Session.GetString("NickName");
     var username = HttpContextAccessor.HttpContext.Session.GetString("UserName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 
 @{
@@ -20,14 +21,14 @@
 
 
 
-    var newModel = Model.reservations.Where(x => x.UserId == userId).OrderByDescending(x => x.ResId).ToList();
-    var newResCancelModel = Model.reservationCancels.Where(x => x.UserId == userId).OrderByDescending(x => x.ResId).ToList();
+    var newModel = Model.reservations.Where(x => x.UserId == userId && x.CompanyId == compId).OrderByDescending(x => x.ResId).ToList();
+    var newResCancelModel = Model.reservationCancels.Where(x => x.UserId == userId && x.CompanyId == compId).OrderByDescending(x => x.ResId).ToList();
 
     var newCount = newModel.Count();
 
-    var yx = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+    var yx = Model.reservations.Where(x => x.UserId == userId && x.CompanyId == compId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
 
-    var dateCancel = Model.reservationCancels.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
+    var dateCancel = Model.reservationCancels.Where(x => x.UserId == userId && x.CompanyId == compId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
 
     yx.AddRange(dateCancel);
 
@@ -56,13 +57,13 @@
 
     var generalTotalPrice = totPrice + totalPrice;
 
-    var debtCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false).Count());
-    var debtCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false).Count());
-    var debtNotCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true).Count());
-    var debtNotCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == true && x.Procedure == true).Count());
+    var debtCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false && x.CompanyId == compId).Count());
+    var debtCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false && x.CompanyId == compId).Count());
+    var debtNotCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true && x.CompanyId == compId).Count());
+    var debtNotCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == true && x.Procedure == true && x.CompanyId == compId).Count());
     var totalDebt = debtCount + debtCountCancel;
     var totalDebtNotCount = debtNotCount + debtNotCountCancel;
-    var cancelRes = Model.reservationCancels.Where(x => x.UserId == userId && x.CancelRes == true).Count();
+    var cancelRes = Model.reservationCancels.Where(x => x.UserId == userId && x.CancelRes == true && x.CompanyId == compId).Count();
 
 }
 <div class="content-wrapper">

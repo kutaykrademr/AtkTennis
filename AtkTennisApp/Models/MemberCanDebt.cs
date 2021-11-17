@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace AtkTennisApp.Models
 {
-    public class ReservationSettings
+    public class MemberCanDebt
     {
         [Key]
-        public int? ReservationSettingsId { get; set; }
-        public string ReservationSettingsInf { get; set; }
-        public string ReservationValue { get; set; }
+        public int MemberCanDebtId { get; set; }
+        public bool CanDebt { get; set; }      
         public string CompanyId { get; set; }
     }
 }

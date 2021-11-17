@@ -1,75 +1,86 @@
 ﻿@model Helpers.Dto.PartialViewDtos.IdentityPartialViewDto;
 
-    <style>
-        button {
-            border: none !important;
-        }
-    </style>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 
-    <div class="content-wrapper">
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Kullanıcılar</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">DataTables</li>
-                        </ol>
-                    </div>
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
+
+<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kullanıcılar</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
 
 
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
 
-                            <section class="content">
-                                <div class="container-fluid">
-                                    <div class="card" style="border-radius:40px; margin-top:20px">
-                                        <div class="card-content">
-                                            <div class="card-body cleartfix">
-                                                <div class="media align-items-stretch">
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card" style="border-radius:40px; margin-top:20px">
+                                    <div class="card-content">
+                                        <div class="card-body cleartfix">
+                                            <div class="media align-items-stretch">
 
-                                                    <div style="margin-top:10px" class="media-body">
-                                                        <h3>Kullanıcı Listeleri</h3>
-                                                    </div>
+                                                <div style="margin-top:10px" class="media-body">
+                                                    <h3>Kullanıcı Listeleri</h3>
+                                                </div>
 
-                                                    <div class="align-self-center">
-                                                        <a href="~/AdminHome/NewRegister"><h3><i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-plus"></i></h3></a>
-                                                    </div>
+                                                <div class="align-self-center">
+                                                    <a href="~/AdminHome/NewRegister"><h3><i style="font-size:25px; margin-left:10px ; color:darkmagenta" class="fas fa-plus"></i></h3></a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </section>
+                            </div>
+                        </section>
 
 
-                            <div class="card-body">
-                                <table id="example1" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr style="text-align:center">
-                                            <th>Adı </th>
-                                            <th>E-Mail</th>
-                                            <th>Telefon Numarası</th>
-                                            <th>Role</th>
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Adı </th>
+                                        <th>E-Mail</th>
+                                        <th>Telefon Numarası</th>
+                                        <th>Role</th>
 
-                                            <th>İşlemler</th>
+                                        <th>İşlemler</th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                        @foreach (var item in Model.memberLists)
+                                    @foreach (var item in Model.memberLists)
+                                    {
+                                        if (item.CompanyId == CompId && item.ActPas == true)
                                         {
                                             <tr style="text-align:center" id="">
                                                 <td>@item.FullName</td>
@@ -77,9 +88,8 @@
                                                 <td>@item.Phone</td>
                                                 <td>@item.Role</td>
 
-
                                                 <td>
-                                                   
+
                                                     <button class="btn btn-outline-warning" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
                                                     <button class="btn btn-outline-danger" id="@item.UserId" onclick="openDeleteUserModal(this.id) "><i class="fas fa-trash"></i></button>
 
@@ -88,464 +98,568 @@
                                             </tr>
                                         }
 
+                                    }
 
-                                    </tbody>
-                                </table>
-                            </div>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
-    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="card">
-                        <div class="card-body register-card-body">
-                            <p class="login-box-msg">Kayıt Formu </p>
-                            <div>
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body register-card-body">
+                        <p class="login-box-msg">Kayıt Formu </p>
+                        <div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input placeholder="Bitiş Tarihi" type="text" class="form-control" id="finishDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <select id="RegistersRole" class="form-control">
-                                            <option disabled="disabled" selected>Türü</option>
-                                            @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Başlangıç Tarihi" type="text" class="form-control" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Bitiş Tarihi" type="text" class="form-control" id="finishDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <select id="RegistersRole" class="form-control">
+                                        <option disabled="disabled" selected>Türü</option>
+                                        @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+
+                                        {
+                                            if (Model.AppIdentityRoles[i].CompanyId == CompId)
                                             {
                                                 <option>@Model.AppIdentityRoles[i].NormalizedName</option>
                                             }
 
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <select id="condition" class="form-control">
-                                            <option disabled="disabled" selected>Durumu</option>
-                                            <option>Faal</option>
-                                            <option>Çıkan</option>
-                                            <option>Dondurulmuş</option>
-                                            <option>Fahri</option>
-                                            <option>İstifa</option>
-                                            <option>Onur</option>
-                                            <option>Vefat</option>
-                                            <option>Belirtilmemiş</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                        }
 
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="email" class="form-control" placeholder="T.C Kimlik" id="identificationNumber" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-envelope"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <select id="webReservation" class="form-control">
-                                            <option disabled="disabled" selected>Web Rezervasyon</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <select id="condition" class="form-control">
+                                        <option disabled="disabled" selected>Durumu</option>
+                                        <option>Faal</option>
+                                        <option>Çıkan</option>
+                                        <option>Dondurulmuş</option>
+                                        <option>Fahri</option>
+                                        <option>İstifa</option>
+                                        <option>Onur</option>
+                                        <option>Vefat</option>
+                                        <option>Belirtilmemiş</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                                            <option value="1">Yapabilir</option>
-                                            <option value="2">Yapamaz</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input placeholder="Telefon No" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="phone2Exp" placeholder="Tel Açıklama" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-envelope"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="birthPlace" placeholder="Doğum Yeri" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="job" placeholder="Meslek" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="note" placeholder="Not" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="password" placeholder="Password" autocomplete="new-password">
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="email" class="form-control" placeholder="T.C Kimlik" id="identificationNumber" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
-                                            <span class="fas fa-lock"></span>
+                                            <span class="fas fa-envelope"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div style="visibility:hidden" class="input-group mb-3">
-                                    <input type="text" class="form-control" id="checkpassword" placeholder="Retype password" autocomplete="new-password">
+                                <div class="form-group col-md-6">
+                                    <select id="webReservation" class="form-control">
+                                        <option disabled="disabled" selected>Web Rezervasyon</option>
+
+                                        <option value="1">Yapabilir</option>
+                                        <option value="2">Yapamaz</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Telefon No" id="phone" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="phoneExp" placeholder="Tel Açıklama" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
-                                            <span class="fas fa-lock"></span>
+                                            <span class="fas fa-user"></span>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Telefon No" id="phone2" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="phone2Exp" placeholder="Tel Açıklama" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="emailExp" placeholder="Email Açıklama" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input placeholder="Doğum Tarihi" id="birthdate" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" autocomplete="new-password">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="birthPlace" placeholder="Doğum Yeri" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="motherName" placeholder="Anne Adı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="fatherName" placeholder="Baba Adı" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="city" placeholder="Şehir" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="district" placeholder="İlçe" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="job" placeholder="Meslek" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="note" placeholder="Not" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="password" placeholder="Password" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="visibility:hidden" class="input-group mb-3">
+                                <input type="text" class="form-control" id="checkpassword" placeholder="Retype password" autocomplete="new-password">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" id="updateModel">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" onclick="updateMemberList(this.id)">Güncelle</button>
-                </div>
+            </div>
+            <div class="modal-footer" id="updateModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="updateMemberList(this.id)">Güncelle</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="openDeleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Silmek İstediğinize Emin Misiniz ?
-                </div>
-                <div class="modal-footer" id="deleteOperationModel">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" onclick="deleteUser(this.id)">Sil</button>
-                </div>
+<div class="modal fade" id="openDeleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Silmek İstediğinize Emin Misiniz ?
+            </div>
+            <div class="modal-footer" id="deleteOperationModel">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="deleteUser(this.id)">Sil</button>
             </div>
         </div>
     </div>
+</div>
 
 
-    <script>
-        $(document).ready(function () {
-
-
-
-            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-            $('[data-mask]').inputmask()
-            $('#reservationdate').datetimepicker({
-                format: 'L'
-            });
+<script>
+    $(document).ready(function () {
 
 
 
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": [/*"copy", "csv", "excel",*/ "pdf", "print"/*, "colvis"*/]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-            $('#example2 , #example3 , #example4').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        $('[data-mask]').inputmask()
+        $('#reservationdate').datetimepicker({
+            format: 'L'
         });
 
-        function openDeleteUserModal(id) {
-
-            $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
-            $("#openDeleteUserModal").modal("toggle");
-
-        }
-
-        function deleteUser(id) {
-
-            $.ajax({
-                type: "POST",
-                url: '../AdminHome/DeleteUser',
-                cache: false,
-                data: { "id": id },
-                dataType: "json",
-                async: true,
-                success: function (res) {
 
 
-                    if (res != false) {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": [/*"copy", "csv", "excel",*/ "pdf", "print"/*, "colvis"*/]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-                        $("#openDeleteUserModal").modal("toggle");
+        $('#example2 , #example3 , #example4').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
 
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Kullanıcı başarıyla silindi.",
-                            buttons: {
-                                TAMAM: function () {
+    });
 
-                                    window.location.href = "ListUser"
-                                }
+    function openDeleteUserModal(id) {
+
+        $("#deleteOperationModel button:nth-of-type(2)").attr("id", id);
+        $("#openDeleteUserModal").modal("toggle");
+
+    }
+
+    function deleteUser(id) {
+
+        $.ajax({
+            type: "POST",
+            url: '../AdminHome/DeleteUser',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                if (res != false) {
+
+                    $("#openDeleteUserModal").modal("toggle");
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Kullanıcı başarıyla silindi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                window.location.href = "ListUser"
                             }
-                        });
-                    }
+                        }
+                    });
+                }
 
-                    else {
-                        $.confirm({
-                            title: "Uyarı",
-                            content: "Bir Hata Oluştu.",
-                            buttons: {
-                                TAMAM: function () {
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Bir Hata Oluştu.",
+                        buttons: {
+                            TAMAM: function () {
 
-                                }
                             }
-                        });
-                    }
+                        }
+                    });
+                }
 
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function openUpdateModal(id) {
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/GetMemberList',
+            cache: false,
+            data: { "id": id },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                if (res != null) {
+
+                    $("#name").val(res.fullName);
+                    $("#username").val(res.userName);
+                    $("#startDate").val(res.startDate);
+                    $("#finishDate").val(res.finishDate);
+                    $("#RegistersRole option:selected").text(res.role);
+                    $("#condition option:selected").text(res.condition);
+                    $("#identificationNumber").val(res.identityNumber);
+                    $("#webReservation option:selected").text(res.webReservation);
+                    $("#phone").val(res.phone);
+                    $("#phoneExp").val(res.phoneExp);
+                    $("#phone2").val(res.phone2);
+                    $("#phone2Exp").val(res.phone2Exp);
+                    $("#email").val(res.email);
+                    $("#emailExp").val(res.emailExp);
+                    $("#birthdate").val(res.birthDate);
+                    $("#birthPlace").val(res.birthPlace);
+                    $("#motherName").val(res.motherName);
+                    $("#fatherName").val(res.fatherName);
+                    $("#city").val(res.city);
+                    $("#district").val(res.district);
+                    $("#job").val(res.job);
+                    $("#note").val(res.note);
+                    $("#password").val(res.password);
+                    $("#checkpassword").val(res.password);
+
+
+                    $("#updateModel button:nth-of-type(2)").attr("id", id);
+                    $('#updateModal').modal('toggle');
+                }
+
+                else {
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Üye Bulunamadı.",
+                        buttons: {
+                            TAMAM: function () {
+
+                            }
+                        }
+                    });
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function updateMemberList(id) {
+
+        userObj = {
+
+            id: null,
+            name: null,
+            username: null,
+            startDate: null,
+            finishDate: null,
+            role: null,
+            condition: null,
+            identificationNumber: null,
+            webReservation: null,
+            phone: null,
+            phoneExp: null,
+            phone2: null,
+            phone2Exp: null,
+            email: null,
+            emailExp: null,
+            birthdate: null,
+            birthPlace: null,
+            motherName: null,
+            fatherName: null,
+            city: null,
+            district: null,
+            job: null,
+            note: null,
+            password: null,
+            gender: null,
+            checkpass: null,
+
+        };
+
+
+
+        if ($("#RegistersRole option:nth-of-type(1)").text() == $("#select2-RegistersRole-container").text()) {
+
+            $.confirm({
+                title: "Uyarı",
+                content: "Lütfen Rol Seçiniz",
+                buttons: {
+                    TAMAM: function () {
+
+
+                    }
                 }
             });
-        }
 
-        function openUpdateModal(id) {
-            $.ajax({
-                type: "GET",
-                url: '../AdminHome/GetMemberList',
-                cache: false,
-                data: { "id": id },
-                dataType: "json",
-                async: true,
-                success: function (res) {
+        } else {
 
 
-                    if (res != null) {
 
-                        $("#name").val(res.fullName);
-                        $("#username").val(res.userName);
-                        $("#startDate").val(res.startDate);
-                        $("#finishDate").val(res.finishDate);
-                        $("#RegistersRole option:selected").text(res.role);
-                        $("#condition option:selected").text(res.condition);
-                        $("#identificationNumber").val(res.identityNumber);
-                        $("#webReservation option:selected").text(res.webReservation);
-                        $("#phone").val(res.phone);
-                        $("#phoneExp").val(res.phoneExp);
-                        $("#phone2").val(res.phone2);
-                        $("#phone2Exp").val(res.phone2Exp);
-                        $("#email").val(res.email);
-                        $("#emailExp").val(res.emailExp);
-                        $("#birthdate").val(res.birthDate);
-                        $("#birthPlace").val(res.birthPlace);
-                        $("#motherName").val(res.motherName);
-                        $("#fatherName").val(res.fatherName);
-                        $("#city").val(res.city);
-                        $("#district").val(res.district);
-                        $("#job").val(res.job);
-                        $("#note").val(res.note);
-                        $("#password").val(res.password);
-                        $("#checkpassword").val(res.password);
+            userObj.checkpass = $("#checkpassword").val();
+            userObj.id = id;
+            userObj.name = $("#name").val();
+            userObj.username = $("#username").val();
+            userObj.startDate = $("#startDate").val();
+            userObj.finishDate = $("#finishDate").val();
+            userObj.role = $("#RegistersRole option:selected").text();
+            userObj.condition = $("#condition option:selected").text();
+            userObj.identificationNumber = $("#identificationNumber").val();
+            userObj.webReservation = $("#webReservation option:selected").val();
+            userObj.phone = $("#phone").val();
+            userObj.phoneExp = $("#phoneExp").val();
+            userObj.phone2 = $("#phone2").val();
+            userObj.phone2Exp = $("#phone2Exp").val();
+            userObj.email = $("#email").val();
+            userObj.emailExp = $("#emailExp").val();
+            userObj.birthdate = $("#birthdate").val();
+            userObj.birthPlace = $("#birthPlace").val();
+            userObj.motherName = $("#motherName").val();
+            userObj.fatherName = $("#fatherName").val();
+            userObj.city = $("#city").val();
+            userObj.district = $("#district").val();
+            userObj.job = $("#job").val();
+            userObj.note = $("#note").val();
+            userObj.password = $("#password").val();
+            userObj.gender = "Male";
 
 
-                        $("#updateModel button:nth-of-type(2)").attr("id", id);
-                        $('#updateModal').modal('toggle');
-                    }
 
-                    else {
-                        $.confirm({
-                            title: "Uyarı",
-                            content: "Üye Bulunamadı.",
-                            buttons: {
-                                TAMAM: function () {
+            if (userObj.password != "" || userObj.username != "") {
 
-                                }
+                try {
+                    $.ajax({
+                        type: "Post",
+                        url: '../AdminHome/UpdateMemberList',
+                        cache: false,
+                        data: userObj,
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+
+
+                            if (res == true) {
+                                $('#updateModal').modal('toggle');
+
+                                $.confirm({
+                                    title: "Bilgilendirme",
+                                    content: "Kullanıcı Başarıyla Güncellendi.",
+                                    buttons: {
+                                        TAMAM: function () {
+
+                                            window.location.href = "ListUser"
+
+                                        }
+                                    }
+                                });
                             }
-                        });
-                    }
 
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
+                            else
+                                $.confirm({
+                                    title: "Uyarı",
+                                    content: "Kullanıcı Güncellenirken Hata Oluştu. Şifre : En az bir büyük harf , Küçük Harf , Sayı ve Sembol(*/.) içermelidir.",
+                                    buttons: {
+                                        TAMAM: function () {
+
+
+                                        }
+                                    }
+                                });
+
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                } catch (e) {
+                    console.log(e.message);
                 }
-            });
-        }
-
-        function updateMemberList(id) {
-
-            userObj = {
-
-                id: null,
-                name: null,
-                username: null,
-                startDate: null,
-                finishDate: null,
-                role: null,
-                condition: null,
-                identificationNumber: null,
-                webReservation: null,
-                phone: null,
-                phoneExp: null,
-                phone2: null,
-                phone2Exp: null,
-                email: null,
-                emailExp: null,
-                birthdate: null,
-                birthPlace: null,
-                motherName: null,
-                fatherName: null,
-                city: null,
-                district: null,
-                job: null,
-                note: null,
-                password: null,
-                gender: null,
-                checkpass: null,
-
-            };
-
-
-
-            if ($("#RegistersRole option:nth-of-type(1)").text() == $("#select2-RegistersRole-container").text()) {
-
+            }
+            else {
                 $.confirm({
                     title: "Uyarı",
-                    content: "Lütfen Rol Seçiniz",
+                    content: "Kullanıcı Adı / Şifre Boş Bırakılamaz",
                     buttons: {
                         TAMAM: function () {
 
@@ -554,110 +668,13 @@
                     }
                 });
 
-            } else {
-
-
-
-                userObj.checkpass = $("#checkpassword").val();
-                userObj.id = id;
-                userObj.name = $("#name").val();
-                userObj.username = $("#username").val();
-                userObj.startDate = $("#startDate").val();
-                userObj.finishDate = $("#finishDate").val();
-                userObj.role = $("#RegistersRole option:selected").text();
-                userObj.condition = $("#condition option:selected").text();
-                userObj.identificationNumber = $("#identificationNumber").val();
-                userObj.webReservation = $("#webReservation option:selected").val();
-                userObj.phone = $("#phone").val();
-                userObj.phoneExp = $("#phoneExp").val();
-                userObj.phone2 = $("#phone2").val();
-                userObj.phone2Exp = $("#phone2Exp").val();
-                userObj.email = $("#email").val();
-                userObj.emailExp = $("#emailExp").val();
-                userObj.birthdate = $("#birthdate").val();
-                userObj.birthPlace = $("#birthPlace").val();
-                userObj.motherName = $("#motherName").val();
-                userObj.fatherName = $("#fatherName").val();
-                userObj.city = $("#city").val();
-                userObj.district = $("#district").val();
-                userObj.job = $("#job").val();
-                userObj.note = $("#note").val();
-                userObj.password = $("#password").val();
-                userObj.gender = "Male";
-
-
-
-                if (userObj.password != "" || userObj.username != "") {
-
-                    try {
-                        $.ajax({
-                            type: "Post",
-                            url: '../AdminHome/UpdateMemberList',
-                            cache: false,
-                            data: userObj,
-                            dataType: "json",
-                            async: true,
-                            success: function (res) {
-
-
-
-                                if (res == true) {
-                                    $('#updateModal').modal('toggle');
-
-                                    $.confirm({
-                                        title: "Bilgilendirme",
-                                        content: "Kullanıcı Başarıyla Güncellendi.",
-                                        buttons: {
-                                            TAMAM: function () {
-
-                                                window.location.href = "ListUser"
-
-                                            }
-                                        }
-                                    });
-                                }
-
-                                else
-                                    $.confirm({
-                                        title: "Uyarı",
-                                        content: "Kullanıcı Güncellenirken Hata Oluştu. Şifre : En az bir büyük harf , Küçük Harf , Sayı ve Sembol(*/.) içermelidir.",
-                                        buttons: {
-                                            TAMAM: function () {
-
-
-                                            }
-                                        }
-                                    });
-
-                            },
-                            error: function (textStatus, errorThrown) {
-                                console.log(JSON.stringify(textStatus));
-                                console.log(textStatus);
-                            }
-                        });
-                    } catch (e) {
-                        console.log(e.message);
-                    }
-                }
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Kullanıcı Adı / Şifre Boş Bırakılamaz",
-                        buttons: {
-                            TAMAM: function () {
-
-
-                            }
-                        }
-                    });
-
-                }
-
             }
 
         }
 
+    }
 
 
 
-    </script>
+
+</script>

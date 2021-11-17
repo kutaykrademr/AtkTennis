@@ -35,7 +35,7 @@ namespace AtkTennisApp.Controllers
         #region IdentityRoleSettings
 
         [HttpGet("NewRole", Name = "NewRole")]
-        public AppIdentityRole NewRole(string roleName)
+        public AppIdentityRole NewRole(string roleName, string compId)
         {
 
             var Role = new AppIdentityRole();
@@ -52,7 +52,7 @@ namespace AtkTennisApp.Controllers
                     var roleResult = roleManager.CreateAsync(Role).Result;
 
 
-
+                    Role2.CompanyId = compId;
                     Role2.RoleId = Role.Id;
                     Role2.RoleName = roleName;
                     Role2.Advisory = false;
@@ -149,6 +149,53 @@ namespace AtkTennisApp.Controllers
             catch (Exception ex)
             {
                 model = new IdentityRoleSettingsViewModel();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+        }
+
+        [HttpGet("ControlMemberDebtSettings", Name = "ControlMemberDebtSettings")]
+        public MemberCanDebt ControlMemberDebtSettings( string isChecked , string compId)
+
+        {
+
+            MemberCanDebt model = new MemberCanDebt();
+            MemberCanDebt model2 = new MemberCanDebt();
+
+            model = db.memberCanDebts.Where(x => x.CompanyId == compId).FirstOrDefault();
+            try
+            {
+                if (model == null)
+                {
+                    if (isChecked == "true")
+                    {
+                        model2.CanDebt = true;
+                        model2.CompanyId = compId;
+
+                        db.Add(model2);
+                        db.SaveChanges();
+                        
+                    }
+                   
+                }
+
+                else
+                {
+                    model.CanDebt = false;
+
+                    if (isChecked == "true")
+                    {
+                        model.CanDebt = true;
+                    }
+
+                    db.Update(model);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                model = new MemberCanDebt();
                 Mutuals.monitizer.AddException(ex);
             }
 
@@ -275,7 +322,7 @@ namespace AtkTennisApp.Controllers
                         model2.Reservations = true;
                     else
                         model2.Reservations = false;
-                    
+
                     if (activeAuth.Contains("Dashboard"))
                         model2.Dashboard = true;
                     else
@@ -359,10 +406,10 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewCourtType", Name = "NewCourtTypeourt")]
-        public JsonResult NewCourtType(string courtTypeName)
+        public JsonResult NewCourtType(string courtTypeName, string compId)
         {
             CourtRecipeType courtType = new CourtRecipeType();
-            
+
 
             try
             {
@@ -370,6 +417,7 @@ namespace AtkTennisApp.Controllers
                 {
 
                     courtType.CourtRecipeTypes = courtTypeName;
+                    courtType.CompanyId = compId;
 
                     db.Add(courtType);
                     db.SaveChanges();
@@ -454,7 +502,7 @@ namespace AtkTennisApp.Controllers
 
                     return Json(model);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -465,18 +513,19 @@ namespace AtkTennisApp.Controllers
             return Json(false);
         }
 
-        
+
 
         [HttpGet("NewCourt", Name = "NewCourt")]
-        public Court NewCourt(string courtName, string courtType, int courtCondition, int courtWebCondition , string courtTimePeriod , string courtStartTime , string courtFinishTime)
+        public Court NewCourt(string courtName, string compId, string courtType, int courtCondition, int courtWebCondition, string courtTimePeriod, string courtStartTime, string courtFinishTime)
         {
 
             var Court = new Court();
 
             try
             {
-                if (courtName != null || courtType != null )
+                if (courtName != null || courtType != null)
                 {
+                    Court.CompanyId = compId;
                     Court.CourtName = courtName;
                     Court.CourtType = courtType;
                     Court.CourtConditions = courtCondition;
@@ -520,11 +569,11 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
-      
+
 
         //kontrol eksiği var
         [HttpGet("UpdateCourt", Name = "UpdateCourt")]
-        public JsonResult UpdateCourt(int id, string courtName, string courtType, int courtCondition, int courtWebCondition , string courtPeriodTime, string courtTimeStart, string courtTimeFinish)
+        public JsonResult UpdateCourt(int id, string courtName, string courtType, int courtCondition, int courtWebCondition, string courtPeriodTime, string courtTimeStart, string courtTimeFinish)
         {
             Court model = new Court();
 
@@ -582,7 +631,7 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("NewCourtPriceList", Name = "NewCourtPriceList")]
-        public CourtPriceList NewCourtPriceList(string recipeName, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition , string time, string day , string month , string recipeTypeId)
+        public CourtPriceList NewCourtPriceList(string recipeName, string compId, int recipePrice, string recipePriceType, string courtRecipeType, string recipeCondition, string time, string day, string month, string recipeTypeId)
         {
 
             var CourtPriceList = new CourtPriceList();
@@ -592,6 +641,7 @@ namespace AtkTennisApp.Controllers
             {
                 if (recipeName != null || recipePriceType != null || courtRecipeType != null || recipeCondition != null)
                 {
+                    CourtPriceList.CompanyId = compId;
                     CourtPriceList.RecipeTypeId = recipeTypeId;
                     CourtPriceList.DayInf = day;
                     CourtPriceList.MonthInf = month;
@@ -612,7 +662,7 @@ namespace AtkTennisApp.Controllers
                     {
                         CourtPriceList.TimeInf = time;
                     }
-                    
+
                     CourtPriceList.Name = recipeName;
                     CourtPriceList.CourtPrice = recipePrice;
                     CourtPriceList.PriceType = recipePriceType;
@@ -676,7 +726,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateCourtPriceList", Name = "UpdateCourtPriceList")]
-        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition , string recipeTypeName , string month , string day)
+        public JsonResult UpdateCourtPriceList(int id, string name, int courtPrice, string priceType, string recipeType, string condition, string recipeTypeName, string month, string day)
         {
             CourtPriceList model = new CourtPriceList();
 
@@ -746,7 +796,7 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model = db.courtScaleLists.Where(x => x.CourtScaleListId == id).SingleOrDefault();
-               
+
                 if (model != null)
                 {
 
@@ -784,7 +834,7 @@ namespace AtkTennisApp.Controllers
 
                     return Json(model);
                 }
-               
+
 
             }
             catch (Exception ex)
@@ -797,7 +847,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddNewCourtScale", Name = "AddNewCourtScale")]
-        public JsonResult AddNewCourtScale(string scaleName, string scaleColor , string scaleCode)
+        public JsonResult AddNewCourtScale(string scaleName, string compId, string scaleColor, string scaleCode)
         {
 
             CourtScaleList model = new CourtScaleList();
@@ -806,6 +856,7 @@ namespace AtkTennisApp.Controllers
             {
                 if (scaleName != "" || scaleColor != "")
                 {
+                    model.CompanyId = compId;
                     model.Color = "#" + scaleColor;
                     model.Name = scaleName;
                     model.Code = scaleCode;
@@ -1617,7 +1668,6 @@ namespace AtkTennisApp.Controllers
         public MemberSettingsViewModel MemberSettings()
 
         {
-
             MemberSettingsViewModel model = new MemberSettingsViewModel();
 
             try
@@ -1625,8 +1675,10 @@ namespace AtkTennisApp.Controllers
                 model.cabinetOperations = db.cabinetOperations.ToList();
                 model.cabinetTypes = db.cabinetTypes.ToList();
                 model.memberDuesTypes = db.memberDuesTypes.ToList();
+                model.memberCanDebts = db.memberCanDebts.ToList();
 
             }
+
             catch (Exception ex)
             {
                 model = new MemberSettingsViewModel();
@@ -1637,7 +1689,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddCabinetType", Name = "AddCabinetType")]
-        public JsonResult AddCabinetType(string type , int price)
+        public JsonResult AddCabinetType(string type, int price, string compId)
         {
 
             CabinetType model = new CabinetType();
@@ -1646,7 +1698,7 @@ namespace AtkTennisApp.Controllers
             {
                 model.CabinetTypes = type;
                 model.CabinetTypesPrice = price;
-
+                model.CompanyId = compId;
 
                 if (model != null)
                 {
@@ -1678,7 +1730,7 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model = db.cabinetTypes.Where(x => x.CabinetId == id).FirstOrDefault();
-               
+
 
                 if (model != null)
                 {
@@ -1714,7 +1766,7 @@ namespace AtkTennisApp.Controllers
 
         //        if (model != null)
         //        {
-                  
+
         //            return Json(model);
         //        }
         //        else
@@ -1733,7 +1785,7 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("AddCabinets", Name = "AddCabinets")]
-        public JsonResult AddCabinets(string code, string cabType)
+        public JsonResult AddCabinets(string code, string cabType, string compId)
         {
 
             CabinetOperations model = new CabinetOperations();
@@ -1745,16 +1797,16 @@ namespace AtkTennisApp.Controllers
             {
                 try
                 {
-                        
-                        model2.CabinetCode = code;
-                        model2.CabinetOpTypes = cabType;
+                    model2.CompanyId = compId;
+                    model2.CabinetCode = code;
+                    model2.CabinetOpTypes = cabType;
 
-                        db.Add(model2);
-                        db.SaveChanges();
+                    db.Add(model2);
+                    db.SaveChanges();
 
-                        return Json(model2);
-                    
-             
+                    return Json(model2);
+
+
                 }
 
                 catch (Exception ex)
@@ -1813,32 +1865,32 @@ namespace AtkTennisApp.Controllers
 
 
         [HttpGet("AddDiscountType", Name = "AddDiscountType")]
-        public MemberDuesType AddDiscountType(int age, int year, int discount)
+        public MemberDuesType AddDiscountType(int age, int year, int discount , string compId)
         {
 
             MemberDuesType model = new MemberDuesType();
-          
-           
-                try
-                {
-
-                    model.Age = age;
-                    model.Year = year;
-                    model.Discount = discount;
-                   
-
-                    db.Add(model);
-                    db.SaveChanges();
-
-                    return model;
 
 
-                }
+            try
+            {
+                model.CompanyId = compId;
+                model.Age = age;
+                model.Year = year;
+                model.Discount = discount;
 
-                catch (Exception ex)
-                {
-                    Mutuals.monitizer.AddException(ex);
-                }
+
+                db.Add(model);
+                db.SaveChanges();
+
+                return model;
+
+
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
 
             return new MemberDuesType();
         }

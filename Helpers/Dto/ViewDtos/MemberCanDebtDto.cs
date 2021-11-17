@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Helpers.Dto.ViewDtos
 {
-    public class CourtRecipeTypeDto
-
+    public class MemberCanDebtDto
     {
-        public int CourtRecipeTypeId { get; set; }
-        public string CourtRecipeTypes { get; set; }
+        public int MemberCanDebtId { get; set; }
+        public bool CanDebt { get; set; }
         public string CompanyId { get; set; }
     }
 }

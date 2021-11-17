@@ -9,10 +9,14 @@
 
 
 @{
+    
     var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 
 <h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@compId</h2>
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -191,6 +195,7 @@
         })
             .buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
     }
+    var compId = $("#compId").text();
 
     findMemberTotal();
 
@@ -208,11 +213,13 @@
 
 
         if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
+
             alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
         }
         else {
 
             if (parseInt(price) - parseInt(paidPrice) < 0) {
+
                 alert("fazla tutar girdiniz !");
             }
             else {
@@ -221,7 +228,7 @@
                     url: '../AdminHome/GetPaid',
                     cache: false,
                     dataType: "json",
-                    data: { "userId": userId, "refId": id, "refType": 2, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                    data: { "userId": userId, "compId": compId, "refId": id, "refType": 2, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": 1, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
                     async: true,
                     success: function (res) {
 
@@ -270,7 +277,12 @@
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+
+                    if (res.memberLists[i].companyId == compId) {
+
+                        mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                    }
+                  
                 }
 
                 $("#memberFind").autocomplete({
@@ -318,6 +330,7 @@
                     row = "";
 
                     for (var x = 0; x < res.allGetPaidLogs.length; x++) {
+
      
                         row += '<tr>';
                         row += '<td>' + x + '</td>';
@@ -374,7 +387,7 @@
 
 
                 var memberInf = Enumerable.from(res.memberLists)
-                    .where(function (x) { return x.memberNumber == memNum.trim() })
+                    .where(function (x) { return x.memberNumber == memNum.trim() && x.companyId == compId })
                     .select(function (x) { return x }).toArray();
 
 
@@ -395,10 +408,23 @@
 
                             $("#appendResInf").empty();
 
+                            var totalPrice2 = 0;
+
+                            for (var i = 0; i < res.memberDuesInfTables.length; i++) {
+
+                                if (res.memberDuesInfTables[i].companyId == compId && res.memberDuesInfTables[i].duesInfType == false) {
+
+                                    var firstPrice2 = res.memberDuesInfTables[i].remainingPrice;
+                                    var totalPrice2 = firstPrice2 + totalPrice2;
+                                }
+                            }
 
                             row = "";
                             row += '<div id="asd" class="card-body">';
+                            row += '<div  class="d-flex justify-content-between">';
                             row += '<h4 style="margin-bottom:30px">Üye Aidat Borçları</h4>';
+                            row += '<h4 style="margin-bottom:30px">Toplam Borç:' + totalPrice2 + '</h4>';
+                            row += '</div>';
                             row += '<table id="resList" class="table table-bordered table-hover">';
                             row += '<thead>';
                             row += '<tr style="text-align:center">';
@@ -420,7 +446,7 @@
 
                             for (var i = 0; i < res.memberDuesInfTables.length; i++) {
 
-                                if (res.memberDuesInfTables[i].priceCondition == false && res.memberDuesInfTables[i].duesInfType == false) {
+                                if (res.memberDuesInfTables[i].priceCondition == false && res.memberDuesInfTables[i].duesInfType == false && res.memberDuesInfTables[i].companyId == compId) {
 
                                   
                                     row += '<tr style="text-align:center" id="">';      

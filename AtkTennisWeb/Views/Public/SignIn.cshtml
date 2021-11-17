@@ -16,13 +16,14 @@
 <link href="~/adminRoot/plugins/fontawesome-free/css/all.css" rel="stylesheet" />
 <link href="~/adminRoot/css/adminlte.min.css" rel="stylesheet" />
 <link href="~/adminRoot/css/jquery-confirm.css" rel="stylesheet" />
+<link href="~/adminRoot/css/loading.css" rel="stylesheet" />
 
 
 <body class="hold-transition login-page" style="background-color:rgb(108, 119, 110) !important">
     <div class="login-box">
-       
 
-   
+
+
         <div class="card" style="background-color:transparent">
             <div style="margin-top:20px" class="login-logo">
                 <img src="~/images/atkimg/altyapilogo.png" alt="Alternate Text" style="width:35%">
@@ -69,7 +70,7 @@
                         </div>
 
 
-    
+
                     </div>
                 </div>
             </div>
@@ -90,10 +91,9 @@
             </div>
 
             <div style="margin-top:1rem" class="form-group col-md-12">
-               
+
                 <div class="input-group">
                     <select id="roles" class="form-control">
-                     
                     </select>
                 </div>
             </div>
@@ -112,7 +112,9 @@
 <script src="~/lib/jquery/dist/jquery-confirm.js"></script>
 <script src="~/adminRoot/js/loading.js"></script>
 
+
 <script>
+
 
     var now = new Date();
     var month = (now.getMonth() + 1);
@@ -127,6 +129,7 @@
 
     $(document).ready(function () {
 
+
     });
 
     $('#loginButtons').keypress(function (e) {
@@ -137,12 +140,12 @@
         }
     });
 
-  
 
-    function getsettings(id , role) {
+
+    function getsettings(id, role) {
 
         $.ajax({
-        type: "Get",
+            type: "Get",
             url: '../Settings/GetSettings',
             cache: false,
             data: { "companyId": id },
@@ -150,11 +153,22 @@
             async: true,
             success: function (res) {
 
-                if (role != "Yönetici" && role != "Sekreterya") {
+                debugger;
 
+                if (res == "false") {
+                    alert("Error Api");
+                    setTimeout(function () { $("body").loading('destroy'); });
+                    
+                }
+
+                else if (role != "Yönetici" && role != "Sekreterya") {
+
+                 /*   setTimeout(function () { $("body").loading('destroy'); });*/
                     window.location.href = "../Public/Reservation?date=" + today;
                 }
                 else
+
+                    //setTimeout(function () { $("body").loading('destroy'); });
                     window.location.href = "../AdminHome/Index";
 
             },
@@ -166,39 +180,53 @@
     }
 
 
-    //function signIn2() {
+    function signIn2() {
 
-    //    $.ajax({
-    //    type: "Get",
-    //        url: '../Public/SignInReq',
-    //        cache: false,
-    //        data: { "UserName": $("#username").val(), "Password": $("#password").val(), "RoleName": $("#roles option:selected").text(), "RoleId":$("#roles option:selected").val()},
-    //        dataType: "json",
-    //        async: true,
-    //        success: function (res) {
-               
-    //            getsettings(res.companyId);
+        $('body').loading({
 
-    //            if (res.custom_role != "Yönetici" && res.custom_role != "Sekreterya") {
+            theme: 'dark',
+            stoppable: false,
+            message: '<div><img src="../images/atkimg/spinner4.gif" style="width:100px;" /></div>'
 
-    //                window.location.href = "../Public/Reservation?date=" + today;
-    //            }
-    //            else
-    //                window.location.href = "../AdminHome/Index";
+        });
+        
 
-    //        },
-    //        error: function (textStatus, errorThrown) {
-    //            console.log(JSON.stringify(textStatus));
-    //            console.log(textStatus);
-    //        }
-    //    });
-    //}
+        $.ajax({
+            type: "Get",
+            url: '../Public/SignInReq',
+            cache: false,
+            data: { "UserName": $("#username").val(), "Password": $("#password").val(), "RoleName": $("#roles option:selected").text(), "RoleId": $("#roles option:selected").val() },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                if (res.comp_Id != "") {
+
+                    getsettings(res.comp_Id, res.custom_role);
+                }         
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+    }
 
     function signIn() {
 
+        $('body').loading({
+
+            theme: 'dark',
+            stoppable: false,
+            message: '<div><img src="../images/atkimg/spinner4.gif" style="width:120px;" /></div>'
+
+        });
+
+
         try {
             $.ajax({
-            type: "Get",
+                type: "Get",
                 url: '../Public/GetRoles',
                 cache: false,
                 data: { "UserName": $("#username").val(), "Password": $("#password").val() },
@@ -206,19 +234,22 @@
                 async: true,
                 success: function (res) {
 
-                    debugger;
+                   
 
                     if (res == "false") {
 
                         $.confirm({
-                        title: "Uyarı",
+                            title: "Uyarı",
                             content: "Kullanıcı Adı ve/veya Şifre Hatalı.",
                             buttons: {
-                            TAMAM: function () {
+                                TAMAM: function () {
 
                                 }
                             }
                         });
+
+                        setTimeout(function () { $("body").loading('destroy'); }, 1000);
+
                     }
 
                     if (res.custom_role.length > 1) {
@@ -229,32 +260,31 @@
 
                         for (var i = 0; i < res.custom_role.length; i++) {
 
-                            row += '<option value="'+res.custom_roleId[i] +'">' + res.custom_role[i] + '</option>';
+                            row += '<option value="' + res.custom_roleId[i] + '">' + res.custom_role[i] + '</option>';
 
                             $("#roles").append(row);
                         }
 
-                        $('#myModal').modal('toggle')
+                        $('#myModal').modal('toggle');
+
+                        setTimeout(function () { $("body").loading('destroy'); }, 1000);
                     }
 
-                    else if (res.custom_role.length == 1)
-
-                    {
+                    else if (res.custom_role.length == 1) {
 
                         $.ajax({
-                        type: "Get",
+                            type: "Get",
                             url: '../Public/SignInReq',
                             cache: false,
-                            data: { "UserName": $("#username").val(), "Password": $("#password").val(), "RoleName": res.custom_role[0], "RoleId":res.custom_roleId[0] },
+                            data: { "UserName": $("#username").val(), "Password": $("#password").val(), "RoleName": res.custom_role[0], "RoleId": res.custom_roleId[0] },
                             dataType: "json",
-                            async: false,
+                            async: true,
                             success: function (res) {
 
-                                debugger;
-
                                 if (res.comp_Id != "") {
+
                                     getsettings(res.comp_Id, res.custom_role);
-                                } 
+                                }
 
                             },
                             error: function (textStatus, errorThrown) {
@@ -263,48 +293,6 @@
                             }
                         });
                     }
-
-                    //if (res != "false") {
-
-                    //    localStorage.setItem("userName", $("#username").val());
-                    //    localStorage.setItem("password", $("#password").val());
-
-                    //    if ($("#checkLocal").is(':checked')) {
-
-                    //        var check = "true"
-
-                    //    }
-
-                    //    else {
-
-                    //        var check = "false"
-                    //    }
-
-
-                    //    localStorage.setItem("loginCheck", check);
-
-
-                    //    if (res.custom_role != "Yönetici" && res.custom_role != "Sekreterya") {
-
-                    //        window.location.href = "../Public/Reservation?date=" + today;
-                    //    }
-                    //    else
-                    //        window.location.href = "../AdminHome/Index";
-
-                    //}
-
-                    //else
-                    //    $.confirm({
-                    //        title: "Uyarı",
-                    //        content: "Kullanıcı Adı/Şifre Hatalı.",
-                    //        buttons: {
-                    //            TAMAM: function () {
-
-
-
-                    //            }
-                    //        }
-                    //    });
 
 
                 },

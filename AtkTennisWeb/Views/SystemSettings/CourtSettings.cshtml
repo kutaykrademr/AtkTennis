@@ -1,6 +1,10 @@
 ﻿
-
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 @model Helpers.Dto.PartialViewDtos.CourtSettingsViewDto;
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
 
 <style>
 
@@ -8,6 +12,8 @@
         border: none !important;
     }
 </style>
+
+<h2 style="display:none" id="compId">@CompId</h2>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -57,21 +63,25 @@
 
                                     @foreach (var item in Model.courtRecipeTypes)
                                     {
-                                        <tr style="text-align:center" id="">
-                                            <td>@item.CourtRecipeTypes</td>
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.CourtRecipeTypes</td>
 
 
-                                            <td>
+                                                <td>
 
 
-                                                <button type="button" class="btn btn-outline-success" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtTypeModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button type="button" class="btn btn-outline-danger" id="@item.CourtRecipeTypeId" onclick="deleteCourtType(this.id) "><i class="fas fa-trash"></i></button>
+                                                    <button type="button" class="btn btn-outline-success" id="@item.CourtRecipeTypeId" onclick="openUpdateCourtTypeModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button type="button" class="btn btn-outline-danger" id="@item.CourtRecipeTypeId" onclick="deleteCourtType(this.id) "><i class="fas fa-trash"></i></button>
 
 
 
-                                            </td>
+                                                </td>
 
-                                        </tr>
+                                            </tr>
+                                        }
+
                                     }
 
 
@@ -95,9 +105,13 @@
 
                             @foreach (var item in Model.courtRecipeTypes)
                             {
-                                <div>
-                                    <button class="btn btn-outline-dark pListGen pList_@item.CourtRecipeTypeId" id="@item.CourtRecipeTypeId" onclick="getPriceList(this.id)">@item.CourtRecipeTypes</button>
-                                </div>
+                                if (item.CompanyId == CompId)
+                                {
+                                    <div>
+                                        <button class="btn btn-outline-dark pListGen pList_@item.CourtRecipeTypeId" id="@item.CourtRecipeTypeId" onclick="getPriceList(this.id)">@item.CourtRecipeTypes</button>
+                                    </div>
+                                }
+
                             }
 
                         </div>
@@ -119,40 +133,44 @@
                                 <tbody id="getPriceListTable">
                                     @for (int i = 0; i < Model.courtPriceLists.Count; i++)
                                     {
-                                        <tr style="text-align:center">
+                                        if (Model.courtPriceLists[i].CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center">
 
 
-                                            <td>@Model.courtPriceLists[i].Name</td>
-                                            <td>@Model.courtPriceLists[i].CourtPrice</td>
+                                                <td>@Model.courtPriceLists[i].Name</td>
+                                                <td>@Model.courtPriceLists[i].CourtPrice</td>
 
-                                            @if (Model.courtPriceLists[i].PriceType == "1")
-                                            {
-                                                <td>Aktif Ücret</td>
-                                            }
-                                            else
-                                            {
-                                                <td>Pasif Ücret</td>
-                                            }
+                                                @if (Model.courtPriceLists[i].PriceType == "1")
+                                                {
+                                                    <td>Aktif Ücret</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Pasif Ücret</td>
+                                                }
 
 
-                                            <td>@Model.courtPriceLists[i].RecipeType</td>
+                                                <td>@Model.courtPriceLists[i].RecipeType</td>
 
-                                            @if (Model.courtPriceLists[i].Condition == "1")
-                                            {
-                                                <td>Aktif</td>
-                                            }
+                                                @if (Model.courtPriceLists[i].Condition == "1")
+                                                {
+                                                    <td>Aktif</td>
+                                                }
 
-                                            else
-                                            {
-                                                <td>Pasif</td>
-                                            }
+                                                else
+                                                {
+                                                    <td>Pasif</td>
+                                                }
 
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@Model.courtPriceLists[i].CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@Model.courtPriceLists[i].CourtPriceListId" onclick="deleteCourtPrice(this.id) "><i class="fas fa-trash"></i></button>
-                                            </td>
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@Model.courtPriceLists[i].CourtPriceListId" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@Model.courtPriceLists[i].CourtPriceListId" onclick="deleteCourtPrice(this.id) "><i class="fas fa-trash"></i></button>
+                                                </td>
 
-                                        </tr>
+                                            </tr>
+                                        }
+
                                     }
                                 </tbody>
                             </table>
@@ -184,23 +202,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    //Burası
                                     @foreach (var item2 in Model.courtScales)
                                     {
+                                        if (item2.CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center">
+                                                <td style="text-align:center;background-color:@item2.Color;color:#ffffff;"><span>@item2.Code</span></td>
+                                                <td>@item2.Name</td>
+                                                <td>@item2.Color</td>
 
-                                        <tr style="text-align:center">
-                                            <td style="text-align:center;background-color:@item2.Color;color:#ffffff;"><span>@item2.Code</span></td>
-                                            <td>@item2.Name</td>
-                                            <td>@item2.Color</td>
 
+                                                <td>
 
-                                            <td>
+                                                    <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtScaleModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item2.CourtScaleListId" onclick="deleteCourtScale(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
 
-                                                <button class="btn btn-outline-success" id="@item2.CourtScaleListId" onclick="openUpdateCourtScaleModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item2.CourtScaleListId" onclick="deleteCourtScale(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
+                                            </tr>
+                                        }
 
-                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -241,60 +262,58 @@
 
                             @foreach (var item in Model.Courts)
                             {
-                                <tr style="text-align:center" id="">
-                                    <td>@item.CourtName</td>
+                                if (item.CompanyId == CompId)
+                                {
+                                    <tr style="text-align:center" id="">
+                                        <td>@item.CourtName</td>
 
-                                    @foreach (var item2 in Model.courtRecipeTypes)
-                                    {
-                                        if (item2.CourtRecipeTypeId == Convert.ToInt32(item.CourtType))
+                                        @foreach (var item2 in Model.courtRecipeTypes)
                                         {
-                                            <td>@item2.CourtRecipeTypes</td>
+                                            if (item2.CourtRecipeTypeId == Convert.ToInt32(item.CourtType))
+                                            {
+                                                <td>@item2.CourtRecipeTypes</td>
+                                            }
+
                                         }
 
-                                    }
 
+                                        @if (item.CourtWebConditions == 1)
+                                        {
+                                            <td>Web Aktif  </td>
+                                        }
+                                        else
+                                        {
+                                            <td>Web Pasif  </td>
+                                        }
 
-                                    @if (item.CourtWebConditions == 1)
-                                    {
-                                        <td>Web Aktif  </td>
-                                    }
-                                    else
-                                    {
-                                        <td>Web Pasif  </td>
-                                    }
+                                        @if (item.CourtConditions == 1)
+                                        {
+                                            <td>Aktif  </td>
+                                        }
+                                        else
+                                        {
+                                            <td>Pasif </td>
+                                        }
 
-                                    @if (item.CourtConditions == 1)
-                                    {
-                                        <td>Aktif  </td>
-                                    }
-                                    else
-                                    {
-                                        <td>Pasif </td>
-                                    }
+                                        <td>@item.CourtStartTime </td>
+                                        <td>@item.CourtFinishTime </td>
+                                        <td>@item.CourtTimePeriod </td>
 
-                                    <td>@item.CourtStartTime </td>
-                                    <td>@item.CourtFinishTime </td>
-                                    <td>@item.CourtTimePeriod </td>
+                                        <td>
+                                            <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
+                                        </td>
 
-                                    <td>
-                                        <button class="btn btn-outline-success" id="@item.CourtId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                        <button class="btn btn-outline-danger" id="@item.CourtId" onclick="deleteCourt(this.id) "><i class="fas fa-trash"></i></button>
-                                    </td>
+                                    </tr>
+                                }
 
-                                </tr>
                             }
-
 
                         </tbody>
                     </table>
                 </div>
             </div>
-
-
-
-
         </div>
-
     </section>
 </div>
 
@@ -323,9 +342,11 @@
 
                                 @foreach (var item in Model.courtRecipeTypes)
                                 {
-                                    <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+                                    }
                                 }
-
 
                             </select>
                         </div>
@@ -363,11 +384,13 @@
                             <select id="courtStartTime" class="form-control">
                                 <option disabled="disabled" selected="selected">Başlangıç Saati</option>
 
-                                @foreach (var item in Model.resTimes)
+                                @foreach (var item in Model.resTimes.OrderBy(x=>x.ResTimes))
                                 {
-                                    <option>@item.ResTimes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option>@item.ResTimes</option>
+                                    }
                                 }
-
 
                             </select>
                         </div>
@@ -379,9 +402,12 @@
                             <select id="courtFinishTime" class="form-control">
                                 <option disabled="disabled" selected="selected">Bitiş Saati</option>
 
-                                @foreach (var item in Model.resTimes)
+                                @foreach (var item in Model.resTimes.OrderBy(x => x.ResTimes))
                                 {
-                                    <option>@item.ResTimes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option>@item.ResTimes</option>
+                                    }
                                 }
 
                             </select>
@@ -392,7 +418,7 @@
                         <label for="recipient-name" class="col-form-label">Period:</label>
                         <div class="input-group">
                             <select id="courtTimePeriod" class="form-control">
-                                <option disabled="disabled" selected="selected">Durumu</option>
+                                <option disabled="disabled" selected="selected">Period</option>
 
                                 <option>15</option>
                                 <option>30</option>
@@ -436,7 +462,11 @@
 
                                 @foreach (var item in Model.courtRecipeTypes)
                                 {
-                                    <option value="@item.CourtRecipeTypeId"> @item.CourtRecipeTypes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option value="@item.CourtRecipeTypeId"> @item.CourtRecipeTypes</option>
+                                    }
+
                                 }
 
                             </select>
@@ -478,7 +508,11 @@
 
                                 @foreach (var item in Model.resTimes)
                                 {
-                                    <option>@item.ResTimes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option>@item.ResTimes</option>
+                                    }
+
                                 }
 
 
@@ -494,7 +528,11 @@
 
                                 @foreach (var item in Model.resTimes)
                                 {
-                                    <option>@item.ResTimes</option>
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        <option>@item.ResTimes</option>
+                                    }
+
                                 }
 
                             </select>
@@ -544,7 +582,9 @@
 
                 <div class="form-group">
                     <label>Gün Seçiniz</label>
+
                     <select id="selectDay" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Gün Bilgisi Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                      
                         <option value="0,1,2,3,4,5,6">Tüm Günler</option>
                         <option value="1,">Pazartesi</option>
                         <option value="2,">Salı</option>
@@ -553,6 +593,7 @@
                         <option value="5,">Cuma</option>
                         <option value="6,">Cumartesi</option>
                         <option value="0,">Pazar</option>
+
                     </select>
                 </div>
 
@@ -565,10 +606,15 @@
                         @foreach (var item in Model.resTimes)
 
                         {
-                            if (item.Restimes60 == 60)
+                            if (item.CompanyId == CompId)
                             {
-                                <option value="@item.ResTimes,">@item.ResTimes</option>
+                                if (item.Restimes60 == 60)
+                                {
+
+                                    <option value="@item.ResTimes,">@item.ResTimes</option>
+                                }
                             }
+
                         }
 
                     </select>
@@ -603,7 +649,10 @@
 
                             @foreach (var item in Model.courtRecipeTypes)
                             {
-                                <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+                                if (item.CompanyId == CompId)
+                                {
+                                    <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+                                }
 
                             }
 
@@ -691,10 +740,14 @@
                         @foreach (var item in Model.resTimes)
 
                         {
-                            if (item.Restimes60 == 60)
+                            if (item.CompanyId == CompId)
                             {
-                                <option value="@item.ResTimes,">@item.ResTimes</option>
+                                if (item.Restimes60 == 60)
+                                {
+                                    <option value="@item.ResTimes,">@item.ResTimes</option>
+                                }
                             }
+
                         }
 
                     </select>
@@ -732,7 +785,11 @@
 
                             @foreach (var item in Model.courtRecipeTypes)
                             {
-                                <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+                                if (item.CompanyId == CompId)
+                                {
+                                    <option value="@item.CourtRecipeTypeId">@item.CourtRecipeTypes</option>
+                                }
+
 
                             }
 
@@ -972,6 +1029,7 @@
     });
 
 
+    var compId = $("#compId").text();
 
 
     function saveAddCourtType() {
@@ -994,7 +1052,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddNewCourtType',
                 cache: false,
-                data: { "courtTypeName": courtTypeName },
+                data: { "courtTypeName": courtTypeName, "compId": compId },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -1221,7 +1279,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddNewCourt',
                 cache: false,
-                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType option:selected").val(), AddcourtCondition, AddcourtWebCondition, courtStartTime, courtFinishTime, courtTimePeriod },
+                data: { "courtName": $("#courtName").val(), "courtType": $("#courtType option:selected").val(), AddcourtCondition, AddcourtWebCondition, courtStartTime, courtFinishTime, courtTimePeriod, "compId": compId },
                 dataType: "json",
                 async: true,
                 success: function (res) {
@@ -1418,7 +1476,6 @@
 
 
 
-
     function openUpdateCourtPriceModal(ID) {
         $.ajax({
             type: "GET",
@@ -1465,7 +1522,7 @@
                     row = "";
 
                     for (var i = 0; i < 12; i++) {
-                        debugger;
+                      
 
                         switch (i) {
                             case 0:
@@ -1551,7 +1608,7 @@
                                 break;
                             case 6:
                                 dayInfName = "Cumartesi";
-                                break;                       
+                                break;
 
                             default:
                         }
@@ -1567,6 +1624,7 @@
 
                     $("#selectDay").append(row);
 
+         
                     $("#updateCourtPriceModel button:nth-of-type(2)").attr("id", ID);
                     $('#updatePriceModalLong').modal('toggle');
                 }
@@ -1633,7 +1691,7 @@
             type: "POST",
             url: '../SystemSettings/UpdateCourtPriceList',
             cache: false,
-            data: {"month":months , "day":days , "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), "priceType": priceType, "recipeType": recipeType, "recipeTypeName": recipeTypeName, "condition": condition },
+            data: { "month": months, "day": days, "id": id, "name": $("#courtPriceName").val(), "courtPrice": $("#price").val(), "priceType": priceType, "recipeType": recipeType, "recipeTypeName": recipeTypeName, "condition": condition },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -1776,13 +1834,12 @@
             times = firstDay + times;
         }
 
-        debugger;
-
+ 
         $.ajax({
             type: "POST",
             url: '../SystemSettings/AddNewCourtPriceList',
             cache: false,
-            data: { "month": months, "day": days, "time": times, "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType option:selected").val(), "courtRecipeType": $("#recipeTypeAdd option:selected").text(), "recipeTypeId": $("#recipeTypeAdd option:selected").val(), "recipeCondition": "1" },
+            data: { "month": months, "compId": compId , "day": days, "time": times, "recipeName": $("#recipeName").val(), "recipePrice": $("#recipePrice").val(), "recipePriceType": $("#recipePriceType option:selected").val(), "courtRecipeType": $("#recipeTypeAdd option:selected").text(), "recipeTypeId": $("#recipeTypeAdd option:selected").val(), "recipeCondition": "1" },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -2007,7 +2064,7 @@
                 type: "POST",
                 url: '../SystemSettings/AddNewCourtScale',
                 cache: false,
-                data: { "scaleColor": scaleColor, "scaleName": scaleName, "scaleCode": scaleCode },
+                data: { "scaleColor": scaleColor, "scaleName": scaleName, "scaleCode": scaleCode, "compId": compId },
                 dataType: "json",
                 async: true,
                 success: function (res) {

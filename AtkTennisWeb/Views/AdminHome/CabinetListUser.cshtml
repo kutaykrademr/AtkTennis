@@ -1,6 +1,13 @@
 ﻿
 @model Helpers.Dto.PartialViewDtos.CabinetListUserViewDto;
 
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
 <style>
     button {
         border: none !important;
@@ -58,33 +65,37 @@
 
                                     @foreach (var item in Model.cabinetListUsers)
                                     {
-                                        <tr style="text-align:center" id="">
-                                            <td>@item.Date</td>
-                                            <td>@item.CabinetCode</td>
-                                            <td>@item.CabinetOpTypes</td>
-                                            @{
-                                                var x = Model.memberLists.Where(x => x.UserId == item.CabinetUserId).FirstOrDefault();
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            <tr style="text-align:center" id="">
+                                                <td>@item.Date</td>
+                                                <td>@item.CabinetCode</td>
+                                                <td>@item.CabinetOpTypes</td>
+                                                @{
+                                                    var x = Model.memberLists.Where(x => x.UserId == item.CabinetUserId).FirstOrDefault();
 
-                                                if (x != null)
-                                                {
-                                                    <td>@x.FullName</td>
+                                                    if (x != null)
+                                                    {
+                                                        <td>@x.FullName</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>-</td>
+                                                    }
+
                                                 }
-                                                else
-                                                {
-                                                    <td>-</td>
-                                                }
-
-                                            }
 
 
-                                            <td>@item.CabinetWho</td>
+                                                <td>@item.CabinetWho</td>
 
-                                            <td>
-                                                <button id="@item.CabinetUserId" onclick="openMemberCabinetDetail(this.id)" type="button" class="btn btn-outline-success"><i class="fas fa-search"></i></button>
+                                                <td>
+                                                    <button id="@item.CabinetUserId" onclick="openMemberCabinetDetail(this.id)" type="button" class="btn btn-outline-success"><i class="fas fa-search"></i></button>
 
-                                                <button type="button" onclick="myfunction()" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
+                                                    <button type="button" onclick="myfunction()" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+
                                     }
 
                                 </tbody>
@@ -111,7 +122,7 @@
 
                                         <th>Dolap Kodu</th>
                                         <th>Dolap Türü</th>
-                                     
+
 
                                     </tr>
                                 </thead>
@@ -119,19 +130,20 @@
 
                                     @foreach (var item2 in Model.cabinetOperations)
                                     {
-
-                                        var codeCheck = Model.cabinetListUsers.Where(x => x.CabinetCode == item2.CabinetCode).FirstOrDefault();
-
-                                        if (codeCheck == null)
+                                        if (item2.CompanyId == CompId)
                                         {
-                                            <tr style="text-align:center" id="">
-                                                <td>@item2.CabinetCode</td>
-                                                <td>@item2.CabinetOpTypes</td>
-                                              
+                                            var codeCheck = Model.cabinetListUsers.Where(x => x.CabinetCode == item2.CabinetCode).FirstOrDefault();
 
-                                            </tr>
+                                            if (codeCheck == null)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item2.CabinetCode</td>
+                                                    <td>@item2.CabinetOpTypes</td>
+
+
+                                                </tr>
+                                            }
                                         }
-
                                     }
 
                                 </tbody>

@@ -10,8 +10,10 @@
 
 @{
     var currentUserId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 <h2 style="display:none" id="currentUserId">@currentUserId</h2>
+<h2 style="display:none" id="compId">@CompId</h2>
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -178,7 +180,7 @@
                 row = "";
                 $("#appendResInf").empty();
 
-                if (res.reservationCancels.length > 0) {
+                if (res.reservationCancels.length > 0 ) {
 
                     row += '<div id="asd" class="card-body">';
                     row += '<h4 style="margin-bottom:30px">Rezervasyon İptal Listesi</h4>';
@@ -220,35 +222,35 @@
                             }
                         }
 
+                        var compId = $("#compId").text();
                        
-                        row += '<tr style="text-align:center" id="">';                     
-                        row += '<td>' + res.reservationCancels[i].resId + '</td>';
-                        row += '<td>' + memberInf[0].memberNumber + '</td>';
-                        row += '<td>' + memberInf[0].fullName + '</td>';
-                        row += '<td>' + courtName + '</td>';
-                        row += '<td>' + res.reservationCancels[i].resDate + '</td>';
-                        row += '<td>' + res.reservationCancels[i].resStartTime + '</td>';
-                        row += '<td>' + res.reservationCancels[i].resFinishTime + '</td>';
-                        row += '<td>' + res.reservationCancels[i].price + '</td>';
-                        if (res.reservationCancels[i].priceInf) {
-                            row += '<td>' + "Ödendi" + '</td>';
-                        }
-                        else {
-                            row += '<td>' + "Ödenmedi" + '</td>';
-                        }
-                        if (res.reservationCancels[i].procedure) {
-                            row += '<td>' + "Var" + '</td>';
-                        }
-                        else {
-                            row += '<td>' + "Yok" + '</td>';
-                        }
-                       
-                        row += '<td>' + cancelMemberInf[0].fullName + '</td>';
+                        if (res.reservationCancels[i].companyId == compId) {
 
+                            row += '<tr style="text-align:center" id="">';
+                            row += '<td>' + res.reservationCancels[i].resId + '</td>';
+                            row += '<td>' + memberInf[0].memberNumber + '</td>';
+                            row += '<td>' + memberInf[0].fullName + '</td>';
+                            row += '<td>' + courtName + '</td>';
+                            row += '<td>' + res.reservationCancels[i].resDate + '</td>';
+                            row += '<td>' + res.reservationCancels[i].resStartTime + '</td>';
+                            row += '<td>' + res.reservationCancels[i].resFinishTime + '</td>';
+                            row += '<td>' + res.reservationCancels[i].price + '</td>';
+                            if (res.reservationCancels[i].priceInf) {
+                                row += '<td>' + "Ödendi" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Ödenmedi" + '</td>';
+                            }
+                            if (res.reservationCancels[i].procedure) {
+                                row += '<td>' + "Var" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Yok" + '</td>';
+                            }
 
-
-                        row += '</tr>';
-                      
+                            row += '<td>' + cancelMemberInf[0].fullName + '</td>';
+                            row += '</tr>';
+                        }
 
                     }
                     row += '</tbody>';
