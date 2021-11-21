@@ -57,7 +57,7 @@
 
                                         <option>Yıllık Aidat Ücreti</option>
                                         <option>Yıllık Eş Aidat Ücreti</option>
-                                        <option>Geçiçi Üye Ücreti</option>
+                                        <option>Geçici Üye Ücreti</option>
 
                                     </select>
                                 </div>
@@ -98,6 +98,8 @@
 </div>
 
 <script>
+    var compId = $("#compId").text();
+   
 
     findMemberTotal();
 
@@ -112,11 +114,21 @@
             success: function (res) {
 
 
+                debugger;
 
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
-                    mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+
+                    var arrayMem = (res.memberLists[i].role.indexOf("Üye") > -1);
+
+                    if (arrayMem) {
+
+                        if (res.memberLists[i].companyId == compId && res.memberLists[i].actPas == true) {
+                            mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+                        }
+                    }
+                  
                 }
 
                 $("#findMember").autocomplete({
@@ -141,7 +153,7 @@
         var duesYear = $("#duesYear option:selected").val();
         var duesPrice = $("#duesPrice").val();
         var explain = $("#explain").val();
-        var compId = $("compId").text();
+        
 
 
         if (duesType == "" || duesYear == "" || duesPrice == "" || explain == "" || memNum == "") {

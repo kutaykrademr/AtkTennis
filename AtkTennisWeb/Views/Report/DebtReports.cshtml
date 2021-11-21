@@ -94,21 +94,14 @@
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+        <div class="modal-content">    
             <div class="modal-body">
                 <div id="duesInf2x">
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
             </div>
         </div>
     </div>
@@ -117,20 +110,13 @@
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
             <div class="modal-body">
                 <div id="cabinetInf2x">
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
             </div>
         </div>
     </div>
@@ -206,33 +192,33 @@
 
                     debugger;
 
-                    if (res[i].priceCondition == true && res[i].duesPrice != res[i].remainingPrice && res[i].companyId == compId) {
+                    if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice ) {
+                        if (res[i].companyId == compId) {
+                            if (res[i].duesInfType == false) {
+                                row += '<tr style="text-align:center" id="">';
 
-                        if (res[i].duesInfType == false) {
-                            row += '<tr style="text-align:center" id="">';
-
-                            if (res[i].remainingPrice != 0) {
-                                row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
-                            }
-                            else {
-                                row += '<td style="background-color:#8BC34A">' + res[i].memberDuesInfTableId + '</td>';
-                            }
-                            row += '<td>' + res[i].memberFullName + '</td>';
-                            row += '<td>' + res[i].duesType + '</td>';
-                            row += '<td>' + res[i].duesYear + '</td>';
-                            row += '<td>' + res[i].date + '</td>';
-                            row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
-                            row += '<td style="font-weight:bold">' + res[i].paidPrice + "₺" + '</td>';
-                            row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
-                            row += '<td >' + "Ödenmedi" + '</td>';
-                            row += '<td>' + res[i].explain + '</td>';
-                            row += '<td><i id="' + res[i].memberDuesInfTableId + '" onclick="getDues(this.id)" style="cursor:pointer" class="fas fa-search"></i></td>';
+                                if (res[i].remainingPrice != 0) {
+                                    row += '<td style="background-color:#FBC02D">' + res[i].memberDuesInfTableId + '</td>';
+                                }
+                                else {
+                                    row += '<td style="background-color:#8BC34A">' + res[i].memberDuesInfTableId + '</td>';
+                                }
+                                row += '<td>' + res[i].memberFullName + '</td>';
+                                row += '<td>' + res[i].duesType + '</td>';
+                                row += '<td>' + res[i].duesYear + '</td>';
+                                row += '<td>' + res[i].date + '</td>';
+                                row += '<td style="font-weight:bold">' + res[i].duesPrice + "₺" + '</td>';
+                                row += '<td style="font-weight:bold">' + res[i].paidPrice + "₺" + '</td>';
+                                row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
+                                row += '<td >' + "Ödenmedi" + '</td>';
+                                row += '<td>' + res[i].explain + '</td>';
+                                row += '<td><i id="' + res[i].memberDuesInfTableId +'" onclick="getDues(this.id)" style="cursor:pointer" class="fas fa-search"></i></td>';
 
 
 
-                            row += '</tr>';
+                                row += '</tr>';
+                            }   
                         }
-
                     }
 
                 }
@@ -757,7 +743,7 @@
 
                 for (var i = 0; i < res.duesInf.length; i++) {
 
-                    if (res.companyId == compId) {
+               
                         var memberInf = Enumerable.from(res.memberLists)
                             .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
                             .select(function (x) { return x }).toArray();
@@ -765,9 +751,6 @@
                         var getPayment = Enumerable.from(res.memberLists)
                             .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
                             .select(function (x) { return x }).toArray();
-
-
-
 
                         
                         row += '<tr style="text-align:center" id="">';
@@ -793,7 +776,7 @@
                    
                     }
 
-                }
+                
                 row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
@@ -856,8 +839,7 @@
 
                 for (var i = 0; i < res.duesInf.length; i++) {
 
-                    if (res.compId == compId) {
-
+                  
                         var memberInf = Enumerable.from(res.memberLists)
                             .where(function (x) { return x.userId == res.duesInf[i].dues.memberId })
                             .select(function (x) { return x }).toArray();
@@ -865,9 +847,6 @@
                         var getPayment = Enumerable.from(res.memberLists)
                             .where(function (x) { return x.userId == res.duesInf[i].paymentLog.doOpUserId })
                             .select(function (x) { return x }).toArray();
-
-
-
 
 
                         row += '<tr style="text-align:center" id="">';
@@ -893,7 +872,7 @@
 
 
                         row += '</tr>';
-                    }
+                    
                 }
 
                 row += '</tbody>';

@@ -49,7 +49,17 @@
 
                             <div class="row">
 
-                                <div class="input-group mb-3 col-md-6">
+                                <div class="form-group col-md-4">
+                                    <select id="memType" class="form-control">
+                                        <option disabled="disabled" selected>Üyelik Türü</option>
+
+                                        <option value="0">Asil Üye</option>
+                                        <option value="1">Geçici Üye</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="input-group mb-3 col-md-4">
                                     <input type="text" class="form-control" id="refmem1" placeholder="Referans Üye 1" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -58,7 +68,7 @@
                                     </div>
                                 </div>
 
-                                <div class="input-group mb-3 col-md-6">
+                                <div class="input-group mb-3 col-md-4">
                                     <input type="text" class="form-control" id="refmem2" placeholder="Referans Üye 2" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -524,11 +534,13 @@
         partnerBirthDate: null,
         password2: null,
         companyId: null,
+        memType:null,
 
     };
 
     function register() {
 
+        userObj.memType = $("#memType option:selected").val();
         userObj.companyId = $("#compId").text();
         userObj.name = $("#name").val();
         userObj.username = $("#username").val();
@@ -580,7 +592,7 @@
         }
 
 
-        if ($("#refmem2").val() == "" || $("#refmem1").val() == "" || $("#name").val() == "" || $("#username").val() == "" || $("#nickname").val() == "" || $("#memberNum").val() == "" || $("#startDate").val() == "" || $("#password").val() == "" || $("#webReservation option:selected").val() == "") {
+        if ($("#refmem2").val() == "" || $("#refmem1").val() == "" || $("#name").val() == "" || $("#username").val() == "" || $("#nickname").val() == "" || $("#memberNum").val() == "" || $("#memType option:selected").val() == "" || $("#startDate").val() == "" || $("#password").val() == "" || $("#webReservation option:selected").val() == "") {
 
             alert("Üye Zorunlu Alanları Boş Bırakılmış, Lütfen Eksiksiz Doldurunuz !!!");
         }
@@ -595,7 +607,7 @@
 
             else if (userObj.nickName2 == userObj.nickName || userObj.username == userObj.username2 || userObj.memberNumber == userObj.memberNumber2) {
 
-                alert("Eş Bilgisi ve Üye Bilgisi Kullanıcı Adı / Üye Numarası / Rumuz Aynı Değişiklik Yapınız !!!");
+                alert("Eş Bilgisi ve Üye Bilgisi Kullanıcı Adı / Üye Numarası / Rumuz Aynı !! Değişiklik Yapınız !!!");
 
             }
 

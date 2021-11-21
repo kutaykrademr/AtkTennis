@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20211118001135_up_memList")]
+    partial class up_memList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -590,8 +592,8 @@ namespace AtkTennisApp.Migrations
                     b.Property<bool>("isPartner")
                         .HasColumnType("bit");
 
-                    b.Property<int>("memberType")
-                        .HasColumnType("int");
+                    b.Property<bool>("memberType")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("whoPartner")
                         .HasColumnType("bit");

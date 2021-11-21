@@ -8,6 +8,7 @@ namespace Helpers.Dto.ViewDtos
     {
         public int ResId { get; set; }
         public string ResDate { get; set; }
+        public string UserId { get; set; }
         public string ResTime { get; set; }
         public string ResStartTime { get; set; }
         public string ResFinishTime { get; set; }

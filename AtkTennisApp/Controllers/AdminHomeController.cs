@@ -444,7 +444,7 @@ namespace AtkTennisApp.Controllers
             string note, string phone, string password, string birthdate, string gender, string role, string nickName,
             int memberNumber, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
             bool isPartner, string refmem1, string refmem2, string nickName2, string username2, string startDate2,
-            string finishDate2, string memberNumber2, string password2, string compId , bool boss)
+            string finishDate2, string memberNumber2, string password2, string compId , bool boss , int memType)
         {
             MemberList model2 = new MemberList();
             MemberList model3 = new MemberList();
@@ -480,12 +480,11 @@ namespace AtkTennisApp.Controllers
                 user.FullName = name;
                 user.BirthDate = birthdate;
                 user.PhoneNumber = phone;
-                //Role.Name = role;
-
+             
                 var result = userManager.CreateAsync(user, password).Result;
                
 
-                if (isPartner)
+                if (isPartner && result.Succeeded)
                 {
                     user2.UserName = username2;
                     user2.FullName = partnerName;
@@ -497,6 +496,7 @@ namespace AtkTennisApp.Controllers
 
                     if (result2.Succeeded)
                     {
+                        model3.memberType = 2;
                         model3.CompanyId = compId;
                         model3.UserId = user2.Id;
                         model3.IdentityNumber = partnerIdNumber;
@@ -509,7 +509,11 @@ namespace AtkTennisApp.Controllers
                         model3.Phone = partnerPhone;
                         model3.PhoneExp = "Kendi";
                         model3.BirthDate = partnerBirthdate;
-                        model3.Role = role.Remove(role.Length - 1);
+                        model3.Role = role;
+                        if (role.Contains(","))
+                        {
+                            model3.Role = role.Remove(role.Length - 1);
+                        }
                         model3.MemberNumber = Convert.ToInt32(memberNumber2);
                         model3.WebReservation = webReservation;
                         model3.Password = password2;
@@ -526,49 +530,53 @@ namespace AtkTennisApp.Controllers
 
                 var id = user.Id;
 
-
-                if (isPartner == true)
-                {
-                    model2.isPartner = isPartner;
-                    model2.PartnerId = user2.Id;
-                }
-
-                model2.CompanyId = compId;
-                model2.DetailAddress = detailAddress;
-                model2.ReferenceMember1 = refmem1;
-                model2.ReferenceMember2 = refmem2;
-                model2.MemberNumber = memberNumber;
-                model2.UserId = id;
-                model2.FullName = name;
-                model2.NickName = nickName;
-                model2.Gender = gender;
-                model2.UserName = username;
-                model2.StartDate = startDate;
-                model2.FinishDate = finishDate;
-                model2.Role = role.Remove(role.Length - 1);
-                model2.Condition = condition;
-                model2.IdentityNumber = identificationNumber;
-                model2.WebReservation = webReservation;
-                model2.Phone = phone;
-                model2.PhoneExp = phoneExp;
-                model2.Phone2 = phone2;
-                model2.Phone2Exp = phone2Exp;
-                model2.Email = email;
-                model2.EmailExp = emailExp;
-                model2.BirthDate = birthdate;
-                model2.BirthPlace = birthPlace;
-                model2.MotherName = motherName;
-                model2.FatherName = fatherName;
-                model2.City = city;
-                model2.District = district;
-                model2.Job = job;
-                model2.Note = note;
-                model2.ActPas = true;
-                model2.Password = password;
-  
-
                 if (result.Succeeded)
-                {              
+                {
+                    if (isPartner == true)
+                    {
+                        model2.isPartner = isPartner;
+                        model2.PartnerId = user2.Id;
+                    }
+
+
+                    model2.memberType = memType;
+                    model2.CompanyId = compId;
+                    model2.DetailAddress = detailAddress;
+                    model2.ReferenceMember1 = refmem1;
+                    model2.ReferenceMember2 = refmem2;
+                    model2.MemberNumber = memberNumber;
+                    model2.UserId = id;
+                    model2.FullName = name;
+                    model2.NickName = nickName;
+                    model2.Gender = gender;
+                    model2.UserName = username;
+                    model2.StartDate = startDate;
+                    model2.FinishDate = finishDate;
+                    model2.Role = role;
+                    if (role.Contains(","))
+                    {
+                        model2.Role = role.Remove(role.Length - 1);
+                    } 
+                    model2.Condition = condition;
+                    model2.IdentityNumber = identificationNumber;
+                    model2.WebReservation = webReservation;
+                    model2.Phone = phone;
+                    model2.PhoneExp = phoneExp;
+                    model2.Phone2 = phone2;
+                    model2.Phone2Exp = phone2Exp;
+                    model2.Email = email;
+                    model2.EmailExp = emailExp;
+                    model2.BirthDate = birthdate;
+                    model2.BirthPlace = birthPlace;
+                    model2.MotherName = motherName;
+                    model2.FatherName = fatherName;
+                    model2.City = city;
+                    model2.District = district;
+                    model2.Job = job;
+                    model2.Note = note;
+                    model2.ActPas = true;
+                    model2.Password = password;
+
                     if (roles.Length > 1)
                     {
                         for (int i = 0; i < roles.Length; i++)
@@ -577,25 +585,22 @@ namespace AtkTennisApp.Controllers
                             {
                                 userManager.AddToRoleAsync(user, roles[i]).Wait();
                             }
-                          
+
                         }
                     }
                     else
                     {
                         userManager.AddToRoleAsync(user, role).Wait();
                     }
-                  
+
                     db.Add(model2);
                     db.SaveChanges();
                 }
 
-         
                 else
                 {
                     ModelState.AddModelError("", "Invalid User Details");
                 }
-
-                
 
             }
             catch (Exception ex)
@@ -1355,7 +1360,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
-        public async Task<JsonResult> UpdateMemberList(string id, string actPass ,string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        public async Task<JsonResult> UpdateMemberList(string id, string detailAddress , string actPass ,string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
         {
             AppIdentityUser model = new AppIdentityUser();
             MemberList model2 = new MemberList();
@@ -1379,40 +1384,41 @@ namespace AtkTennisApp.Controllers
                     model.PhoneNumber = phone;
 
                 }
-                if (actPass == "true")
-                {
-                    model2.ActPas = true;
-                }
 
-                else
+                if (model2 != null)
                 {
+                    model2.BirthDate = birthdate;
+                    model2.BirthPlace = birthPlace;
+                    model2.City = city;
+                    model2.Condition = condition;
+                    model2.District = district;
+                    model2.Email = email;
                     model2.ActPas = false;
+                    if (actPass == "true")
+                    {
+                        model2.ActPas = true;
+                    }
+                    model2.EmailExp = emailExp;
+                    model2.FatherName = fatherName;
+                    model2.FinishDate = finishDate;
+                    model2.FullName = name;
+                    model2.Gender = gender;
+                    model2.IdentityNumber = identificationNumber;
+                    model2.Job = job;
+                    model2.MotherName = motherName;
+                    model2.Note = note;
+                    model2.Password = password;
+                    model2.Phone = phone;
+                    model2.Phone2 = phone2;
+                    model2.Phone2Exp = phone2Exp;
+                    model2.PhoneExp = phoneExp;
+                    model2.StartDate = startDate;
+                    model2.UserName = username;
+                    model2.WebReservation = webReservation;
+                    model2.Role = role.Remove(role.Length - 1);
+                    model2.DetailAddress = detailAddress;
                 }
-               
-                model2.BirthDate = birthdate;
-                model2.BirthPlace = birthPlace;
-                model2.City = city;
-                model2.Condition = condition;
-                model2.District = district;
-                model2.Email = email;
-                model2.EmailExp = emailExp;
-                model2.FatherName = fatherName;
-                model2.FinishDate = finishDate;
-                model2.FullName = name;
-                model2.Gender = gender;
-                model2.IdentityNumber = identificationNumber;
-                model2.Job = job;
-                model2.MotherName = motherName;
-                model2.Note = note;
-                model2.Password = password;
-                model2.Phone = phone;
-                model2.Phone2 = phone2;
-                model2.Phone2Exp = phone2Exp;
-                model2.PhoneExp = phoneExp;
-                model2.StartDate = startDate;
-                model2.UserName = username;
-                model2.WebReservation = webReservation;
-                model2.Role = role.Remove(role.Length - 1);
+              
 
                 //Ağlama 
 
@@ -2363,8 +2369,8 @@ namespace AtkTennisApp.Controllers
         {
             AddDuesViewModel model = new AddDuesViewModel();
 
-            model.memberLists = db.memberLists.ToList();
-            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear).FirstOrDefault();
+            model.memberLists = db.memberLists.Where(x=>x.CompanyId == compId && x.Role.Contains("Üye")).ToList();
+            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear && x.CompanyId == compId).FirstOrDefault();
 
             try
             {
@@ -2393,14 +2399,14 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.Explain = explain;
 
                                 db.Add(model.memberDuesInfTable);
-                                db.SaveChanges();
+                              
                             }
                         }
 
-                        else
+                        else if(duesType == "Yıllık Aidat Ücreti")
                         {
                           
-                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true)
+                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true && model.memberLists[i].memberType == 0)
                             {
                                
                                 model.memberDuesInfTable = new MemberDuesInfTable();
@@ -2415,12 +2421,56 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.Explain = explain;
 
                                 db.Add(model.memberDuesInfTable);
-                                db.SaveChanges();
+                              
                             }
+                        }
+                        else if (duesType == "Geçici Üye Ücreti")
+                        {
+                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true && model.memberLists[i].memberType == 1)
+                            {
+
+                                model.memberDuesInfTable = new MemberDuesInfTable();
+                                model.memberDuesInfTable.CompanyId = compId;
+                                model.memberDuesInfTable.MemberId = model.memberLists[i].UserId;
+                                model.memberDuesInfTable.MemberFullName = model.memberLists[i].FullName;
+                                model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                                model.memberDuesInfTable.DuesType = duesType;
+                                model.memberDuesInfTable.DuesPrice = duesPrice;
+                                model.memberDuesInfTable.RemainingPrice = duesPrice;
+                                model.memberDuesInfTable.DuesYear = duesYear;
+                                model.memberDuesInfTable.Explain = explain;
+
+                                db.Add(model.memberDuesInfTable);
+                               
+                            }
+                        }
+                        else if (duesType == "Üyelik Giriş Ücreti")
+                        {
+                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true )
+                            {
+
+                                model.memberDuesInfTable = new MemberDuesInfTable();
+                                model.memberDuesInfTable.CompanyId = compId;
+                                model.memberDuesInfTable.MemberId = model.memberLists[i].UserId;
+                                model.memberDuesInfTable.MemberFullName = model.memberLists[i].FullName;
+                                model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                                model.memberDuesInfTable.DuesType = duesType;
+                                model.memberDuesInfTable.DuesPrice = duesPrice;
+                                model.memberDuesInfTable.RemainingPrice = duesPrice;
+                                model.memberDuesInfTable.DuesYear = duesYear;
+                                model.memberDuesInfTable.Explain = explain;
+
+                                db.Add(model.memberDuesInfTable);
+
+                            }
+                        }
+                        else
+                        {
+                            return new AddDuesViewModel(); ;
                         }
 
                     }
-
+                    db.SaveChanges();
                     return model;
                 }
 
@@ -2440,17 +2490,15 @@ namespace AtkTennisApp.Controllers
         {
             AddDuesViewModel model = new AddDuesViewModel();
 
-            model.memberLists = db.memberLists.Where(x => x.MemberNumber == memNum).ToList();
-            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear).FirstOrDefault();
+            model.memberLists = db.memberLists.Where(x => x.MemberNumber == memNum && x.CompanyId == compId).ToList();
+            model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear && x.CompanyId == compId).FirstOrDefault();
 
             try
             {
 
-
-
                 if (duesType == "Yıllık Eş Aidat Ücreti")
                 {
-                    if (model.memberLists[0].isPartner == true)
+                    if (model.memberLists[0].isPartner == true && model.memberLists[0].ActPas == true && model.memberLists[0].whoPartner == false)
                     {
                         model.memberDuesInfTable = new MemberDuesInfTable();
                         model.memberDuesInfTable.CompanyId = compId;
@@ -2463,28 +2511,64 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.DuesYear = duesYear;
                         model.memberDuesInfTable.Explain = explain;
 
-                        db.Add(model.memberDuesInfTable);
-                        db.SaveChanges();
+                     
+                      
+                    }
+                }
+
+                else if (duesType == "Yıllık Aidat Ücreti")
+          
+                {
+                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true && model.memberLists[0].memberType == 0)
+                    {
+                        model.memberDuesInfTable = new MemberDuesInfTable();
+                        model.memberDuesInfTable.MemberId = model.memberLists[0].UserId;
+                        model.memberDuesInfTable.MemberFullName = model.memberLists[0].FullName;
+                        model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                        model.memberDuesInfTable.DuesType = duesType;
+                        model.memberDuesInfTable.DuesPrice = duesPrice;
+                        model.memberDuesInfTable.RemainingPrice = duesPrice;
+                        model.memberDuesInfTable.DuesYear = duesYear;
+                        model.memberDuesInfTable.Explain = explain;
+                        model.memberDuesInfTable.CompanyId = compId;
+
+                    }
+                        
+                  
+                }
+
+                else if (duesType == "Geçici Üye Ücreti")
+                {
+                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true && model.memberLists[0].memberType == 1)
+                    {
+
+                        model.memberDuesInfTable = new MemberDuesInfTable();
+                        model.memberDuesInfTable.MemberId = model.memberLists[0].UserId;
+                        model.memberDuesInfTable.MemberFullName = model.memberLists[0].FullName;
+                        model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                        model.memberDuesInfTable.DuesType = duesType;
+                        model.memberDuesInfTable.DuesPrice = duesPrice;
+                        model.memberDuesInfTable.RemainingPrice = duesPrice;
+                        model.memberDuesInfTable.DuesYear = duesYear;
+                        model.memberDuesInfTable.Explain = explain;
+                        model.memberDuesInfTable.CompanyId = compId;
+
+                      
+
                     }
                 }
 
                 else
                 {
-                    model.memberDuesInfTable = new MemberDuesInfTable();
-                    model.memberDuesInfTable.MemberId = model.memberLists[0].UserId;
-                    model.memberDuesInfTable.MemberFullName = model.memberLists[0].FullName;
-                    model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
-                    model.memberDuesInfTable.DuesType = duesType;
-                    model.memberDuesInfTable.DuesPrice = duesPrice;
-                    model.memberDuesInfTable.RemainingPrice = duesPrice;
-                    model.memberDuesInfTable.DuesYear = duesYear;
-                    model.memberDuesInfTable.Explain = explain;
-                    model.memberDuesInfTable.CompanyId = compId;
+                  return  new AddDuesViewModel();
+                }
 
+                if (model != null)
+                {
                     db.Add(model.memberDuesInfTable);
                     db.SaveChanges();
                 }
-
+              
                 return model;
             }
 

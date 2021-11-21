@@ -260,15 +260,27 @@
                         async: true,
                         success: function (res) {
 
-                            debugger;
+                   
+                            var totalPrice2 = 0;
 
+                            for (var i = 0; i < res.memberDuesInfTables.length; i++) {
+
+                                if (res.memberDuesInfTables[i].companyId == compId && res.memberDuesInfTables[i].duesInfType == true) {
+
+                                    var firstPrice2 = res.memberDuesInfTables[i].remainingPrice;
+                                    var totalPrice2 = firstPrice2 + totalPrice2;
+                                }
+                            }
 
                             $("#append").empty();
 
 
                             row = "";
                             row += '<div id="asd" class="card-body">';
+                            row += '<div class="d-flex justify-content-between">';
                             row += '<h4 style="margin-bottom:30px">Dolap Aidat Borçları</h4>';
+                            row += '<h4 style="margin-bottom:30px">Toplam Borç:' + totalPrice2 + '₺</h4>';
+                            row += '</div>';
                             row += '<table id="resList" class="table table-bordered table-hover">';
                             row += '<thead>';
                             row += '<tr style="text-align:center">';
@@ -288,15 +300,11 @@
                             row += '<tbody>';
 
 
-
                             for (var i = 0; i < res.memberDuesInfTables.length; i++) {
 
                                 if (res.memberDuesInfTables[i].duesInfType == true && res.memberDuesInfTables[i].priceCondition == false && res.memberDuesInfTables[i].companyId == compId) {
-
-                           
-                                    row += '<tr style="text-align:center" id="">';
-
-                             
+                      
+                                    row += '<tr style="text-align:center" id="">';                     
                                     row += '<td>' + memberInf[0].memberNumber + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].memberFullName + '</td>';
                                     row += '<td>' + res.memberDuesInfTables[i].duesYear + '</td>';

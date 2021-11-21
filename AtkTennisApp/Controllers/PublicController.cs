@@ -978,6 +978,7 @@ namespace AtkTennisApp.Controllers
                     model2.resSchemaModal.NickName = mem.NickName;
                 }
 
+                model2.resSchemaModal.UserId = model.reservations.UserId;
                 model2.resSchemaModal.CourtName = model.reservations.Court.CourtName;
                 model2.resSchemaModal.ResDate = model.reservations.ResDate;
                 model2.resSchemaModal.ResEvent = model.reservations.ResEvent;

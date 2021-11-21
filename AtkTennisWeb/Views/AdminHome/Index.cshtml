@@ -35,11 +35,11 @@
 
     if (start != null || finish != null || resSettingsTime != null)
     {
-         startTime = start.ReservationValue;
-         finishTime = finish.ReservationValue;
-         resSetTime = resSettingsTime.ReservationValue;
+        startTime = start.ReservationValue;
+        finishTime = finish.ReservationValue;
+        resSetTime = resSettingsTime.ReservationValue;
     }
- 
+
 
     var TotalResPriceList = Model.reservations.Where(x => x.PriceInf == false && x.CompanyId == CompId).ToList();
     var TotalResCanPriceList = Model.reservationCancels.Where(x => x.PriceInf == false && x.Procedure == false && x.CompanyId == CompId).ToList();
@@ -150,6 +150,7 @@
 </style>
 
 <h2 style="display:none" id="compId">@CompId</h2>
+<h2 style="display:none" id="userId">@userId</h2>
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid">
@@ -192,11 +193,9 @@
                 </div>
 
                 <div class="col-lg-3 col-6">
-
                     <div class="small-box bg-success">
                         <div style="margin-top:10px" class="inner">
                             @*<h3>53<sup style="font-size: 20px">%</sup></h3>*@
-
                             <h3>
 
                                 @if (Model.TodayResCount == null)
@@ -219,7 +218,6 @@
                 </div>
 
                 <div class="col-lg-3 col-6">
-
                     <div class="small-box bg-danger">
                         <div style="margin-top:10px" class="inner">
                             <h3>
@@ -234,7 +232,6 @@
                                     @Model.TotalResCount
 
                             </h3>
-
                             <p>Toplam Rezervasyon Sayısı</p>
                         </div>
                         <div class="icon">
@@ -381,6 +378,7 @@
 
 
                 <div class="row">
+
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-body" style="background-color:#d39e000f">
@@ -435,17 +433,19 @@
                                 <div class="info-box shadow-lg">
                                     <div class="info-box-content">
                                         <div class="row">
-                                            <div style="margin-right:7px">
-                                                <button style="font-size:15px; background-color:#ffc107" type="button" class="btn btn-dark"><i style="margin-right:8px" class="fas fa-wallet"></i>Ödeme</button>
+
+                                            <div id="getPaidOpe" style="margin-right:7px">
+                                                <button onclick="getPaid(this.id)" style="font-size:15px; background-color:#ffc107" type="button" class="btn btn-dark"><i style="margin-right:8px" class="fas fa-wallet"></i>Ödeme</button>
                                             </div>
 
-                                            <div style="margin-right:10px">
-                                                <button style="font-size:15px;" type="button" class="btn btn-danger"><i style="margin-right:8px" class="fas fa-wallet"></i>Toplu Ödeme</button>
+                                            <div id="getPaidTotOpe" style="margin-right:10px">
+                                                <button onclick="getPaidTot(this.id)" style="font-size:15px;" type="button" class="btn btn-danger"><i style="margin-right:8px" class="fas fa-wallet"></i>Toplu Ödeme</button>
                                             </div>
 
                                             <div style="margin-right:7px">
                                                 <button id="ppp" style="font-size:15px; background-color:#17a2b8" type="button" onclick="ppp()" class="btn btn-dark"><i class="fas fa-print"></i></button>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -602,7 +602,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="priceModal">
     <div class="modal-dialog modal-lg modal-dialog-bottom ">
         <div id="xad" class="panel" style="width: 8cm; display:block; margin-bottom: 1cm; background-color: #fff;">
@@ -622,6 +621,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 
@@ -784,11 +785,11 @@
                 <textbox style="color:black; " id="userId">@userId</textbox>
             </div>
 
-
             <div class="modal-footer" id="forApproveUpdId">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
                 <button type="button" class="btn btn-primary" onclick="updateReservation(this.id)">Güncelle</button>
             </div>
+
         </div>
     </div>
 </div>
@@ -850,7 +851,160 @@
     </div>
 </div>
 
+<div class="modal fade" id="getPaidModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ödeme Al</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered " style=" margin-bottom: 0;">
+                                    <tbody>
+                                        <tr class="note note-danger">
+                                            <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
+                                            <td style="">
+                                                <select class="form-control" id="paymentType" data-id="28911">
+                                                    <option value="1">Nakit</option>
+                                                    <option value="2">Kredi Kartı</option>
+                                                    <option value="3">Havale </option>
+                                                    <option value="4">Eft </option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Makbuz No:</td>
+                                            <td style=""><input id="receiptNo" type="text" name="MakbuzNumarasi" class="form-control " placeholder="Makbuz No"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Makbuz Tarihi:</td>
+                                            <td><input class="form-control" type="date" id="receiptDate" style="cursor:pointer;"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Açıklama:</td>
+                                            <td style=""><input id="explain" type="text" name="Aciklama" class="form-control" placeholder="Açıklama"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td>Ücreti:</td>
+                                            <td>
+                                                <input id="price" disabled type="text" class="form-control" autocomplete="new-password">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="paidOp" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="getPaidOperations(this.id)">Ödeme Al</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="totPriceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+           
+            <div class="modal-body">
+
+                <div id="appendResInf">
+                    <div class="portlet-body">
+
+                    </div>
+                </div>
+
+                <div id="append">
+                    <div class="portlet-body">
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" onclick="getPaidMulti()" class="btn btn-primary">Ödeme Al</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="getTotalPaidModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ödeme Al</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered " style=" margin-bottom: 0;">
+                                    <tbody>
+                                        <tr class="note note-danger">
+                                            <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
+                                            <td style="">
+                                                <select class="form-control" id="paymentType" data-id="28911">
+                                                    <option value="1">Nakit</option>
+                                                    <option value="2">Kredi Kartı</option>
+                                                    <option value="3">Havale </option>
+                                                    <option value="4">Eft </option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Makbuz No:</td>
+                                            <td style=""><input id="receiptNo" type="text" name="MakbuzNumarasi" class="form-control " placeholder="Makbuz No"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Makbuz Tarihi:</td>
+                                            <td><input class="form-control" type="date" id="receiptDate" style="cursor:pointer;"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td style="">Açıklama:</td>
+                                            <td style=""><input id="explain" type="text" name="Aciklama" class="form-control" placeholder="Açıklama"></td>
+                                        </tr>
+                                        <tr class="note note-danger">
+                                            <td>Ücreti:</td>
+                                            <td>
+                                                <input id="price" disabled type="text" class="form-control" autocomplete="new-password">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="paidOp2" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="getTotalPaidOperations(this.id)">Ödeme Al</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <script src="~/adminRoot/js/loading.js"></script>
 <script src="~/lib/jquery/dist/linq.min.js"></script>
@@ -899,7 +1053,7 @@
 
         });
 
-      
+
 
     });
 
@@ -1001,24 +1155,24 @@
             async: true,
             success: function (res) {
 
-                debugger;
+
 
                 var mem = [];
 
                 for (var i = 0; i < res.memberLists.length; i++) {
 
-                    debugger;
+
 
                     var arrayMem = (res.memberLists[i].role.indexOf("Üye") > -1);
                     var arrayAnt = (res.memberLists[i].role.indexOf("Antrenör") > -1);
 
                     if (res.memberLists[i].companyId == compId) {
-                        if (arrayMem || arrayAnt ) {
-
+                        if (arrayMem || arrayAnt) {
+                            mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
                         }
-                        mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
+
                     }
-                 
+
                 }
 
 
@@ -1102,7 +1256,7 @@
 
                 for (var i = 0; i < res.courts.length; i++) {
 
-              
+
 
 
                     if (res.courts[i].companyId == compId) {
@@ -1111,7 +1265,7 @@
 
                         for (var a = 0; a < res.reservations.length; a++) {
 
-                            if (res.reservations[a].court.courtId == res.courts[i].courtId && res.reservations[a].companyId ==  compId) {
+                            if (res.reservations[a].court.courtId == res.courts[i].courtId && res.reservations[a].companyId == compId) {
 
 
                                 NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item"><div class="d-flex">';
@@ -1283,7 +1437,7 @@
         var courtId = a[0];
         var courtName = a[1];
         var clcTime = a[2];
-      
+
 
 
         var resStartTime = $('#doRes').attr('start');
@@ -1324,7 +1478,6 @@
             swal("Uyarı !", "Önceki Günlere Rezervasyon Yapamazsınız.", "warning", {
                 button: "Tamam",
             });
-
         }
 
         else {
@@ -1536,7 +1689,7 @@
 
         }
 
-       /* $("#selectedCourt option:selected").text(courtName);*/
+        /* $("#selectedCourt option:selected").text(courtName);*/
 
         $('#selectedCourt').on('change', function () {
 
@@ -1796,7 +1949,7 @@
                         row += '<tr>';
                         row += ' <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">' + res.courts[i].courtName + '</th>';
 
-                        for (var a = 0; a < res.resTimes.length; a++) {                         
+                        for (var a = 0; a < res.resTimes.length; a++) {
 
                             if (res.resTimes[a].companyId == compId) {
 
@@ -1840,13 +1993,13 @@
                                 if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
 
                                     var scaleList = Enumerable.from(res.courtScaleLists)
-                                        .where(function (x) { return x.code == Res[0].nickName  })
+                                        .where(function (x) { return x.code == Res[0].nickName })
                                         .select(function (x) { return x }).toArray();
 
 
                                     var scaleList2 = Enumerable.from(res.courtScaleLists)
 
-                                        .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase()  })
+                                        .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
                                         .select(function (x) { return x }).toArray();
 
 
@@ -1874,7 +2027,7 @@
 
                                 else if (Res.length != 0) {
 
-                              
+
 
                                     var scaleList = Enumerable.from(res.courtScaleLists)
                                         .where(function (x) { return x.code == Res[0].nickName })
@@ -1957,7 +2110,6 @@
 
     function myfunction() {
 
-
         $("#tablecount td").each(function () {
 
 
@@ -2004,9 +2156,336 @@
 
     }
 
+    function getPaidOperations(id) {
+
+        var splID = id.split(",");
+
+        var userId = splID[1];
+        var paymentType = $("#paymentType option:selected").val();
+        var currentUserId = $("#userId").text();;
+        var price = $("#price").val();
+        var paidPrice = price;
+        var remainingPrice = $("#remainingPrice").val();
+        var receiptNo = $("#receiptNo").val();
+        var receiptDate = $("#receiptDate").val();
+        var explain = $("#explain").val();
+        var compId = $("#compId").text();
+
+        if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || remainingPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
+            alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
+        }
+
+        else {
+
+            $.ajax({
+                type: "Get",
+                url: '../AdminHome/GetPaid',
+                cache: false,
+                dataType: "json",
+                data: { "userId": userId, "compId": compId, "refId": splID[0], "refType": 1, "doUserId": currentUserId, "price": price, "paidPrice": paidPrice, "remainingPrice": parseInt(price) - parseInt(paidPrice), "paymentType": paymentType, "receiptNo": receiptNo, "receiptDate": receiptDate, "explain": explain },
+                async: true,
+                success: function (res) {
+
+                    if (res != null) {
+
+                        swal({
+                            title: "Ödeme Başarılı",
+                            text: "Ödeme Başarılı Şekilde Alındı !",
+                            icon: "success",
+                            button: "Tamam",
+                            timer: 500,
+
+                        }).then((value) => {
+
+                            $('#getPaidModal').modal('toggle')
+                            getList();
+
+                        });
+                    }
+
+                },
+
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+        }
+    }
+
+    function getPaidTot(id) {
+
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetResUser',
+            cache: false,
+            dataType: "json",
+            data: { "id": id },
+            async: true,
+            success: function (res) {
+
+
+                $("#appendResInf").empty();
+
+                var totalPrice = 0;
+
+                for (var i = 0; i < res.reservations.length; i++) {
+
+                    if (res.reservations[i].companyId == compId && res.reservations[i].priceInf == false) {
+
+                        var firstPrice = res.reservations[i].price;
+                        var totalPrice = firstPrice + totalPrice;
+                    }
+                }
+
+                row = "";
+                row += '<div id="asd" class="card-body ">';
+                row += '<div class="d-flex justify-content-between">';
+                row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
+                row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon Borcu :' + totalPrice + '  ₺</h4>';
+                row += '</div>';
+                row += '<table id="resList" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Adı - Soyadı</th>';
+                row += '<th>Rezervasyon Tarihi</th>';
+                row += '<th>Rezervasyon Saatleri</th>';
+                row += '<th>Kort Bilgisi</th>';
+                row += '<th>Ücret Durumu</th>';
+                row += '<th>Ücret Bilgisi</th>';
+
+                row += '<th>İşlemler</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+                row += '<tbody>';
+
+
+                for (var i = 0; i < res.reservations.length; i++) {
+
+
+                    if (res.reservations.length > 0 && res.reservations[i].priceInf == false && res.reservations[i].companyId == compId) {
+
+
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td>' + res.memberLists[0].memberNumber + '</td>';
+                        row += '<td>' + res.memberLists[0].fullName + '</td>';
+                        row += '<td>' + res.reservations[i].resDate + '</td>';
+                        row += '<td>' + res.reservations[i].resStartTime + ' - ' + res.reservations[i].resFinishTime + '</td>';
+                        row += '<td>' + res.reservations[i].court.courtName + '</td>';
+                        row += '<td>' + "Ödenmedi" + '</td>';
+                        row += '<td>' + res.reservations[i].price + '₺' + '</td>';
+
+
+                        row += '<td>';
+                        //row += '<button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button>';
+                        //row += '<button style="display:none" class="btn btn-outline-dark" value="' + res.memberLists[0].userId + '" id="userId"</button>';
+                        row += '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res.reservations[i].resId + '"><label class="custom-control-label" for="' + res.reservations[i].resId + '"></label></div>';
+                        row += '</td>';
+                        row += '</tr>';
+
+
+                    }
+
+                }
+
+                row += '</tbody>';
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+                $("#appendResInf").append(row);
+
+
+                $("#append").empty();
+
+
+                var totalPrice2 = 0;
+
+                for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                    if (res.reservationCancels[i].companyId == compId && res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false) {
+
+                        var firstPrice2 = res.reservationCancels[i].price;
+                        var totalPrice2 = firstPrice2 + totalPrice2;
+                    }
+                }
+
+                row = "";
+                row += '<div id="asd" class="card-body">';
+                row += '<div class="d-flex justify-content-between">';
+                row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
+                row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon İptal Borcu : ' + totalPrice2 + ' ₺</h4>';
+                row += '</div>';
+                row += '<table id="resList2" class="table table-bordered table-hover">';
+                row += '<thead>';
+                row += '<tr style="text-align:center">';
+                row += '<th>Üye Numarası</th>';
+                row += '<th>Adı - Soyadı</th>';
+                row += '<th>Rezervasyon Tarihi</th>';
+                row += '<th>Rezervasyon Saatleri</th>';
+                row += '<th>Kort Bilgisi</th>';
+                row += '<th>Ücret Durumu</th>';
+                row += '<th>Ücret Bilgisi</th>';
+
+                row += '<th>İşlemler</th>';
+                row += '</tr>';
+                row += '</thead>';
+
+
+
+                for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                    if (res.reservationCancels.length > 0 && res.reservationCancels[i].priceInf == false && res.reservationCancels[i].procedure == false && res.reservationCancels[i].companyId == compId) {
+
+                        row += '<tbody>';
+                        row += '<tr style="text-align:center" id="">';
+                        row += '<td id="userId2" value="' + res.memberLists[0].userId + '">' + res.memberLists[0].memberNumber + '</td>';
+                        row += '<td>' + res.memberLists[0].fullName + '</td>';
+                        row += '<td>' + res.reservationCancels[i].resDate + '</td>';
+                        row += '<td>' + res.reservationCancels[i].resStartTime + ' - ' + res.reservationCancels[i].resFinishTime + '</td>';
+
+                        for (var c = 0; c < res.courts.length; c++) {
+                            if (res.courts[c].courtId == res.reservationCancels[i].courtId) {
+                                row += '<td>' + res.courts[c].courtName + '</td>';
+                            }
+                        }
+
+                        row += '<td>' + "Ödenmedi" + '</td>';
+                        row += '<td>' + res.reservationCancels[i].price + '₺' + '</td>';
+                        row += '<td>';
+                        row += '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res.reservationCancels[i].resId + '"><label class="custom-control-label" for="' + res.reservationCancels[i].resId +'"></label></div>';                    
+                        row += '</td>';
+                        row += '</tr>';
+                        row += '</tbody>';
+
+                    }
+
+                }
+
+                row += '</table>';
+                row += '</div>';
+                row += '</div>';
+
+                $("#append").append(row);
+
+                $('#totPriceModal').modal('toggle')
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+    }
+
+    function getPaid(id) {
+
+        $("#paidOp button:nth-of-type(2)").attr("id", id.split(",")[0]);
+
+        var dt = new Date();
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0');
+        var yyyy = dt.getFullYear();
+
+        var today = yyyy + '-' + mm + '-' + dd;
+
+        $("#receiptDate").val(today)
+
+  
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetReserInf',
+            cache: false,
+            dataType: "json",
+            data: { "id": id.split(",")[0] },
+            async: true,
+            success: function (res) {
+
+               
+                if (res.reservation != null) {
+
+                    $("#price").val(res.reservation.price)
+                }
+                else {
+                    $("#price").val(res.reservationCancel.price)
+                }
+            },
+
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
+
+        $('#exampleModal').modal('toggle')
+
+        $('#getPaidModal').modal('toggle');
+    }
+
+    function getPaidMulti() {
+
+        //Buraaa
+        $('#getTotalPaidModal').modal('toggle');
+
+        debugger;
+        
+        var idList = [];
+        var idList2 = [];
+
+        var idLists = "";
+        var idLists2 = "";
+
+        $('#resList input:checked:not(:disabled)').each(function () {
+
+            idList.push(this.id);
+        });
+
+        $('#resList2 input:checked:not(:disabled)').each(function () {
+
+            idList2.push(this.id);
+        });
+
+        for (var i = 0; i < idList.length; i++) {
+
+            idLists = idList[i] + ',' + idLists;
+        }
+
+        for (var i = 0; i < idList2.length; i++) {
+
+            idLists2 = idList2[i] + ',' + idLists2;
+        }
+
+        //$.ajax({
+        //    type: "GET",
+        //    url: '../Public/GetResModalInf',
+        //    cache: false,
+        //    data: { "idList": idLists , "idList2":idLists2 },
+        //    dataType: "json",
+        //    async: true,
+        //    success: function (res) {
+
+        //        if (res == true) {
+
+        //        }
+                
+
+        //    },
+        //    error: function (textStatus, errorThrown) {
+        //        console.log(JSON.stringify(textStatus));
+        //        console.log(textStatus);
+        //    }
+        //});
+
+    }
+
+
     function getPrice() {
-
-
 
         var price = [];
         $('#checkPriceTables input:checked').each(function () {
@@ -2026,7 +2505,6 @@
         }
 
     }
-
 
     function ApproveAll(id) {
 
@@ -2188,8 +2666,6 @@
         var today = yyyy + '-' + mm + '-' + dd;
 
 
-
-
         var resobject = {
 
             ResDate: '',
@@ -2204,7 +2680,7 @@
             PriceIds: '',
             UserName: '',
             PrivRes: '',
-            CompId:'',
+            CompId: '',
 
         }
 
@@ -2273,7 +2749,7 @@
                     async: true,
                     success: function (res) {
 
-                        
+
 
                         if (res == true) {
 
@@ -2335,6 +2811,8 @@
 
     function openResInfModal(id) {
 
+
+
         $.ajax({
             type: "GET",
             url: '../Public/GetResModalInf',
@@ -2358,7 +2836,7 @@
 
                 var date3 = day + '-' + month + '-' + d.getFullYear();
                 var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-            
+
 
                 $("#PriceInf").empty();
 
@@ -2388,7 +2866,10 @@
 
                 row = "";
 
+                var sumPrice = 0;
+
                 for (var i = 0; i < res.courtPriceLists.length; i++) {
+
                     for (var a = 0; a < IdsArray.length; a++) {
 
                         if (IdsArray[a] == res.courtPriceLists[i].courtPriceListId) {
@@ -2396,16 +2877,16 @@
                             row += '<td>' + res.courtPriceLists[i].name + '</td>';
                             row += '<td>' + res.courtPriceLists[i].courtPrice + '</td>';
                             row += '</tr>';
+
+                            sumPrice = sumPrice + res.courtPriceLists[i].courtPrice;
+
                         }
                     }
                 }
 
                 $("#PriceNI").append(row);
 
-
-
-
-                $("#sumPrice").html(res.resSchemaModal.price);
+                $("#sumPrice").html(sumPrice);
 
                 var a = res.resSchemaModal.resNowDate.split("-");
                 var nowDate = a[2] + '-' + a[1] + '-' + a[0];
@@ -2574,11 +3055,12 @@
                 row += '</div>';
 
 
-
-
-
-
                 $("#receiptAppend").append(row);
+
+                //kanka
+                $("#getPaidTotOpe button").attr("id", res.resSchemaModal.userId);
+                $("#getPaidOpe button").attr("id", id);
+                $("#getPaid button").attr("id", id + ',' + res.resSchemaModal.userId);
 
             },
             error: function (textStatus, errorThrown) {
@@ -2655,7 +3137,7 @@
                         type: "GET",
                         url: '../AdminHome/CancelResAdmin',
                         cache: false,
-                        data: { "id": id, "userId": userId, "procedure": procedure, "cancelReasons": cancelReasons , "compId":compId },
+                        data: { "id": id, "userId": userId, "procedure": procedure, "cancelReasons": cancelReasons, "compId": compId },
                         dataType: "json",
                         async: true,
                         success: function (res) {
@@ -2699,7 +3181,7 @@
 
     function checkMe(id) {
 
-     
+
 
         var checkID = "";
 

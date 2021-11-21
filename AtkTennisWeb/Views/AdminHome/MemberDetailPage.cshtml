@@ -430,18 +430,6 @@
                                     </div>
                                 </div>
 
-                                <hr>
-
-                                <strong><i class="far fa-file-alt mr-1"></i> Detaylı Adres</strong>
-
-                                <div class="input-group col-md-12">
-                                    <input type="text" value="@Model.memberLists.DetailAddress" class="form-control" id="detailAddress" placeholder="Adres Detay" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <hr>
                                 <strong><i class="far fa-file-alt mr-1"></i>Referans Üyeler</strong>
@@ -516,9 +504,14 @@
                                 </div>
 
                                 <hr>
+                               
 
+                                <strong><i class="far fa-file-alt mr-1"></i> Detaylı Adres</strong>
 
-
+                                <div class="input-group col-md-12">
+                                    @*<textarea  type="text" value="@Model.memberLists.DetailAddress" class="form-control" id="detailAddress" placeholder="Adres Detay" autocomplete="new-password">*@
+                                        <textarea id="detailAddress" name="detailAddress" rows="4" cols="50">@Model.memberLists.DetailAddress</textarea>
+                                </div>
 
                             </div>
                             <button class="btn btn-warning" id="@Model.memberLists.UserId" onclick="updateMemberList(this.id)">Kaydet</button>
@@ -1424,11 +1417,13 @@
             gender: null,
             checkpass: null,
             actChecked: null,
+            detailAddress:null,
         };
 
         debugger;
         
         userObj.actPass = $("#actChecked input").prop('checked');
+        userObj.detailAddress = $("#detailAddress").val();
         userObj.checkpass = $("#password").val();
         userObj.id = id;
         userObj.name = $("#name").val();

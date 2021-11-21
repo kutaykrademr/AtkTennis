@@ -160,14 +160,14 @@
             success: function (res) {
 
                 var mem = [];
-        
+
 
                 for (var i = 0; i < res.memberLists.length; i++) {
 
                     if (res.memberLists[i].companyId == compId) {
                         mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
                     }
-                    
+
                 }
 
 
@@ -186,7 +186,7 @@
 
                             mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
                         }
-                      
+
                     }
 
                 }
@@ -210,7 +210,7 @@
     function findAllRes() {
 
 
-       
+
         var userName = $("#findMember").val();
         var startDate = $("#dateStart").val();
         var finishDate = $("#dateFinish").val();
@@ -289,7 +289,7 @@
                         for (var i = 0; i < res.length; i++) {
 
                             if (res[i].companyId == compId) {
-                               
+
                                 row += '<tr style="text-align:center" id="">';
                                 row += '<td>' + res[i].resId + '</td>';
                                 row += '<td>' + res[i].resDate + '</td>';
@@ -330,12 +330,11 @@
                                 row += '</div>';
                                 row += '</td>';
                                 row += '</tr>';
-                               
-                            }
-                            row += '</tbody>';
 
+                            }
                         }
 
+                        row += '</tbody>';
                         row += '<tfoot style="text-align:center; font-weight:bold">';
                         row += '<tr>';
                         row += '<td></td>';
