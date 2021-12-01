@@ -6,339 +6,294 @@
     var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 
 }
-<style>
+@if (Mutuals.M6 == false)
+{
 
-    button {
-        border: none !important;
-    }
-</style>
+}
+else
+{
 
-<div class="content-wrapper">
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Reservasyon Ayarları</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
+    <style>
+
+        button {
+            border: none !important;
+        }
+    </style>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Reservasyon Ayarları</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">DataTables</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Rezervason Ayarları Düzenle</h3>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Rezervason Ayarları Düzenle</h3>
+                                </div>
+                                <div>
+
+                                    @*<button type="button" class="btn btn-outline-primary"  data-toggle="modal" data-target="#addResSettings">Ekle</button>*@
+                                    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#openUpdateResSetModal"><i class="fas fa-edit"></i></button>
+
+                                </div>
                             </div>
-                            <div>
 
-                                @*<button type="button" class="btn btn-outline-primary"  data-toggle="modal" data-target="#addResSettings">Ekle</button>*@
-                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#openUpdateResSetModal"><i class="fas fa-edit"></i></button>
+                            <div class="card-body">
+                                <table id="example3" class="table table-bordered table-hover">
+                                    <thead>
 
-                            </div>
-                        </div>
+                                        <tr style="text-align:center">
+                                            <th>Ayar Bilgisi </th>
+                                            <th>Değeri</th>
+                                            @*<th>İşlemler</th>*@
+                                        </tr>
 
-                        <div class="card-body">
-                            <table id="example3" class="table table-bordered table-hover">
-                                <thead>
+                                    </thead>
 
-                                    <tr style="text-align:center">
-                                        <th>Ayar Bilgisi </th>
-                                        <th>Değeri</th>
-                                        @*<th>İşlemler</th>*@
-                                    </tr>
+                                    <tbody>
 
-                                </thead>
-
-                                <tbody>
-
-                                    @for (int i = 0; i < Model.reservationSettings.Count; i++)
-                                    {
-                                        if (Model.reservationSettings[i].CompanyId == CompId)
+                                        @for (int i = 0; i < Model.reservationSettings.Count; i++)
                                         {
-                                            <tr style="text-align:center">
-                                                <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
-                                                <td>@Model.reservationSettings[i].ReservationValue</td>
-                                                @*<td>
-                                                        <button type="button" class="btn btn-outline-danger" id="@Model.reservationSettings[i].ReservationSettingsId" onclick="deleteResSetOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-                                                    </td>*@
-                                            </tr>
+                                            if (Model.reservationSettings[i].CompanyId == CompId)
+                                            {
+                                                <tr style="text-align:center">
+                                                    <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
+                                                    <td>@Model.reservationSettings[i].ReservationValue</td>
+                                                    @*<td>
+                                                            <button type="button" class="btn btn-outline-danger" id="@Model.reservationSettings[i].ReservationSettingsId" onclick="deleteResSetOpenModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                        </td>*@
+                                                </tr>
+                                            }
+
                                         }
 
-                                    }
-
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
-<div class="modal fade" id="addResSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Özel Ders Tarife</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Ayar Bilgisi:</label>
-                        <input type="text" class="form-control" id="setInf">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Değeri:</label>
-                        <input type="number" class="form-control" id="setVal">
+    <div class="modal fade" id="addResSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Özel Ders Tarife</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Ayar Bilgisi:</label>
+                            <input type="text" class="form-control" id="setInf">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Değeri:</label>
+                            <input type="number" class="form-control" id="setVal">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveReservationSettings()">Ekle</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="openDeleteResSetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperationResSetModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deleteResSet(this.id)">Sil</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="saveReservationSettings()">Ekle</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-<div class="modal fade" id="openUpdateResSetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Güncelle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <div class="modal fade" id="openDeleteResSetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Silmek İstediğinize Emin Misiniz ?
+                </div>
+                <div class="modal-footer" id="deleteOperationResSetModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="deleteResSet(this.id)">Sil</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <table id="example3" class="table table-bordered table-hover">
-                    <thead>
+        </div>
+    </div>
 
-                        <tr style="text-align:center">
-                            <th>Ayar Bilgisi </th>
-                            <th>Değeri</th>
-                        </tr>
 
-                    </thead>
-                    <tbody>
+    <div class="modal fade" id="openUpdateResSetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="example3" class="table table-bordered table-hover">
+                        <thead>
 
-                        @for (int i = 0; i < Model.reservationSettings.Count; i++)
-                        {
-                            if (Model.reservationSettings[i].CompanyId == CompId)
+                            <tr style="text-align:center">
+                                <th>Ayar Bilgisi </th>
+                                <th>Değeri</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            @for (int i = 0; i < Model.reservationSettings.Count; i++)
                             {
-                                <tr style="text-align:center">
-                                    <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
-                                    <td><input class="update" id="@Model.reservationSettings[i].ReservationSettingsId" style="text-align:center" value="@Model.reservationSettings[i].ReservationValue"></td>
-                                </tr>
+                                if (Model.reservationSettings[i].CompanyId == CompId)
+                                {
+                                    <tr style="text-align:center">
+                                        <td>@Model.reservationSettings[i].ReservationSettingsInf</td>
+                                        <td><input class="update" id="@Model.reservationSettings[i].ReservationSettingsId" style="text-align:center" value="@Model.reservationSettings[i].ReservationValue"></td>
+                                    </tr>
+                                }
+
                             }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" id="deleteOperationResSetModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="UpdateResSet()">Güncelle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        $(document).ready(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            $('#example2 , #example3 , #example4').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+
+            });
+        });
+
+
+        function saveReservationSettings() {
+            if ($("#setInf").val() == "" || $("#setVal").val() == "") {
+                $.confirm({
+                    title: "Bilgilendirme",
+                    content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
+                    buttons: {
+                        TAMAM: function () {
 
                         }
-
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer" id="deleteOperationResSetModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="UpdateResSet()">Güncelle</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<script>
-
-    $(document).ready(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        $('#example2 , #example3 , #example4').DataTable({
-            "paging": false,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-
-        });
-    });
-
-
-    function saveReservationSettings() {
-        if ($("#setInf").val() == "" || $("#setVal").val() == "") {
-            $.confirm({
-                title: "Bilgilendirme",
-                content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
-                buttons: {
-                    TAMAM: function () {
-
                     }
-                }
-            });
-        } else {
+                });
+            } else {
 
-            $.ajax({
-                type: "POST",
-                url: '../SystemSettings/AddResSet',
-                cache: false,
-                data: { "setInf": $("#setInf").val(), "setVal": $("#setVal").val() },
-                dataType: "json",
-                async: true,
-                success: function (res) {
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddResSet',
+                    cache: false,
+                    data: { "setInf": $("#setInf").val(), "setVal": $("#setVal").val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
 
 
-                    if (res == true) {
+                        if (res == true) {
 
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Rezervasyon Ayarı başarıyla eklendi.",
-                            buttons: {
-                                TAMAM: function () {
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Rezervasyon Ayarı başarıyla eklendi.",
+                                buttons: {
+                                    TAMAM: function () {
 
-                                    window.location.href = "ReservationSettings"
+                                        window.location.href = "ReservationSettings"
+                                    }
                                 }
-                            }
-                        });
+                            });
 
 
-                    }
-                    else {
-                        $.confirm({
-                            title: "Uyarı",
-                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
-                            buttons: {
-                                TAMAM: function () {
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
 
+                                    }
                                 }
-                            }
-                        });
-                    }
+                            });
+                        }
 
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
-                }
-            });
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+
         }
 
-    }
 
+        function deleteResSetOpenModal(id) {
 
-    function deleteResSetOpenModal(id) {
+            $("#deleteOperationResSetModel button:nth-of-type(2)").attr("id", id);
+            $("#openDeleteResSetModal").modal("toggle");
 
-        $("#deleteOperationResSetModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeleteResSetModal").modal("toggle");
+        }
 
-    }
-
-    function deleteResSet(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeleteResSet',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Rezervasyon Ayarı Başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "ReservationSettings"
-                            }
-                        }
-                    });
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Bir Hata Oluştu.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function UpdateResSet() {
-        try {
-
-            var UpdStr = "";
-            $('.update').each(function (i, obj) {
-                UpdStr += $(obj).attr('id') + "_" + $(obj).val() + "-";
-            });
-            UpdStr = UpdStr.slice(0, -1);
+        function deleteResSet(id) {
 
             $.ajax({
                 type: "POST",
-                url: '../SystemSettings/UpdateResSet',
+                url: '../SystemSettings/DeleteResSet',
                 cache: false,
-                data: { "updStr": UpdStr },
+                data: { "id": id },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
-                    if (res != false) {
+                    if (res != null) {
 
                         $.confirm({
                             title: "Bilgilendirme",
-                            content: "Rezervasyon Ayarı Başarıyla Güncellendi.",
+                            content: "Rezervasyon Ayarı Başarıyla silindi.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -359,16 +314,69 @@
                             }
                         });
                     }
-                    $("#openUpdateResSetModal").toggle("modal");
+
                 },
                 error: function (textStatus, errorThrown) {
                     console.log(JSON.stringify(textStatus));
                     console.log(textStatus);
                 }
             });
-        } catch (e) {
-
         }
 
-    }
-</script>
+        function UpdateResSet() {
+            try {
+
+                var UpdStr = "";
+                $('.update').each(function (i, obj) {
+                    UpdStr += $(obj).attr('id') + "_" + $(obj).val() + "-";
+                });
+                UpdStr = UpdStr.slice(0, -1);
+
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/UpdateResSet',
+                    cache: false,
+                    data: { "updStr": UpdStr },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+                        if (res != false) {
+
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Rezervasyon Ayarı Başarıyla Güncellendi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        window.location.href = "ReservationSettings"
+                                    }
+                                }
+                            });
+                        }
+
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Bir Hata Oluştu.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+                        $("#openUpdateResSetModal").toggle("modal");
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            } catch (e) {
+
+            }
+
+        }
+    </script>
+}

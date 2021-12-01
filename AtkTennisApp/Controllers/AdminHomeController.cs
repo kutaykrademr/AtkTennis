@@ -203,7 +203,7 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model.courts = db.courts.ToList();
-                model.resTimes = db.resTimes.OrderBy(x=>x.ResTimes).ToList();
+                model.resTimes = db.resTimes.OrderBy(x => x.ResTimes).ToList();
                 model.reservations = db.reservations.Where(x => x.ResDate == date).ToList();
                 model.reservationCancels = db.reservationCancels.Where(x => x.ResDate == date).ToList();
                 model.memberLists = db.memberLists.ToList();
@@ -444,7 +444,7 @@ namespace AtkTennisApp.Controllers
             string note, string phone, string password, string birthdate, string gender, string role, string nickName,
             int memberNumber, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
             bool isPartner, string refmem1, string refmem2, string nickName2, string username2, string startDate2,
-            string finishDate2, string memberNumber2, string password2, string compId , bool boss , int memType)
+            string finishDate2, string memberNumber2, string password2, string compId, bool boss, int memType)
         {
             MemberList model2 = new MemberList();
             MemberList model3 = new MemberList();
@@ -471,7 +471,7 @@ namespace AtkTennisApp.Controllers
                                 var roleResult = roleManager.CreateAsync(Role).Result;
                             }
                         }
-                      
+
                     }
                 }
 
@@ -480,9 +480,9 @@ namespace AtkTennisApp.Controllers
                 user.FullName = name;
                 user.BirthDate = birthdate;
                 user.PhoneNumber = phone;
-             
+
                 var result = userManager.CreateAsync(user, password).Result;
-               
+
 
                 if (isPartner && result.Succeeded)
                 {
@@ -520,12 +520,12 @@ namespace AtkTennisApp.Controllers
                         model3.isPartner = false;
                         model3.PartnerId = user.Id;
                         model3.ActPas = true;
-                        
+
                         userManager.AddToRoleAsync(user2, role).Wait();
                         db.Add(model3);
                         db.SaveChanges();
                     }
-                  
+
                 }
 
                 var id = user.Id;
@@ -556,7 +556,7 @@ namespace AtkTennisApp.Controllers
                     if (role.Contains(","))
                     {
                         model2.Role = role.Remove(role.Length - 1);
-                    } 
+                    }
                     model2.Condition = condition;
                     model2.IdentityNumber = identificationNumber;
                     model2.WebReservation = webReservation;
@@ -754,7 +754,7 @@ namespace AtkTennisApp.Controllers
                     {
                         ResFinishTime = h + ":" + m;
                     }
-                   
+
                 }
 
             }
@@ -768,8 +768,8 @@ namespace AtkTennisApp.Controllers
                 return Json(false);
             }
 
-          
-      
+
+
             else
             {
                 try
@@ -788,9 +788,9 @@ namespace AtkTennisApp.Controllers
                 }
             }
 
-         
 
-          
+
+
 
             if (model == null)
             {
@@ -927,7 +927,7 @@ namespace AtkTennisApp.Controllers
         {
             var res = db.reservations.Where(x => x.ResId == resId).FirstOrDefault();
             var court = db.courts.Where(x => x.CourtId == courtId).FirstOrDefault();
-            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).OrderBy(x=>x.ResStartTime).ToList();
+            var model = db.reservations.Where(x => x.Court.CourtId == court.CourtId && x.ResDate == dateInf && x.CancelRes == false).OrderBy(x => x.ResStartTime).ToList();
 
             var startTime = Convert.ToDateTime(court.CourtStartTime);
             var finishTime = Convert.ToDateTime(court.CourtFinishTime);
@@ -1135,7 +1135,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("CancelResAdmin", Name = "CancelResAdmin")]
-        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons , string compId)
+        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons, string compId)
 
         {
             MemberList mem = new MemberList();
@@ -1360,7 +1360,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
-        public async Task<JsonResult> UpdateMemberList(string id, string detailAddress , string actPass ,string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        public async Task<JsonResult> UpdateMemberList(string id, string detailAddress, string actPass, string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
         {
             AppIdentityUser model = new AppIdentityUser();
             MemberList model2 = new MemberList();
@@ -1376,7 +1376,7 @@ namespace AtkTennisApp.Controllers
 
                 if (model != null)
                 {
-                    
+
                     model.UserName = username;
                     model.Email = email;
                     model.FullName = name;
@@ -1418,7 +1418,7 @@ namespace AtkTennisApp.Controllers
                     model2.Role = role.Remove(role.Length - 1);
                     model2.DetailAddress = detailAddress;
                 }
-              
+
 
                 //Ağlama 
 
@@ -1426,15 +1426,15 @@ namespace AtkTennisApp.Controllers
                 var role_to_remove = await userManager.GetRolesAsync(user);
                 var result = await userManager.RemoveFromRoleAsync(user, role_to_remove[0]);
                 var newRoles = role.Split(",");
-                for (int i = 0; i <  newRoles.Length; i++)
+                for (int i = 0; i < newRoles.Length; i++)
                 {
                     if (newRoles[i] != "")
                     {
                         var newRole = await userManager.AddToRoleAsync(user, newRoles[i]);
                     }
-                    
+
                 }
-                
+
 
                 if (model2.Password != checkpass)
                 {
@@ -1523,11 +1523,11 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddPrice", Name = "AddPrice")]
-        public JsonResult AddPrice(int id, int money)
+        public JsonResult AddPrice(string id, int money)
         {
             MemberList model = new MemberList();
 
-            model = db.memberLists.Where(x => x.Id == id).FirstOrDefault();
+            model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
 
             if (model != null)
             {
@@ -1638,7 +1638,7 @@ namespace AtkTennisApp.Controllers
                 return Json(true);
             }
         }
-     
+
         public class CabinetandDuesTable
         {
             public CabinetListUser cabinetListUser { get; set; } = new CabinetListUser();
@@ -2067,7 +2067,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddMultiRes", Name = "AddMultiRes")]
-        public JsonResult AddMultiRes(int CourtId, string compId , string DateInf, string Date2, string ResStartTime, string ResFinishTime, string userId, string UserName, string day)
+        public JsonResult AddMultiRes(int CourtId, string compId, string DateInf, string Date2, string ResStartTime, string ResFinishTime, string userId, string UserName, string day)
         {
             Reservation model = new Reservation();
             CourtScaleList scale = new CourtScaleList();
@@ -2365,11 +2365,11 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddDues", Name = "AddDues")]
-        public AddDuesViewModel AddDues(int duesYear, string duesType, int duesPrice, string explain , string compId)
+        public AddDuesViewModel AddDues(int duesYear, string duesType, int duesPrice, string explain, string compId)
         {
             AddDuesViewModel model = new AddDuesViewModel();
 
-            model.memberLists = db.memberLists.Where(x=>x.CompanyId == compId && x.Role.Contains("Üye")).ToList();
+            model.memberLists = db.memberLists.Where(x => x.CompanyId == compId && x.Role.Contains("Üye")).ToList();
             model.memberDuesInfTable = db.memberDuesInfTables.Where(x => x.DuesType == duesType.Trim() && x.DuesYear == duesYear && x.CompanyId == compId).FirstOrDefault();
 
             try
@@ -2399,16 +2399,16 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.Explain = explain;
 
                                 db.Add(model.memberDuesInfTable);
-                              
+
                             }
                         }
 
-                        else if(duesType == "Yıllık Aidat Ücreti")
+                        else if (duesType == "Yıllık Aidat Ücreti")
                         {
-                          
+
                             if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true && model.memberLists[i].memberType == 0)
                             {
-                               
+
                                 model.memberDuesInfTable = new MemberDuesInfTable();
                                 model.memberDuesInfTable.CompanyId = compId;
                                 model.memberDuesInfTable.MemberId = model.memberLists[i].UserId;
@@ -2421,7 +2421,7 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.Explain = explain;
 
                                 db.Add(model.memberDuesInfTable);
-                              
+
                             }
                         }
                         else if (duesType == "Geçici Üye Ücreti")
@@ -2441,12 +2441,12 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.Explain = explain;
 
                                 db.Add(model.memberDuesInfTable);
-                               
+
                             }
                         }
                         else if (duesType == "Üyelik Giriş Ücreti")
                         {
-                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true )
+                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true)
                             {
 
                                 model.memberDuesInfTable = new MemberDuesInfTable();
@@ -2511,13 +2511,13 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.DuesYear = duesYear;
                         model.memberDuesInfTable.Explain = explain;
 
-                     
-                      
+
+
                     }
                 }
 
                 else if (duesType == "Yıllık Aidat Ücreti")
-          
+
                 {
                     if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true && model.memberLists[0].memberType == 0)
                     {
@@ -2533,8 +2533,8 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.CompanyId = compId;
 
                     }
-                        
-                  
+
+
                 }
 
                 else if (duesType == "Geçici Üye Ücreti")
@@ -2553,14 +2553,14 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.Explain = explain;
                         model.memberDuesInfTable.CompanyId = compId;
 
-                      
+
 
                     }
                 }
 
                 else
                 {
-                  return  new AddDuesViewModel();
+                    return new AddDuesViewModel();
                 }
 
                 if (model != null)
@@ -2568,7 +2568,7 @@ namespace AtkTennisApp.Controllers
                     db.Add(model.memberDuesInfTable);
                     db.SaveChanges();
                 }
-              
+
                 return model;
             }
 
@@ -2837,13 +2837,13 @@ namespace AtkTennisApp.Controllers
         [HttpGet("AddPartner", Name = "AddPartner")]
         public AppIdentityUser AddPartner(string id, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
           bool isPartner, string nickName2, string username2, string startDate2,
-          string finishDate2, string memberNumber2, string password2 , string webReservation)
+          string finishDate2, string memberNumber2, string password2, string webReservation)
         {
             MemberList model2 = new MemberList();
             var x = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
             var Role = new AppIdentityRole();
             var user = new AppIdentityUser();
-         
+
 
             try
             {
@@ -2880,7 +2880,7 @@ namespace AtkTennisApp.Controllers
                     userManager.AddToRoleAsync(user, Role.Name).Wait();
                     db.Add(model2);
                     db.Update(x);
-                    
+
                     db.SaveChanges();
 
                 }
@@ -2897,7 +2897,7 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetPaid", Name = "GetPaid")]
         public AllGetPaidLogs GetPaid(string userId, int refId, int refType,
             string doUserId, int price, int paidPrice, int remainingPrice,
-            int paymentType, int receiptNo, string receiptDate, string explain , string compId)
+            int paymentType, int receiptNo, string receiptDate, string explain, string compId)
         {
             AllPaidLogsViewModel model = new AllPaidLogsViewModel();
 
@@ -2922,7 +2922,7 @@ namespace AtkTennisApp.Controllers
 
                     model.reservationCancel.Price = 0;
                     model.reservationCancel.PriceInf = true;
-                  
+
 
                     db.Update(model.reservationCancel);
                 }
@@ -2942,13 +2942,13 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                         model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PriceCondition = true;
-                   
+
                     }
                     else
                     {
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                         model.memberDuesInf.RemainingPrice = remainingPrice;
-                  
+
                     }
 
                     db.Update(model.memberDuesInf);
@@ -2964,7 +2964,7 @@ namespace AtkTennisApp.Controllers
 
                     if (price - paidPrice == 0)
                     {
-   
+
                         model.memberDuesInf.PriceCondition = true;
                         model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
@@ -3013,6 +3013,143 @@ namespace AtkTennisApp.Controllers
             return new AllGetPaidLogs();
         }
 
+        [HttpGet("GetPaidMulti", Name = "GetPaidMulti")]
+        public ReservationViewModel GetPaidMulti(string idLists, string idLists2)
+        {
+
+
+            ReservationViewModel model = new ReservationViewModel();
+
+            if (idLists != null)
+            {
+                var resList = idLists.Split(",");
+
+                for (int i = 0; i < resList.Count(); i++)
+                {
+                    if (resList[i] != "")
+                    {
+                        model.reservations = db.reservations.Where(x => x.ResId == Convert.ToInt32(resList[i])).ToList();
+                    }
+
+                }
+            }
+
+            if (idLists2 != null)
+            {
+                var resCanList = idLists2.Split(",");
+
+                for (int i = 0; i < resCanList.Count(); i++)
+                {
+                    if (resCanList[i] != "")
+                    {
+                        model.reservationCancels = db.reservationCancels.Where(x => x.ResId == Convert.ToInt32(resCanList[i])).ToList();
+                    }
+
+                }
+            }
+
+            return model;
+
+
+
+        }
+
+
+        [HttpGet("GetPaidMultiOp", Name = "GetPaidMultiOp")]
+        public AllGetPaidLogs GetPaidMultiOp(string doUserId, int paymentType, int receiptNo, string idLists, string idLists2, string receiptDate, string explain, string compId)
+        {
+            AllPaidLogsViewModel model = new AllPaidLogsViewModel();
+
+            if (idLists != null)
+            {
+                var resList = idLists.Split(",");
+
+                for (int i = 0; i < resList.Count(); i++)
+                {
+                    if (resList[i] != "")
+                    {
+                        model = new AllPaidLogsViewModel();
+
+                        model.reservation = db.reservations.Where(x => x.ResId == Convert.ToInt32(resList[i])).FirstOrDefault();
+
+                        if (model.reservation != null)
+                        {
+
+                          
+
+                            model.allGetPaid.UserId = model.reservation.UserId;
+                            model.allGetPaid.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                            model.allGetPaid.RefId = Convert.ToInt32(resList[i]);
+                            model.allGetPaid.RefType = 1;
+                            model.allGetPaid.DoOpUserId = doUserId;
+                            model.allGetPaid.Price = model.reservation.Price;
+                            model.allGetPaid.PaidPrice = model.reservation.Price;
+                            model.allGetPaid.RemainingPrice = 0;
+                            model.allGetPaid.PaymentType = paymentType;
+                            model.allGetPaid.ReceiptNo = receiptNo;
+                            model.allGetPaid.ReceiptDate = receiptDate;
+                            model.allGetPaid.Explain = explain;
+                            model.allGetPaid.CompanyId = compId;
+
+                            model.reservation.Price = 0;
+                            model.reservation.PriceInf = true;
+
+
+
+                            db.Update(model.reservation);
+                            db.Add(model.allGetPaid);
+                            db.SaveChanges();
+                        }
+                    }
+                   
+                }
+            }
+
+            if (idLists2 != null)
+            {
+                var resCanList = idLists2.Split(",");
+
+                for (int a = 0; a < resCanList.Count(); a++)
+                {
+                    if (resCanList[a] != "")
+                    {
+                        model = new AllPaidLogsViewModel();
+
+                        if (model.reservationCancel != null)
+                        {
+
+                            model.reservationCancel = db.reservationCancels.Where(x => x.ResId == Convert.ToInt32(resCanList[a])).FirstOrDefault();
+
+                            
+
+                            model.allGetPaid.UserId = model.reservationCancel.UserId;
+                            model.allGetPaid.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                            model.allGetPaid.RefId = Convert.ToInt32(resCanList[a]);
+                            model.allGetPaid.RefType = 1;
+                            model.allGetPaid.DoOpUserId = doUserId;
+                            model.allGetPaid.Price = model.reservationCancel.Price;
+                            model.allGetPaid.PaidPrice = model.reservationCancel.Price;
+                            model.allGetPaid.RemainingPrice = 0;
+                            model.allGetPaid.PaymentType = paymentType;
+                            model.allGetPaid.ReceiptNo = receiptNo;
+                            model.allGetPaid.ReceiptDate = receiptDate;
+                            model.allGetPaid.Explain = explain;
+                            model.allGetPaid.CompanyId = compId;
+
+                            model.reservationCancel.Price = 0;
+                            model.reservationCancel.PriceInf = true;
+
+                            db.Update(model.reservationCancel);
+                            db.Add(model.allGetPaid);
+                            db.SaveChanges();
+                        }
+                    }
+                  
+                }
+            }
+
+            return model.allGetPaid;
+        }
 
     }
 }

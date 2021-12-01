@@ -3,8 +3,16 @@
 @inject IHttpContextAccessor HttpContextAccessor;
 @model Helpers.Dto.PartialViewDtos.CourtSettingsViewDto;
 @{
-    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId"); 
 }
+
+@if (Mutuals.M6 == false)
+{
+
+}
+else
+{
+
 
 <style>
 
@@ -2175,3 +2183,4 @@
 
 </script>
 
+}

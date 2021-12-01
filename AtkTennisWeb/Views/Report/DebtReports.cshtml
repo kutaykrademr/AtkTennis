@@ -188,12 +188,10 @@
                 row += '<tbody>';
                 for (var i = 0; i < res.length; i++) {
 
-                    //burası 
-
-                    debugger;
-
+                  
                     if (res[i].priceCondition == true || res[i].duesPrice != res[i].remainingPrice ) {
                         if (res[i].companyId == compId) {
+
                             if (res[i].duesInfType == false) {
                                 row += '<tr style="text-align:center" id="">';
 
@@ -501,6 +499,7 @@
                 for (var i = 0; i < res.duesInf.length; i++) {
 
                     if (res.duesInf[i].res.companyId == compId) {
+
                         var memberInf = Enumerable.from(res.memberLists)
                             .where(function (x) { return x.userId == res.duesInf[i].res.userId })
                             .select(function (x) { return x }).toArray();

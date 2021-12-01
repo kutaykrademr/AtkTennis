@@ -357,6 +357,49 @@ namespace AtkTennisWeb.Controllers
             return Json(model);
         }
 
+        public JsonResult GetPaidMulti( string idList, string idList2)
+        {
+            ReservationViewDto model = new ReservationViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetPaidMulti?idLists=" + idList + "&idLists2=" + idList2 ));
+              
+                if (model == null)
+
+                    model = new ReservationViewDto();
+            }
+
+            catch (Exception)
+            {
+                model = new ReservationViewDto();
+            }
+
+            return Json(model);
+        }
+
+        public JsonResult GetPaidMultiOp(string doUserId, int paymentType, int receiptNo, string idList, string idList2, string receiptDate, string explain, string compId)
+        {
+            ReservationViewDto model = new ReservationViewDto();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<ReservationViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetPaidMultiOp?idLists=" + idList + "&idLists2=" + idList2 + "&doUserId=" + doUserId + "&paymentType=" + paymentType
+                    + "&receiptNo=" + receiptNo + "&receiptDate=" + receiptDate + "&explain=" + explain + "&compId=" + compId));
+
+                if (model == null)
+
+                    model = new ReservationViewDto();
+            }
+
+            catch (Exception)
+            {
+                model = new ReservationViewDto();
+            }
+
+            return Json(model);
+        }
+
         public JsonResult GetUserSchoolList()
         {
             MemberSchoolPerViewDto model = new MemberSchoolPerViewDto();
@@ -426,7 +469,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<AppIdentityUserDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewRegister?name=" + name +  "&nickName2=" + nickName2 + "&password2=" + password2 + "&memberNumber2=" + memberNumber2 + "&startDate2=" + startDate2 + "&finishDate2=" + finishDate2 + "&username=" + username + "&phone=" + phone + "&password=" + password + "&birthdate=" + birthdate + "&gender=" + gender + "&email=" + email + "&role=" + role +
                     "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&compId=" + companyId + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
-                    "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&detailAddress=" + detailAddress + "&refmem1=" + refmem1 + "&memType=" + memType + "&refmem2=" + refmem2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber + "&partnerBirthdate=" + partnerBirthdate + "&partnerIdNumber=" + partnerIdNumber + "&partnerPhone=" + partnerPhone + "&partnerName=" + partnerName + "&isPartner=" + isPartner));
+                    "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&detailAddress=" + detailAddress + "&username2=" + username2 + "&refmem1=" + refmem1 + "&memType=" + memType + "&refmem2=" + refmem2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber + "&partnerBirthdate=" + partnerBirthdate + "&partnerIdNumber=" + partnerIdNumber + "&partnerPhone=" + partnerPhone + "&partnerName=" + partnerName + "&isPartner=" + isPartner));
 
                 if (model == null)
                     model = new AppIdentityUserDto();
@@ -762,7 +805,7 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult AddPrice(int id, int money)
+        public JsonResult AddPrice(string id, int money)
         {
             MemberListDto model = new MemberListDto();
             try

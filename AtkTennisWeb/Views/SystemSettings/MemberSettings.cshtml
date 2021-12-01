@@ -7,424 +7,574 @@
     var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 
 }
-<style>
+@if (Mutuals.M6 == false)
+{
 
-    button {
-        border: none !important;
-    }
-</style>
+}
+else
+{
 
-<h2 style="display:none" id="compId">@CompId</h2>
+    <style>
 
-<div class="content-wrapper">
-    <section class="content">
-        <div class="container-fluid">
+        button {
+            border: none !important;
+        }
+    </style>
 
-            <div class="card" style="margin-top:15px">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="card-title">
-                        <h3>Üye Borç Ayarları</h3>
-                    </div>
+    <h2 style="display:none" id="compId">@CompId</h2>
 
-                    @foreach (var item in Model.memberCanDebts)
-                    {
-                        if (item.CompanyId == CompId && item.CanDebt == true)
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="container-fluid">
 
-                        {  <div class="custom-control custom-switch">
-                                <input style="cursor:pointer" type="checkbox" checked class="custom-control-input" value="Pazar" id="sun">
-                                <label style="cursor:pointer" class="custom-control-label" for="sun">Üye Borç Yapabilecekse Lütfen Açık Konuma Alıp Kaydediniz !!!</label>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="custom-control custom-switch">
-                                <input style="cursor:pointer" type="checkbox" class="custom-control-input" value="Pazar" id="sun">
-                                <label style="cursor:pointer" class="custom-control-label" for="sun">Üye Borç Yapabilecekse Lütfen Açık Konuma Alıp Kaydediniz !!!</label>
-                            </div>
-                        }
-
-                    }
-
-
-                    <div>
-
-                        <button class="btn btn-outline-primary" onclick="saveMemberDuesInf()"><i style="margin-right:15px" class="fas fa-plus-square"></i>Kaydet</button>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row" style="margin-top:15px">
-
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Dolap Türleri</h3>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>
-                            </div>
+                <div class="card" style="margin-top:15px">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="card-title">
+                            <h3>Üye Borç Ayarları</h3>
                         </div>
 
-                        <div class="card-body">
-                            <table id="cabinetTypeTable" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
+                        @foreach (var item in Model.memberCanDebts)
+                        {
+                            if (item.CompanyId == CompId && item.CanDebt == true)
 
-                                        <th>Dolap Türü</th>
-                                        <th>Ücret</th>
-                                        <th>İşlemler</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            {<div class="custom-control custom-switch">
+                                    <input style="cursor:pointer" type="checkbox" checked class="custom-control-input" value="Pazar" id="sun">
+                                    <label style="cursor:pointer" class="custom-control-label" for="sun">Üye Borç Yapabilecekse Lütfen Açık Konuma Alıp Kaydediniz !!!</label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="custom-control custom-switch">
+                                    <input style="cursor:pointer" type="checkbox" class="custom-control-input" value="Pazar" id="sun">
+                                    <label style="cursor:pointer" class="custom-control-label" for="sun">Üye Borç Yapabilecekse Lütfen Açık Konuma Alıp Kaydediniz !!!</label>
+                                </div>
+                            }
+
+                        }
+
+
+                        <div>
+
+                            <button class="btn btn-outline-primary" onclick="saveMemberDuesInf()"><i style="margin-right:15px" class="fas fa-plus-square"></i>Kaydet</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="margin-top:15px">
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Dolap Türleri</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinetType"><i class="fas fa-plus-square"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <table id="cabinetTypeTable" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+
+                                            <th>Dolap Türü</th>
+                                            <th>Ücret</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.cabinetTypes)
+                                        {
+                                            if (item.CompanyId == CompId)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item.CabinetTypes</td>
+                                                    <td>@item.CabinetTypesPrice</td>
+
+                                                    <td>
+                                                        <button class="btn btn-outline-success" id="@item.CabinetId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger" id="@item.CabinetId" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Dolap Ekle</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinet"><i class="fas fa-plus-square"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <table id="cabinetAddTable" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Kodu</th>
+                                            <th>Türü</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (var item in Model.cabinetOperations)
+                                        {
+                                            if (item.CompanyId == CompId)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item.CabinetCode</td>
+                                                    <td>@item.CabinetOpTypes</td>
+
+                                                    <td>
+
+                                                        <button class="btn btn-outline-success" id="@item.CabinetOpId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger" id="@item.CabinetOpId" onclick="deleteCabinetSet(this.id) "><i class="fas fa-trash"></i></button>
+                                                    </td>
+
+                                                </tr>
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Üye Aidat İndirim Ayarları</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddDuesDiscount"><i class="fas fa-plus-square"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+
+                                            <th>Yaşa Göre</th>
+                                            <th>Kaç Yıllık Üye</th>
+                                            <th>İndirim (%)</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.memberDuesTypes)
+                                        {
+                                            if (item.CompanyId == CompId)
+                                            {
+                                                <tr style="text-align:center" id="">
+                                                    <td>@item.Age (Yaş)</td>
+                                                    <td>@item.Year (Yıl)</td>
+                                                    <td>@item.Discount (%)</td>
+
+                                                    <td>
+                                                        <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-danger" id="@item.MemberDuesTypeId" onclick="deleteDiscount(this.id)"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="openAddCabinetType" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class="col-form-label">Türü</label>
+                            <input type="text" id="cabinetType" class="form-control">
+                        </div>
+
+
+                        <div class="col-md-6 form-group">
+                            <label class="col-form-label">Ücreti</label>
+                            <input type="text" id="cabinetPrice" class="form-control" autocomplete="new-password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="addCabinetType()">Tür Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="openAddCabinet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Dolap Kodu:</label>
+                            <input type="text" class="form-control" id="cabinetCode">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Dolap Türü:</label>
+                            <div class="input-group">
+                                <select id="cabinetTypeOption" class="form-control">
 
                                     @foreach (var item in Model.cabinetTypes)
                                     {
                                         if (item.CompanyId == CompId)
                                         {
-                                            <tr style="text-align:center" id="">
-                                                <td>@item.CabinetTypes</td>
-                                                <td>@item.CabinetTypesPrice</td>
-
-                                                <td>
-                                                    <button class="btn btn-outline-success" id="@item.CabinetId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-danger" id="@item.CabinetId" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
-                                                </td>
-                                            </tr>
+                                            <option> @item.CabinetTypes</option>
                                         }
 
                                     }
 
-                                </tbody>
-                            </table>
+
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Dolap Ekle</h3>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddCabinet"><i class="fas fa-plus-square"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <table id="cabinetAddTable" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Kodu</th>
-                                        <th>Türü</th>
-                                        <th>İşlemler</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach (var item in Model.cabinetOperations)
-                                    {
-                                        if (item.CompanyId == CompId)
-                                        {
-                                            <tr style="text-align:center" id="">
-                                                <td>@item.CabinetCode</td>
-                                                <td>@item.CabinetOpTypes</td>
-
-                                                <td>
-
-                                                    <button class="btn btn-outline-success" id="@item.CabinetOpId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-danger" id="@item.CabinetOpId" onclick="deleteCabinetSet(this.id) "><i class="fas fa-trash"></i></button>
-                                                </td>
-
-                                            </tr>
-                                        }
-
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="addCabinet()">Tür Ekle</button>
                 </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Üye Aidat İndirim Ayarları</h3>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#openAddDuesDiscount"><i class="fas fa-plus-square"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-
-                                        <th>Yaşa Göre</th>
-                                        <th>Kaç Yıllık Üye</th>
-                                        <th>İndirim (%)</th>
-                                        <th>İşlemler</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach (var item in Model.memberDuesTypes)
-                                    {
-                                        if (item.CompanyId == CompId)
-                                        {
-                                            <tr style="text-align:center" id="">
-                                                <td>@item.Age (Yaş)</td>
-                                                <td>@item.Year (Yıl)</td>
-                                                <td>@item.Discount (%)</td>
-
-                                                <td>
-                                                    <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-danger" id="@item.MemberDuesTypeId" onclick="deleteDiscount(this.id)"><i class="fas fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                        }
-
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-
-            </div>
-        </div>
-    </section>
-</div>
-
-<div class="modal fade" id="openAddCabinetType" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label class="col-form-label">Türü</label>
-                        <input type="text" id="cabinetType" class="form-control">
-                    </div>
-
-
-                    <div class="col-md-6 form-group">
-                        <label class="col-form-label">Ücreti</label>
-                        <input type="text" id="cabinetPrice" class="form-control" autocomplete="new-password">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="addCabinetType()">Tür Ekle</button>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="openAddCabinet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Dolap Kodu:</label>
-                        <input type="text" class="form-control" id="cabinetCode">
-                    </div>
+    <div class="modal fade" id="openAddDuesDiscount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
 
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Dolap Türü:</label>
-                        <div class="input-group">
-                            <select id="cabinetTypeOption" class="form-control">
-
-                                @foreach (var item in Model.cabinetTypes)
-                                {
-                                    if (item.CompanyId == CompId)
-                                    {
-                                        <option> @item.CabinetTypes</option>
-                                    }
-
-                                }
-
-
-                            </select>
+                        <div class="col-md-4 form-group">
+                            <label class="col-form-label">Yaş</label>
+                            <input type="text" id="age" class="form-control" autocomplete="new-password">
                         </div>
+
+
+                        <div class="col-md-4 form-group">
+                            <label class="col-form-label">Yıl</label>
+                            <input type="text" id="year" class="form-control" autocomplete="new-password">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label class="col-form-label">İndirim (%)</label>
+                            <input type="text" id="discount" class="form-control" autocomplete="new-password">
+                        </div>
+
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="addCabinet()">Tür Ekle</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="addDiscount()">Tür Ekle</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="openAddDuesDiscount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
+    <script>
 
-                    <div class="col-md-4 form-group">
-                        <label class="col-form-label">Yaş</label>
-                        <input type="text" id="age" class="form-control" autocomplete="new-password">
-                    </div>
+        var compId = $("#compId").text();
+
+        $(document).ready(function () {
 
 
-                    <div class="col-md-4 form-group">
-                        <label class="col-form-label">Yıl</label>
-                        <input type="text" id="year" class="form-control" autocomplete="new-password">
-                    </div>
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-                    <div class="col-md-4 form-group">
-                        <label class="col-form-label">İndirim (%)</label>
-                        <input type="text" id="discount" class="form-control" autocomplete="new-password">
-                    </div>
-
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="addDiscount()">Tür Ekle</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-
-    var compId = $("#compId").text();
-
-    $(document).ready(function () {
-
-
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        $('#example2 , #example3 , #example4').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
-
-        $('#cabinetTypeTable , #cabinetAddTable').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "pageLength": 3,
-        });
-
-    });
-
-
-    function saveMemberDuesInf() {
-
-        debugger;
-
-        var isChecked = $('#sun').prop('checked');
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/ControlMemberDebtSettings',
-            cache: false,
-            data: { "isChecked": isChecked, "compId": compId },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res) {
-                    alert("Başarı İle Kaydedildi");
-                }
-                else {
-                    alert("Bir sorun oluştu");
-                }
-
-                location.reload();
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-
-    }
-
-    function addCabinetType() {
-
-        var type = $("#cabinetType").val();
-        var price = $("#cabinetPrice").val();
-
-
-
-        if (type == "" || price == 0) {
-            $.confirm({
-                title: "Uyarı",
-                content: " Lütfen Boş Bilgi Bırakmayınız.",
-                buttons: {
-                    TAMAM: function () {
-
-                    }
-                }
+            $('#example2 , #example3 , #example4').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
             });
-        }
-        else {
+
+            $('#cabinetTypeTable , #cabinetAddTable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "pageLength": 3,
+            });
+
+        });
+
+
+        function saveMemberDuesInf() {
+
+            debugger;
+
+            var isChecked = $('#sun').prop('checked');
+
             $.ajax({
                 type: "POST",
-                url: '../SystemSettings/AddCabinetType',
+                url: '../SystemSettings/ControlMemberDebtSettings',
                 cache: false,
-                data: { "type": type, "price": price, "compId": compId },
+                data: { "isChecked": isChecked, "compId": compId },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
+                    if (res) {
+                        alert("Başarı İle Kaydedildi");
+                    }
+                    else {
+                        alert("Bir sorun oluştu");
+                    }
+
+                    location.reload();
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+        }
+
+        function addCabinetType() {
+
+            var type = $("#cabinetType").val();
+            var price = $("#cabinetPrice").val();
 
 
-                    if (res == true) {
+
+            if (type == "" || price == 0) {
+                $.confirm({
+                    title: "Uyarı",
+                    content: " Lütfen Boş Bilgi Bırakmayınız.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddCabinetType',
+                    cache: false,
+                    data: { "type": type, "price": price, "compId": compId },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+
+                        if (res == true) {
+
+                            swal({
+                                title: "Dolap Türü Eklendi",
+                                text: "Dolap Türü  Başarılı Bir Şekilde Eklendi !",
+                                icon: "success",
+                                button: "",
+                                timer: 600,
+                            }).then((value) => {
+
+                                location.reload();
+
+                            });
+
+
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: " Lütfen sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+
+        }
+
+        function deleteCabinetType(id) {
+
+
+            if (id == "") {
+                swal("Başarısız!", "Bir Hata Oluştu", "warning");
+            }
+            else {
+                swal({
+                    title: "Emin Misiniz?",
+                    text: "Dolap  İptal Edilecek !",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: '../SystemSettings/DeleteCabinetType',
+                                cache: false,
+                                data: { "id": id },
+                                dataType: "json",
+                                async: true,
+                                success: function (res) {
+
+
+
+                                    if (res == true) {
+
+                                        swal({
+                                            title: "Dolap Türü Silindi",
+                                            text: "Dolap  Başarılı Bir Şekilde Silindi !",
+                                            icon: "success",
+                                            button: "Tamam",
+                                            timer: 600,
+                                        }).then((value) => {
+
+                                            location.reload();
+
+                                        });
+
+
+                                    }
+                                    else {
+                                        $.confirm({
+                                            title: "Uyarı",
+                                            content: " Lütfen sonra tekrar deneyiniz.",
+                                            buttons: {
+                                                TAMAM: function () {
+
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                },
+                                error: function (textStatus, errorThrown) {
+                                    console.log(JSON.stringify(textStatus));
+                                    console.log(textStatus);
+                                }
+                            });
+
+                        }
+                        else
+                            swal({
+                                title: "Dolap Korundu",
+                                text: "Dolap Silmekten Vazgeçtiniz!",
+                                icon: "success",
+                                button: "Tamam",
+                            });
+                    });
+
+            }
+        }
+
+
+        function addCabinet() {
+
+            var code = $("#cabinetCode").val();
+            var cabType = $("#cabinetTypeOption option:selected").text();
+
+
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/AddCabinets',
+                cache: false,
+                data: { "cabType": cabType, "code": code, "compId": compId },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res == false) {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Dolap Önceden Eklenmiş Olabilir. Kontrol Ediniz..",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                    else if (res != null) {
 
                         swal({
                             title: "Dolap Türü Eklendi",
                             text: "Dolap Türü  Başarılı Bir Şekilde Eklendi !",
                             icon: "success",
                             button: "",
-                            timer: 600,
+                            timer: 800,
                         }).then((value) => {
 
                             location.reload();
@@ -433,7 +583,7 @@
 
 
                     }
-                    else {
+                    else
                         $.confirm({
                             title: "Uyarı",
                             content: " Lütfen sonra tekrar deneyiniz.",
@@ -443,7 +593,7 @@
                                 }
                             }
                         });
-                    }
+
 
                 },
                 error: function (textStatus, errorThrown) {
@@ -453,369 +603,227 @@
             });
         }
 
-    }
-
-    function deleteCabinetType(id) {
+        function deleteCabinetSet(id) {
 
 
-        if (id == "") {
-            swal("Başarısız!", "Bir Hata Oluştu", "warning");
-        }
-        else {
-            swal({
-                title: "Emin Misiniz?",
-                text: "Dolap  İptal Edilecek !",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-
-                        $.ajax({
-                            type: "POST",
-                            url: '../SystemSettings/DeleteCabinetType',
-                            cache: false,
-                            data: { "id": id },
-                            dataType: "json",
-                            async: true,
-                            success: function (res) {
-
-
-
-                                if (res == true) {
-
-                                    swal({
-                                        title: "Dolap Türü Silindi",
-                                        text: "Dolap  Başarılı Bir Şekilde Silindi !",
-                                        icon: "success",
-                                        button: "Tamam",
-                                        timer: 600,
-                                    }).then((value) => {
-
-                                        location.reload();
-
-                                    });
-
-
-                                }
-                                else {
-                                    $.confirm({
-                                        title: "Uyarı",
-                                        content: " Lütfen sonra tekrar deneyiniz.",
-                                        buttons: {
-                                            TAMAM: function () {
-
-                                            }
-                                        }
-                                    });
-                                }
-
-                            },
-                            error: function (textStatus, errorThrown) {
-                                console.log(JSON.stringify(textStatus));
-                                console.log(textStatus);
-                            }
-                        });
-
-                    }
-                    else
-                        swal({
-                            title: "Dolap Korundu",
-                            text: "Dolap Silmekten Vazgeçtiniz!",
-                            icon: "success",
-                            button: "Tamam",
-                        });
-                });
-
-        }
-    }
-
-
-    function addCabinet() {
-
-        var code = $("#cabinetCode").val();
-        var cabType = $("#cabinetTypeOption option:selected").text();
-
-
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/AddCabinets',
-            cache: false,
-            data: { "cabType": cabType, "code": code, "compId": compId },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res == false) {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Dolap Önceden Eklenmiş Olabilir. Kontrol Ediniz..",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-                else if (res != null) {
-
-                    swal({
-                        title: "Dolap Türü Eklendi",
-                        text: "Dolap Türü  Başarılı Bir Şekilde Eklendi !",
-                        icon: "success",
-                        button: "",
-                        timer: 800,
-                    }).then((value) => {
-
-                        location.reload();
-
-                    });
-
-
-                }
-                else
-                    $.confirm({
-                        title: "Uyarı",
-                        content: " Lütfen sonra tekrar deneyiniz.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
+            if (id == "") {
+                swal("Başarısız!", "Bir Hata Oluştu", "warning");
             }
-        });
-    }
+            else {
+                swal({
+                    title: "Emin Misiniz?",
+                    text: "Dolap  İptal Edilecek !",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
 
-    function deleteCabinetSet(id) {
-
-
-        if (id == "") {
-            swal("Başarısız!", "Bir Hata Oluştu", "warning");
-        }
-        else {
-            swal({
-                title: "Emin Misiniz?",
-                text: "Dolap  İptal Edilecek !",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-
-                        $.ajax({
-                            type: "POST",
-                            url: '../SystemSettings/DeleteCabinetSet',
-                            cache: false,
-                            data: { "id": id },
-                            dataType: "json",
-                            async: true,
-                            success: function (res) {
+                            $.ajax({
+                                type: "POST",
+                                url: '../SystemSettings/DeleteCabinetSet',
+                                cache: false,
+                                data: { "id": id },
+                                dataType: "json",
+                                async: true,
+                                success: function (res) {
 
 
 
-                                if (res == true) {
+                                    if (res == true) {
 
-                                    swal({
-                                        title: "Dolap Türü Silindi",
-                                        text: "Dolap  Başarılı Bir Şekilde Silindi !",
-                                        icon: "success",
-                                        button: "Tamam",
-                                        timer: 600,
-                                    }).then((value) => {
+                                        swal({
+                                            title: "Dolap Türü Silindi",
+                                            text: "Dolap  Başarılı Bir Şekilde Silindi !",
+                                            icon: "success",
+                                            button: "Tamam",
+                                            timer: 600,
+                                        }).then((value) => {
 
-                                        location.reload();
+                                            location.reload();
 
-                                    });
+                                        });
 
 
-                                }
-                                else {
-                                    $.confirm({
-                                        title: "Uyarı",
-                                        content: " Lütfen sonra tekrar deneyiniz.",
-                                        buttons: {
-                                            TAMAM: function () {
+                                    }
+                                    else {
+                                        $.confirm({
+                                            title: "Uyarı",
+                                            content: " Lütfen sonra tekrar deneyiniz.",
+                                            buttons: {
+                                                TAMAM: function () {
 
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
+
+                                },
+                                error: function (textStatus, errorThrown) {
+                                    console.log(JSON.stringify(textStatus));
+                                    console.log(textStatus);
                                 }
+                            });
 
-                            },
-                            error: function (textStatus, errorThrown) {
-                                console.log(JSON.stringify(textStatus));
-                                console.log(textStatus);
-                            }
-                        });
+                        }
+                        else
+                            swal({
+                                title: "Dolap Korundu",
+                                text: "Dolap Silmekten Vazgeçtiniz!",
+                                icon: "success",
+                                button: "Tamam",
+                            });
+                    });
 
+            }
+        }
+
+
+        function addDiscount() {
+
+            var age = $("#age").val();
+            var year = $("#year").val();
+            var discount = $("#discount").val();
+
+
+
+            if (age == "" || year == "" || discount == "") {
+                $.confirm({
+                    title: "Uyarı",
+                    content: " Lütfen Boş Bilgi Bırakmayınız.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
                     }
-                    else
-                        swal({
-                            title: "Dolap Korundu",
-                            text: "Dolap Silmekten Vazgeçtiniz!",
-                            icon: "success",
-                            button: "Tamam",
-                        });
                 });
-
-        }
-    }
-
-
-    function addDiscount() {
-
-        var age = $("#age").val();
-        var year = $("#year").val();
-        var discount = $("#discount").val();
-
-
-
-        if (age == "" || year == "" || discount == "") {
-            $.confirm({
-                title: "Uyarı",
-                content: " Lütfen Boş Bilgi Bırakmayınız.",
-                buttons: {
-                    TAMAM: function () {
-
-                    }
-                }
-            });
-        }
-        else {
-            $.ajax({
-                type: "POST",
-                url: '../SystemSettings/AddDiscountType',
-                cache: false,
-                data: { "age": age, "year": year, "discount": discount, "compId": compId },
-                dataType: "json",
-                async: true,
-                success: function (res) {
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddDiscountType',
+                    cache: false,
+                    data: { "age": age, "year": year, "discount": discount, "compId": compId },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
 
 
 
-                    if (res == true) {
+                        if (res == true) {
 
-                        swal({
-                            title: "Aidat İndirim Türü Eklendi",
-                            text: "İndirim Türü  Başarılı Bir Şekilde Eklendi !",
-                            icon: "success",
-                            button: "",
-                            timer: 600,
-                        }).then((value) => {
+                            swal({
+                                title: "Aidat İndirim Türü Eklendi",
+                                text: "İndirim Türü  Başarılı Bir Şekilde Eklendi !",
+                                icon: "success",
+                                button: "",
+                                timer: 600,
+                            }).then((value) => {
 
-                            location.reload();
+                                location.reload();
 
-                        });
+                            });
 
 
-                    }
-                    else {
-                        $.confirm({
-                            title: "Uyarı",
-                            content: " Lütfen sonra tekrar deneyiniz.",
-                            buttons: {
-                                TAMAM: function () {
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: " Lütfen sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
 
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
                     }
+                });
+            }
 
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
-                }
-            });
         }
 
-    }
-
-    function deleteDiscount(id) {
+        function deleteDiscount(id) {
 
 
-        if (id == "") {
-            swal("Başarısız!", "Bir Hata Oluştu", "warning");
-        }
-        else {
-            swal({
-                title: "Emin Misiniz?",
-                text: "İndirim Türü Silinecek !",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
+            if (id == "") {
+                swal("Başarısız!", "Bir Hata Oluştu", "warning");
+            }
+            else {
+                swal({
+                    title: "Emin Misiniz?",
+                    text: "İndirim Türü Silinecek !",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
 
-                        $.ajax({
-                            type: "POST",
-                            url: '../SystemSettings/DeleteDiscountType',
-                            cache: false,
-                            data: { "id": id },
-                            dataType: "json",
-                            async: true,
-                            success: function (res) {
+                            $.ajax({
+                                type: "POST",
+                                url: '../SystemSettings/DeleteDiscountType',
+                                cache: false,
+                                data: { "id": id },
+                                dataType: "json",
+                                async: true,
+                                success: function (res) {
 
 
 
-                                if (res == true) {
+                                    if (res == true) {
 
-                                    swal({
-                                        title: "İndirim Türü Silindi",
-                                        text: "İndirim  Başarılı Bir Şekilde Silindi !",
-                                        icon: "success",
-                                        button: "Tamam",
-                                        timer: 600,
-                                    }).then((value) => {
+                                        swal({
+                                            title: "İndirim Türü Silindi",
+                                            text: "İndirim  Başarılı Bir Şekilde Silindi !",
+                                            icon: "success",
+                                            button: "Tamam",
+                                            timer: 600,
+                                        }).then((value) => {
 
-                                        location.reload();
+                                            location.reload();
 
-                                    });
+                                        });
 
 
-                                }
-                                else {
-                                    $.confirm({
-                                        title: "Uyarı",
-                                        content: " Lütfen sonra tekrar deneyiniz.",
-                                        buttons: {
-                                            TAMAM: function () {
+                                    }
+                                    else {
+                                        $.confirm({
+                                            title: "Uyarı",
+                                            content: " Lütfen sonra tekrar deneyiniz.",
+                                            buttons: {
+                                                TAMAM: function () {
 
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
+
+                                },
+                                error: function (textStatus, errorThrown) {
+                                    console.log(JSON.stringify(textStatus));
+                                    console.log(textStatus);
                                 }
+                            });
 
-                            },
-                            error: function (textStatus, errorThrown) {
-                                console.log(JSON.stringify(textStatus));
-                                console.log(textStatus);
-                            }
-                        });
+                        }
+                        else
+                            swal({
+                                title: "Dolap Korundu",
+                                text: "Dolap Silmekten Vazgeçtiniz!",
+                                icon: "success",
+                                button: "Tamam",
+                            });
+                    });
 
-                    }
-                    else
-                        swal({
-                            title: "Dolap Korundu",
-                            text: "Dolap Silmekten Vazgeçtiniz!",
-                            icon: "success",
-                            button: "Tamam",
-                        });
-                });
-
+            }
         }
-    }
 
-</script>
+    </script>
+}

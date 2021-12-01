@@ -145,7 +145,7 @@
 
                                     <select id="RegistersRole" class="select2bs4" multiple="multiple" data-placeholder="Role Seçimi Yapınız" style="width: 100%;">
                                         <option disabled="disabled" selected>@Model.memberLists.Role,</option>
-                                    
+
                                         @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
                                         {
                                             <option value="@Model.AppIdentityRoles[i].Name">@Model.AppIdentityRoles[i].Name,</option>
@@ -167,27 +167,27 @@
 
 
                                     @*<div class="form-group col-md-5">
-                <select id="RegistersRole" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Role Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                            <select id="RegistersRole" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Role Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
 
-                    <option disabled="disabled" selected>@Model.memberLists.Role</option>
-                    @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
-                    {
-                        <option>@Model.AppIdentityRoles[i].Name</option>
-                    }
+                                                <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                                                @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                                                {
+                                                    <option>@Model.AppIdentityRoles[i].Name</option>
+                                                }
 
-                </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--focus" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Role Seçimi Yapınız" style="width: 815px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-            </div>*@
+                                            </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--focus" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Role Seçimi Yapınız" style="width: 815px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                        </div>*@
 
                                     @*<div class="input-group col-md-5">
-                <select id="RegistersRole" class="form-control">
-                    <option disabled="disabled" selected>@Model.memberLists.Role</option>
-                    @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
-                    {
-                        <option>@Model.AppIdentityRoles[i].Name</option>
-                    }
+                                            <select id="RegistersRole" class="form-control">
+                                                <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                                                @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                                                {
+                                                    <option>@Model.AppIdentityRoles[i].Name</option>
+                                                }
 
-                </select>
-            </div>*@
+                                            </select>
+                                        </div>*@
 
                                 </div>
 
@@ -504,13 +504,13 @@
                                 </div>
 
                                 <hr>
-                               
+
 
                                 <strong><i class="far fa-file-alt mr-1"></i> Detaylı Adres</strong>
 
                                 <div class="input-group col-md-12">
                                     @*<textarea  type="text" value="@Model.memberLists.DetailAddress" class="form-control" id="detailAddress" placeholder="Adres Detay" autocomplete="new-password">*@
-                                        <textarea id="detailAddress" name="detailAddress" rows="4" cols="50">@Model.memberLists.DetailAddress</textarea>
+                                    <textarea id="detailAddress" name="detailAddress" rows="4" cols="50">@Model.memberLists.DetailAddress</textarea>
                                 </div>
 
                             </div>
@@ -528,33 +528,38 @@
 
                             <h2 class="card-title">Bakiye Bilgisi - @Model.memberLists.Price ₺ </h2>
 
-                            @*<div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
-                                        Bakiye Yükle
-                                    </button>
-                                </div>*@
+                            <div class="card-tools">
+                                <button id="@Model.memberLists.UserId" onclick="addPriceModal(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                    Bakiye Yükle
+                                </button>
+                            </div>
 
                         </div>
                     </div>
 
                     <div class="card card-white">
-                        <div class="card-header">
-                            @if (Model.totalPrice == 0)
-                            {
-                                <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Rezervasyon Borcu Yok</h2>
-                            }
-                            else
-                            {
-                                <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Rezervasyon Borcu - @Model.totalPrice ₺ </h2>
-                            }
 
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
+                        
+
+                            <div class="card-header">
+                                @if (Model.totalPrice == 0)
+                                {
+                                    <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Rezervasyon Borcu Yok</h2>
+                                }
+                                else
+                                {
+                                    <h2 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Rezervasyon Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Rezervasyon Borcu - @Model.totalPrice ₺ </h2>
+                                }
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+
                             </div>
+                        
 
-                        </div>
                         <div class="card-body p-0">
                             <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
                                 <tbody>
@@ -639,137 +644,142 @@
                         var x = Model.cabinetListUsers.Where(x => x.CabinetUserId == Model.memberLists.UserId).ToList();
                     }
 
-                    @if (x.Count == 0)
+                    @if (Model.memberLists.whoPartner == false)
                     {
-                        <div class="card card-white">
-                            <div class="card-header">
-                                <h3 class="card-title">Dolap Bilgileri</h3>
+                        @if (x.Count == 0)
+                        {
+                            <div class="card card-white">
+                                <div class="card-header">
+                                    <h3 class="card-title">Dolap Bilgileri</h3>
 
-                                <div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid" type="button" class="btn btn-tool tdHover">
-                                        Dolap Tahsis Et
-                                    </button>
+                                    <div class="card-tools">
+                                        <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid" type="button" class="btn btn-tool tdHover">
+                                            Dolap Tahsis Et
+                                        </button>
+                                    </div>
+
+
+
                                 </div>
-
-
-
+                                <div class="card-body p-0">
+                                    <h5 style="text-align:center">Dolap Bilgisi Bulunmamaktadır.</h5>
+                                </div>
                             </div>
-                            <div class="card-body p-0">
-                                <h5 style="text-align:center">Dolap Bilgisi Bulunmamaktadır.</h5>
-                            </div>
-                        </div>
-                    }
+                        }
 
-                    else
-                    {
-                        <div class="card card-white">
-                            <div class="card-header">
-                                @{
-                                    var firstPrice = 0;
+                        else
+                        {
+                            <div class="card card-white">
+                                <div class="card-header">
+                                    @{
+                                        var firstPrice = 0;
 
-                                    foreach (var item in x)
-                                    {
-                                        if (item.PriceCondition == false)
+                                        foreach (var item in x)
                                         {
-                                            var priceModel = item.CabinetOpPrice;
+                                            if (item.PriceCondition == false)
+                                            {
+                                                var priceModel = item.CabinetOpPrice;
 
-                                            firstPrice = firstPrice + priceModel;
+                                                firstPrice = firstPrice + priceModel;
+                                            }
+
                                         }
-
                                     }
-                                }
 
-                                <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Dolap Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Dolap Bilgileri - @firstPrice ₺ </h3>
+                                    <h3 class="card-title"><i data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="Dolap Detay Gör" style="margin-right:15px; cursor:pointer" class="fas fa-search"></i>Dolap Bilgileri - @firstPrice ₺ </h3>
 
 
-                                <div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
-                                        Dolap Tahsis Et
-                                    </button>
+                                    <div class="card-tools">
+                                        <button id="@Model.memberLists.UserId" onclick="addCabinetforMember(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                            Dolap Tahsis Et
+                                        </button>
+                                    </div>
+
                                 </div>
 
-                            </div>
+                                <div class="card-body p-0">
 
-                            <div class="card-body p-0">
+                                    <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
+                                        <tbody>
 
-                                <table class="table table-bordered bg-green-soft bg-font-green-soft" style="margin:0;">
-                                    <tbody>
+                                            <tr>
+                                                <td style="padding:0;text-align:center;">Dolap Kodu</td>
+                                                <td style="padding:0;text-align:center;">Aidat Ücreti / Yıllık</td>
+                                                <td style="padding:0;text-align:center;">Dolap Türü</td>
+                                                <td style="padding:0;text-align:center;">Dolap Sahibi</td>
+                                                <td style="padding:0;text-align:center;">Dolap Alım Tarihi</td>
+                                                <td style="padding:0;text-align:center;">Dolap Ücreti</td>
 
-                                        <tr>
-                                            <td style="padding:0;text-align:center;">Dolap Kodu</td>
-                                            <td style="padding:0;text-align:center;">Aidat Ücreti / Yıllık</td>
-                                            <td style="padding:0;text-align:center;">Dolap Türü</td>
-                                            <td style="padding:0;text-align:center;">Dolap Sahibi</td>
-                                            <td style="padding:0;text-align:center;">Dolap Alım Tarihi</td>
-                                            <td style="padding:0;text-align:center;">Dolap Ücreti</td>
-
-
-                                        </tr>
-
-                                        @foreach (var item in x)
-
-                                        {
-                                            <tr class="info" style="color:#000;">
-
-                                                <td style="padding:0;text-align:center;">@item.CabinetCode</td>
-                                                <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
-                                                <td style="padding:0;text-align:center;">@item.CabinetOpTypes</td>
-                                                <td style="padding:0;text-align:center;">@item.CabinetWho</td>
-                                                <td style="padding:0;text-align:center;">@item.Date</td>
-                                                <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
-
-
-
-                                                <td style="padding:0;text-align:center;">
-                                                    <i id="@item.CabinetOpId" onclick="deleteCabinet(this.id)" style="text-align:center; cursor:pointer" class="fas fa-trash"></i>
-                                                </td>
 
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    }
+
+                                            @foreach (var item in x)
+
+                                            {
+                                                <tr class="info" style="color:#000;">
+
+                                                    <td style="padding:0;text-align:center;">@item.CabinetCode</td>
+                                                    <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
+                                                    <td style="padding:0;text-align:center;">@item.CabinetOpTypes</td>
+                                                    <td style="padding:0;text-align:center;">@item.CabinetWho</td>
+                                                    <td style="padding:0;text-align:center;">@item.Date</td>
+                                                    <td style="padding:0;text-align:center;">@item.CabinetOpPrice</td>
 
 
-                    @if (Model.memberLists.PartnerId != null)
-                    {
-                        <div class="card card-white ">
-                            <div class="card-header">
-                                @{
-                                    var partnerInf = Model.memberLists2.Where(x => x.UserId == Model.memberLists.PartnerId).FirstOrDefault();
-                                }
-                                <h3 style="color:black" class="card-title">Eş Bilgisi .......  @partnerInf.MemberNumber - @partnerInf.FullName - @partnerInf.NickName </h3>
 
+                                                    <td style="padding:0;text-align:center;">
+                                                        <i id="@item.CabinetOpId" onclick="deleteCabinet(this.id)" style="text-align:center; cursor:pointer" class="fas fa-trash"></i>
+                                                    </td>
 
-                                <div class="card-tools">
-                                    <a href="../AdminHome/MemberDetailPage?memberNum=@partnerInf.MemberNumber" type="button" class="btn btn-tool">
-                                        <i class="fas fa-search"></i>
-                                    </a>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
-
                             </div>
-                        </div>
+                        }
+
+                        @if (Model.memberLists.PartnerId != null)
+                        {
+                            <div class="card card-white ">
+                                <div class="card-header">
+                                    @{
+                                        var partnerInf = Model.memberLists2.Where(x => x.UserId == Model.memberLists.PartnerId).FirstOrDefault();
+                                    }
+                                    <h3 style="color:black" class="card-title">Eş Bilgisi .......  @partnerInf.MemberNumber - @partnerInf.FullName - @partnerInf.NickName </h3>
 
 
-                    }
-                    else
-                    {
-                        <div class="card card-white">
-                            <div class="card-header">
+                                    <div class="card-tools">
+                                        <a href="../AdminHome/MemberDetailPage?memberNum=@partnerInf.MemberNumber" type="button" class="btn btn-tool">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </div>
 
-                                <h2 class="card-title"><i style="margin-right:15px; cursor:pointer" class="fas fa-user"></i>Eş Bilgisi Bulunmamaktadır</h2>
-
-                                <div class="card-tools">
-                                    <button id="@Model.memberLists.UserId" onclick="addPartner(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
-                                        Eş Bilgisi Ekle
-                                    </button>
                                 </div>
-
                             </div>
-                        </div>
+
+
+                        }
+
+                        else
+                        {
+                            <div class="card card-white">
+                                <div class="card-header">
+
+                                    <h2 class="card-title"><i style="margin-right:15px; cursor:pointer" class="fas fa-user"></i>Eş Bilgisi Bulunmamaktadır</h2>
+
+                                    <div class="card-tools">
+                                        <button id="@Model.memberLists.UserId" onclick="addPartner(this.id)" style="color:black; border:1px solid " type="button" class="btn btn-tool tdHover">
+                                            Eş Bilgisi Ekle
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
                     }
+
+
 
                 </div>
             </div>
@@ -977,6 +987,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="balanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Bakiye Yükle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+
+                    <div class="col-md-12 form-group">
+                        <input type="text" id="balance" class="form-control">
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div id="balanceOperations" class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-primary" onclick="addBalance(this.id)">Tahsis Et</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -1417,11 +1456,11 @@
             gender: null,
             checkpass: null,
             actChecked: null,
-            detailAddress:null,
+            detailAddress: null,
         };
 
         debugger;
-        
+
         userObj.actPass = $("#actChecked input").prop('checked');
         userObj.detailAddress = $("#detailAddress").val();
         userObj.checkpass = $("#password").val();
@@ -1519,6 +1558,66 @@
 
         }
 
+    }
+
+    function addPriceModal(id) {
+
+        debugger;
+
+        $('#balanceModal').modal('toggle');
+        $("#balanceOperations button:nth-of-type(2)").attr("id", id);
+    }
+
+    function addBalance(id) {
+
+        debugger;
+
+        var price = $("#balance").val();
+
+        $.ajax({
+            type: "Post",
+            url: '../AdminHome/AddPrice',
+            cache: false,
+            data: { "id": id, "money": price },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                if (res == true) {
+
+
+                    $.confirm({
+                        title: "Bilgilendirme",
+                        content: "Bakiye Başarıyla Eklendi.",
+                        buttons: {
+                            TAMAM: function () {
+
+                                location.reload();
+
+                            }
+                        }
+                    });
+                }
+
+                else
+                    $.confirm({
+                        title: "Uyarı",
+                        content: "Bakiye Eklenirken Hata Oluştu.",
+                        buttons: {
+                            TAMAM: function () {
+
+
+                            }
+                        }
+                    });
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
     }
 
 

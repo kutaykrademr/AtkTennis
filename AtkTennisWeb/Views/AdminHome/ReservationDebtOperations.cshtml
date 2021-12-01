@@ -56,7 +56,7 @@
 
                     <div class="portlet-body">
                         <div class="portlet light" style="padding: 15px;">
-                            <div class="alert alert-info" style="margin-bottom: 0; background-color:#b7003c">
+                            <div class="alert alert-info" style="margin-bottom: 0; background-color:#343a40">
                                 <strong>Rezervasyon Ödemesi!</strong> İlgili üye bilgisini bularak işleme devam ediniz.
                             </div>
                         </div>
@@ -145,8 +145,7 @@
 
             <div id="paidOp" class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
-                <button type="button" class="btn btn-primary" onclick="
-                        rations(this.id)">Ödeme Al</button>
+                <button type="button" class="btn btn-primary" onclick="getPaidOperations(this.id)">Ödeme Al</button>
             </div>
 
         </div>
@@ -392,7 +391,7 @@
                             row += '<div id="asd" class="card-body ">';
                             row += '<div class="d-flex justify-content-between">';
                             row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
-                            row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon İptal Borcu :' + totalPrice + '  ₺</h4>';
+                            row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon  Borcu :' + totalPrice + '  ₺</h4>';
                             row += '</div>';
                             row += '<table id="resList" class="table table-bordered table-hover">';
                             row += '<thead>';
@@ -464,8 +463,8 @@
                             row = "";
                             row += '<div id="asd" class="card-body">';
                             row += '<div class="d-flex justify-content-between">';
-                            row += '<h4 style="margin-bottom:30px">Rezervasyon Borçları</h4>';
-                            row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon Borcu : ' + totalPrice2 + ' ₺</h4>';
+                            row += '<h4 style="margin-bottom:30px">Rezervasyon İptal Borçları</h4>';
+                            row += '<h4 style="margin-bottom:30px">Toplam Rezervasyon İptal Borcu : ' + totalPrice2 + ' ₺</h4>';
                             row += '</div>';
                             row += '<table id="resList2" class="table table-bordered table-hover">';
                             row += '<thead>';

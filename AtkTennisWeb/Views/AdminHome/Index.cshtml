@@ -963,7 +963,7 @@
                                         <tr class="note note-danger">
                                             <td style="vertical-align:middle;width: 112px;">Ödeme Tipi:</td>
                                             <td style="">
-                                                <select class="form-control" id="paymentType" data-id="28911">
+                                                <select class="form-control" id="paymentType3" data-id="28911">
                                                     <option value="1">Nakit</option>
                                                     <option value="2">Kredi Kartı</option>
                                                     <option value="3">Havale </option>
@@ -973,20 +973,20 @@
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz No:</td>
-                                            <td style=""><input id="receiptNo" type="text" name="MakbuzNumarasi" class="form-control " placeholder="Makbuz No"></td>
+                                            <td style=""><input id="receiptNo3" type="text" name="MakbuzNumarasi" class="form-control " placeholder="Makbuz No"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Makbuz Tarihi:</td>
-                                            <td><input class="form-control" type="date" id="receiptDate" style="cursor:pointer;"></td>
+                                            <td><input class="form-control" type="date" id="receiptDate3" style="cursor:pointer;"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td style="">Açıklama:</td>
-                                            <td style=""><input id="explain" type="text" name="Aciklama" class="form-control" placeholder="Açıklama"></td>
+                                            <td style=""><input id="explain3" type="text" name="Aciklama" class="form-control" placeholder="Açıklama"></td>
                                         </tr>
                                         <tr class="note note-danger">
                                             <td>Ücreti:</td>
                                             <td>
-                                                <input id="price" disabled type="text" class="form-control" autocomplete="new-password">
+                                                <input id="price3" disabled type="text" class="form-control" autocomplete="new-password">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -999,7 +999,7 @@
 
             <div id="paidOp2" class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
-                <button type="button" class="btn btn-primary" onclick="getTotalPaidOperations(this.id)">Ödeme Al</button>
+                <button type="button" id="1" class="btn btn-primary" onclick="getPaidMulti(this.id)">Ödeme Al</button>
             </div>
 
         </div>
@@ -1012,8 +1012,9 @@
 
 <script>
 
+    
     var compId = $("#compId").text();
-
+    var userId = $("#userId").text();
     $(document).ready(function () {
 
         $("#example1").DataTable({
@@ -1180,11 +1181,9 @@
 
                     if (res.courtScales[i].companyId == compId) {
 
-                        var checkRole = Enumerable.from(res.memberLists)
-                            .where(function (x) { return x.role.toLowerCase() == res.courtScales[i].name.toLowerCase() })
-                            .select(function (x) { return x }).toArray();
+                        debugger;
 
-                        if (checkRole.length == 0) {
+                        if (res.courtScales[i].name != "Sekreterya" && res.courtScales[i].name != "Antrenör" && res.courtScales[i].name != "Üye" && res.courtScales[i].name != "Yönetici" ) {
                             mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
                         }
 
@@ -2263,7 +2262,6 @@
 
                 row += '<tbody>';
 
-
                 for (var i = 0; i < res.reservations.length; i++) {
 
 
@@ -2287,9 +2285,7 @@
                         row += '</td>';
                         row += '</tr>';
 
-
                     }
-
                 }
 
                 row += '</tbody>';
@@ -2330,12 +2326,9 @@
                 row += '<th>Kort Bilgisi</th>';
                 row += '<th>Ücret Durumu</th>';
                 row += '<th>Ücret Bilgisi</th>';
-
                 row += '<th>İşlemler</th>';
                 row += '</tr>';
                 row += '</thead>';
-
-
 
                 for (var i = 0; i < res.reservationCancels.length; i++) {
 
@@ -2373,6 +2366,10 @@
                 $("#append").append(row);
 
                 $('#totPriceModal').modal('toggle')
+
+                
+
+               
             },
 
             error: function (textStatus, errorThrown) {
@@ -2428,12 +2425,10 @@
         $('#getPaidModal').modal('toggle');
     }
 
-    function getPaidMulti() {
+    function getPaidMulti(id) {
 
-        //Buraaa
-        $('#getTotalPaidModal').modal('toggle');
 
-        debugger;
+     
         
         var idList = [];
         var idList2 = [];
@@ -2461,29 +2456,92 @@
             idLists2 = idList2[i] + ',' + idLists2;
         }
 
-        //$.ajax({
-        //    type: "GET",
-        //    url: '../Public/GetResModalInf',
-        //    cache: false,
-        //    data: { "idList": idLists , "idList2":idLists2 },
-        //    dataType: "json",
-        //    async: true,
-        //    success: function (res) {
+ 
+        if (id == 1) {
 
-        //        if (res == true) {
+            var paymentType = $('#paymentType3 option:selected').val();
+            var receiptNo = $('#receiptNo3').val();
+            var receiptDate = $('#receiptDate3').val();
+            var explain = $('#explain3').val();
 
-        //        }
-                
+            if (paymentType == "" || receiptNo == "" || receiptDate == "") {
 
-        //    },
-        //    error: function (textStatus, errorThrown) {
-        //        console.log(JSON.stringify(textStatus));
-        //        console.log(textStatus);
-        //    }
-        //});
+                swal("Dikkat!", "Bilgileri Eksiksiz Giriniz.", "warning", {
+                    button: "Tamam",
+                });
+            }
+
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: '../AdminHome/GetPaidMultiOp',
+                    cache: false,
+                    data: { "doUserId": userId, "compId":compId , "idList": idLists, "idList2": idLists2, "explain": explain, "receiptDate": receiptDate, "paymentType": paymentType, "receiptNo": receiptNo },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+                     
+
+                        swal({
+                            title: "Ödeme Başarılı",
+                            text: "Ödeme  Başarılı Bir Şekilde Gerçekleşti !",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then((value) => {
+
+                            location.reload();
+
+                        });
+                        
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+           
+        }
+
+
+        $.ajax({
+            type: "GET",
+            url: '../AdminHome/GetPaidMulti',
+            cache: false,
+            data: { "idList": idLists , "idList2":idLists2 , "key":1},
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+                var price = 0;
+
+                if (res.reservationCancels.length > 0 || res.reservations.length > 0) {
+
+                    for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                        price = price + res.reservationCancels[i].price;
+                    }
+
+                    for (var i = 0; i < res.reservations.length; i++) {
+
+                        price = price + res.reservations[i].price;
+                    }
+
+                    $('#price3').val(price);
+                 
+                    $('#getTotalPaidModal').modal('toggle')
+                }
+
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+            }
+        });
 
     }
-
 
     function getPrice() {
 
@@ -3114,7 +3172,7 @@
 
     function cancelResAuthorized(id) {
 
-        var userId = $("#userId").text();
+       
         var procedure = false;
         var cancelReasons = $("#reasonCancel option:selected").text();
 

@@ -1,4 +1,12 @@
 ﻿@model Helpers.Dto.PartialViewDtos.EducationSettingsViewDto;
+
+@if (Mutuals.M6 == false)
+{
+
+}
+else
+{
+
     <style>
 
         button {
@@ -6,327 +14,382 @@
         }
     </style>
 
-<div class="content-wrapper">
+    <div class="content-wrapper">
 
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Performans Ayarları</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Performans Ayarları</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">DataTables</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Performans Türleri</h3>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Performans Türleri</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceType"><i class="fas fa-plus-square"></i></button>
+                                </div>
                             </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceType"><i class="fas fa-plus-square"></i></button>
-                            </div>
-                        </div>
 
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Performans Kodu</th>
-                                        <th>Performans Türü</th>
-                                        <th>İşlemler</th>
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Performans Kodu</th>
+                                            <th>Performans Türü</th>
+                                            <th>İşlemler</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach (var item in Model.performanceTypes)
-
-                                    {
-                                        <tr style="text-align:center" id="">
-
-                                            <td>@item.PerformanceCode</td>
-                                            <td>@item.PerformanceTypes</td>
-
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item.PerformanceTypesId" onclick="openUpdatePerformanceType(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.PerformanceTypesId" onclick="deletePerTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                        @foreach (var item in Model.performanceTypes)
 
+                                        {
+                                            <tr style="text-align:center" id="">
 
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="card-title">
-                                <h3>Performans Seviyeleri</h3>
+                                                <td>@item.PerformanceCode</td>
+                                                <td>@item.PerformanceTypes</td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.PerformanceTypesId" onclick="openUpdatePerformanceType(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.PerformanceTypesId" onclick="deletePerTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
                             </div>
-                            <div>
-                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel"><i class="fas fa-plus-square"></i></button>
-                            </div>
                         </div>
 
-                        <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Performans Seviyesi</th>
-                                        <th>Kota</th>
-                                        <th>İşlemler</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    <h3>Performans Seviyeleri</h3>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addPerformanceLevel"><i class="fas fa-plus-square"></i></button>
+                                </div>
+                            </div>
 
-                                    @foreach (var item in Model.performanceLevels)
-                                    {
-                                        <tr style="text-align:center" id="">
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Performans Seviyesi</th>
+                                            <th>Kota</th>
+                                            <th>İşlemler</th>
 
-                                            <td>@item.PerLevel</td>
-                                            <td>@item.PerQuotaInf</td>
-
-                                            <td>
-                                                <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
-                                            </td>
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
+                                        @foreach (var item in Model.performanceLevels)
+                                        {
+                                            <tr style="text-align:center" id="">
+
+                                                <td>@item.PerLevel</td>
+                                                <td>@item.PerQuotaInf</td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-success" id="@item.PerLevelId" onclick="openUpdatePerformanceLevel(this.id)"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger" id="@item.PerLevelId" onclick="deleteLevelTypeOpenModal(this.id)"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <div class="modal fade" id="addPerformanceType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Performans Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label"> Kodu:</label>
+                            <input type="text" class="form-control" id="perCode">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Performans Türü:</label>
+                            <input type="text" class="form-control" id="perType">
                         </div>
                     </div>
-
-     
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAddPerformanceType()">Ekle</button>
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 
-
-<div class="modal fade" id="addPerformanceType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Performans Türü Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label"> Kodu:</label>
-                        <input type="text" class="form-control" id="perCode">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Performans Türü:</label>
-                        <input type="text" class="form-control" id="perType">
-                    </div>
+    <div class="modal fade" id="openDeletePerTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Silmek İstediğinize Emin Misiniz ?
+                </div>
+                <div class="modal-footer" id="deleteOperationPerTypeModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="deletePerformanceType(this.id)">Sil</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveAddPerformanceType()">Ekle</button>
-            </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="openDeletePerTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperationPerTypeModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deletePerformanceType(this.id)">Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="updatePerType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Okul Türü Güncelle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Kodu:</label>
-                        <input type="text" class="form-control" id="perfCode">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">PerformansTürü:</label>
-                        <input type="text" class="form-control" id="perfType">
+    <div class="modal fade" id="updatePerType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Okul Türü Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Kodu:</label>
+                            <input type="text" class="form-control" id="perfCode">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">PerformansTürü:</label>
+                            <input type="text" class="form-control" id="perfType">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer" id="updateOperationPerModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="updatePerformanceType(this.id)">Ekle</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="modal fade" id="addPerformanceLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Performans Türü Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label"> Performans Seviyesi:</label>
-                        <input type="text" class="form-control" id="perLevel">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Kota:</label>
-                        <input type="text" class="form-control" id="perQuota">
-                    </div>
+                <div class="modal-footer" id="updateOperationPerModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updatePerformanceType(this.id)">Ekle</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveAddPerformanceLevel()">Ekle</button>
-            </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="openDeletePerLevelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek İstediğinize Emin Misiniz ?
-            </div>
-            <div class="modal-footer" id="deleteOperationPerLevelModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="deletePerformanceLevel(this.id)">Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="updatePerLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Performans Seviyesi Güncelle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Performans Seviyesi:</label>
-                        <input type="text" class="form-control" id="perLevels">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="recipient-name" class="col-form-label">Kota Bilgisi:</label>
-                        <input type="text" class="form-control" id="perQuotas">
+
+    <div class="modal fade" id="addPerformanceLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Performans Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label"> Performans Seviyesi:</label>
+                            <input type="text" class="form-control" id="perLevel">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Kota:</label>
+                            <input type="text" class="form-control" id="perQuota">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer" id="updateOperationPerLevelModel">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="updatePerformanceLevel(this.id)">Ekle</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAddPerformanceLevel()">Ekle</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="openDeletePerLevelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Silmek İstediğinize Emin Misiniz ?
+                </div>
+                <div class="modal-footer" id="deleteOperationPerLevelModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="deletePerformanceLevel(this.id)">Sil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updatePerLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Performans Seviyesi Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Performans Seviyesi:</label>
+                            <input type="text" class="form-control" id="perLevels">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Kota Bilgisi:</label>
+                            <input type="text" class="form-control" id="perQuotas">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="updateOperationPerLevelModel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updatePerformanceLevel(this.id)">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-<script>
-    $(document).ready(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    <script>
+        $(document).ready(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-        $('#example2 , #example3 , #example4').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+            $('#example2 , #example3 , #example4').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
 
-        });
-    });
-
-
-    function saveAddPerformanceType() {
-        if ($("#perType").val() == "" || $("#perCode").val() == "") {
-            $.confirm({
-                title: "Bilgilendirme",
-                content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
-                buttons: {
-                    TAMAM: function () {
-
-                    }
-                }
             });
-        } else {
+        });
+
+
+        function saveAddPerformanceType() {
+            if ($("#perType").val() == "" || $("#perCode").val() == "") {
+                $.confirm({
+                    title: "Bilgilendirme",
+                    content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddNewPerformanceType',
+                    cache: false,
+                    data: { "code": $("#perCode").val(), "type": $("#perType").val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res == true) {
+
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Performans Türü başarıyla eklendi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        window.location.href = "EducationPerformanceSettings"
+                                    }
+                                }
+                            });
+
+
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+
+        }
+
+        function deletePerTypeOpenModal(id) {
+
+            $("#deleteOperationPerTypeModel button:nth-of-type(2)").attr("id", id);
+            $("#openDeletePerTypeModal").modal("toggle");
+
+        }
+
+        function deletePerformanceType(id) {
 
             $.ajax({
                 type: "POST",
-                url: '../SystemSettings/AddNewPerformanceType',
+                url: '../SystemSettings/DeletePerformanceType',
                 cache: false,
-                data: { "code": $("#perCode").val(), "type": $("#perType").val() },
+                data: { "id": id },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
-
-                    if (res == true) {
+                    if (res != null) {
 
                         $.confirm({
                             title: "Bilgilendirme",
-                            content: "Performans Türü başarıyla eklendi.",
+                            content: "Performans Türü başarıyla silindi.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -334,13 +397,12 @@
                                 }
                             }
                         });
-
-
                     }
+
                     else {
                         $.confirm({
                             title: "Uyarı",
-                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            content: "Bir Hata Oluştu.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -357,183 +419,24 @@
             });
         }
 
-    }
-
-    function deletePerTypeOpenModal(id) {
-
-        $("#deleteOperationPerTypeModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeletePerTypeModal").modal("toggle");
-
-    }
-
-    function deletePerformanceType(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeletePerformanceType',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Performans Türü başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationPerformanceSettings"
-                            }
-                        }
-                    });
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Bir Hata Oluştu.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function updatePerformanceType(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/UpdatePerformanceType',
-            cache: false,
-            data: { "id": id, "code": $("#perfCode").val(), "type": $("#perfType").val() },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Performans Türü başarıyla güncellendi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationPerformanceSettings"
-                            }
-                        }
-                    });
-
-
-
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Performans Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function openUpdatePerformanceType(id) {
-        $.ajax({
-            type: "GET",
-            url: '../SystemSettings/GetPerformanceTypeInf',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-
-                if (res != null) {
-
-                    $("#perfCode").val(res.performanceCode);
-                    $("#perfType").val(res.performanceTypes);
-
-                    $("#updateOperationPerModel button:nth-of-type(2)").attr("id", id);
-                    $('#updatePerType').modal('toggle');
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-
-
-
-
-    function saveAddPerformanceLevel() {
-        if ($("#perLevel").val() == "" || $("#perQuota").val() == "") {
-            $.confirm({
-                title: "Bilgilendirme",
-                content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
-                buttons: {
-                    TAMAM: function () {
-
-                    }
-                }
-            });
-        } else {
+        function updatePerformanceType(id) {
 
             $.ajax({
                 type: "POST",
-                url: '../SystemSettings/AddNewPerformanceLevel',
+                url: '../SystemSettings/UpdatePerformanceType',
                 cache: false,
-                data: { "level": $("#perLevel").val(), "quota": $("#perQuota").val() },
+                data: { "id": id, "code": $("#perfCode").val(), "type": $("#perfType").val() },
                 dataType: "json",
                 async: true,
                 success: function (res) {
 
 
-                    if (res == true) {
+
+                    if (res != null) {
 
                         $.confirm({
                             title: "Bilgilendirme",
-                            content: "Performans Seviyesi başarıyla eklendi.",
+                            content: "Performans Türü başarıyla güncellendi.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -543,11 +446,13 @@
                         });
 
 
+
                     }
+
                     else {
                         $.confirm({
                             title: "Uyarı",
-                            content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                            content: "Performans Türü Bulunamadı.",
                             buttons: {
                                 TAMAM: function () {
 
@@ -564,174 +469,278 @@
             });
         }
 
-    }
+        function openUpdatePerformanceType(id) {
+            $.ajax({
+                type: "GET",
+                url: '../SystemSettings/GetPerformanceTypeInf',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
 
-    function deleteLevelTypeOpenModal(id) {
 
-        $("#deleteOperationPerLevelModel button:nth-of-type(2)").attr("id", id);
-        $("#openDeletePerLevelModal").modal("toggle");
 
-    }
+                    if (res != null) {
 
-    function deletePerformanceLevel(id) {
+                        $("#perfCode").val(res.performanceCode);
+                        $("#perfType").val(res.performanceTypes);
 
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/DeletePerformanceLevel',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
+                        $("#updateOperationPerModel button:nth-of-type(2)").attr("id", id);
+                        $('#updatePerType').modal('toggle');
+                    }
 
-                if (res != null) {
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Okul Türü Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
 
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Performans Seviyesi başarıyla silindi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationPerformanceSettings"
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
                 }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Bir Hata Oluştu.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function updatePerformanceLevel(id) {
-
-        $.ajax({
-            type: "POST",
-            url: '../SystemSettings/UpdatePerformanceLevel',
-            cache: false,
-            data: { "id": id, "level": $("#perLevels").val(), "quota": $("#perQuotas").val() },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-
-                if (res != null) {
-
-                    $.confirm({
-                        title: "Bilgilendirme",
-                        content: "Performans Seviyesi başarıyla güncellendi.",
-                        buttons: {
-                            TAMAM: function () {
-
-                                window.location.href = "EducationPerformanceSettings"
-                            }
-                        }
-                    });
-
-
-
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Performans Seviyesi Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-    function openUpdatePerformanceLevel(id) {
-        $.ajax({
-            type: "GET",
-            url: '../SystemSettings/GetPerformanceLevelInf',
-            cache: false,
-            data: { "id": id },
-            dataType: "json",
-            async: true,
-            success: function (res) {
-
-
-                if (res != null) {
-
-                    $("#perLevels").val(res.perLevel);
-                    $("#perQuotas").val(res.perQuotaInf);
-
-                    $("#updateOperationPerLevelModel button:nth-of-type(2)").attr("id", id);
-                    $('#updatePerLevel').modal('toggle');
-                }
-
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Okul Türü Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
-
-                            }
-                        }
-                    });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
-            }
-        });
-    }
-
-
-
-    function openPage(pageName, elmnt, color) {
-        // Hide all elements with class="tabcontent" by default */
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+            });
         }
 
-        // Remove the background color of all tablinks/buttons
-        tablinks = document.getElementsByClassName("tablink");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "";
+
+
+
+
+        function saveAddPerformanceLevel() {
+            if ($("#perLevel").val() == "" || $("#perQuota").val() == "") {
+                $.confirm({
+                    title: "Bilgilendirme",
+                    content: "Lütfen Bilgileri Eksizsiz Doldurunuz.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: '../SystemSettings/AddNewPerformanceLevel',
+                    cache: false,
+                    data: { "level": $("#perLevel").val(), "quota": $("#perQuota").val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res == true) {
+
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Performans Seviyesi başarıyla eklendi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        window.location.href = "EducationPerformanceSettings"
+                                    }
+                                }
+                            });
+
+
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Kayıt sırasında bir hata oluştu. Lütfen Kontrol edip daha sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+
         }
 
-        // Show the specific tab content
-        document.getElementById(pageName).style.display = "block";
+        function deleteLevelTypeOpenModal(id) {
 
-        // Add the specific color to the button used to open the tab content
-        elmnt.style.backgroundColor = color;
-    }
+            $("#deleteOperationPerLevelModel button:nth-of-type(2)").attr("id", id);
+            $("#openDeletePerLevelModal").modal("toggle");
 
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click(); 
+        }
 
-</script>
+        function deletePerformanceLevel(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/DeletePerformanceLevel',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res != null) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Performans Seviyesi başarıyla silindi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "EducationPerformanceSettings"
+                                }
+                            }
+                        });
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Bir Hata Oluştu.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+        function updatePerformanceLevel(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/UpdatePerformanceLevel',
+                cache: false,
+                data: { "id": id, "level": $("#perLevels").val(), "quota": $("#perQuotas").val() },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+
+                    if (res != null) {
+
+                        $.confirm({
+                            title: "Bilgilendirme",
+                            content: "Performans Seviyesi başarıyla güncellendi.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                    window.location.href = "EducationPerformanceSettings"
+                                }
+                            }
+                        });
+
+
+
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Performans Seviyesi Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+        function openUpdatePerformanceLevel(id) {
+            $.ajax({
+                type: "GET",
+                url: '../SystemSettings/GetPerformanceLevelInf',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res != null) {
+
+                        $("#perLevels").val(res.perLevel);
+                        $("#perQuotas").val(res.perQuotaInf);
+
+                        $("#updateOperationPerLevelModel button:nth-of-type(2)").attr("id", id);
+                        $('#updatePerLevel').modal('toggle');
+                    }
+
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Okul Türü Bulunamadı.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+
+
+        function openPage(pageName, elmnt, color) {
+            // Hide all elements with class="tabcontent" by default */
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the background color of all tablinks/buttons
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+
+            // Show the specific tab content
+            document.getElementById(pageName).style.display = "block";
+
+            // Add the specific color to the button used to open the tab content
+            elmnt.style.backgroundColor = color;
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+
+    </script>
+}

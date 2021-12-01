@@ -234,8 +234,10 @@
                                     </a>
                                 </li>
                             }
+                        }
 
-
+                        @if (Mutuals.M2 == true)
+                        {
 
                             @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Advisory)
 
@@ -318,25 +320,27 @@
                                         </li>
 
                                         @*<li class="nav-item">
-                                    <a href="~/AdminHome/RegisterStudent" class="nav-link">
-                                        <i class="fas fa-plus nav-icon"></i>
-                                        <p>Öğrenci Kaydı</p>
-                                    </a>
-                                </li>
+                            <a href="~/AdminHome/RegisterStudent" class="nav-link">
+                                <i class="fas fa-plus nav-icon"></i>
+                                <p>Öğrenci Kaydı</p>
+                            </a>
+                        </li>
 
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="fas fa-list-ol nav-icon"></i>
-                                        <p>Öğrenci Genel Liste</p>
-                                    </a>
-                                </li>*@
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-list-ol nav-icon"></i>
+                                <p>Öğrenci Genel Liste</p>
+                            </a>
+                        </li>*@
 
                                     </ul>
                                 </li>
                             }
+                        }
 
 
-
+                        @if (Mutuals.M3 == true)
+                        {
                             @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reservations)
                             {
                                 <li class="nav-item ">
@@ -384,7 +388,11 @@
                                     </ul>
                                 </li>
                             }
+                        }
 
+
+                        @if (Mutuals.M4 == true)
+                        {
                             @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].MemberDebtList)
                             {
                                 <li class="nav-item ">
@@ -425,16 +433,19 @@
 
 
                                         @*<li class="nav-item">
-                                    <a href="~/Admin/ReservationTable" class="nav-link">
-                                        <i class="fas fa-user nav-icon"></i>
-                                        <p>Potansiyel Üye</p>
-                                    </a>
-                                </li>*@
+                            <a href="~/Admin/ReservationTable" class="nav-link">
+                                <i class="fas fa-user nav-icon"></i>
+                                <p>Potansiyel Üye</p>
+                            </a>
+                        </li>*@
                                     </ul>
                                 </li>
 
                             }
+                        }
 
+                        @if (Mutuals.M5 == true)
+                        {
                             @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].DebtandPayment)
                             {
                                 <li class="nav-item ">
@@ -488,7 +499,10 @@
                                     </ul>
                                 </li>
                             }
+                        }
 
+                        @if (Mutuals.M6 == true)
+                        {
                             @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
                             {
                                 <li class="nav-item ">
@@ -521,38 +535,38 @@
 
 
                                         @*<li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-user"></i>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
 
-                                        <p>
-                                            Üye Ayarları
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                                <p>
+                                    Üye Ayarları
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/MemberSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Üye Dolap Ayarları</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/MemberSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Üye Dolap Ayarları</p>
-                                            </a>
-                                        </li>
+                                </li>
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/MemberDuesSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Üye Borçlandırma Ayarları</p>
-                                            </a>
-                                        </li>
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/MemberDuesSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Üye Borçlandırma Ayarları</p>
+                                    </a>
+                                </li>
 
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Özel Ders</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>*@
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Özel Ders</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
 
 
                                         <li class="nav-item">
@@ -563,84 +577,84 @@
                                         </li>
 
                                         @*<li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-table-tennis"></i>
-                                        <p>
-                                            Eğitim Ayarları
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table-tennis"></i>
+                                <p>
+                                    Eğitim Ayarları
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Okul</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Okul</p>
-                                            </a>
-                                        </li>
+                                </li>
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Performans</p>
-                                            </a>
-                                        </li>
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Performans</p>
+                                    </a>
+                                </li>
 
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Özel Ders</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>*@
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Özel Ders</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
 
                                         @*<li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                        <p>
-                                            Öğr. Gel. ve Tak. Ayar.
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                <p>
+                                    Öğr. Gel. ve Tak. Ayar.
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Antreman Havuzu</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Antreman Havuzu</p>
-                                            </a>
-                                        </li>
+                                </li>
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Fiziksel Çalışmalar</p>
-                                            </a>
-                                        </li>
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Fiziksel Çalışmalar</p>
+                                    </a>
+                                </li>
 
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Oyunlar</p>
-                                            </a>
-                                        </li>
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Oyunlar</p>
+                                    </a>
+                                </li>
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Gelişim Formları</p>
-                                            </a>
-                                        </li>
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Gelişim Formları</p>
+                                    </a>
+                                </li>
 
-                                        <li class="nav-item">
-                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>İçerik İşlemleri</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>*@
+                                <li class="nav-item">
+                                    <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>İçerik İşlemleri</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
 
                                         <li class="nav-item">
                                             <a href="~/SystemSettings/ReservationSettings" class="nav-link">
@@ -652,38 +666,40 @@
                                     </ul>
                                 </li>
                             }
-
-                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reports)
-                            {
-                                <li class="nav-item ">
-                                    <a style="background-color:#625e5e" href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-pie"></i>
-                                        <p>
-                                            Raporlar
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="~/Report/DebtReports" class="nav-link">
-                                                <i class="fas fa-id-card nav-icon"></i>
-                                                <p>Ödeme Raporları </p>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="~/Report/CourtOccupancyReports" class="nav-link">
-                                                <i class="nav-icon fas fa-chart-pie"></i>
-                                                <p>Kort Doluluk Raporları </p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
                         }
+
+
+                        @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reports)
+                        {
+                            <li class="nav-item ">
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Raporlar
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Report/DebtReports" class="nav-link">
+                                            <i class="fas fa-id-card nav-icon"></i>
+                                            <p>Ödeme Raporları </p>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Report/CourtOccupancyReports" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>Kort Doluluk Raporları </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        
                     </ul>
                 </nav>
             </div>
