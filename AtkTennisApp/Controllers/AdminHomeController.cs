@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using static AtkTennisApp.Program;
 using Helpers.Dto;
 using Helpers;
+using AtkTennisApp.AModels;
 
 namespace AtkTennisApp.Controllers
 {
@@ -36,6 +37,7 @@ namespace AtkTennisApp.Controllers
         }
 
         Context db = new Context();
+        ankarateniskulubudbContext atkcontext = new ankarateniskulubudbContext();
 
         [HttpGet("GetHome", Name = "GetHome")]
         public HomeModelView GetHome()
@@ -76,6 +78,26 @@ namespace AtkTennisApp.Controllers
 
 
             return model;
+        }
+
+        [HttpGet]
+        public void RegisterAll()
+        {
+            foreach (var user in atkcontext.Uyes)
+            {
+                MemberList member = 
+                new MemberList{
+                    FullName = user.Adi + " " + user.Soyadi
+
+                };
+
+                NewRegister(member.FullName,);
+
+
+
+
+
+            }
         }
 
         [HttpGet("TotalSystemUsers", Name = "TotalSystemUsers")]
