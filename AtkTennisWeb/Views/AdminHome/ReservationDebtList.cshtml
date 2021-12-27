@@ -154,7 +154,18 @@
 </div>
 
 <script>
+
+    $('body').loading({
+
+        theme: 'dark',
+        stoppable: false,
+        message: 'Yükleniyor..'
+    });
+
     $(document).ready(function () {
+
+
+        setTimeout(function () { $("body").loading('destroy'); });
 
         $('#example2').DataTable({
             "paging": true,

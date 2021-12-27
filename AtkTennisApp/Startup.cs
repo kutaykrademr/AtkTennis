@@ -62,7 +62,13 @@ namespace AtkTennisApp
             services.AddDbContext<AppIdentityDbContext>(
                 options =>options.UseSqlServer(Configuration.GetValue<string>("DbUrl") , options=> { options.EnableRetryOnFailure(); }));
 
-            services.AddIdentity<AppIdentityUser, AppIdentityRole>()
+            services.AddIdentity<AppIdentityUser, AppIdentityRole>(options=> {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

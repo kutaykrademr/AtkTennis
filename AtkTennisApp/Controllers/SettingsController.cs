@@ -42,17 +42,17 @@ namespace AtkTennisApp.Controllers
                     return Json("false");
                 }
               
-                var a = db.userSettings.ToList();
+                var a = db.userSettings.Where(x=>x.CompanyId == companyId).ToList();
                 foreach (var item in a)
                 {
-                    appLogList.UserSettingsList.Add(new Helpers.Dto.ViewDtos.UserSettingsDto() { Advisory = item.Advisory, Dashboard = item.Dashboard, DebtandPayment = item.DebtandPayment, MemberDebtList = item.MemberDebtList, Reports = item.Reports, Reservations = item.Reservations, RoleId = item.RoleId, RoleName = item.RoleName, SystemSettings = item.SystemSettings, UserSettingsId = item.UserSettingsId });
+                    appLogList.UserSettingsList.Add(new Helpers.Dto.ViewDtos.UserSettingsDto() { Advisory = item.Advisory, Dashboard = item.Dashboard, DebtandPayment = item.DebtandPayment, MemberDebtList = item.MemberDebtList, Reports = item.Reports, Reservations = item.Reservations, RoleId = item.RoleId, RoleName = item.RoleName, SystemSettings = item.SystemSettings, UserSettingsId = item.UserSettingsId , CompanyId = item.CompanyId });
                 }
 
 
                 if (appLogList != null)
 
                     mut.CompanyName = appLogList.CompanyName;
-                mut.SunucuIp = appLogList.SunucuIp;
+                    mut.SunucuIp = appLogList.SunucuIp;
 
                 if (appLogList == null)
                 {

@@ -4,6 +4,7 @@ using Helpers.Dto;
 using Helpers.Dto.PartialViewDtos;
 using Helpers.Dto.ViewDtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -27,7 +28,7 @@ namespace AtkTennisWeb.Controllers
             HomeModelDto model = new HomeModelDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome"));
+                model = Helpers.Serializers.DeserializeJson<HomeModelDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetHome?compId=" + HttpContext.Session.GetString("CompId") ));
                 if (model == null)
                     model = new HomeModelDto();
             }
@@ -615,18 +616,18 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId)
+        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId , string drg)
         {
-            ReservationCourtViewDto model = new ReservationCourtViewDto();
+            ReservationDto model = new ReservationDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationCourtViewDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateResAdmin?id=" + id + "&startTime=" + startTime + "&finishTime=" + finishTime + "&time=" + time + "&cId=" + cId));
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateResAdmin?id=" + id + "&startTime=" + startTime + "&finishTime=" + finishTime + "&time=" + time + "&cId=" + cId + "&drg=" + drg));
 
-                if (model != null)
+                if (model.UserId != null)
                 {
-                    return Json(model);
+                    return Json(true);
                 }
                 else
                 {

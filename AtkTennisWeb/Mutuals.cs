@@ -16,6 +16,7 @@ namespace AtkTennisWeb
         public static bool? M5 { get; set; }
         public static bool? M6 { get; set; }
         public static string CompName { get; set; }
+        public static string CompanyId { get; set; }
         public static Dictionary<string, Helpers.Dto.ViewDtos.UserSettingsDto> UserSettings = new Dictionary<string, Helpers.Dto.ViewDtos.UserSettingsDto>();
     }
 }

@@ -20,7 +20,7 @@
 
     var debtDuesList = Model.memberDuesInf.Where(x => x.PriceCondition == false && x.CancelCondition == false && x.CompanyId == CompId).ToList();
 
-    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30 && x.CompanyId == CompId).OrderBy(x => x.ResTimes).ToList();
+    var times = Model.resTimes.Where(x => x.Restimes60 == 00 && x.ResTimes30 == 00).OrderBy(x => x.ResTimes).ToList();
 
     var x = times.Count * 4;
 
@@ -205,6 +205,7 @@
 
                                 else
 
+
                                     @Model.TodayResCount
 
                             </h3>
@@ -286,7 +287,7 @@
                                         <th style="background-color:#f5f8fd; min-width:100px" scope="col">
                                             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                                                 <button id="submit" type="button" class="btn btn-warning"><i class="fas fa-print"></i></button>
-                                                <button type="button" class="btn btn-danger"><i style="color:white" class="fas fa-trash"></i></button>
+                                                <button id="trash" ondrop="drop(event)" ondragover="allowDrop(event)" type="button" class="btn btn-danger"><i style="color:white" class="fas fa-trash"></i></button>
                                             </div>
                                         </th>
 
@@ -366,7 +367,7 @@
 
 
                     <div style="margin-right:15px" id="cancelRes">
-                        <button color:white" class="btn btn-danger" type="button" onclick="cancelResProcedureModal(this.id)">İptal Et</button>
+                        <button color:white" class="btn btn-danger cancelResCls" type="button" onclick="cancelResProcedureModal(this.id)">İptal Et</button>
                     </div>
 
 
@@ -644,7 +645,11 @@
 
                             @foreach (var item in Model.courts)
                             {
-                                <option value="@item.CourtId">@item.CourtName</option>
+                                if (item.CompanyId == CompId)
+                                {
+                                    <option value="@item.CourtId">@item.CourtName</option>
+                                }
+
 
                             }
 
@@ -918,7 +923,7 @@
 <div class="modal fade" id="totPriceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-           
+
             <div class="modal-body">
 
                 <div id="appendResInf">
@@ -1012,9 +1017,57 @@
 
 <script>
 
-    
+    //----------------Const------------------//
+    //predate
+
+    var d = new Date();
+    var month = "";
+    var day = "";
+
+    function nextPreDate(value) {
+
+        var date = $("#timeNow").val();
+
+        d = new Date(date);
+
+
+        if (value == 1) {
+            d.setDate(d.getDate() + 1);
+        }
+
+        else {
+            d.setDate(d.getDate() - 1);
+        }
+
+
+        month = (d.getMonth() + 1);
+        day = d.getDate();
+
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+    }
+
+    //nextdate -end
+
+
+
+    //js today
+    var dt = new Date();
+    var dd = String(dt.getDate()).padStart(2, '0');
+    var mm = String(dt.getMonth() + 1).padStart(2, '0');
+    var yyyy = dt.getFullYear();
+
+    var today = yyyy + '-' + mm + '-' + dd;
+    //jstodayend
+
+
     var compId = $("#compId").text();
     var userId = $("#userId").text();
+
+    //-------------Const-----End-----------------------//
+
     $(document).ready(function () {
 
         $("#example1").DataTable({
@@ -1036,12 +1089,8 @@
         });
 
         //Rezervasyon Şema Tarih
-        var dt = new Date();
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
 
-        var today = yyyy + '-' + mm + '-' + dd;
+
 
         $('#timeNow').val(today);
 
@@ -1167,7 +1216,9 @@
                     var arrayMem = (res.memberLists[i].role.indexOf("Üye") > -1);
                     var arrayAnt = (res.memberLists[i].role.indexOf("Antrenör") > -1);
 
-                    if (res.memberLists[i].companyId == compId) {
+
+
+                    if (res.memberLists[i].companyId == compId && res.memberLists[i].actPas == true) {
                         if (arrayMem || arrayAnt) {
                             mem.push(res.memberLists[i].memberNumber + ' - ' + res.memberLists[i].fullName + ' - ' + res.memberLists[i].nickName);
                         }
@@ -1181,9 +1232,9 @@
 
                     if (res.courtScales[i].companyId == compId) {
 
-                        debugger;
 
-                        if (res.courtScales[i].name != "Sekreterya" && res.courtScales[i].name != "Antrenör" && res.courtScales[i].name != "Üye" && res.courtScales[i].name != "Yönetici" ) {
+
+                        if (res.courtScales[i].name != "Sekreterya" && res.courtScales[i].name != "Antrenör" && res.courtScales[i].name != "Üye" && res.courtScales[i].name != "Yönetici") {
                             mem.push(res.courtScales[i].code + ' - ' + res.courtScales[i].name);
                         }
 
@@ -1314,17 +1365,7 @@
 
     function nextDate() {
 
-        var date = $("#timeNow").val();
-
-        const d = new Date(date);
-        d.setDate(d.getDate() + 1);
-
-        var month = (d.getMonth() + 1);
-        var day = d.getDate();
-        if (month < 10)
-            month = "0" + month;
-        if (day < 10)
-            day = "0" + day;
+        nextPreDate(1);
 
         var date3 = d.getFullYear() + '-' + month + '-' + day;
 
@@ -1336,17 +1377,8 @@
 
     function preDate() {
 
-        var date = $("#timeNow").val();
+        nextPreDate(2);
 
-        const d = new Date(date);
-        d.setDate(d.getDate() - 1);
-
-        var month = (d.getMonth() + 1);
-        var day = d.getDate();
-        if (month < 10)
-            month = "0" + month;
-        if (day < 10)
-            day = "0" + day;
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
 
@@ -1356,11 +1388,7 @@
 
     }
 
-    // Rezervasyon Yap Tarih
 
-    var courtNameOption = $("#selectCourt option:selected").text();
-
-    var courtIdOption = $("#selectCourt option:selected").val();
 
     function nextDate2() {
 
@@ -1408,6 +1436,13 @@
 
 
     }
+
+    // Rezervasyon Yap Tarih
+
+    var courtNameOption = $("#selectCourt option:selected").text();
+
+    var courtIdOption = $("#selectCourt option:selected").val();
+
 
     function today(date) {
         $("#timeNowModal").val(date);
@@ -1463,13 +1498,6 @@
         var c = resFinishTime.split(":");
 
 
-        var dt = new Date();
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
-
-        var today = yyyy + '-' + mm + '-' + dd;
-
 
 
         if ($('#timeNowModal').val() < today) {
@@ -1515,9 +1543,6 @@
         $("#forApproveId2 button:nth-of-type(2)").attr("id", courtId);
 
 
-
-        var dt = new Date();
-
         var hours = dt.getHours();
         var min = dt.getMinutes();
 
@@ -1538,11 +1563,6 @@
         var days = new Date(timePickerModal);
         var getday = days.getDay();
 
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
-
-        var today = yyyy + '-' + mm + '-' + dd;
 
 
         var date = timePickerModal;
@@ -1665,12 +1685,6 @@
         var resId = a[2];
 
 
-        var dt = new Date();
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
-
-        var today = yyyy + '-' + mm + '-' + dd;
 
         if ($('#timeNowUpdModal').val() < today) {
 
@@ -1738,12 +1752,6 @@
         var days = new Date(timePickerModal);
         var getday = days.getDay();
 
-
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
-
-        var today = yyyy + '-' + mm + '-' + dd;
 
 
         var date = timePickerModal;
@@ -1852,7 +1860,9 @@
 
     }
 
-    function updateReservation(id) {
+    function updateReservation(id, resStime, CId, drg , cName) {
+
+        debugger;
 
         var courtId = $("#selectedCourt option:selected").val();
 
@@ -1866,55 +1876,149 @@
 
         var time = $('#timeNow').val();
 
+        if (drg == "drg") {
 
-        $.ajax({
-            type: "GET",
-            url: '../AdminHome/UpdateResAdmin',
-            cache: false,
-            data: { "id": id, "startTime": ResStartTime, "finishTime": ResFinishTime, "time": time, "cId": courtId },
-            dataType: "json",
-            async: true,
-            success: function (res) {
+            ResStartTime = resStime;
+            ResFinishTime = resStime;
+            courtId = CId;
+
+        }
+
+        if (ResStartTime == undefined || ResFinishTime == undefined) {
+            swal("Dikkat!", "Bilgileri Eksiksiz Giriniz (Saat , Kort , Tarih).", "warning", {
+                button: "Tamam",
+            });
+        }
+
+        else {
+            if (drg == "drg") {
+                swal({
+                    title: "Değişiklik Onayı?",
+                    text: cName + " " + resStime + " " + time,
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            $.ajax({
+                                type: "GET",
+                                url: '../AdminHome/UpdateResAdmin',
+                                cache: false,
+                                data: { "id": id, "startTime": ResStartTime, "finishTime": ResFinishTime, "time": time, "cId": courtId, "drg": drg },
+                                dataType: "json",
+                                async: true,
+                                success: function (res) {
 
 
 
-                if (res != null) {
+                                    if (res == true) {
 
-                    swal({
-                        title: "Rezervasyon Düzenlendi",
-                        text: "Rezervasyon  Başarılı Bir Şekilde Düzenlendi !",
-                        icon: "success",
-                        button: "Tamam",
-                    }).then((value) => {
+                                        swal({
+                                            title: "Rezervasyon Düzenlendi",
+                                            text: "Rezervasyon  Başarılı Bir Şekilde Düzenlendi !",
+                                            icon: "success",
+                                            button: "Tamam",
+                                        }).then((value) => {
+
+                                            if (drg != "drg") {
+                                                $('#rsvModalUpd').modal('toggle');
+                                            }
 
 
+                                            getResTable($("#timeNow").val());
 
-                        getResTable($("#timeNow").val());
+                                        });
+                                    }
 
-                    });
-                }
+                                    else {
 
-                else {
-                    $.confirm({
-                        title: "Uyarı",
-                        content: "Üye Bulunamadı.",
-                        buttons: {
-                            TAMAM: function () {
+                                        $.confirm({
+                                            title: "Uyarı",
+                                            content: "Düzenleme Sırasında Hata Oluştu.",
+                                            buttons: {
+                                                TAMAM: function () {
 
-                            }
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                },
+                                error: function (textStatus, errorThrown) {
+                                    console.log(JSON.stringify(textStatus));
+                                    console.log(textStatus);
+                                }
+                            });
                         }
                     });
-                }
-
-            },
-            error: function (textStatus, errorThrown) {
-                console.log(JSON.stringify(textStatus));
-                console.log(textStatus);
             }
-        });
+
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: '../AdminHome/UpdateResAdmin',
+                    cache: false,
+                    data: { "id": id, "startTime": ResStartTime, "finishTime": ResFinishTime, "time": time, "cId": courtId },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+
+                        if (res == true) {
+
+                            swal({
+                                title: "Rezervasyon Düzenlendi",
+                                text: "Rezervasyon  Başarılı Bir Şekilde Düzenlendi !",
+                                icon: "success",
+                                button: "Tamam",
+                            }).then((value) => {
+
+                                if (drg != "drg") {
+                                    $('#rsvModalUpd').modal('toggle');
+                                }
+
+
+                                getResTable($("#timeNow").val());
+
+                            });
+                        }
+
+                        else {
+
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Düzenleme Sırasında Hata Oluştu.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+        
+        }
+
     }
 
     function getResTable(date) {
+        $('body').loading({
+
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+
 
 
         $("#timeNow").val(date);
@@ -1950,50 +2054,93 @@
 
                         for (var a = 0; a < res.resTimes.length; a++) {
 
-                            if (res.resTimes[a].companyId == compId) {
+                            if (res.resTimes[a].resTimes30 == 0 && res.resTimes[a].restimes60 == 0 && res.resTimes[a].resTimes.split(":")[1] != "45") {
 
-                                var Res = Enumerable.from(res.reservations)
-                                    .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.court.courtId == res.courts[i].courtId && x.companyId == compId })
+                            
+                            var Res = Enumerable.from(res.reservations)
+                                .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.court.courtId == res.courts[i].courtId && x.companyId == compId })
+                                .select(function (x) { return x }).toArray();
+
+                            var resCancel = Enumerable.from(res.reservationCancels)
+                                .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.courtId == res.courts[i].courtId && x.companyId == compId })
+                                .select(function (x) { return x }).toArray();
+
+
+                            var asd = res.courts[i].courtTimePeriod;
+                            var period = (60 / parseInt(asd));
+
+
+                            if (Res.length > 0) {
+
+                                var mem = Enumerable.from(res.memberLists)
+
+                                    .where(function (x) { return x.userId == Res[0].userId })
+                                    .select(function (x) { return x.fullName }).toArray();
+                            }
+
+                            if (Res.length > 0) {
+
+                                var xyz = Res[0].resStartTime.split(":");
+                                var xyzd = Res[0].resFinishTime.split(":");
+                                var sTimeSpl = parseInt((xyz[0] + xyz[1]));
+                                var fTimeSpl = parseInt((xyzd[0] + xyzd[1]));
+
+                                if ((fTimeSpl - sTimeSpl) >= 1000) {
+                                    var colspanVal = (fTimeSpl - sTimeSpl) * 4 / 1000;
+                                }
+                                else {
+                                    colspanVal = (fTimeSpl - sTimeSpl) * 4 / 100;
+                                }
+                            }
+
+
+                            if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
+
+                                var scaleList = Enumerable.from(res.courtScaleLists)
+                                    .where(function (x) { return x.code == Res[0].nickName })
                                     .select(function (x) { return x }).toArray();
 
-                                var resCancel = Enumerable.from(res.reservationCancels)
-                                    .where(function (x) { return x.resStartTime == res.resTimes[a].resTimes && x.courtId == res.courts[i].courtId && x.companyId == compId })
+
+                                var scaleList2 = Enumerable.from(res.courtScaleLists)
+
+                                    .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
                                     .select(function (x) { return x }).toArray();
 
 
-                                var asd = res.courts[i].courtTimePeriod;
-                                var period = (60 / parseInt(asd));
 
-
-                                if (Res.length > 0) {
-
-                                    var mem = Enumerable.from(res.memberLists)
-
-                                        .where(function (x) { return x.userId == Res[0].userId })
-                                        .select(function (x) { return x.fullName }).toArray();
+                                if (scaleList.length > 0) {
+                                    row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
+                                    row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
                                 }
 
-                                if (Res.length > 0) {
-
-                                    var xyz = Res[0].resStartTime.split(":");
-                                    var xyzd = Res[0].resFinishTime.split(":");
-                                    var sTimeSpl = parseInt((xyz[0] + xyz[1]));
-                                    var fTimeSpl = parseInt((xyzd[0] + xyzd[1]));
-
-                                    if ((fTimeSpl - sTimeSpl) >= 1000) {
-                                        var colspanVal = (fTimeSpl - sTimeSpl) * 4 / 1000;
-                                    }
-                                    else {
-                                        colspanVal = (fTimeSpl - sTimeSpl) * 4 / 100;
-                                    }
+                                else {
+                                    row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                    row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
                                 }
 
+                                row += '<a style="padding:0;color:#fff;">';
+                                row += Res[0].nickName;
+                                row += '</a>';
+                                row += '<small style="right: -3px;top: -10px;position:relative; color:black">';
+                                row += 'w';
+                                row += '</small>';
+                                row += '</div>';
+                                row += '</td>';
 
-                                if (Res.length != 0 && Res[0].userId == Res[0].doResUserId) {
+                                a = a + parseInt(colspanVal) - 1;
+                            }
 
-                                    var scaleList = Enumerable.from(res.courtScaleLists)
-                                        .where(function (x) { return x.code == Res[0].nickName })
-                                        .select(function (x) { return x }).toArray();
+                            else if (Res.length != 0) {
+
+
+
+                                var scaleList = Enumerable.from(res.courtScaleLists)
+                                    .where(function (x) { return x.code == Res[0].nickName })
+                                    .select(function (x) { return x }).toArray();
+
+
+
+                                if (scaleList.length == 0) {
 
 
                                     var scaleList2 = Enumerable.from(res.courtScaleLists)
@@ -2001,89 +2148,49 @@
                                         .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
                                         .select(function (x) { return x }).toArray();
 
-
-
-                                    if (scaleList.length > 0) {
-                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
-                                        row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
-                                    }
-                                    else {
-                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
-                                        row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
-                                    }
-
-                                    row += '<a style="padding:0;color:#fff;">';
-                                    row += Res[0].nickName;
-                                    row += '</a>';
-                                    row += '<small style="right: -3px;top: -10px;position:relative; color:black">';
-                                    row += 'w';
-                                    row += '</small>';
-                                    row += '</div>';
-                                    row += '</td>';
-
-                                    a = a + parseInt(colspanVal) - 1;
                                 }
 
-                                else if (Res.length != 0) {
 
 
-
-                                    var scaleList = Enumerable.from(res.courtScaleLists)
-                                        .where(function (x) { return x.code == Res[0].nickName })
-                                        .select(function (x) { return x }).toArray();
-
-
-
-                                    if (scaleList.length == 0) {
-
-
-                                        var scaleList2 = Enumerable.from(res.courtScaleLists)
-
-                                            .where(function (x) { return x.name.toLowerCase() == Res[0].roleName.toLowerCase() })
-                                            .select(function (x) { return x }).toArray();
-
-                                    }
-
-
-
-                                    if (scaleList.length > 0) {
-                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + scaleList[0].name + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
-                                        row += '<div style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
-                                    }
-
-                                    else {
-                                        row += '<td borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
-                                        row += '<div style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
-                                    }
-
-                                    row += '<a style="padding:0;color:#fff;">';
-                                    row += Res[0].nickName;
-                                    row += '</a>';
-                                    row += '</div>';
-                                    row += '</td>';
-
-                                    a = a + parseInt(colspanVal) - 1;
+                                if (scaleList.length > 0) {
+                                    row += '<td draggable="true" ondragstart="drag(event)" borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + scaleList[0].name + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList[0].color + '!important; color:#ffffff!important; border-right: 1px solid #dee2e6; ">';
+                                    row += '<div   style="background-color:' + scaleList[0].color + '!important; color:#ffffff!important; ">';
                                 }
 
-                                else
-                                    if (period == 4) {
+                                else {
+                                    row += '<td draggable="true" ondragstart="drag(event)" borderRes="' + Res[0].resStartTime + ',' + period + '" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="' + Res[0].nickName + ' | ' + mem[0] + '" ' + 'data-content="' + '<span style=' + 'color:#e61a1a' + '></span><br />' + Res[0].resStartTime + '-' + Res[0].resFinishTime + ' <br />' + Res[0].court.courtName + ' <br />' + Res[0].resDate + Res[0].resTime + '" onclick="openResInfModal(this.id)" id=" ' + Res[0].resId + '"  ' + 'colspan="' + colspanVal + '" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:' + scaleList2[0].color + '!important;color:#ffffff!important;  border-right: 1px solid #dee2e6; ">';
+                                    row += '<div  style="background-color:' + scaleList2[0].color + '!important; color:#ffffff!important; ">';
+                                }
 
-                                        row += '<td  borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
-                                    }
+                                row += '<a style="padding:0;color:#fff;">';
+                                row += Res[0].nickName;
+                                row += '</a>';
+                                row += '</div>';
+                                row += '</td>';
 
-                                    else if (period == 2) {
-                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+                                a = a + parseInt(colspanVal) - 1;
+                            }
 
-                                        a = a + 1;
-                                    }
+                            else
+                                if (period == 4) {
 
-                                    else if (period == 1) {
-                                        row += '<td borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+                                    row += '<td   ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="removeStyle(event)" borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+                                }
 
-                                        a = a + 3;
-                                    }
+                                else if (period == 2) {
+                                    row += '<td  ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="removeStyle(event)" borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+
+                                    a = a + 1;
+                                }
+
+                                else if (period == 1) {
+                                    row += '<td ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="removeStyle(event)" borderRes="' + res.resTimes[a].resTimes + ',' + period + '" ' + 'class="tdHover" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="' + res.courts[i].courtName + '-' + res.resTimes[a].resTimes + '" ' + ' onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="' + res.courts[i].courtId + ',' + res.courts[i].courtName + ',' + res.resTimes[a].resTimes + '" ' + 'per="' + period + '"></td>';
+
+                                    a = a + 3;
+                                }
 
                             }
+
 
                         }
 
@@ -2098,7 +2205,7 @@
                 })
 
                 myfunction();
-
+                setTimeout(function () { $("body").loading('destroy'); });
             },
             error: function (textStatus, errorThrown) {
                 console.log(JSON.stringify(textStatus));
@@ -2225,6 +2332,7 @@
             async: true,
             success: function (res) {
 
+                debugger;
 
                 $("#appendResInf").empty();
 
@@ -2238,6 +2346,17 @@
                         var totalPrice = firstPrice + totalPrice;
                     }
                 }
+
+                for (var i = 0; i < res.reservationCancels.length; i++) {
+
+                    if (res.reservationCancels[i].companyId == compId && res.reservationCancels[i].priceInf == false) {
+
+                        var firstPrice2 = res.reservationCancels[i].price;
+                        var totalPrice2 = firstPrice + totalPrice;
+                    }
+                }
+
+                
 
                 row = "";
                 row += '<div id="asd" class="card-body ">';
@@ -2281,7 +2400,7 @@
                         row += '<td>';
                         //row += '<button class="btn btn-outline-dark" id="' + res.reservations[i].resId + '" onclick="getPaid(this.id) "><i class="fas fa-wallet"></i></button>';
                         //row += '<button style="display:none" class="btn btn-outline-dark" value="' + res.memberLists[0].userId + '" id="userId"</button>';
-                        row += '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res.reservations[i].resId + '"><label class="custom-control-label" for="' + res.reservations[i].resId + '"></label></div>';
+                        row += '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" style="cursor:pointer" id="r_' + res.reservations[i].resId + '"><label class="custom-control-label" for="r_' + res.reservations[i].resId + '"></label></div>';
                         row += '</td>';
                         row += '</tr>';
 
@@ -2350,7 +2469,7 @@
                         row += '<td>' + "Ödenmedi" + '</td>';
                         row += '<td>' + res.reservationCancels[i].price + '₺' + '</td>';
                         row += '<td>';
-                        row += '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" style="cursor:pointer" id="' + res.reservationCancels[i].resId + '"><label class="custom-control-label" for="' + res.reservationCancels[i].resId +'"></label></div>';                    
+                        row += '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" style="cursor:pointer" id="ri_' + res.reservationCancels[i].resId + '"><label class="custom-control-label" for="ri_' + res.reservationCancels[i].resId + '"></label></div>';
                         row += '</td>';
                         row += '</tr>';
                         row += '</tbody>';
@@ -2367,9 +2486,9 @@
 
                 $('#totPriceModal').modal('toggle')
 
-                
 
-               
+
+
             },
 
             error: function (textStatus, errorThrown) {
@@ -2384,16 +2503,10 @@
 
         $("#paidOp button:nth-of-type(2)").attr("id", id.split(",")[0]);
 
-        var dt = new Date();
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var yyyy = dt.getFullYear();
-
-        var today = yyyy + '-' + mm + '-' + dd;
 
         $("#receiptDate").val(today)
 
-  
+
 
         $.ajax({
             type: "Get",
@@ -2404,7 +2517,7 @@
             async: true,
             success: function (res) {
 
-               
+
                 if (res.reservation != null) {
 
                     $("#price").val(res.reservation.price)
@@ -2428,8 +2541,8 @@
     function getPaidMulti(id) {
 
 
-     
-        
+
+
         var idList = [];
         var idList2 = [];
 
@@ -2456,7 +2569,7 @@
             idLists2 = idList2[i] + ',' + idLists2;
         }
 
- 
+
         if (id == 1) {
 
             var paymentType = $('#paymentType3 option:selected').val();
@@ -2476,12 +2589,12 @@
                     type: "GET",
                     url: '../AdminHome/GetPaidMultiOp',
                     cache: false,
-                    data: { "doUserId": userId, "compId":compId , "idList": idLists, "idList2": idLists2, "explain": explain, "receiptDate": receiptDate, "paymentType": paymentType, "receiptNo": receiptNo },
+                    data: { "doUserId": userId, "compId": compId, "idList": idLists, "idList2": idLists2, "explain": explain, "receiptDate": receiptDate, "paymentType": paymentType, "receiptNo": receiptNo },
                     dataType: "json",
                     async: true,
                     success: function (res) {
 
-                     
+
 
                         swal({
                             title: "Ödeme Başarılı",
@@ -2493,7 +2606,7 @@
                             location.reload();
 
                         });
-                        
+
 
                     },
                     error: function (textStatus, errorThrown) {
@@ -2502,7 +2615,7 @@
                     }
                 });
             }
-           
+
         }
 
 
@@ -2510,7 +2623,7 @@
             type: "GET",
             url: '../AdminHome/GetPaidMulti',
             cache: false,
-            data: { "idList": idLists , "idList2":idLists2 , "key":1},
+            data: { "idList": idLists, "idList2": idLists2, "key": 1 },
             dataType: "json",
             async: true,
             success: function (res) {
@@ -2530,7 +2643,7 @@
                     }
 
                     $('#price3').val(price);
-                 
+
                     $('#getTotalPaidModal').modal('toggle')
                 }
 
@@ -2623,7 +2736,7 @@
 
                     for (var i = 0; i < res.courtPriceLists.length; i++) {
 
-                        if (res.courtPriceLists[i].condition == "1") {
+                        if (res.courtPriceLists[i].condition == "1" && res.courtPriceLists[i].companyId == compId) {
 
                             row += '<tr>';
                             row += '<td>' + res.courtPriceLists[i].name + '</td>';
@@ -2641,7 +2754,7 @@
 
                     for (var i = 0; i < res.priceLists.length; i++) {
 
-                        if (res.priceLists[i].condition == "1") {
+                        if (res.priceLists[i].condition == "1" && res.priceLists[i].companyId == compId) {
 
                             row += '<tr>';
                             row += '<td>' + res.priceLists[i].name + '</td>';
@@ -2717,6 +2830,7 @@
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
+        //Today7
         var dd = String(dt.getDate()).padStart(2, '0');
         var mm = String(dt.getMonth() + 1).padStart(2, '0');
         var yyyy = dt.getFullYear();
@@ -2894,21 +3008,30 @@
 
                 var date3 = day + '-' + month + '-' + d.getFullYear();
                 var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-
+                //Buraa
 
                 $("#PriceInf").empty();
 
                 row = "";
 
+                if (res.resSchemaModal.priceInf == true) {
+                    $(".cancelResCls").css("display", "none")
+                }
+
                 if (res.resSchemaModal.priceInf == false) {
                     row += '<span class="info-box-icon"><i style="color:red" class="fas fa-times"></i></span>';
                     row += '<div class="info-box-content">';
                     row += '<span class="info-box-text">Ücreti Ödenmedi - Borç Mevcut</span>';
+                    $("#getPaidOpe").css("display", "block")
+                    $("#getPaidTotOpe").css("display", "block")
                 }
                 else {
                     row += '<span class="info-box-icon"><i style="color:#1bbc27" class="fas fa-check"></i></span>';
                     row += '<div class="info-box-content">';
                     row += '<span class="info-box-text">Ücreti Ödendi - Borç Mevcut Değil</span>';
+                    $("#getPaidOpe").css("display", "none")
+                    $("#getPaidTotOpe").css("display", "none")
+                    alert("asd");
                 }
                 row += '</div>';
 
@@ -3129,7 +3252,10 @@
 
     }
 
-    function cancelResProcedureModal(id) {
+    function cancelResProcedureModal(id, drg) {
+
+        debugger;
+        id = id.trim();
 
         $.ajax({
             type: "GET",
@@ -3153,7 +3279,11 @@
 
                     $("#cancelResProModal button:nth-of-type(2)").attr("id", id);
 
-                    $('#openResInf').modal('toggle')
+
+                    if (drg == "") {
+                        $('#openResInf').modal('toggle')
+                    }
+
                 }
                 else {
 
@@ -3172,7 +3302,7 @@
 
     function cancelResAuthorized(id) {
 
-       
+
         var procedure = false;
         var cancelReasons = $("#reasonCancel option:selected").text();
 
@@ -3627,4 +3757,42 @@
 
 </script>
 
+<script>
+    var dragId = ""
 
+    function allowDrop(ev) {
+
+        ev.preventDefault();
+        $(ev.target).css('background-color', '#bdbbbb');
+    }
+
+    function drag(ev) {
+
+        dragId = ev.target.id;
+    }
+
+    function removeStyle(ev) {
+        $(ev.target).css('background-color', '#fff');
+    }
+
+    function drop(ev) {
+       
+
+        ev.preventDefault();
+        $(ev.target).css('background-color', '#fff');
+
+        if (ev.currentTarget.id == "trash") {
+
+            cancelResProcedureModal(dragId, "drg");
+
+        }
+        else {
+
+            var spl = ev.currentTarget.id.split(",")
+
+            updateReservation(dragId, spl[2], spl[0], "drg" , spl[1]);
+        }
+
+    }
+
+</script>

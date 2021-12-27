@@ -227,7 +227,15 @@
     }
 
     function getList() {
+        $('body').loading({
 
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+
+
+        
         $.ajax({
             type: "Get",
             url: '../Public/UserList',
@@ -334,7 +342,7 @@
                             $("#append").append(row);
 
                             dataTable();
-
+                            setTimeout(function () { $("body").loading('destroy'); });
 
                         },
 
@@ -345,6 +353,7 @@
                     });
                 }
 
+                
             },
 
             error: function (textStatus, errorThrown) {
@@ -357,7 +366,12 @@
 
     function getPaidDues(id) {
 
-        debugger;
+        $('body').loading({
+
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
 
         $("#paidOp button:nth-of-type(2)").attr("id", id);
 
@@ -416,7 +430,7 @@
                 }
 
                 $('#exampleModal').modal('toggle')
-
+                setTimeout(function () { $("body").loading('destroy'); });
             },
 
             error: function (textStatus, errorThrown) {
@@ -430,7 +444,15 @@
 
     function getPaidOperations(id) {
 
-        debugger;
+        $('body').loading({
+
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+
+
+       
 
         var userId = $(".userId").val();
         var currentUserId = $("#currentUserId").text();
@@ -474,6 +496,8 @@
 
                             });
                         }
+
+                        setTimeout(function () { $("body").loading('destroy'); });
 
                     },
 

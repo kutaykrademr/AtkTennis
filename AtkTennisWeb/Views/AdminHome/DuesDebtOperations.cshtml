@@ -180,6 +180,8 @@
 
 <script>
 
+  
+
     function dataTable() {
 
         $('#resList').DataTable({
@@ -195,14 +197,21 @@
         })
             .buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
     }
+
+
     var compId = $("#compId").text();
 
     findMemberTotal();
 
     function getPaidOperations(id) {
 
-        debugger;
+        $('body').loading({
 
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+     
         var userId = $(".userId").val();
         var currentUserId = $("#currentUserId").text();
         var price = $("#price").val();
@@ -215,12 +224,14 @@
         if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
 
             alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
+            setTimeout(function () { $("body").loading('destroy'); });
         }
         else {
 
             if (parseInt(price) - parseInt(paidPrice) < 0) {
 
                 alert("fazla tutar girdiniz !");
+                setTimeout(function () { $("body").loading('destroy'); });
             }
             else {
                 $.ajax({
@@ -247,6 +258,8 @@
 
                             });
                         }
+
+                        setTimeout(function () { $("body").loading('destroy'); });
 
                     },
 
@@ -298,7 +311,6 @@
             }
         });
     }
-
 
     function getPaid(id) {
 
@@ -370,6 +382,13 @@
 
     function getList() {
 
+        $('body').loading({
+
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+        
 
 
         $.ajax({
@@ -482,7 +501,9 @@
 
                             $("#appendResInf").append(row);
 
-                            dataTable();
+                            dataTable(); 
+
+                            setTimeout(function () { $("body").loading('destroy'); });
 
                         },
 

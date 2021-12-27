@@ -56,6 +56,7 @@ namespace AtkTennisApp.AModels
         public virtual Dolap Dolap { get; set; }
         public virtual Ilce Ilce { get; set; }
         public virtual Sehir Sehir { get; set; }
+
         public virtual ICollection<KortRezervasyon> KortRezervasyons { get; set; }
         public virtual ICollection<N2Log> N2Logs { get; set; }
         public virtual ICollection<OnRezervasyon> OnRezervasyons { get; set; }

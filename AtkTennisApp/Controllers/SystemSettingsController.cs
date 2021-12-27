@@ -272,7 +272,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("changeAuthority", Name = "changeAuthority")]
-        public List<UserSettings> changeAuthority(string trueStr)
+        public List<UserSettings> changeAuthority(string trueStr , string compId)
         {
             List<UserSettings> model = new List<UserSettings>();
 
@@ -302,44 +302,47 @@ namespace AtkTennisApp.Controllers
 
                     }
 
-                    UserSettings model2 = db.userSettings.SingleOrDefault(x => x.UserSettingsId == item);
+                    UserSettings model2 = db.userSettings.SingleOrDefault(x => x.UserSettingsId == item && x.CompanyId == compId);
+                    if (model2 != null)
+                    {
+                        if (activeAuth.Contains("System"))
+                            model2.SystemSettings = true;
+                        else
+                            model2.SystemSettings = false;
+                        if (activeAuth.Contains("Advisory"))
+                            model2.Advisory = true;
+                        else
+                            model2.Advisory = false;
 
-                    if (activeAuth.Contains("System"))
-                        model2.SystemSettings = true;
-                    else
-                        model2.SystemSettings = false;
-                    if (activeAuth.Contains("Advisory"))
-                        model2.Advisory = true;
-                    else
-                        model2.Advisory = false;
+                        if (activeAuth.Contains("DebtandPayment"))
+                            model2.DebtandPayment = true;
+                        else
+                            model2.DebtandPayment = false;
 
-                    if (activeAuth.Contains("DebtandPayment"))
-                        model2.DebtandPayment = true;
-                    else
-                        model2.DebtandPayment = false;
+                        if (activeAuth.Contains("Reservations"))
+                            model2.Reservations = true;
+                        else
+                            model2.Reservations = false;
 
-                    if (activeAuth.Contains("Reservations"))
-                        model2.Reservations = true;
-                    else
-                        model2.Reservations = false;
+                        if (activeAuth.Contains("Dashboard"))
+                            model2.Dashboard = true;
+                        else
+                            model2.Dashboard = false;
 
-                    if (activeAuth.Contains("Dashboard"))
-                        model2.Dashboard = true;
-                    else
-                        model2.Dashboard = false;
+                        if (activeAuth.Contains("Reports"))
+                            model2.Reports = true;
+                        else
+                            model2.Reports = false;
 
-                    if (activeAuth.Contains("Reports"))
-                        model2.Reports = true;
-                    else
-                        model2.Reports = false;
+                        if (activeAuth.Contains("MemberDebtList"))
+                            model2.MemberDebtList = true;
+                        else
+                            model2.MemberDebtList = false;
 
-                    if (activeAuth.Contains("MemberDebtList"))
-                        model2.MemberDebtList = true;
-                    else
-                        model2.MemberDebtList = false;
-
-                    db.Update(model2);
-                    db.SaveChanges();
+                        db.Update(model2);
+                        db.SaveChanges();
+                    }
+                
 
                 }
 

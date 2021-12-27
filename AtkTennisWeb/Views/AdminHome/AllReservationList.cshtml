@@ -53,8 +53,8 @@
                                             var tomorrow = date2.ToString("yyyy-MM-dd");
                                         }
 
-                                        <li class="page-item"><a style="color:white; cursor:pointer; background-color:#3fc9d5 !important" class="page-link" id="@today" onclick="getResCancelList(this.id)">Bugün</a></li>
-                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" id="@tomorrow" onclick="getResCancelList(this.id)">Yarın</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer; background-color:#3fc9d5 !important" class="page-link" id="@today" onclick="getResList(this.id)">Bugün</a></li>
+                                        <li class="page-item"><a style="color:white; cursor:pointer;  background-color:#337ab7" class="page-link" id="@tomorrow" onclick="getResList(this.id)">Yarın</a></li>
                                         <li class="page-item"><input class="form-control" type="date" id="timeNowModal" style="cursor:pointer; background-color:#e7505a; color:white"></li>
                                         <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="preDate()"><i class="fas fa-chevron-left"></i></button></li>
                                         <li class="page-item"><button style="color:cornflowerblue; background-color:#f9f9f9" class="page-link" onclick="nextDate()"><i class="fas fa-chevron-right"></i></button></li>
@@ -63,7 +63,6 @@
                                 </nav>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="portlet-body">
@@ -91,6 +90,9 @@
 
 <script>
 
+
+
+
     $(document).ready(function () {
 
         var dt = new Date();
@@ -102,28 +104,30 @@
 
         $('#timeNowModal').val(today);
 
-        getResCancelList($('#timeNowModal').val());
+        getResList($('#timeNowModal').val());
+
+
 
     });
 
 
-     function dataTable() {
+    function dataTable() {
 
         $("#resList").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
             buttons: [{ extend: 'pdf', title: 'Rezervasyon Listesi' }, { extend: 'print', title: 'Rezervasyon Listesi' }]
-           
+
         }).buttons().container().appendTo('#resList_wrapper .col-md-6:eq(0)');
-        
+
     }
 
     $('#timeNowModal').change(function () {
 
-        getResCancelList($('#timeNowModal').val());
+        getResList($('#timeNowModal').val());
 
     });
 
-    function nextDate(){
+    function nextDate() {
 
         var date = $("#timeNowModal").val();
 
@@ -141,7 +145,7 @@
 
 
 
-        getResCancelList(date3);
+        getResList(date3);
     }
 
     function preDate() {
@@ -160,25 +164,35 @@
         var date4 = d.getFullYear() + '-' + month + '-' + day;
 
 
-        getResCancelList(date4);
+        getResList(date4);
 
     }
 
-    function getResCancelList(date) {
+    function getResList(date) {
 
+        $('body').loading({
 
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+
+   
         $("#timeNowModal").val(date);
 
+        debugger;
 
         $.ajax({
 
             type: "Get",
-            url: '../AdminHome/GetResCancelList',
+            url: '../AdminHome/GetResTable',
             cache: false,
             dataType: "json",
             data: { "date": date },
             async: true,
             success: function (res) {
+
+                debugger;
 
                 row = "";
                 $("#appendResInf").empty();
@@ -196,12 +210,9 @@
                     row += '<th>Kort Adı</th>';
                     row += '<th>Tarihi</th>';
                     row += '<th>Başlangıç Saati</th>';
-                    row += '<th>Bitiş Saati</th>';
                     row += '<th>Ücreti</th>';
                     row += '<th>Ücret Durumu</th>';
                     row += '<th>Rezervasyon Yapan</th>';
-
-
                     row += '</tr>';
                     row += '</thead>';
                     row += '<tbody>';
@@ -217,35 +228,45 @@
                             .where(function (x) { return x.userId == res.reservations[i].userId })
                             .select(function (x) { return x }).toArray();
 
-                        debugger;
-
-                        var compId = $("#compId").text();
-
-                        if (res.reservations[i].companyId == compId) {
-
-                            row += '<tr style="text-align:center" id="">';
-                            row += '<td>' + res.reservations[i].resId + '</td>';
-                            row += '<td>' + memberInf[0].memberNumber + '</td>';
-                            row += '<td>' + memberInf[0].fullName + '</td>';
-                            row += '<td>' + res.reservations[i].court.courtName + '</td>';
-                            row += '<td>' + res.reservations[i].resDate + '</td>';
-                            row += '<td>' + res.reservations[i].resStartTime + '</td>';
-                            row += '<td>' + res.reservations[i].resFinishTime + '</td>';
-                            row += '<td>' + res.reservations[i].price + '</td>';
+                        if (doResMember.length != 0 && memberInf.length != 0) {
 
 
-                            if (res.reservations[i].priceInf == true) {
-                                row += '<td>' + "Ödendi" + '</td>';
+
+                            var compId = $("#compId").text();
+
+                            if (res.reservations[i].companyId == compId) {
+
+                                row += '<tr style="text-align:center" id="">';
+                                row += '<td>' + res.reservations[i].resId + '</td>';
+
+
+                                row += '<td>' + memberInf[0].memberNumber + '</td>';
+                                row += '<td>' + memberInf[0].fullName + '</td>';
+
+
+                                row += '<td>' + res.reservations[i].court.courtName + '</td>';
+                                row += '<td>' + res.reservations[i].resDate + '</td>';
+                                row += '<td>' + res.reservations[i].resStartTime + '</td>';
+                                row += '<td>' + res.reservations[i].price + '</td>';
+
+
+                                if (res.reservations[i].priceInf == true) {
+                                    row += '<td>' + "Ödendi" + '</td>';
+                                }
+                                else {
+                                    row += '<td>' + "Ödenmedi" + '</td>';
+                                }
+
+
+                                row += '<td>' + doResMember[0].fullName + '</td>';
+
+
+
+                                row += '</tr>';
                             }
-                            else {
-                                row += '<td>' + "Ödenmedi" + '</td>';
-                            }
-
-                            row += '<td>' + doResMember[0].fullName + '</td>';
-
-
-                            row += '</tr>';
                         }
+
+
 
                     }
                     row += '</tbody>';
@@ -263,6 +284,8 @@
 
                 timeInf();
                 dataTable()
+
+                setTimeout(function () { $("body").loading('destroy'); });
             },
 
             error: function (textStatus, errorThrown) {

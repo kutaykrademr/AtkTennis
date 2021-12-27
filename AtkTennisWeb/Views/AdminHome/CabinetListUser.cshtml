@@ -243,6 +243,16 @@
 </div>
 
 <script>
+
+
+    $('body').loading({
+
+        theme: 'dark',
+        stoppable: false,
+        message: 'Yükleniyor..'
+    });
+  
+
     $(document).ready(function () {
 
         $('#example2').DataTable({
@@ -272,6 +282,7 @@
         })
             .buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
 
+        setTimeout(function () { $("body").loading('destroy'); }, 500);
 
     });
 

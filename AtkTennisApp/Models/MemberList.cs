@@ -45,7 +45,6 @@ namespace AtkTennisApp.Models
         public string CompanyId { get; set; }
         public bool whoPartner { get; set; }
         public int memberType { get; set; }
-   
         public string RoleId { get; set; }
 
 

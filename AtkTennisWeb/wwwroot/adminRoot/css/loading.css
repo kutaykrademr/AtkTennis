@@ -3,12 +3,12 @@
 
 .loading-overlay {
     display: table;
-    opacity: 1;
+    opacity: 0.8;
     z-index: 150001 !important;
 }
 
 .loading-overlay-content {
-    text-transform: uppercase;
+  
     letter-spacing: 0.4em;
     font-size: 1.15em;
     font-weight: bold;

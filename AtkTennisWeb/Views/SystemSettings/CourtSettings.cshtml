@@ -210,7 +210,7 @@ else
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    //Burası
+                              
                                     @foreach (var item2 in Model.courtScales)
                                     {
                                         if (item2.CompanyId == CompId)
@@ -513,9 +513,12 @@ else
                         <div class="input-group">
                             <select id="courtTimeStart" class="form-control">
 
+                                <option selected>Saat Seçiniz</option>
 
-                                @foreach (var item in Model.resTimes)
+                                @foreach (var item in Model.resTimes.OrderBy(x=>x.ResTimes))
                                 {
+
+
                                     if (item.CompanyId == CompId)
                                     {
                                         <option>@item.ResTimes</option>
@@ -533,9 +536,12 @@ else
                         <div class="input-group">
                             <select id="courtTimeFinish" class="form-control">
 
+                                <option selected>Saat Seçiniz</option>
 
-                                @foreach (var item in Model.resTimes)
+                                @foreach (var item in Model.resTimes.OrderBy(x => x.ResTimes))
                                 {
+
+
                                     if (item.CompanyId == CompId)
                                     {
                                         <option>@item.ResTimes</option>
@@ -552,9 +558,9 @@ else
                         <div class="input-group">
                             <select id="courtPeriodTime" class="form-control">
 
-
+                                <option selected>Period</option>
                                 <option>15</option>
-                                <option>30</option>
+                                @*<option>30</option>*@
                                 <option>60</option>
 
                             </select>
@@ -1913,31 +1919,31 @@ else
                 if (res.length > 0) {
 
                     for (var i = 0; i < res.length; i++) {
+                        if (res[i].companyId == compId) {
+                            row += '  <tr style="text-align:center" id="">';
+                            row += '<td>' + res[i].name + '</td>';
+                            row += '<td>' + res[i].courtPrice + '</td>';
+                            if (res[i].priceType == 1) {
+                                row += '<td>' + "Asıl Ücret" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Ek Ücret" + '</td>';
+                            }
 
-                        row += '  <tr style="text-align:center" id="">';
-                        row += '<td>' + res[i].name + '</td>';
-                        row += '<td>' + res[i].courtPrice + '</td>';
-                        if (res[i].priceType == 1) {
-                            row += '<td>' + "Asıl Ücret" + '</td>';
-                        }
-                        else {
-                            row += '<td>' + "Ek Ücret" + '</td>';
-                        }
+                            row += '<td>' + res[i].recipeType + '</td>';
+                            if (res[i].condition == 1) {
+                                row += '<td>' + "Aktif" + '</td>';
+                            }
+                            else {
+                                row += '<td>' + "Pasif" + '</td>';
+                            }
 
-                        row += '<td>' + res[i].recipeType + '</td>';
-                        if (res[i].condition == 1) {
-                            row += '<td>' + "Aktif" + '</td>';
+                            row += '<td>';
+                            row += '<button class="btn btn-outline-success" id="' + res[i].courtPriceListId + '" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>';
+                            row += '<button class="btn btn-outline-danger" id="' + res[i].courtPriceListId + '" onclick="deleteCourtPrice(this.id) "><i class="fas fa-trash"></i></button>';
+                            row += '</td>';
+                            row += '</tr>';
                         }
-                        else {
-                            row += '<td>' + "Pasif" + '</td>';
-                        }
-
-                        row += '<td>';
-                        row += '<button class="btn btn-outline-success" id="' + res[i].courtPriceListId + '" onclick="openUpdateCourtPriceModal(this.id)"><i class="fas fa-edit"></i></button>';
-                        row += '<button class="btn btn-outline-danger" id="' + res[i].courtPriceListId + '" onclick="deleteCourtPrice(this.id) "><i class="fas fa-trash"></i></button>';
-                        row += '</td>';
-                        row += '</tr>';
-
                     }
                 }
 

@@ -431,6 +431,14 @@
 
 
     <script>
+
+        $('body').loading({
+
+            theme: 'dark',
+            stoppable: false,
+            message: 'Yükleniyor..'
+        });
+
         $(document).ready(function () {
 
 
@@ -458,6 +466,8 @@
                 "autoWidth": false,
                 "responsive": true,
             });
+
+            setTimeout(function () { $("body").loading('destroy'); }, 500);
 
         });
 

@@ -27,6 +27,7 @@ namespace AtkTennisWeb.Controllers
                     Mutuals.M4 = model.M4;
                     Mutuals.M5 = model.M5;
                     Mutuals.M6 = model.M6;
+               
                 }
                 else
                 {
@@ -36,8 +37,11 @@ namespace AtkTennisWeb.Controllers
                 foreach (var item in model.UserSettingsList)
                 {
                     if (Mutuals.UserSettings.ContainsKey(item.RoleId))
-                        Mutuals.UserSettings[item.RoleId] = item;
+
+                        Mutuals.UserSettings[item.RoleId] = item;              
+                    
                     else
+
                         Mutuals.UserSettings.Add(item.RoleId, item);
                 }
 

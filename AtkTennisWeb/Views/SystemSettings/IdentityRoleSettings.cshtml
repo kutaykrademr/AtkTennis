@@ -53,15 +53,14 @@
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Roller </th>
-                                        <th>Güncelle / Sil</th>
+                                        @*<th>Güncelle / Sil</th>*@
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     @for (int i = 0; i < Model.appIdentityRoles.Count; i++)
                                     {
-                                        if (Model.appIdentityRoles[i].CompanyId == CompId)
-                                        {
+                                        
                                             <tr style="text-align:center" id="">
                                                 <td>@Model.appIdentityRoles[i].Name</td>
                                                 @*<td>
@@ -70,7 +69,7 @@
                                                 </td>*@
 
                                             </tr>
-                                        }
+                                        
 
                                     }
                                 </tbody>
@@ -142,7 +141,6 @@
                                                     }
                                                 }
                                             }
-
                                         }
                                     </tr>
 

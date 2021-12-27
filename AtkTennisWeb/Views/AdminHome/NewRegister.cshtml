@@ -131,15 +131,15 @@
 
                         <div class="form-group col-md-6">
                             <select id="condition" class="form-control">
-                                <option disabled="disabled" selected>Durumu</option>
-                                <option>Faal</option>
-                                <option>Çıkan</option>
-                                <option>Dondurulmuş</option>
-                                <option>Fahri</option>
-                                <option>İstifa</option>
-                                <option>Onur</option>
-                                <option>Vefat</option>
-                                <option>Belirtilmemiş</option>
+                                <option value="0" disabled="disabled" selected>Durumu</option>
+                                <option value="1" >Faal</option>
+                                <option value="2" >Çıkan</option>
+                                <option value="3" >Dondurulmuş</option>
+                                <option value="4" >Fahri</option>
+                                <option value="5" >İstifa</option>
+                                <option value="6" >Onur</option>
+                                <option value="7" >Vefat</option>
+                                <option value="8" >Belirtilmemiş</option>
                             </select>
                         </div>
 
@@ -378,7 +378,7 @@
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
         userObj.role = roles; 
-        userObj.condition = $("#condition option:selected").text();
+        userObj.condition = $("#condition option:selected").val();
         userObj.identificationNumber = $("#identificationNumber").val();
         userObj.webReservation = $("#webReservation option:selected").val();
         userObj.phone = $("#phone").val();

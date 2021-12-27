@@ -2,6 +2,7 @@
 using Helpers.Dto;
 using Helpers.Dto.PartialViewDtos;
 using Helpers.Dto.ViewDtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -131,7 +132,7 @@ namespace AtkTennisWeb.Controllers
                 List<UserSettingsDto> model = new List<UserSettingsDto>();
                 try
                 {
-                    model = Helpers.Serializers.DeserializeJson<List<UserSettingsDto>>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/changeAuthority?trueStr=" + trueStr));
+                    model = Helpers.Serializers.DeserializeJson<List<UserSettingsDto>>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/changeAuthority?trueStr=" + trueStr + "&compId="  + HttpContext.Session.GetString("CompId")));
 
                     if (model == null)
                         return Json(false);

@@ -40,7 +40,7 @@ namespace AtkTennisApp.Controllers
         ankarateniskulubudbContext atkcontext = new ankarateniskulubudbContext();
 
         [HttpGet("GetHome", Name = "GetHome")]
-        public HomeModelView GetHome()
+        public HomeModelView GetHome(string compId)
         {
             DateTime date1 = DateTime.Now;
             var today = date1.ToString("yyyy-MM-dd");
@@ -52,8 +52,8 @@ namespace AtkTennisApp.Controllers
             {
                 model.TotalUserCount = userManager.Users.Count();
                 model.TotalRoleCount = roleManager.Roles.Count();
-                var b = db.reservations.Where(x => x.ResDate == today).ToList();
-                var a = db.reservations.ToList();
+                var b = db.reservations.Where(x => x.ResDate == today && x.CompanyId == compId).ToList();
+                var a = db.reservations.Where(x => x.CompanyId == compId).ToList();
                 model.TodayResCount = b.Count();
                 model.TotalResCount = a.Count();
                 model.toDoLists = db.toDoLists.ToList();
@@ -80,23 +80,77 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-        [HttpGet]
+        [HttpGet("RegisterAll", Name = "RegisterAll")]
         public void RegisterAll()
         {
             foreach (var user in atkcontext.Uyes)
             {
-                MemberList member = 
-                new MemberList{
-                    FullName = user.Adi + " " + user.Soyadi
+                MemberList member =
+                new MemberList
+                {
+                    FullName = user.Adi + " " + user.Soyadi,
+                    MemberNumber = user.UyelikNumarasi,
+                    Password = user.Sifre,
+                    UserId = null,
+                    Note = user.Aciklama,
+                    BirthDate = Convert.ToString(user.DogumTarihi),
+                    BirthPlace = user.DogumYeri,
+                    ActPas = false,
+                    whoPartner = false,
+                    Role = "Üye",
+                    NickName = user.Rumuz,
+                    Job = user.Meslek,
+                    City = "",
+                    Condition = Convert.ToString(user.Durumu),
+                    CompanyId = "192.168.250.12",
+                    StartDate = Convert.ToString(user.UyelikBaslamaTarihi),
+                    FinishDate = Convert.ToString(user.UyelikBitisTarihi),
+                    FatherName = user.BabaAdi,
+                    MotherName = user.AnneAdi,
+                    Gender = "",
+                    isPartner = false,
+                    WebReservation = "1",
+                    IdentityNumber = user.Tckimlik,
+                    District = "",
+                    memberType = user.Sekli,
+                    Price = 0,
+                    UserName = Convert.ToString(user.UyelikNumarasi),
+                    DetailAddress = "",
+                    Email = "",
+                    EmailExp = "",
+                    Phone = "",
+                    PhoneExp = "",
+                    Phone2 = "",
+                    PartnerId = "",
+                    Phone2Exp = "",
+                    PrivRes = false,
+                    ReferenceMember1 = "",
+                    ReferenceMember2 = "",
+                    Id = 1312,
+
 
                 };
 
-                NewRegister(member.FullName,);
+
+                if (member.memberType == 1)
+                {
+                    member.memberType = 0;
+                }
+                else
+                {
+                    member.memberType = 1;
+                }
 
 
+                if (user.Durumu == 1)
+                {
+                    member.ActPas = true;
+                }
 
 
-
+                NewRegister(member.Id, member.DetailAddress, member.FullName, member.UserName, member.StartDate.Split(" ")[0], member.FinishDate.Split(" ")[0], member.Condition, member.IdentityNumber, member.WebReservation, member.PhoneExp,
+                    member.Phone2, member.Phone2Exp, member.Email, member.EmailExp, member.BirthPlace, member.ActPas, member.MotherName, member.FatherName, member.City, member.District, member.Job, member.Note, member.Phone, member.Password, member.BirthDate, member.Gender,
+                    member.Role, member.NickName, member.MemberNumber, "", "", "", "", false, "", "", "", "", "", "", "", "", member.CompanyId, false, member.memberType);
             }
         }
 
@@ -460,9 +514,10 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewRegister", Name = "NewRegister")]
-        public AppIdentityUser NewRegister(string detailAddress, string name, string username, string startDate, string finishDate, string condition,
+
+        public AppIdentityUser NewRegister(int Id, string detailAddress, string name, string username, string startDate, string finishDate, string condition,
             string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email,
-            string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job,
+            string emailExp, string birthPlace, bool ActPas, string motherName, string fatherName, string city, string district, string job,
             string note, string phone, string password, string birthdate, string gender, string role, string nickName,
             int memberNumber, string partnerBirthdate, string partnerIdNumber, string partnerPhone, string partnerName,
             bool isPartner, string refmem1, string refmem2, string nickName2, string username2, string startDate2,
@@ -543,6 +598,7 @@ namespace AtkTennisApp.Controllers
                         model3.PartnerId = user.Id;
                         model3.ActPas = true;
 
+
                         userManager.AddToRoleAsync(user2, role).Wait();
                         db.Add(model3);
                         db.SaveChanges();
@@ -596,7 +652,13 @@ namespace AtkTennisApp.Controllers
                     model2.District = district;
                     model2.Job = job;
                     model2.Note = note;
-                    model2.ActPas = true;
+
+                    if (Id == 1312)
+                    {
+                        model2.ActPas = ActPas;
+                    }
+                    else
+                        model2.ActPas = true;
                     model2.Password = password;
 
                     if (roles.Length > 1)
@@ -1270,7 +1332,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateResAdmin", Name = "UpdateResAdmin")]
-        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId)
+        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId , string drg)
 
         {
             Reservation model = new Reservation();
@@ -1287,69 +1349,103 @@ namespace AtkTennisApp.Controllers
                 var h = Convert.ToInt32(x[0]);
                 var m = Convert.ToInt32(x[1]);
                 var per = Convert.ToInt16(court.CourtTimePeriod);
-
-                if (per == 15)
+               
+                if (drg != "drg")
                 {
-                    if (m == 45)
+                    if (per == 15)
+                    {
+                        if (m == 45)
+                        {
+                            h = h + 1;
+                            if (h < 10)
+                            {
+                                finishTime = "0" + h + ":" + "00";
+                            }
+                            else
+                                finishTime = h + ":" + "00";
+                        }
+                        else
+                        {
+
+                            m = m + 15;
+                            if (h < 10)
+                            {
+                                finishTime = "0" + h + ":" + m;
+                            }
+                            else
+                                finishTime = h + ":" + m;
+                        }
+                    }
+                    else if (per == 30)
+                    {
+                        if (m == 30)
+                        {
+                            h = h + 1;
+                            if (h < 10)
+                            {
+                                finishTime = "0" + h + ":" + "00";
+                            }
+                            else
+                                finishTime = h + ":" + "00";
+                        }
+                        else
+                        {
+                            m = m + 30;
+                            if (h < 10)
+                            {
+                                finishTime = "0" + h + ":" + m;
+                            }
+                            else
+                                finishTime = h + ":" + m;
+                        }
+
+                    }
+                    else
                     {
                         h = h + 1;
+
                         if (h < 10)
                         {
                             finishTime = "0" + h + ":" + "00";
                         }
                         else
+                        {
                             finishTime = h + ":" + "00";
-                    }
-                    else
-                    {
+                        }
 
-                        m = m + 15;
-                        if (h < 10)
-                        {
-                            finishTime = "0" + h + ":" + m;
-                        }
-                        else
-                            finishTime = h + ":" + m;
                     }
-                }
-                else if (per == 30)
-                {
-                    if (m == 30)
-                    {
-                        h = h + 1;
-                        if (h < 10)
-                        {
-                            finishTime = "0" + h + ":" + "00";
-                        }
-                        else
-                            finishTime = h + ":" + "00";
-                    }
-                    else
-                    {
-                        m = m + 30;
-                        if (h < 10)
-                        {
-                            finishTime = "0" + h + ":" + m;
-                        }
-                        else
-                            finishTime = h + ":" + m;
-                    }
-
                 }
                 else
                 {
+              
                     h = h + 1;
 
                     if (h < 10)
                     {
-                        finishTime = "0" + h + ":" + "00";
+                        if (m == 0)
+                        {
+                            finishTime = "0" + h + ":" + m + "0";
+                        }
+                        else
+                        {
+                            finishTime = "0" + h + ":" + m ;
+                        }
+                        
                     }
                     else
                     {
-                        finishTime = h + ":" + "00";
+                        if (m == 0)
+                        {
+                            finishTime = h + ":" + m + "0";
+                        }
+                        else
+                        {
+                            finishTime = h + ":" + m;
+                        }
+                       
                     }
-
                 }
+                
 
                 model.Court = court;
                 model.ResStartTime = startTime;
@@ -3044,13 +3140,18 @@ namespace AtkTennisApp.Controllers
 
             if (idLists != null)
             {
+
                 var resList = idLists.Split(",");
+                
+                
 
                 for (int i = 0; i < resList.Count(); i++)
                 {
                     if (resList[i] != "")
                     {
-                        model.reservations = db.reservations.Where(x => x.ResId == Convert.ToInt32(resList[i])).ToList();
+                        var x = resList[i].Split("r_");
+                        var y = x[1];
+                        model.reservations = db.reservations.Where(x => x.ResId == Convert.ToInt32(y)).ToList();
                     }
 
                 }
@@ -3064,7 +3165,9 @@ namespace AtkTennisApp.Controllers
                 {
                     if (resCanList[i] != "")
                     {
-                        model.reservationCancels = db.reservationCancels.Where(x => x.ResId == Convert.ToInt32(resCanList[i])).ToList();
+                        var x = resCanList[i].Split("ri_");
+                        var y = x[1];
+                        model.reservationCancels = db.reservationCancels.Where(x => x.ResId == Convert.ToInt32(y)).ToList();
                     }
 
                 }
@@ -3097,7 +3200,7 @@ namespace AtkTennisApp.Controllers
                         if (model.reservation != null)
                         {
 
-                          
+
 
                             model.allGetPaid.UserId = model.reservation.UserId;
                             model.allGetPaid.Date = DateTime.Now.ToString("dd-MM-yyyy");
@@ -3123,7 +3226,7 @@ namespace AtkTennisApp.Controllers
                             db.SaveChanges();
                         }
                     }
-                   
+
                 }
             }
 
@@ -3142,7 +3245,7 @@ namespace AtkTennisApp.Controllers
 
                             model.reservationCancel = db.reservationCancels.Where(x => x.ResId == Convert.ToInt32(resCanList[a])).FirstOrDefault();
 
-                            
+
 
                             model.allGetPaid.UserId = model.reservationCancel.UserId;
                             model.allGetPaid.Date = DateTime.Now.ToString("dd-MM-yyyy");
@@ -3166,7 +3269,7 @@ namespace AtkTennisApp.Controllers
                             db.SaveChanges();
                         }
                     }
-                  
+
                 }
             }
 
