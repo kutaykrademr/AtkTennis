@@ -154,6 +154,33 @@
                                     </select>
                                 </div>
 
+
+                                <strong><i class="fas fa-book mr-1"></i> Üyelik Türü </strong>
+                                <div class="row">
+                                    <div class="input-group col-md-12">
+                                        @{ 
+                                            var type = "";
+
+                                            if (Model.memberLists.memberType == 1)
+                                            {
+                                                type = "Geçiçi Üye";
+                                            }
+                                            else
+                                            {
+                                                type = "Asil Üye";
+                                            }
+                                        }
+
+                                        <input type="text" class="form-control mb-2" disabled value="@type" autocomplete="new-password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <strong><i class="fas fa-book mr-1"></i> Adı - Soyadı </strong>
                                 <div class="row">
                                     <div class="input-group col-md-12">
@@ -167,27 +194,27 @@
 
 
                                     @*<div class="form-group col-md-5">
-                                            <select id="RegistersRole" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Role Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <select id="RegistersRole" class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Role Seçimi Yapınız" style="width: 100%;" tabindex="-1" aria-hidden="true">
 
-                                                <option disabled="disabled" selected>@Model.memberLists.Role</option>
-                                                @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
-                                                {
-                                                    <option>@Model.AppIdentityRoles[i].Name</option>
-                                                }
+                    <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                    @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                    {
+                        <option>@Model.AppIdentityRoles[i].Name</option>
+                    }
 
-                                            </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--focus" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Role Seçimi Yapınız" style="width: 815px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                        </div>*@
+                </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--focus" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Role Seçimi Yapınız" style="width: 815px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+            </div>*@
 
                                     @*<div class="input-group col-md-5">
-                                            <select id="RegistersRole" class="form-control">
-                                                <option disabled="disabled" selected>@Model.memberLists.Role</option>
-                                                @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
-                                                {
-                                                    <option>@Model.AppIdentityRoles[i].Name</option>
-                                                }
+                <select id="RegistersRole" class="form-control">
+                    <option disabled="disabled" selected>@Model.memberLists.Role</option>
+                    @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
+                    {
+                        <option>@Model.AppIdentityRoles[i].Name</option>
+                    }
 
-                                            </select>
-                                        </div>*@
+                </select>
+            </div>*@
 
                                 </div>
 
@@ -455,19 +482,53 @@
 
 
                                 <strong><i class="far fa-file-alt mr-1"></i>Durumu</strong>
-
+                                @{ 
+                                    var cond = "";
+                                }
+                                @if (Model.memberLists.Condition == "1")
+                                {
+                                     cond = "Faal";
+                                }
+                                else if (Model.memberLists.Condition == "2")
+                                {
+                                     cond = "Çıkan";
+                                }
+                                else if (Model.memberLists.Condition == "3")
+                                {
+                                     cond = "Dondurulmuş";
+                                }
+                                else if (Model.memberLists.Condition == "4")
+                                {
+                                     cond = "Fahri";
+                                }
+                                else if (Model.memberLists.Condition == "5")
+                                {
+                                     cond = "İstifa";
+                                }
+                                else if (Model.memberLists.Condition == "6")
+                                {
+                                     cond = "Onur";
+                                }
+                                else if (Model.memberLists.Condition == "7")
+                                {
+                                     cond = "Vefat";
+                                }
+                                else
+                                {
+                                     cond = "Belirtilmemiş";
+                                }
 
                                 <div class="form-group col-md-12">
 
                                     <select id="condition" class="form-control">
-                                        <option disabled="disabled" selected>@Model.memberLists.Condition</option>
-                                        <option>Faal</option>
-                                        <option>Çıkan</option>
-                                        <option>Dondurulmuş</option>
-                                        <option>Fahri</option>
-                                        <option>İstifa</option>
-                                        <option>Onur</option>
-                                        <option>Vefat</option>
+                                        <option disabled="disabled" selected>@cond</option>
+                                        <option value="1">Faal</option>
+                                        <option value="2">Çıkan</option>
+                                        <option value="3">Dondurulmuş</option>
+                                        <option value="4">Fahri</option>
+                                        <option value="5">İstifa</option>
+                                        <option value="6">Onur</option>
+                                        <option value="7">Vefat</option>
                                         <option>Belirtilmemiş</option>
                                     </select>
 
@@ -1470,7 +1531,7 @@
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
         userObj.role = $("#RegistersRole option:selected").text();
-        userObj.condition = $("#condition option:selected").text();
+        userObj.condition = $("#condition option:selected").val();
         userObj.identificationNumber = $("#identificationNumber").val();
         userObj.webReservation = $("#webReservation option:selected").val();
         userObj.phone = $("#phone").val();

@@ -2562,9 +2562,9 @@ namespace AtkTennisApp.Controllers
 
                             }
                         }
-                        else if (duesType == "Üyelik Giriş Ücreti")
+                        else if (duesType == "Ek Ücret")
                         {
-                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true)
+                            if (model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true && model.memberLists[i].memberType == 0)
                             {
 
                                 model.memberDuesInfTable = new MemberDuesInfTable();
@@ -2651,13 +2651,11 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.CompanyId = compId;
 
                     }
-
-
                 }
 
                 else if (duesType == "Geçici Üye Ücreti")
                 {
-                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true && model.memberLists[0].memberType == 1)
+                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true )
                     {
 
                         model.memberDuesInfTable = new MemberDuesInfTable();
@@ -2671,7 +2669,24 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInfTable.Explain = explain;
                         model.memberDuesInfTable.CompanyId = compId;
 
+                    }
+                }
 
+                else if (duesType == "Giriş Ücreti")
+                {
+                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true && model.memberLists[0].memberType == 0)
+                    {
+
+                        model.memberDuesInfTable = new MemberDuesInfTable();
+                        model.memberDuesInfTable.MemberId = model.memberLists[0].UserId;
+                        model.memberDuesInfTable.MemberFullName = model.memberLists[0].FullName;
+                        model.memberDuesInfTable.Date = DateTime.Now.ToString("dd-MM-yyyy");
+                        model.memberDuesInfTable.DuesType = duesType;
+                        model.memberDuesInfTable.DuesPrice = duesPrice;
+                        model.memberDuesInfTable.RemainingPrice = duesPrice;
+                        model.memberDuesInfTable.DuesYear = duesYear;
+                        model.memberDuesInfTable.Explain = explain;
+                        model.memberDuesInfTable.CompanyId = compId;
 
                     }
                 }

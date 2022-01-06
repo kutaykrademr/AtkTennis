@@ -1862,7 +1862,7 @@
 
     function updateReservation(id, resStime, CId, drg , cName) {
 
-        debugger;
+     
 
         var courtId = $("#selectedCourt option:selected").val();
 
@@ -2332,7 +2332,7 @@
             async: true,
             success: function (res) {
 
-                debugger;
+               
 
                 $("#appendResInf").empty();
 
@@ -2994,6 +2994,8 @@
             async: true,
             success: function (res) {
 
+                debugger;
+
                 var date = new Date();
 
                 const d = new Date(date);
@@ -3014,10 +3016,6 @@
 
                 row = "";
 
-                if (res.resSchemaModal.priceInf == true) {
-                    $(".cancelResCls").css("display", "none")
-                }
-
                 if (res.resSchemaModal.priceInf == false) {
                     row += '<span class="info-box-icon"><i style="color:red" class="fas fa-times"></i></span>';
                     row += '<div class="info-box-content">';
@@ -3029,9 +3027,18 @@
                     row += '<span class="info-box-icon"><i style="color:#1bbc27" class="fas fa-check"></i></span>';
                     row += '<div class="info-box-content">';
                     row += '<span class="info-box-text">Ücreti Ödendi - Borç Mevcut Değil</span>';
+
                     $("#getPaidOpe").css("display", "none")
                     $("#getPaidTotOpe").css("display", "none")
-                    alert("asd");
+
+                    var roleaxa = $("#RoleName").val();
+
+
+                    if ($("#RoleName").val() == "Sekreterya") {
+                        $(".cancelResCls").css("display", "none")
+                    }
+                    
+            
                 }
                 row += '</div>';
 
@@ -3131,6 +3138,8 @@
 
                 $("#receiptAppend").empty();
 
+                debugger;
+
                 row = "";
                 row += '<div class="portlet light bordered" style="padding: 4px; margin-bottom: 2px;">';
                 row += 'ATK - Aytekin Kaya Tenis Akademisi<br>';
@@ -3165,7 +3174,7 @@
                 row += '<p style="margin: 5px;">Kort Ücreti</p>';
                 row += '<p style="margin: 5px;"> </p>';
                 row += '</td>';
-                row += ' <td class="text-center sbold" style="width:100px; font-weight:bold">' + res.resSchemaModal.price + ' ' + '₺' + '</td>';
+                row += ' <td class="text-center sbold" style="width:100px; font-weight:bold">' + sumPrice + ' ' + '₺' + '</td>';  
                 row += '</tr>';
                 row += '</tbody>';
                 row += '</table>';
@@ -3180,12 +3189,15 @@
                 row += '<tbody>';
                 row += '<tr>';
                 row += '<td>Nakit</td>';
-                if (res.resSchemaModal.priceInf) {
-                    row += '<td class="text-center sbold" style="width:100px; font-weight:bold">' + res.resSchemaModal.price + ' ' + '₺' + '</td>';
+
+                if (res.resSchemaModal.priceInf == true) {
+                    row += ' <td class="text-center sbold" style="width:100px; font-weight:bold">' + sumPrice + ' ' + '₺' + '</td>';
                 }
+
                 else {
-                    row += '<td class="text-center sbold" style="width:100px; font-weight:bold">0</td>';
+                    row += ' <td class="text-center sbold" style="width:100px; font-weight:bold">' + 0 + ' ' + '₺' + '</td>';
                 }
+
 
                 row += '</tbody>';
                 row += '</table>';
@@ -3254,7 +3266,7 @@
 
     function cancelResProcedureModal(id, drg) {
 
-        debugger;
+       
         id = id.trim();
 
         $.ajax({
