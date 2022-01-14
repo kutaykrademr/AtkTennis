@@ -15,7 +15,7 @@
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
     var RoleId = HttpContextAccessor.HttpContext.Session.GetString("RoleId");
     var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
-    var times = Model.resTimes.Where(x => x.Restimes60 == 60 && x.ResTimes30 == 30).OrderBy(x=>x.ResTimes).ToList();
+    var times = Model.resTimes.Where(x => x.Restimes60 == 0 && x.ResTimes30 == 0 && x.CompanyId == CompId).OrderBy(x=>x.ResTimes).ToList();
     var x = times.Count * 4;
 
     var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati" && x.CompanyId == CompId).FirstOrDefault();
@@ -95,9 +95,9 @@
     }
 </style>
 
+
 <div style="display: none;"><input id="RoleName" type="text" name="name" value="@Role" /></div>
 <div style="display: none;"><input id="doRes" start="@startTime" finish="@finishTime" setTime="@resSetTime" type="text" /></div>
-
 <div style="display: none;"><input id="userIdMember" value="@userId" /></div>
 <div style="display: none;"><input id="antNextDay" value="@antNextDay" /></div>
 <div style="display: none;"><input id="memNextDay" value="@memNextDay" /></div>
@@ -234,11 +234,12 @@
                                             </th>
 
                                             @for (int i = 0; i < times.Count; i++)
-
+                                            {
                                                 if (times[i].ResTimes.Split(":")[1] != "45")
                                                 {
                                                     <th style="background-color:#f5f8fd; font-weight:inherit;" colspan="4" scope="col">@times[i].ResTimes</th>
                                                 }
+                                            }
 
                                         </tr>
                                     </thead>
@@ -250,13 +251,16 @@
                                         @foreach (var item in Model.courts)
 
                                         {
-                                            if (item.CourtConditions == 1)
+                                            if (item.CourtConditions == 1 && item.CompanyId == CompId)
                                             {
                                                 <tr>
                                                     <th style="background-color:#f5f8fd; font-weight:inherit;" scope="row">@item.CourtName</th>
 
                                                     @for (int i = 0; i < Model.resTimes.Count; i++)
                                                     {
+                                                        if (Model.resTimes[i].CompanyId == CompId && Model.resTimes[i].ResTimes.Split(":")[1] != "45" && Model.resTimes[i].ResTimes30 == 0 && Model.resTimes[i].Restimes60 == 0)
+                                                        {
+
 
                                                         var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
 
@@ -388,13 +392,14 @@
                                                             else if (period == 1)
                                                             {
                                                                 <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                i = i + 3;
+                                                                    i = i + 3;
+                                                                }
+
                                                             }
 
                                                         }
 
                                                     }
-
                                                 </tr>
                                             }
                                         }
@@ -680,8 +685,10 @@
 <script>
 
     var picker = "@ViewBag.Date";
+    var compId = $("#compId").text();
 
     $(document).ready(function () {
+
 
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -843,8 +850,8 @@
         var c = resFinishTime.split(":");
 
         var nowTime = a[0] + a[1];
-        var sTime = b[0] + b[1]; //2109
-        var fTime = c[0] + c[1]; //2209
+        var sTime = b[0] + b[1];
+        var fTime = c[0] + c[1];
 
         debugger;
 
@@ -866,7 +873,7 @@
                     });
                 }
 
-               else if (sTime <= nowTime && fTime >= nowTime) {
+                else if (true) {
 
                     getCourtTime(courtId, courtName, checkTime);
                 }
@@ -1478,7 +1485,7 @@
                             type: "GET",
                             url: '../Public/CancelRes',
                             cache: false,
-                            data: { "id": id, "userId": userId, "procedure": procedure },
+                            data: { "id": id, "userId": userId, "procedure": procedure, "compId": compId },
                             dataType: "json",
                             async: true,
                             success: function (res) {
@@ -1532,7 +1539,7 @@
                         type: "GET",
                         url: '../Public/CancelRes',
                         cache: false,
-                        data: { "id": id, "userId": userId, "procedure": procedure},
+                        data: { "id": id, "userId": userId, "procedure": procedure, "compId": compId },
                         dataType: "json",
                         async: true,
                         success: function (res) {
@@ -1833,7 +1840,6 @@
                         $("#t_" + i).prop('checked', true);
 
                         checkList.push("t_" + i);
-
 
                     }
                 }
