@@ -64,6 +64,17 @@ namespace AtkTennisApp.Controllers
             return duesInfTables;
         }
 
+        [HttpGet("BalanceOperationReports", Name = "BalanceOperationReports")]
+        public BalanceOpViewModel BalanceOpModels()
+        {
+            BalanceOpViewModel blcOP = new BalanceOpViewModel();
+
+            blcOP.balanceOpModels = db.balanceOpModels.ToList();
+            blcOP.memberLists = db.memberLists.ToList();
+
+            return blcOP;
+        }
+
         [HttpGet("GetCabinetPayment", Name = "GetCabinetPayment")]
         public JsonResult GetCabinetPayment(int id)
         {

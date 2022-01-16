@@ -227,488 +227,496 @@
 
 
 
-                 
-                            @if (Mutuals.M1 == true)
-                            {
 
-                                if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Dashboard)
-                                {
-                                    <li class="nav-item menu-open">
-                                        <a style="background-color:#d4ff0761" href="~/AdminHome/Index" class="nav-link active">
-                                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                                            <p>
-                                                Ana Sayfa
-                                                <i class="right fas fa-table"></i>
-                                            </p>
-                                        </a>
-                                    </li>
-                                }
+                        @if (Mutuals.M1 == true)
+                        {
+
+                            if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Dashboard)
+                            {
+                                <li class="nav-item menu-open">
+                                    <a style="background-color:#d4ff0761" href="~/AdminHome/Index" class="nav-link active">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Ana Sayfa
+                                            <i class="right fas fa-table"></i>
+                                        </p>
+                                    </a>
+                                </li>
                             }
+                        }
 
-                            @if (Mutuals.M2 == true)
+                        @if (Mutuals.M2 == true)
+                        {
+
+                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Advisory)
                             {
+                                <li class="nav-item  ">
+                                    <a style="background-color:#625e5e" href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-user-circle"></i>
+                                        <p>
+                                            Danışma
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
 
-                                @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Advisory)
-                                {
-                                    <li class="nav-item  ">
-                                        <a style="background-color:#625e5e" href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-user-circle"></i>
-                                            <p>
-                                                Danışma
-                                                <i class="fas fa-angle-left right"></i>
-                                            </p>
-                                        </a>
-
-                                        <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview">
 
 
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/TotalSystemUsers" class="nav-link">
-                                                    <i class="fas fa-user-cog nav-icon"></i>
-                                                    <p>Tüm Sistem Kullanıcıları</p>
-                                                </a>
-                                            </li>
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/TotalSystemUsers" class="nav-link">
+                                                <i class="fas fa-user-cog nav-icon"></i>
+                                                <p>Tüm Sistem Kullanıcıları</p>
+                                            </a>
+                                        </li>
 
-                                            <li class="nav-item">
-                                                <a href="#" class="nav-link">
-                                                    <i class="nav-icon fas fa-user"></i>
-                                                    <p>
-                                                        Üyeler
-                                                        <i class="right fas fa-angle-left"></i>
-                                                    </p>
-                                                </a>
-                                                <ul class="nav nav-treeview">
-                                                    <li class="nav-item">
-                                                        <a href="~/AdminHome/RegisterMember" class="nav-link">
-                                                            <i class="fas fa-user-cog nav-icon"></i>
-                                                            <p>Üye Kaydı</p>
-                                                        </a>
-                                                    </li>
-
-                                                    <li class="nav-item">
-                                                        <a href="~/AdminHome/ListMember" class="nav-link">
-                                                            <i class="fas fa-list-ol nav-icon"></i>
-                                                            <p>Üye Genel Liste</p>
-                                                        </a>
-                                                    </li>
-
-                                                    <li class="nav-item">
-                                                        <a href="~/AdminHome/CabinetListUser" class="nav-link">
-                                                            <i class="fas fa-archive nav-icon"></i>
-                                                            <p>Dolap Kullanıcı Listesi</p>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-
-
-                                            <li class="nav-item">
-                                                <a href="#" class="nav-link">
-                                                    <i class="nav-icon fas fa-user"></i>
-                                                    <p>
-                                                        Personeller
-                                                        <i class="right fas fa-angle-left"></i>
-                                                    </p>
-                                                </a>
-                                                <ul class="nav nav-treeview">
-                                                    <li class="nav-item">
-                                                        <a href="~/AdminHome/NewRegister" class="nav-link">
-                                                            <i class="fas fa-plus nav-icon"></i>
-                                                            <p>Personel Kullanıcı Kayıt</p>
-                                                        </a>
-                                                    </li>
-
-                                                    <li class="nav-item">
-                                                        <a href="~/AdminHome/ListUser" class="nav-link">
-                                                            <i class="fas fa-list-ol nav-icon"></i>
-                                                            <p>Personel Genel Liste</p>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-
-                                            @*<li class="nav-item">
-                                                    <a href="~/AdminHome/RegisterStudent" class="nav-link">
-                                                        <i class="fas fa-plus nav-icon"></i>
-                                                        <p>Öğrenci Kaydı</p>
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-user"></i>
+                                                <p>
+                                                    Üyeler
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="~/AdminHome/RegisterMember" class="nav-link">
+                                                        <i class="fas fa-user-cog nav-icon"></i>
+                                                        <p>Üye Kaydı</p>
                                                     </a>
                                                 </li>
 
                                                 <li class="nav-item">
-                                                    <a href="" class="nav-link">
+                                                    <a href="~/AdminHome/ListMember" class="nav-link">
                                                         <i class="fas fa-list-ol nav-icon"></i>
-                                                        <p>Öğrenci Genel Liste</p>
+                                                        <p>Üye Genel Liste</p>
                                                     </a>
-                                                </li>*@
+                                                </li>
 
-                                        </ul>
-                                    </li>
-                                }
-                            }
-
-
-                            @if (Mutuals.M3 == true)
-                            {
-                                @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reservations)
-                                {
-                                    <li class="nav-item ">
-                                        <a style="background-color:#625e5e" href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-bell"></i>
-                                            <p>
-                                                Rezervasyonlar
-                                                <i class="fas fa-angle-left right"></i>
-
-                                            </p>
-                                        </a>
-
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/AllReservationList" class="nav-link">
-                                                    <i class="fas fa-calendar-check nav-icon"></i>
-                                                    <p>Rezervasyon Listesi</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/AllReservationCancelList" class="nav-link">
-                                                    <i class="fas fa-calendar-check nav-icon"></i>
-                                                    <p>Rezervasyon İptal Listesi</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/MultiReservations" class="nav-link">
-                                                    <i class="fas fa-calendar-check nav-icon"></i>
-                                                    <p>Çoklu Rezervasyon Yap</p>
-                                                </a>
-                                            </li>
-
-
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/MultiReservationCancel" class="nav-link">
-                                                    <i class="fas fa-table nav-icon"></i>
-                                                    <p>Rezervasyonlar - İptal Et</p>
-                                                </a>
-                                            </li>
-
-
-                                        </ul>
-                                    </li>
-                                }
-                            }
-
-
-                            @if (Mutuals.M4 == true)
-                            {
-                                @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].MemberDebtList)
-                                {
-                                    <li class="nav-item ">
-                                        <a style="background-color:#625e5e" href="" class="nav-link">
-                                            <i class="nav-icon fas fa-users"></i>
-                                            <p>
-                                                Üye Borçlu Listeleri
-                                                <i class="fas fa-angle-left right"></i>
-                                            </p>
-                                        </a>
-
-                                        <ul class="nav nav-treeview">
-
-
-
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/ReservationDebtList" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Rezervasyon Borçlu Listesi</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/DuesDebtList" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Üye Aidat Borçlu Listesi</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/DuesCabinetList" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Üye Dolap Borçlu Listesi</p>
-                                                </a>
-                                            </li>
-
-
-
-                                            @*<li class="nav-item">
-                                                    <a href="~/Admin/ReservationTable" class="nav-link">
-                                                        <i class="fas fa-user nav-icon"></i>
-                                                        <p>Potansiyel Üye</p>
+                                                <li class="nav-item">
+                                                    <a href="~/AdminHome/CabinetListUser" class="nav-link">
+                                                        <i class="fas fa-archive nav-icon"></i>
+                                                        <p>Dolap Kullanıcı Listesi</p>
                                                     </a>
-                                                </li>*@
-                                        </ul>
-                                    </li>
-
-                                }
-                            }
-
-                            @if (Mutuals.M5 == true)
-                            {
-                                @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].DebtandPayment)
-                                {
-                                    <li class="nav-item ">
-                                        <a style="background-color:#625e5e" href="" class="nav-link">
-                                            <i class="nav-icon fas fa-wallet"></i>
-                                            <p>
-                                                Ödeme - Borçlandırma
-                                                <i class="fas fa-angle-left right"></i>
-
-                                            </p>
-                                        </a>
-
-                                        <ul class="nav nav-treeview">
+                                                </li>
+                                            </ul>
+                                        </li>
 
 
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/ReservationDebtOperations" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Rezervasyon Ödemeleri</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/DuesDebtOperations" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Aidat Ödemeleri</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/CabinetDebtOperations" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Dolap Ödemeleri</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/SingleDebtMember" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Yeni Üye Borçlandırma</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="~/AdminHome/GeneralDebtMember" class="nav-link">
-                                                    <i class="fas fa-wallet nav-icon"></i>
-                                                    <p>Genel Üye Borçlandırma</p>
-                                                </a>
-                                            </li>
-
-                                        </ul>
-                                    </li>
-                                }
-                            }
-
-                            @if (Mutuals.M6 == true)
-                            {
-                                @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
-                                {
-                                    <li class="nav-item ">
-                                        <a style="background-color:#625e5e" href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-cog"></i>
-                                            <p>
-                                                Sistem Ayarları
-                                                <i class="right fas fa-angle-left"></i>
-                                            </p>
-                                        </a>
-
-                                        <ul class="nav nav-treeview">
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
-                                                    <i class="fas fa-id-card nav-icon"></i>
-                                                    <p>Rol ve Yetkilendirme </p>
-                                                </a>
-                                            </li>
-
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/MemberSettings" class="nav-link">
-                                                    <i class="fas fa-user nav-icon"></i>
-                                                    <p>Üye ve Dolap Ayarları</p>
-                                                </a>
-                                            </li>
-
-
-
-
-                                            @*<li class="nav-item">
-                                                    <a href="#" class="nav-link">
-                                                        <i class="nav-icon fas fa-user"></i>
-
-                                                        <p>
-                                                            Üye Ayarları
-                                                            <i class="right fas fa-angle-left"></i>
-                                                        </p>
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-user"></i>
+                                                <p>
+                                                    Personeller
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="~/AdminHome/NewRegister" class="nav-link">
+                                                        <i class="fas fa-plus nav-icon"></i>
+                                                        <p>Personel Kullanıcı Kayıt</p>
                                                     </a>
-                                                    <ul class="nav nav-treeview">
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/MemberSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Üye Dolap Ayarları</p>
-                                                            </a>
-                                                        </li>
+                                                </li>
 
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/MemberDuesSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Üye Borçlandırma Ayarları</p>
-                                                            </a>
-                                                        </li>
+                                                <li class="nav-item">
+                                                    <a href="~/AdminHome/ListUser" class="nav-link">
+                                                        <i class="fas fa-list-ol nav-icon"></i>
+                                                        <p>Personel Genel Liste</p>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
 
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Özel Ders</p>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>*@
-
-
-                                            <li class="nav-item">
-                                                <a href="~/SystemSettings/CourtSettings" class="nav-link">
-                                                    <i class="fas fa-flag nav-icon"></i>
-                                                    <p>Kort Ayarları </p>
+                                        @*<li class="nav-item">
+                                                <a href="~/AdminHome/RegisterStudent" class="nav-link">
+                                                    <i class="fas fa-plus nav-icon"></i>
+                                                    <p>Öğrenci Kaydı</p>
                                                 </a>
                                             </li>
 
-                                            @*<li class="nav-item">
-                                                    <a href="#" class="nav-link">
-                                                        <i class="nav-icon fas fa-table-tennis"></i>
-                                                        <p>
-                                                            Eğitim Ayarları
-                                                            <i class="right fas fa-angle-left"></i>
-                                                        </p>
-                                                    </a>
-                                                    <ul class="nav nav-treeview">
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Okul</p>
-                                                            </a>
-                                                        </li>
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Performans</p>
-                                                            </a>
-                                                        </li>
-
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Özel Ders</p>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>*@
-
-                                            @*<li class="nav-item">
-                                                    <a href="#" class="nav-link">
-                                                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                                        <p>
-                                                            Öğr. Gel. ve Tak. Ayar.
-                                                            <i class="right fas fa-angle-left"></i>
-                                                        </p>
-                                                    </a>
-                                                    <ul class="nav nav-treeview">
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Antreman Havuzu</p>
-                                                            </a>
-                                                        </li>
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Fiziksel Çalışmalar</p>
-                                                            </a>
-                                                        </li>
-
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Oyunlar</p>
-                                                            </a>
-                                                        </li>
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Gelişim Formları</p>
-                                                            </a>
-                                                        </li>
-
-                                                        <li class="nav-item">
-                                                            <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>İçerik İşlemleri</p>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>*@
-
                                             <li class="nav-item">
-                                                <a href="~/SystemSettings/ReservationSettings" class="nav-link">
-                                                    <i class="fas fa-bell nav-icon"></i>
-                                                    <p>Reservasyon Ayarları </p>
+                                                <a href="" class="nav-link">
+                                                    <i class="fas fa-list-ol nav-icon"></i>
+                                                    <p>Öğrenci Genel Liste</p>
                                                 </a>
-                                            </li>
+                                            </li>*@
 
-                                        </ul>
-                                    </li>
-                                }
+                                    </ul>
+                                </li>
                             }
+                        }
 
 
-                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reports)
+                        @if (Mutuals.M3 == true)
+                        {
+                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reservations)
                             {
                                 <li class="nav-item ">
                                     <a style="background-color:#625e5e" href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-chart-pie"></i>
+                                        <i class="nav-icon fas fa-bell"></i>
                                         <p>
-                                            Raporlar
-                                            <i class="right fas fa-angle-left"></i>
+                                            Rezervasyonlar
+                                            <i class="fas fa-angle-left right"></i>
+
                                         </p>
                                     </a>
 
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="~/Report/DebtReports" class="nav-link">
-                                                <i class="fas fa-id-card nav-icon"></i>
-                                                <p>Ödeme Raporları </p>
+                                            <a href="~/AdminHome/AllReservationList" class="nav-link">
+                                                <i class="fas fa-calendar-check nav-icon"></i>
+                                                <p>Rezervasyon Listesi</p>
                                             </a>
                                         </li>
-                                    </ul>
 
-                                    <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="~/Report/CourtOccupancyReports" class="nav-link">
-                                                <i class="nav-icon fas fa-chart-pie"></i>
-                                                <p>Kort Doluluk Raporları </p>
+                                            <a href="~/AdminHome/AllReservationCancelList" class="nav-link">
+                                                <i class="fas fa-calendar-check nav-icon"></i>
+                                                <p>Rezervasyon İptal Listesi</p>
                                             </a>
                                         </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/MultiReservations" class="nav-link">
+                                                <i class="fas fa-calendar-check nav-icon"></i>
+                                                <p>Çoklu Rezervasyon Yap</p>
+                                            </a>
+                                        </li>
+
+
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/MultiReservationCancel" class="nav-link">
+                                                <i class="fas fa-table nav-icon"></i>
+                                                <p>Rezervasyonlar - İptal Et</p>
+                                            </a>
+                                        </li>
+
+
                                     </ul>
                                 </li>
                             }
+                        }
 
-                        
+
+                        @if (Mutuals.M4 == true)
+                        {
+                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].MemberDebtList)
+                            {
+                                <li class="nav-item ">
+                                    <a style="background-color:#625e5e" href="" class="nav-link">
+                                        <i class="nav-icon fas fa-users"></i>
+                                        <p>
+                                            Üye Borçlu Listeleri
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+
+
+
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/ReservationDebtList" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Rezervasyon Borçlu Listesi</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/DuesDebtList" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Üye Aidat Borçlu Listesi</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/DuesCabinetList" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Üye Dolap Borçlu Listesi</p>
+                                            </a>
+                                        </li>
+
+
+
+                                        @*<li class="nav-item">
+                                                <a href="~/Admin/ReservationTable" class="nav-link">
+                                                    <i class="fas fa-user nav-icon"></i>
+                                                    <p>Potansiyel Üye</p>
+                                                </a>
+                                            </li>*@
+                                    </ul>
+                                </li>
+
+                            }
+                        }
+
+                        @if (Mutuals.M5 == true)
+                        {
+                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].DebtandPayment)
+                            {
+                                <li class="nav-item ">
+                                    <a style="background-color:#625e5e" href="" class="nav-link">
+                                        <i class="nav-icon fas fa-wallet"></i>
+                                        <p>
+                                            Ödeme - Borçlandırma
+                                            <i class="fas fa-angle-left right"></i>
+
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/ReservationDebtOperations" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Rezervasyon Ödemeleri</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/DuesDebtOperations" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Aidat Ödemeleri</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/CabinetDebtOperations" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Dolap Ödemeleri</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/SingleDebtMember" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Yeni Üye Borçlandırma</p>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="~/AdminHome/GeneralDebtMember" class="nav-link">
+                                                <i class="fas fa-wallet nav-icon"></i>
+                                                <p>Genel Üye Borçlandırma</p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @if (Mutuals.M6 == true)
+                        {
+                            @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].SystemSettings)
+                            {
+                                <li class="nav-item ">
+                                    <a style="background-color:#625e5e" href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-cog"></i>
+                                        <p>
+                                            Sistem Ayarları
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/IdentityRoleSettings" class="nav-link">
+                                                <i class="fas fa-id-card nav-icon"></i>
+                                                <p>Rol ve Yetkilendirme </p>
+                                            </a>
+                                        </li>
+
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/MemberSettings" class="nav-link">
+                                                <i class="fas fa-user nav-icon"></i>
+                                                <p>Üye ve Dolap Ayarları</p>
+                                            </a>
+                                        </li>
+
+
+
+
+                                        @*<li class="nav-item">
+                                                <a href="#" class="nav-link">
+                                                    <i class="nav-icon fas fa-user"></i>
+
+                                                    <p>
+                                                        Üye Ayarları
+                                                        <i class="right fas fa-angle-left"></i>
+                                                    </p>
+                                                </a>
+                                                <ul class="nav nav-treeview">
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/MemberSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Üye Dolap Ayarları</p>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/MemberDuesSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Üye Borçlandırma Ayarları</p>
+                                                        </a>
+                                                    </li>
+
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Özel Ders</p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>*@
+
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/CourtSettings" class="nav-link">
+                                                <i class="fas fa-flag nav-icon"></i>
+                                                <p>Kort Ayarları </p>
+                                            </a>
+                                        </li>
+
+                                        @*<li class="nav-item">
+                                                <a href="#" class="nav-link">
+                                                    <i class="nav-icon fas fa-table-tennis"></i>
+                                                    <p>
+                                                        Eğitim Ayarları
+                                                        <i class="right fas fa-angle-left"></i>
+                                                    </p>
+                                                </a>
+                                                <ul class="nav nav-treeview">
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Okul</p>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Performans</p>
+                                                        </a>
+                                                    </li>
+
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Özel Ders</p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>*@
+
+                                        @*<li class="nav-item">
+                                                <a href="#" class="nav-link">
+                                                    <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                                    <p>
+                                                        Öğr. Gel. ve Tak. Ayar.
+                                                        <i class="right fas fa-angle-left"></i>
+                                                    </p>
+                                                </a>
+                                                <ul class="nav nav-treeview">
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationSchoolSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Antreman Havuzu</p>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPerformanceSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Fiziksel Çalışmalar</p>
+                                                        </a>
+                                                    </li>
+
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Oyunlar</p>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>Gelişim Formları</p>
+                                                        </a>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <a href="~/SystemSettings/EducationPrivateLessonSettings" class="nav-link">
+                                                            <i class="far fa-circle nav-icon"></i>
+                                                            <p>İçerik İşlemleri</p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>*@
+
+                                        <li class="nav-item">
+                                            <a href="~/SystemSettings/ReservationSettings" class="nav-link">
+                                                <i class="fas fa-bell nav-icon"></i>
+                                                <p>Reservasyon Ayarları </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            }
+                        }
+
+                        @if (Mutuals.UserSettings[HttpContextAccessor.HttpContext.Session.GetString("RoleId")].Reports)
+                        {
+                            <li class="nav-item ">
+
+                                <a style="background-color:#625e5e" href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Raporlar
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Report/DebtReports" class="nav-link">
+                                            <i class="fas fa-id-card nav-icon"></i>
+                                            <p>Ödeme Raporları </p>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Report/CourtOccupancyReports" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>Kort Doluluk Raporları </p>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Report/BalanceOperationReports" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>Bakiye İşlem Raporları </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
                     </ul>
                 </nav>
             </div>
@@ -953,7 +961,6 @@
             }
         });
     }
-
 
     function getMemberInf() {
 

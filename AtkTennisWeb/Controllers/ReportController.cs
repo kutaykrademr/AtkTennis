@@ -21,13 +21,21 @@ namespace AtkTennisWeb.Controllers
             return View();
         }
 
+        public IActionResult BalanceOperationReports()
+        {
+           BalanceOpViewModel model = new BalanceOpViewModel();
+          
+            model = Helpers.Serializers.DeserializeJson<BalanceOpViewModel>(Helpers.Request.Get(Mutuals.AppUrl + "Report/BalanceOperationReports"));
+
+            return View(model);
+        }
+
         public class DuesPaymentInfoDto
         {
             public AllGetPaidLogsDto paymentLog { get; set; }
             public MemberDuesInfTableDto dues { get; set; }
             public ReservationDto res { get; set; }
         }
-
         public class DuesInfDto
         {
             public List<MemberListDto> memberLists { get; set; } = new List<MemberListDto>();
@@ -35,7 +43,6 @@ namespace AtkTennisWeb.Controllers
             public List<ReservationDto> res { get; set; } = new List<ReservationDto>();
            
         }
-
         public JsonResult GetDuesPayment(int id)
         {
 
@@ -54,7 +61,6 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
-
         public JsonResult MemberDuesDebtList()
         {
             List<MemberDuesInfTableDto> model = new List<MemberDuesInfTableDto>();
@@ -73,9 +79,6 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
-
-
-
         public JsonResult GetCabinetPayment(int id)
         {
 
@@ -94,7 +97,6 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
-
         public JsonResult GetResPayment()
         {
 
@@ -113,13 +115,11 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
-
         public class CourtOccupancyDto
         {
             public List<ReservationDto> myAL { get; set; } = new List<ReservationDto>();
             public List<CourtDto> court { get; set; } = new List<CourtDto>();
         }
-
         public JsonResult GetResOccupancy(string firstDate, string secDate)
         {
             CourtOccupancyDto model = new CourtOccupancyDto();
@@ -139,8 +139,6 @@ namespace AtkTennisWeb.Controllers
 
             return Json(model);
         }
-
-
         public class ResandCancelListDto
         {
             public List<ReservationDto> reservation { get; set; } = new List<ReservationDto>();
@@ -148,7 +146,6 @@ namespace AtkTennisWeb.Controllers
             public List<MemberListDto> memberLists { get; set; } = new List<MemberListDto>();
             public List<CourtDto> courts { get; set; } = new List<CourtDto>();
         }
-
         public JsonResult MemberReservationDebtList()
         {
             ResandCancelListDto model = new ResandCancelListDto();

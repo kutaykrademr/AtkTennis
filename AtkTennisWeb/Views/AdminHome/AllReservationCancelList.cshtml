@@ -251,7 +251,11 @@
                             row += '<td>' + res.reservationCancels[i].resStartTime + '</td>';
                           
                             row += '<td>' + res.reservationCancels[i].price + '</td>';
-                            if (res.reservationCancels[i].priceInf) {
+
+                            if (res.reservationCancels[i].priceInf == true && res.reservationCancels[i].procedure == true) {
+                                row += '<td>' + "Prosedür Var - İade" + '</td>';
+                            }
+                            else if (res.reservationCancels[i].priceInf) {
                                 row += '<td>' + "Ödendi" + '</td>';
                             }
                             else {

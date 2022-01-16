@@ -1,0 +1,129 @@
+﻿@model Helpers.Dto.PartialViewDtos.BalanceOpViewModel;
+
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card" style="border-radius:40px; margin-top:20px">
+                                    <div class="card-content">
+                                        <div class="card-body cleartfix">
+                                            <div class="media align-items-stretch">
+                                                <div style="margin-top:10px" class="media-body">
+                                                    <h3>Üye Bakiye İşlemleri</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Üye Numarası</th>
+                                        <th>Adı - Soyadı</th>
+                                        <th>Yatırılan Ücret</th>
+                                        <th>Ödeme Alan</th>
+                                        <th>Ödeme Alan Numara</th>
+                                        <th>Ödeme Alan Yetki</th>
+                                        <th>Tarih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.balanceOpModels.OrderByDescending(x => x.Date))
+                                    {
+
+                                        <tr style="text-align:center" id="">
+                                            @{
+                                                var mem = Model.memberLists.Where(x => x.UserId == item.MemberId).ToList();
+                                                var mem2 = Model.memberLists.Where(x => x.UserId == item.AdminId).ToList();
+                                            }
+
+                                            <td>@mem[0].MemberNumber</td>
+                                            <td>@mem[0].FullName</td>
+                                            <td>@item.Price</td>
+                                            <td>@mem[0].FullName</td>
+                                            <td>@mem[0].MemberNumber</td>
+
+                                            @if (mem[0] != mem2[0])
+                                            {
+                                                <td>@mem2[0].Role</td>
+                                            }
+
+                                            else
+                                            {
+                                                <td>Üye Kendisi</td>
+                                            }
+
+                                            <td>@item.Date</td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#example1').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 5,
+            "buttons": ["print"],
+            
+        })
+            .buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    });
+
+</script>

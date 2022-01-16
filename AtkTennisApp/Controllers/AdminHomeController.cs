@@ -1641,11 +1641,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddPrice", Name = "AddPrice")]
-        public JsonResult AddPrice(string id, int money)
+        public JsonResult AddPrice(string id, int money ,string adminId)
         {
             MemberList model = new MemberList();
+            BalanceOpModel model2 = new BalanceOpModel();
 
             model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
+            
 
             if (model != null)
             {
@@ -1658,8 +1660,15 @@ namespace AtkTennisApp.Controllers
                     model.Price = newPrice;
 
                     db.Update(model);
-                    db.SaveChanges();
 
+                    model2.Date = Convert.ToString(DateTime.Now);
+                    model2.MemberId = id;
+                    model2.Price = Convert.ToString(money);
+                    model2.AdminId = adminId;
+
+                    db.Add(model2);
+
+                    db.SaveChanges();
                 }
 
                 catch (Exception ex)

@@ -36,8 +36,8 @@
 
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
 
+            <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <section style="background-color:#343a40; border-radius:15px; color:white;" class="content">
@@ -48,9 +48,9 @@
                             </div>
                         </section>
 
-
                         <div class="card-body">
                             <table id="example2" class="table table-bordered table-hover">
+
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Adı </th>
@@ -63,6 +63,7 @@
 
                                     </tr>
                                 </thead>
+
                                 <tbody>
 
                                     @foreach (var item in Model)
@@ -118,7 +119,6 @@
                                                         <td>Belirtilmemiş</td>
                                                     }
 
-
                                                     <td>
                                                         <button class="btn btn-outline-dark" onclick="window.location.href = 'MemberDetailPage?memberNum=@item.MemberNumber'"><i class="fas fa-search"></i></button>
                                                     </td>
@@ -126,22 +126,20 @@
                                                 </tr>
                                             }
                                         }
-
-
                                     }
 
-
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
+
                         <section class="content" style=" background-color:#343a40; border-radius:15px; color: white;">
                             <div class="container-fluid">
                                 <div style="margin-top:10px" class="media-body">
@@ -150,11 +148,9 @@
                             </div>
                         </section>
 
-
                         <div class="card-body">
                             <table id="example3" class="table table-bordered table-hover">
-
-
+                                
                                 <thead>
                                     <tr style="text-align:center">
                                         <th>Adı </th>
@@ -163,12 +159,13 @@
                                         <th>Türü</th>
                                         <th>Durumu</th>
                                         <th>İşlemler</th>
-
                                     </tr>
                                 </thead>
+
                                 <tbody>
 
                                     @foreach (var item in Model)
+
                                     {
                                         if (item.CompanyId == CompId)
                                         {
@@ -229,11 +226,14 @@
                                                 </tr>
                                             }
                                         }
+
                                     }
 
                                 </tbody>
+
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -241,16 +241,13 @@
     </section>
 </div>
 
-
 <script>
 
-    $('body').loading({
-
+    $('body').loading ({
         theme: 'dark',
         stoppable: false,
         message: 'Yükleniyor..'
     });
-
 
     $(document).ready(function () {
 
@@ -266,6 +263,7 @@
             "buttons": ["print"]
         })
             .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
         $('#example3').DataTable({
             "paging": true,
             "lengthChange": false,
@@ -279,15 +277,14 @@
         })
             .buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
 
-        setTimeout(function () { $("body").loading('destroy'); }, 500);
+            setTimeout(function () { $("body").loading('destroy'); }, 500);
 
     });
-
-
 
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <script>
 
     var options = {
