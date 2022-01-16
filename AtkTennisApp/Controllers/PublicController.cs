@@ -573,7 +573,6 @@ namespace AtkTennisApp.Controllers
                 try
                 {
 
-
                     if (memberPrice - resDebt >= 0)
                     {
                         var newMemberPrice = memberPrice - resDebt;
@@ -607,10 +606,11 @@ namespace AtkTennisApp.Controllers
 
                     else
                     {
-                        if (canDebt)
+                        if (canDebt == false)
                         {
                             return Json("false");
                         }
+
                         else
                         {
                             res.PriceInf = false;
@@ -1006,7 +1006,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("CancelRes", Name = "CancelRes")]
-        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons)
+        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons , string compId)
 
         {
             Reservation model = new Reservation();
@@ -1051,6 +1051,7 @@ namespace AtkTennisApp.Controllers
                     model2.ResTime = model.ResTime;
                     model2.UserId = model.UserId;
                     model2.CancelReasons = cancelReasons;
+                    model2.CompanyId = compId;
 
 
 

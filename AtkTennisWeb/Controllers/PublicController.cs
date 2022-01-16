@@ -440,14 +440,14 @@ namespace AtkTennisWeb.Controllers
 
         }
 
-        public JsonResult CancelRes(int id , string userId , bool procedure , string cancelReasons)
+        public JsonResult CancelRes(int id , string userId , bool procedure , string cancelReasons , string compId)
         {
             ReservationDto model = new ReservationDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id + "&userId=" + userId + "&procedure=" + procedure + "&cancelReasons=" + cancelReasons));
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/CancelRes?id=" + id + "&userId=" + userId + "&procedure=" + procedure + "&cancelReasons=" + "Üye Kararı" + "&compId=" + compId));
 
                 if (model != null)
                 {

@@ -853,7 +853,6 @@ namespace AtkTennisApp.Controllers
             }
 
 
-
             else
             {
                 try
@@ -871,10 +870,6 @@ namespace AtkTennisApp.Controllers
 
                 }
             }
-
-
-
-
 
             if (model == null)
             {
