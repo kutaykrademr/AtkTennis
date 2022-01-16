@@ -311,7 +311,7 @@
                                     <p class="login-box-msg">Bakiye Ekle</p>
 
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="currentPassword" placeholder="Bakiye Giriniz" autocomplete="new-password">
+                                        <input type="text" class="form-control" id="sendBakiye" placeholder="Bakiye Giriniz" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <span class="fas fa-wallet"></span>
@@ -325,7 +325,7 @@
 
                         <div class="modal-footer" id="updateModels">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                            <button type="button" class="btn btn-primary" onclick="">Yükle</button>
+                            <button type="button" class="btn btn-primary" onclick="sendBakiye()">Yükle</button>
                         </div>
                     </div>
                 </div>
@@ -351,7 +351,7 @@
                                     <div class="input-group mb-3">
                                         <input type="password" class="form-control" id="newPassword" placeholder="Yeni Şifre" autocomplete="new-password">
                                         <div class="input-group-append">
-                                            <div class="input-group-text">
+                                            <div class="input-group-text">HttpContextAccessor.HttpContext.Session.GetString("UserId");
                                                 <span class="fas fa-lock"></span>
                                             </div>
                                         </div>
@@ -467,6 +467,37 @@
                         }
                     });
                 }
+            }
+
+            function sendBakiye() {
+
+                var price = $("#sendBakiye").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '../Public/AddMemberBalance',
+                    cache: false,
+                    data: { "price": price },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res == true) {
+
+                            alert("Başarılı");
+                        }
+
+                        else {
+                            alert("Bir Problem Oluştu.");
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
             }
 
             function logOut() {

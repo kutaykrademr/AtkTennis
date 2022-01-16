@@ -1149,6 +1149,51 @@ namespace AtkTennisApp.Controllers
             return View();
         }
 
+        [HttpGet("AddMemberBalance", Name = "AddMemberBalance")]
+        public async Task<JsonResult> AddMemberBalance(string id, int price)
+
+        {
+         
+            MemberList model = new MemberList();
+
+            try
+            {
+                model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
+
+                if (model != null)
+                {
+                    if (model.Price == 0)
+                    {
+                        model.Price = price;
+                    }
+                    else
+                    {
+                        model.Price = model.Price + price;
+                    }
+                    
+
+                    db.Update(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                model = new MemberList();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(true);
+
+        }
     }
 
     public class court_reserve

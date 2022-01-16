@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AtkTennisApp.Models
 {
-    public class BalanceOpModel
+    public class SecretaryOp
     {
         [Key]
-        public int BalanceId { get; set; }
-        public string MemberId { get; set; }
+        public int SecretaryOpId { get; set; }
         public string AdminId { get; set; }
+        public string Text { get; set; }
         public string Date { get; set; }
-        public string Price { get; set; }
-        public string CompanyId { get; set; }
+        public string CompId { get; set; }
+
     }
 }

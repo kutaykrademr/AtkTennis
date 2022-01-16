@@ -490,7 +490,32 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult AddMemberBalance(int price)
+        {
+            MemberListDto model = new MemberListDto();
 
+            try
+
+            {
+               var id = HttpContext.Session.GetString("UserId");
+
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/AddMemberBalance?id=" + id + "&price=" + price));
+
+                if (model != null)
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new ResSchemaModalDto());
+            }
+
+        }
 
 
 
@@ -532,6 +557,8 @@ namespace AtkTennisWeb.Controllers
 
             return RedirectToAction("SignIn", "Public");
         }
+
+
     }
 
 

@@ -167,7 +167,7 @@
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">Toplam Bakiye :  </span>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a data-toggle="modal" data-target="#bakiyeAdd" class="dropdown-item">
                             <i class="fas fa-envelope mr-2"></i>Bakiye Yükle
                         </a>
                     </div>
@@ -714,6 +714,16 @@
                                         </a>
                                     </li>
                                 </ul>
+
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/Report/SecretaryOperations" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>Sekreterya İşlem Raporları </p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
 
@@ -778,6 +788,34 @@
             </div>
         </div>
 
+        <div class="modal fade" id="bakiyeAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body register-card-body">
+                                <p class="login-box-msg">Bakiye Ekle</p>
+
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="sendBakiye" placeholder="Bakiye Giriniz" autocomplete="new-password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-wallet"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer" id="updateModels">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                        <button type="button" class="btn btn-primary" onclick="sendBakiye()">Yükle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <aside class="control-sidebar control-sidebar-dark">
         </aside>
 
@@ -872,7 +910,36 @@
 
         }
 
+        function sendBakiye() {
 
+            var price = $("#sendBakiye").val();
+
+            $.ajax({
+                type: "POST",
+                url: '../Public/AddMemberBalance',
+                cache: false,
+                data: { "price": price },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res == true) {
+
+                        alert("Başarılı");
+                    }
+
+                    else {
+                        alert("Bir Problem Oluştu.");
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
     </script>
 
 

@@ -54,6 +54,18 @@ namespace AtkTennisApp.Controllers
             return Json(duesInf);
         }
 
+        [HttpGet("GetSecOp", Name = "GetSecOp")]
+        public SecretaryOpView GetSecOp()
+        {
+           SecretaryOpView sop = new SecretaryOpView();
+
+            sop.balanceOpModels = db.secretaryOps.ToList();
+            sop.memberLists = db.memberLists.ToList();
+
+            return sop;
+        }
+
+
         [HttpGet("MemberDuesDebtList", Name = "MemberDuesDebtList")]
         public List<MemberDuesInfTable> MemberDuesDebtList()
         {

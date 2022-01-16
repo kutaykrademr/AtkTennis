@@ -40,7 +40,8 @@ namespace AtkTennis.Models
         public DbSet<CabinetType> cabinetTypes { get; set; }
         public DbSet<CabinetOperations> cabinetOperations { get; set; }
         public DbSet<CabinetListUser> cabinetListUsers { get; set; }
-      
+        public DbSet<SecretaryOp> secretaryOps { get; set; }
+
 
         public DbSet<MemberDuesType> memberDuesTypes { get; set; }
         public DbSet<MemberDebtType> memberDebtTypes { get; set; }

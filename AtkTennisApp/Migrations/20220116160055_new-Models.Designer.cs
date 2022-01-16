@@ -4,14 +4,16 @@ using AtkTennis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AtkTennisApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220116160055_new-Models")]
+    partial class newModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -985,30 +987,6 @@ namespace AtkTennisApp.Migrations
                     b.HasKey("SchoolTypesId");
 
                     b.ToTable("schoolTypes");
-                });
-
-            modelBuilder.Entity("AtkTennisApp.Models.SecretaryOp", b =>
-                {
-                    b.Property<int>("SecretaryOpId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AdminId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SecretaryOpId");
-
-                    b.ToTable("secretaryOps");
                 });
 
             modelBuilder.Entity("AtkTennisApp.Models.ToDoList", b =>

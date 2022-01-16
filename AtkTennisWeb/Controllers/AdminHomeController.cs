@@ -812,7 +812,7 @@ namespace AtkTennisWeb.Controllers
             try
             {
                
-                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddPrice?id=" + id + "&money=" + money + "&adminId=" + HttpContext.Session.GetString("UserId")));
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddPrice?id=" + id + "&money=" + money + "&adminId=" + HttpContext.Session.GetString("UserId") + "&compId=" + HttpContext.Session.GetString("CompId")));
 
                 if (model != null)
 

@@ -907,6 +907,19 @@ namespace AtkTennisApp.Controllers
                             //res.RoleName = mem.Role.Trim();
                             res.CompanyId = CompanyId;
 
+                            if (db.memberLists.Where(x => x.UserId == UserId && x.CompanyId == CompanyId).FirstOrDefault().Role == "Sekreterya")
+                            {
+                                SecretaryOp sop = new SecretaryOp();
+
+                                sop.AdminId = UserId;
+                                sop.CompId = CompanyId;
+                                sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                                sop.Text = mem.MemberNumber + mem.NickName + mem.FullName + " " + "Rezervasyon Eklendi.";
+
+                                db.Add(sop);
+
+                            }
+
                             db.memberLists.Update(mem);
                             db.reservations.Add(res);
                             db.SaveChanges();
@@ -940,6 +953,18 @@ namespace AtkTennisApp.Controllers
                                 //res.RoleName = mem.Role.Trim();
                                 res.CompanyId = CompanyId;
 
+                                if (db.memberLists.Where(x=>x.UserId == UserId && x.CompanyId == CompanyId).FirstOrDefault().Role == "Sekreterya")
+                                {
+                                    SecretaryOp sop = new SecretaryOp();
+
+                                    sop.AdminId = UserId;
+                                    sop.CompId = CompanyId;
+                                    sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                                    sop.Text = mem.MemberNumber + mem.NickName + mem.FullName + " " +"Rezervasyon Eklendi.";
+
+                                    db.Add(sop);
+                                    
+                                }
 
                                 db.reservations.Add(res);
                                 db.SaveChanges();
@@ -1230,7 +1255,7 @@ namespace AtkTennisApp.Controllers
                 mem = db.memberLists.Where(x => x.UserId == model.UserId).FirstOrDefault();
                 model3 = db.courts.ToList();
 
-                if (mem != null)
+                if (mem != null && model != null)
                 {
                     if (procedure == true && model.PriceInf == true)
                     {
@@ -1266,7 +1291,18 @@ namespace AtkTennisApp.Controllers
                     model2.UserId = model.UserId;
                     model2.CancelReasons = cancelReasons;
 
+                    if (db.memberLists.Where(x => x.UserId == userId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                    {
+                        SecretaryOp sop = new SecretaryOp();
 
+                        sop.AdminId = userId;
+                        sop.CompId = compId;
+                        sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                        sop.Text = mem.MemberNumber + mem.NickName + mem.FullName + " " + "Rezervasyon İptal Edildi.";
+
+                        db.Add(sop);
+
+                    }
 
                     db.Remove(model);
                     db.Add(model2);
@@ -1274,6 +1310,7 @@ namespace AtkTennisApp.Controllers
 
                     return Json(model);
                 }
+               
                 else
                 {
                     return Json(false);
@@ -1332,7 +1369,7 @@ namespace AtkTennisApp.Controllers
         {
             Reservation model = new Reservation();
             Court court = new Court();
-
+            SecretaryOp sop = new SecretaryOp();
             try
             {
                 model = db.reservations.Where(x => x.ResId == id).FirstOrDefault();
@@ -1440,12 +1477,25 @@ namespace AtkTennisApp.Controllers
                        
                     }
                 }
-                
 
+                sop.Text = model.NickName + model.ResStartTime + model.ResFinishTime + " " + "Rezervasyon Güncellendi.";
+              
                 model.Court = court;
                 model.ResStartTime = startTime;
                 model.ResFinishTime = finishTime;
                 model.ResDate = time;
+             
+                if (db.memberLists.Where(x => x.UserId == model.doResUserId && x.CompanyId == model.CompanyId).FirstOrDefault().Role == "Sekreterya")
+                {
+                    
+
+                    sop.AdminId = model.doResUserId;
+                    sop.CompId = model.CompanyId;
+                    sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+              
+                    db.Add(sop);
+
+                }
 
                 db.Update(model);
                 db.SaveChanges();
@@ -1636,7 +1686,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddPrice", Name = "AddPrice")]
-        public JsonResult AddPrice(string id, int money ,string adminId)
+        public JsonResult AddPrice(string id, int money ,string adminId , string compId)
         {
             MemberList model = new MemberList();
             BalanceOpModel model2 = new BalanceOpModel();
@@ -1654,12 +1704,23 @@ namespace AtkTennisApp.Controllers
 
                     model.Price = newPrice;
 
+
                     db.Update(model);
 
                     model2.Date = Convert.ToString(DateTime.Now);
                     model2.MemberId = id;
                     model2.Price = Convert.ToString(money);
                     model2.AdminId = adminId;
+                    model2.CompanyId = compId;
+
+                    if (model2.Price == "0")
+                    {
+                        model2.Price = Convert.ToString(money);
+                    }
+                    else
+                    {
+                        model2.Price = model2.Price +  Convert.ToString(money);
+                    }
 
                     db.Add(model2);
 
@@ -3037,6 +3098,8 @@ namespace AtkTennisApp.Controllers
             int paymentType, int receiptNo, string receiptDate, string explain, string compId)
         {
             AllPaidLogsViewModel model = new AllPaidLogsViewModel();
+            SecretaryOp sop = new SecretaryOp();
+            var mem = db.memberLists.Where(x => x.UserId == userId).FirstOrDefault();
 
             if (refType == 1)
             {
@@ -3044,6 +3107,18 @@ namespace AtkTennisApp.Controllers
 
                 if (model.reservation != null)
                 {
+                    if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                    {
+                      
+
+                        sop.AdminId = doUserId;
+                        sop.CompId = compId;
+                        sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                        sop.Text = mem.FullName + mem.MemberNumber + "," + paidPrice + "tl rezervasyon ödemesi alındı. " + remainingPrice + "tl kaldı.";
+
+                        db.Add(sop);
+
+                    }
 
                     model.reservation.Price = 0;
                     model.reservation.PriceInf = true;
@@ -3055,11 +3130,21 @@ namespace AtkTennisApp.Controllers
                 else
                 {
                     model.reservationCancel = db.reservationCancels.Where(x => x.ResId == refId).FirstOrDefault();
-
-
                     model.reservationCancel.Price = 0;
                     model.reservationCancel.PriceInf = true;
 
+                    if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                    {
+
+
+                        sop.AdminId = doUserId;
+                        sop.CompId = compId;
+                        sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                        sop.Text = mem.FullName + mem.MemberNumber + "," + paidPrice + "tl rezervasyon iptal ödemesi alındı. " + remainingPrice + "tl kaldı.";
+
+                        db.Add(sop);
+
+                    }
 
                     db.Update(model.reservationCancel);
                 }
@@ -3080,11 +3165,39 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PriceCondition = true;
 
+                        if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                        {
+
+
+                            sop.AdminId = doUserId;
+                            sop.CompId = compId;
+                            sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                            sop.Text = mem.FullName + mem.MemberNumber + "," + paidPrice + "tl aidat ödemesi alındı. " + remainingPrice + "tl kaldı.";
+
+                            db.Add(sop);
+
+                        }
+
+
                     }
+
                     else
                     {
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                         model.memberDuesInf.RemainingPrice = remainingPrice;
+
+                        if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                        {
+
+
+                            sop.AdminId = doUserId;
+                            sop.CompId = compId;
+                            sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                            sop.Text = mem.FullName + mem.MemberNumber + "," + paidPrice + "tl aidat ödemesi alındı. " + remainingPrice + "tl kaldı.";
+
+                            db.Add(sop);
+
+                        }
 
                     }
 
@@ -3107,12 +3220,38 @@ namespace AtkTennisApp.Controllers
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                         model.memberDuesInf.CompanyId = compId;
 
+                        if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                        {
+
+
+                            sop.AdminId = doUserId;
+                            sop.CompId = compId;
+                            sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                            sop.Text = mem.FullName + mem.MemberNumber + "," + paidPrice + "tl dolap ödemesi alındı. " + remainingPrice + "tl kaldı.";
+
+                            db.Add(sop);
+
+                        }
+
                     }
                     else
                     {
                         model.memberDuesInf.RemainingPrice = remainingPrice;
                         model.memberDuesInf.PaidPrice = model.memberDuesInf.PaidPrice + paidPrice;
                         model.memberDuesInf.CompanyId = compId;
+
+                        if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
+                        {
+
+
+                            sop.AdminId = doUserId;
+                            sop.CompId = compId;
+                            sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                            sop.Text = mem.FullName + mem.MemberNumber + "," + paidPrice + "tl dolap ödemesi alındı. " + remainingPrice + "tl kaldı.";
+
+                            db.Add(sop);
+
+                        }
                     }
 
                     db.Update(model.memberDuesInf);
