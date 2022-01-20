@@ -86,16 +86,24 @@ namespace AtkTennisApp.Controllers
         [HttpGet("GetRoles", Name = "GetRoles")]
         public async Task<SignIn> GetRoles(string UserName, string password)
         {
+            MemberList model2 = new MemberList();
             SignIn model = new SignIn();
 
             List<string> roles = new List<string>();
+
+            var memberNm = db.memberLists.Where(x => x.NickName == UserName).FirstOrDefault();
+
+            if (memberNm != null)
+            {
+                UserName = memberNm.UserName;
+            }
 
             var result = signInManager.PasswordSignInAsync(UserName, password ,false, false).Result;
 
             if (result.Succeeded)
             {
+ 
                 var _user = signInManager.UserManager.Users.SingleOrDefault(x => x.UserName == UserName);
-
                 var _roles = await userManager.GetRolesAsync(_user);
 
                 model.custom_role = (List<string>)_roles;
@@ -123,8 +131,19 @@ namespace AtkTennisApp.Controllers
             SignIn model = new SignIn();
             MemberList mem = new MemberList();
 
+            var memberNm = db.memberLists.Where(x => x.NickName == UserName).FirstOrDefault();
+
+            if (memberNm != null)
+            {
+                UserName = memberNm.UserName;
+            }
+
             Model2.UserName = UserName;
             Model2.Password = Password;
+       
+
+          
+       
 
 
             if (ModelState.IsValid)

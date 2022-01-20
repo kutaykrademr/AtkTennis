@@ -529,9 +529,23 @@ namespace AtkTennisApp.Controllers
             var Role = new AppIdentityRole();
             var user = new AppIdentityUser();
             var user2 = new AppIdentityUser();
-
+            var isUser = db.memberLists.Where(x => x.UserName == username).FirstOrDefault();
+            var isUser2 = db.memberLists.Where(x => x.NickName == nickName).FirstOrDefault();
             try
             {
+                if (isUser != null)
+                {
+                    user.FullName = "Mn";
+
+                    return user;
+                }
+
+                else if (isUser2 != null)
+                {
+                    user.FullName = "Nn";
+                    return user;
+                }
+
                 var roles = role.Split(",");
 
                 if (roles.Length > 1)
@@ -1693,12 +1707,10 @@ namespace AtkTennisApp.Controllers
 
             model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
             
-
             if (model != null)
             {
                 try
                 {
-
                     var currentPrice = model.Price;
                     var newPrice = currentPrice + money;
 
@@ -1831,14 +1843,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddCabinet", Name = "AddCabinet")]
-        public JsonResult AddCabinet(int price, string code, string who, string type, string userId)
+        public JsonResult AddCabinet(int price, string code, string who, string type, string userId , string compId)
         {
             CabinetandDuesTable model = new CabinetandDuesTable();
 
             var date = DateTime.Now.ToString("dd-MM-yyyy");
             try
             {
-
                 model.cabinetListUser.CabinetCode = code;
                 model.cabinetListUser.CabinetOpPrice = price;
                 model.cabinetListUser.CabinetOpTypes = type;
@@ -1846,7 +1857,7 @@ namespace AtkTennisApp.Controllers
                 model.cabinetListUser.CabinetUserId = userId;
                 model.cabinetListUser.Date = date;
                 model.cabinetListUser.CabinetCondition = true;
-
+                model.cabinetListUser.CompanyId = compId;
 
                 model.memberDuesInfTable.DuesInfType = true;
                 model.memberDuesInfTable.DuesPrice = price;
@@ -1857,10 +1868,7 @@ namespace AtkTennisApp.Controllers
                 model.memberDuesInfTable.MemberFullName = db.memberLists.Where(x => x.UserId == model.memberDuesInfTable.MemberId).FirstOrDefault().FullName;
                 model.memberDuesInfTable.Date = date;
                 model.memberDuesInfTable.DuesYear = Convert.ToInt16(date.Split("-")[2]);
-
-
-
-
+                model.memberDuesInfTable.CompanyId = compId;
 
                 if (price != 0 && code != null && who != null && type != null)
                 {
@@ -1881,6 +1889,7 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
 
             }
+
             return Json(true);
         }
 

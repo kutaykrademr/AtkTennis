@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <p class="login-box-msg">Zorunlu Alan </p>
                             <div class="row">
-                                <div class="input-group mb-3 col-md-4">
+                                <div class="input-group mb-3 col-md-6">
                                     <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -29,16 +29,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="input-group mb-3 col-md-4">
-                                    <input type="text" class="form-control" id="username" disabled placeholder="Kullanıcı Adı" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <a style="cursor:pointer" onclick="getUserName()" class="fas fa-sync-alt"></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3 col-md-4">
-                                    <input type="text" class="form-control" id="nickname" disabled placeholder="Rumuz" autocomplete="new-password">
+                      
+                                <div class="input-group mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="nickname"  placeholder="Rumuz" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <a style="cursor:pointer" onclick="getNickName()" class="fas fa-sync-alt"></a>
@@ -98,7 +91,7 @@
                             <div class="row">
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="memberNum" disabled placeholder="Üye Numarası" autocomplete="new-password">
+                                    <input type="text" class="form-control" id="memberNum" placeholder="Üye Numarası" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <a style="cursor:pointer" onclick="getMemberNumber()" class="fas fa-sync-alt"></a>
@@ -110,8 +103,7 @@
 
                                 <div class="form-group col-md-6">
                                     <select id="webReservation" class="form-control">
-                                        <option disabled="disabled" selected>Web Rezervasyon</option>
-
+                                        <option  selected>Web Rezervasyon</option>
                                         <option value="1">Yapabilir</option>
                                         <option value="2">Yapamaz</option>
 
@@ -121,7 +113,7 @@
                             </div>
 
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="password" disabled placeholder="Şifre" autocomplete="new-password">
+                                <input type="text" class="form-control" id="password"  placeholder="Şifre" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
@@ -302,14 +294,14 @@
                         </div>
                     </div>
 
-
                     <div class="collapse" id="collapseExample">
                         <div class="card" style="margin-bottom:20px;  border:1px solid brown">
 
                             <div class="card-body">
                                 <p class="login-box-msg">Zorunlu Alan (Eş Bilgileri) </p>
                                 <div class="row">
-                                    <div class="input-group mb-3 col-md-4">
+
+                                    <div class="input-group mb-3 col-md-6">
                                         <input type="text" class="form-control" id="partnerName" placeholder="Eş Adı Soyadı" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
@@ -318,22 +310,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="input-group mb-3 col-md-4">
-                                        <input type="text" class="form-control" id="nickname2" disabled="" placeholder="Rumuz" autocomplete="new-password">
+                                    <div class="input-group mb-3 col-md-6">
+                                        <input type="text" class="form-control" id="nickname2"  placeholder="Rumuz" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <a style="cursor:pointer" onclick="getNickName2()" class="fas fa-sync-alt"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                    <div class="input-group mb-3 col-md-4">
-                                        <input type="text" class="form-control" id="username2" disabled="" placeholder="Kullanıcı Adı" autocomplete="new-password">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <a style="cursor:pointer" onclick="getUserName2()" class="fas fa-sync-alt"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -355,17 +336,14 @@
                                 </div>
 
                                 <div class="row">
-
                                     <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="memberNum2" disabled="" placeholder="Üye Numarası" autocomplete="new-password">
+                                        <input type="text" class="form-control" id="memberNum2" disabled  placeholder="Üye Numarası" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <a style="cursor:pointer" onclick="getMemberNumber2()" class="fas fa-sync-alt"></a>
                                             </div>
                                         </div>
                                     </div>
-
-
 
                                     <div class="form-group col-md-6">
                                         <select id="webReservation2" class="form-control">
@@ -376,11 +354,9 @@
 
                                         </select>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="input-group mb-3 col-md-4">
                                         <input type="email" class="form-control" placeholder="Eş T.C Kimlik" id="partnerIdNumber" autocomplete="new-password">
                                         <div class="input-group-append">
@@ -407,14 +383,13 @@
 
 
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="password2" disabled placeholder="Şifre" autocomplete="new-password">
+                                    <input type="text" class="form-control" disabled id="password2"  placeholder="Şifre" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <a style="cursor:pointer" onclick="getPassword2()" class="fas fa-lock"></a>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -424,7 +399,6 @@
                             <button type="submit" class="btn btn-success btn-block" onclick="register()"><i class="fas fa-save"></i>Kaydet</button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -442,8 +416,6 @@
     });
 
     function myfunction() {
-
-        debugger;
 
         $.ajax({
             type: "Get",
@@ -476,8 +448,6 @@
             }
         });
     }
-
-
 
     $(function () {
 
@@ -520,7 +490,6 @@
         refmem2: null,
         detailAddress: null,
         memberNumber: null,
-
         memberNumber2: null,
         nickName2: null,
         username2: null,
@@ -543,7 +512,7 @@
         userObj.memType = $("#memType option:selected").val();
         userObj.companyId = $("#compId").text();
         userObj.name = $("#name").val();
-        userObj.username = $("#username").val();
+        userObj.username = $("#memberNum").val();
         userObj.nickName = $("#nickname").val();
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
@@ -573,13 +542,12 @@
         userObj.detailAddress = $("#detailAddress").val();
 
 
-        debugger;
-
+   
 
         if ($('#part').is(":checked")) {
 
             userObj.nickName2 = $("#nickname2").val();
-            userObj.username2 = $("#username2").val();
+            userObj.username2 = $("#memberNum2").val();
             userObj.startDate2 = $("#startDate2").val();
             userObj.finishDate2 = $("#finishDate2").val();
             userObj.memberNumber2 = $("#memberNum2").val();
@@ -596,7 +564,6 @@
 
             alert("Üye Zorunlu Alanları Boş Bırakılmış, Lütfen Eksiksiz Doldurunuz !!!");
         }
-
 
         else if ($('#part').is(":checked")) {
 
@@ -616,10 +583,8 @@
                 saveUser(userObj);
             }
         }
-
-
-
         else
+
             saveUser(userObj);
 
     }
@@ -635,19 +600,34 @@
                 async: true,
                 success: function (res) {
 
-                    if (res != null)
-
+                    if (res.fullName == "Mn") {
                         $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Kullanıcı Başarıyla Kaydedildi.",
+                            title: "Uyarı",
+                            content: "Üye Numarası önceden Kayıtlı.",
                             buttons: {
                                 TAMAM: function () {
 
-                                    window.location.href = "NewRegister"
+
                                 }
                             }
                         });
 
+                    }
+
+                    else if (res.fullName == "Nn") {
+
+                        $.confirm({
+                            title: "Uyarı",
+                            content: "Üye Numarası önceden Kayıtlı.",
+                            buttons: {
+                                TAMAM: function () {
+
+
+                                }
+                            }
+                        });
+
+                    }
 
                     else
                         $.confirm({

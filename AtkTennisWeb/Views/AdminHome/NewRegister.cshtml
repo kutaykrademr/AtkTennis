@@ -20,7 +20,7 @@
                             <p class="login-box-msg">Zorunlu Alan </p>
 
                             <div class="row">
-                                <div class="input-group mb-3 col-md-4">
+                                <div class="input-group mb-3 col-md-6">
                                     <input type="text" class="form-control" id="name" placeholder="Adı Soyadı" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -29,16 +29,7 @@
                                     </div>
                                 </div>
 
-                                <div class="input-group mb-3 col-md-4">
-                                    <input type="text" class="form-control" id="username" placeholder="Kullanıcı Adı" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <a style="cursor:pointer" onclick="getUserName()" class="fas fa-sync-alt"></a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3 col-md-4">
+                                <div class="input-group mb-3 col-md-6">
                                     <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -47,7 +38,6 @@
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="row">
                                 <div class="input-group mb-3 col-md-4">
@@ -132,14 +122,14 @@
                         <div class="form-group col-md-6">
                             <select id="condition" class="form-control">
                                 <option value="0" disabled="disabled" selected>Durumu</option>
-                                <option value="1" >Faal</option>
-                                <option value="2" >Çıkan</option>
-                                <option value="3" >Dondurulmuş</option>
-                                <option value="4" >Fahri</option>
-                                <option value="5" >İstifa</option>
-                                <option value="6" >Onur</option>
-                                <option value="7" >Vefat</option>
-                                <option value="8" >Belirtilmemiş</option>
+                                <option value="1">Faal</option>
+                                <option value="2">Çıkan</option>
+                                <option value="3">Dondurulmuş</option>
+                                <option value="4">Fahri</option>
+                                <option value="5">İstifa</option>
+                                <option value="6">Onur</option>
+                                <option value="7">Vefat</option>
+                                <option value="8">Belirtilmemiş</option>
                             </select>
                         </div>
 
@@ -291,8 +281,6 @@
     </section>
 </div>
 
-
-
 <script>
 
     $(document).ready(function () {
@@ -312,8 +300,6 @@
             format: 'L'
         });
     })
-
-
 
     userObj = {
 
@@ -348,8 +334,6 @@
 
     };
 
-    
-
     function selectRoles() {
 
         var role = $("#RegistersRole").val();
@@ -369,15 +353,13 @@
 
     function register(roles) {
 
-        debugger;
-
         userObj.companyId = $("#compId").text();
         userObj.name = $("#name").val();
-        userObj.username = $("#username").val();
+        userObj.username = $("#memberNum").val();
         userObj.nickName = $("#nickname").val();
         userObj.startDate = $("#startDate").val();
         userObj.finishDate = $("#finishDate").val();
-        userObj.role = roles; 
+        userObj.role = roles;
         userObj.condition = $("#condition option:selected").val();
         userObj.identificationNumber = $("#identificationNumber").val();
         userObj.webReservation = $("#webReservation option:selected").val();
@@ -400,53 +382,81 @@
         userObj.memberNumber = $("#memberNum").val();
         userObj.detailAddress = $("#detailAddress").val();
 
-     
+        debugger;
 
-        try {
-            $.ajax({
-                type: "Post",
-                url: '../AdminHome/Register',
-                cache: false,
-                data: userObj,
-                dataType: "json",
-                async: true,
-                success: function (res) {
+        if (userObj.name == "" || userObj.username == "" || userObj.nickName == "" || userObj.memberNumber == "" || userObj.password == "" || roles == "") {
+
+            alert("Lütfen Zorunlu Alanları Doldurunuz...");
+        }
+        else if (userObj.webReservation == "Web Rezervasyon") {
+
+            alert("Lütfen Web Rezervasyon Seçiniz...");
+        }
+
+        else {
+
+             try {
+                $.ajax({
+                    type: "Post",
+                    url: '../AdminHome/Register',
+                    cache: false,
+                    data: userObj,
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+                        debugger;
+
+                        if (res.fullName == "Mn") {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Üye Numarası önceden Kayıtlı.",
+                                buttons: {
+                                    TAMAM: function () {
 
 
-                    if (res != null)
-
-                        $.confirm({
-                            title: "Bilgilendirme",
-                            content: "Kullanıcı Başarıyla Kaydedildi.",
-                            buttons: {
-                                TAMAM: function () {
-
-                                    window.location.href = "NewRegister"
+                                    }
                                 }
-                            }
-                        });
+                            });
+
+                        }
+
+                        else if (res.fullName == "Nn") {
+
+                            $.confirm({
+                                title: "Uyarı",
+                                content: "Üye Numarası önceden Kayıtlı.",
+                                buttons: {
+                                    TAMAM: function () {
 
 
-                    else
-                        $.confirm({
-                            title: "Uyarı",
-                            content: "Kullanıcı Kaydedilirken Hata Oluştu.",
-                            buttons: {
-                                TAMAM: function () {
-
-
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                },
-                error: function (textStatus, errorThrown) {
-                    console.log(JSON.stringify(textStatus));
-                    console.log(textStatus);
-                }
-            });
-        } catch (e) {
-            console.log(e.message);
+                        }
+
+                        else
+                            $.confirm({
+                                title: "Bilgilendirme",
+                                content: "Kullanıcı Başarıyla Kaydedildi.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                        window.location.href = "NewRegister"
+                                    }
+                                }
+                            });
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            } catch (e) {
+                console.log(e.message);
+            }
         }
     }
 

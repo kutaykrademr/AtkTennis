@@ -791,7 +791,7 @@ namespace AtkTennisWeb.Controllers
             CabinetandDuesTableDto model = new CabinetandDuesTableDto();
             try
             {
-                model = Helpers.Serializers.DeserializeJson<CabinetandDuesTableDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddCabinet?price=" + price + "&code=" + code + "&who=" + who + "&type=" + type + "&userId=" + userId));
+                model = Helpers.Serializers.DeserializeJson<CabinetandDuesTableDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/AddCabinet?price=" + price + "&code=" + code + "&who=" + who + "&type=" + type + "&userId=" + userId + "&compId=" + HttpContext.Session.GetString("CompId")));
 
                 if (model == null)
 

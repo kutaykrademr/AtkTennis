@@ -1362,7 +1362,6 @@
 
     // Rezervasyon Şema Tarih
 
-
     function nextDate() {
 
         nextPreDate(1);
@@ -1387,8 +1386,6 @@
         getResTable(date4);
 
     }
-
-
 
     function nextDate2() {
 
@@ -1510,6 +1507,8 @@
         else {
 
             getCourtTime(courtId, courtName, timePickerModal, clcTime);
+
+            $('#findMember').val("");
 
             $('#rsvModal').modal('toggle');
         }
