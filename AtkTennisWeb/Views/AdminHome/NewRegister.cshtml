@@ -338,7 +338,7 @@
 
         var role = $("#RegistersRole").val();
 
-        debugger;
+     
 
         var roles = "";
 
@@ -382,7 +382,6 @@
         userObj.memberNumber = $("#memberNum").val();
         userObj.detailAddress = $("#detailAddress").val();
 
-        debugger;
 
         if (userObj.name == "" || userObj.username == "" || userObj.nickName == "" || userObj.memberNumber == "" || userObj.password == "" || roles == "") {
 
@@ -405,7 +404,7 @@
                     async: true,
                     success: function (res) {
 
-                        debugger;
+                 
 
                         if (res.fullName == "Mn") {
                             $.confirm({

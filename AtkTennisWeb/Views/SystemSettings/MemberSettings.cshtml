@@ -95,7 +95,7 @@ else
                                                     <td>@item.CabinetTypesPrice</td>
 
                                                     <td>
-                                                        <button class="btn btn-outline-success" id="@item.CabinetId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-success" id="@item.CabinetId" onclick="updCabinetTypeModal(this.id)"><i class="fas fa-edit"></i></button>
                                                         <button class="btn btn-outline-danger" id="@item.CabinetId" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
                                                     </td>
                                                 </tr>
@@ -141,7 +141,7 @@ else
 
                                                     <td>
 
-                                                        <button class="btn btn-outline-success" id="@item.CabinetOpId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-success" id="@item.CabinetOpId" onclick="updCabinetModal(this.id)"><i class="fas fa-edit"></i></button>
                                                         <button class="btn btn-outline-danger" id="@item.CabinetOpId" onclick="deleteCabinetSet(this.id) "><i class="fas fa-trash"></i></button>
                                                     </td>
 
@@ -192,7 +192,7 @@ else
                                                     <td>@item.Discount (%)</td>
 
                                                     <td>
-                                                        <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-outline-success" id="@item.MemberDuesTypeId" onclick="updDiscountModal(this.id)"><i class="fas fa-edit"></i></button>
                                                         <button class="btn btn-outline-danger" id="@item.MemberDuesTypeId" onclick="deleteDiscount(this.id)"><i class="fas fa-trash"></i></button>
                                                     </td>
                                                 </tr>
@@ -326,6 +326,120 @@ else
         </div>
     </div>
 
+
+    <div class="modal fade" id="updCabinetType" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class="col-form-label">Türü</label>
+                            <input type="text" id="cabinetType2" class="form-control">
+                        </div>
+
+
+                        <div class="col-md-6 form-group">
+                            <label class="col-form-label">Ücreti</label>
+                            <input type="text" id="cabinetPrice2" class="form-control" autocomplete="new-password">
+                        </div>
+                    </div>
+                </div>
+                <div id="cabTypeOp" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updCabinetType(this.id)">Tür Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updCabinet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Dolap Kodu:</label>
+                            <input type="text" class="form-control" id="cabinetCode2">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="recipient-name" class="col-form-label">Dolap Türü:</label>
+                            <div class="input-group">
+                                <select id="cabinetTypeOption2" class="form-control">
+                                    
+                                    @foreach (var item in Model.cabinetTypes)
+                                    {
+                                        if (item.CompanyId == CompId)
+                                        {
+                                            <option> @item.CabinetTypes</option>
+                                        }
+
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="cabOp" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updCabinet(this.id)">Tür Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updDuesDiscount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Dolap Türü Ekle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-4 form-group">
+                            <label class="col-form-label">Yaş</label>
+                            <input type="text" id="age2" class="form-control" autocomplete="new-password">
+                        </div>
+
+
+                        <div class="col-md-4 form-group">
+                            <label class="col-form-label">Yıl</label>
+                            <input type="text" id="year2" class="form-control" autocomplete="new-password">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label class="col-form-label">İndirim (%)</label>
+                            <input type="text" id="discount2" class="form-control" autocomplete="new-password">
+                        </div>
+
+                    </div>
+                </div>
+                <div id="disOp" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onclick="updDiscount(this.id)">Tür Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    
     <script>
 
         var compId = $("#compId").text();
@@ -362,9 +476,212 @@ else
         });
 
 
+      
+        function updCabinetModal(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/GetCabinetSet',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+                    if (res != false) {
+                        $('#cabinetCode2').val(res.cabinetCode)
+                        $('#cabinetTypeOption2 option:selected').text(res.cabinetOpTypes)
+
+                        $("#cabOp button:nth-of-type(2)").attr("id", id);
+                        $('#updCabinet').modal('toggle')
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: " Lütfen sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+           
+            
+        }
+
+        function updCabinet(id) {
+            if ($('#cabinetCode2').val() == "") {
+                $.confirm({
+                    title: "Uyarı",
+                    content: "Boş Bırakılamaz.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+
+            }
+            else {
+                $.ajax({
+                    type: "Get",
+                    url: '../SystemSettings/UpdCabinetSet',
+                    cache: false,
+                    data: { "id": id, "code": $('#cabinetCode2').val(), "cabType": $('#cabinetTypeOption2 option:selected').text() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res != false) {
+                            $.confirm({
+                                title: "Başarılı",
+                                content: "Güncelleme Başarılı.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+
+                            location.reload();
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: " Lütfen sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+           
+        }
+
+        function updCabinetTypeModal(id) {
+
+            $.ajax({
+                type: "POST",
+                url: '../SystemSettings/GetCabinetType',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+
+
+                    if (res != false) {
+
+                        $('#cabinetType2').val(res.cabinetTypes)
+                        $('#cabinetPrice2').val(res.cabinetTypesPrice)
+
+                        $("#cabTypeOp button:nth-of-type(2)").attr("id", id);
+                        $('#updCabinetType').modal('toggle')  
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: " Lütfen sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+
+        }
+
+        function updCabinetType(id) {
+
+            if ($('#cabinetType2').val() == "" || $('#cabinetPrice2').val() == "") {
+                $.confirm({
+                    title: "Uyarı",
+                    content: "Boş Bırakılamaz.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+
+            }
+            else {
+                $.ajax({
+                    type: "Get",
+                    url: '../SystemSettings/UpdateCabinetType',
+                    cache: false,
+                    data: { "id": id, "cabinetType": $('#cabinetType2').val(), "cabinetPrice": $('#cabinetPrice2').val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res != false) {
+                            $.confirm({
+                                title: "Başarılı",
+                                content: "Güncelleme Başarılı.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+
+                            location.reload();
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: " Lütfen sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }
+           
+        }
+
+
         function saveMemberDuesInf() {
 
-            debugger;
+        
 
             var isChecked = $('#sun').prop('checked');
 
@@ -824,6 +1141,108 @@ else
 
             }
         }
+
+        function updDiscountModal(id) {
+
+            $.ajax({
+                type: "Get",
+                url: '../SystemSettings/GetDiscountType',
+                cache: false,
+                data: { "id": id },
+                dataType: "json",
+                async: true,
+                success: function (res) {
+                  
+
+                    if (res != false) {
+
+                        $('#age2').val(res.age)
+                        $('#year2').val(res.year)
+                        $('#discount2').val(res.discount)
+
+                        $("#disOp button:nth-of-type(2)").attr("id", id);
+                        $('#updDuesDiscount').modal('toggle')
+
+
+                    }
+                    else {
+                        $.confirm({
+                            title: "Uyarı",
+                            content: " Lütfen sonra tekrar deneyiniz.",
+                            buttons: {
+                                TAMAM: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log(JSON.stringify(textStatus));
+                    console.log(textStatus);
+                }
+            });
+        }
+
+        function updDiscount(id) {
+            if ($('#age2').val() == "" || $('#year2').val() == "" || $('#discount2').val() == "" ) {
+                $.confirm({
+                    title: "Uyarı",
+                    content: "Boş Bırakılamaz.",
+                    buttons: {
+                        TAMAM: function () {
+
+                        }
+                    }
+                });
+            }
+
+            else {
+                $.ajax({
+                    type: "Get",
+                    url: '../SystemSettings/UpdDiscountType',
+                    cache: false,
+                    data: { "id": id, "age": $('#age2').val(), "year": $('#year2').val(), "disc": $('#discount2').val() },
+                    dataType: "json",
+                    async: true,
+                    success: function (res) {
+
+
+                        if (res != false) {
+                            $.confirm({
+                                title: "Başarılı",
+                                content: "Güncelleme Başarılı.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+
+                            location.reload();
+                        }
+                        else {
+                            $.confirm({
+                                title: "Uyarı",
+                                content: " Lütfen sonra tekrar deneyiniz.",
+                                buttons: {
+                                    TAMAM: function () {
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log(JSON.stringify(textStatus));
+                        console.log(textStatus);
+                    }
+                });
+            }       
+        }
+
 
     </script>
 }

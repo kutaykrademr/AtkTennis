@@ -240,7 +240,6 @@
                 async: true,
                 success: function (res) {
 
-                    debugger;
 
                     if (res != "false") {
 
@@ -306,7 +305,6 @@
                                 row += '<td>';
                                 row += '<div class="custom-control custom-switch">';
 
-                                debugger;
 
                                 if (new Date(res[i].resDate) < new Date(today)) {
 
@@ -392,7 +390,7 @@
 
     function cancelAllRes() {
 
-        debugger;
+ 
 
         var idList = [];
 
@@ -427,8 +425,7 @@
             async: true,
             success: function (res) {
 
-                debugger;
-
+       
 
                 if (res != "true") {
 

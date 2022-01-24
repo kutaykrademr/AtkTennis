@@ -334,7 +334,6 @@
             async: true,
             success: function (res) {
 
-                debugger;
                 $("#allLastOp").empty();
 
                 if (res.allGetPaidLogs.length > 0) {
@@ -399,7 +398,7 @@
             async: true,
             success: function (res) {
 
-                debugger;
+          
                 var userName = $("#memberFind").val();
                 var sptUserName = userName.split("-");
                 var memNum = sptUserName[0];
@@ -423,7 +422,7 @@
                         async: true,
                         success: function (res) {
 
-                            debugger;
+                    
 
                             $("#appendResInf").empty();
 

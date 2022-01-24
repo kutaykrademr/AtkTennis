@@ -853,8 +853,7 @@
         var sTime = b[0] + b[1];
         var fTime = c[0] + c[1];
 
-        debugger;
-
+       
         $.ajax({
             type: "POST",
             url: '../Public/GetResList2',
@@ -864,7 +863,6 @@
             async: false,
             success: function (res) {
 
-                debugger;
 
                 if (res.length >= parseInt($("#memMaxRes").val())) {
             
@@ -1256,7 +1254,6 @@
         resobject.RoleId = $("#RoleSesId").val();
         resobject.RoleName = $("#RoleSes").val();
 
-        debugger;
 
         if (times.length == 0) {
 

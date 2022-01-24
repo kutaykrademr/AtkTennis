@@ -1756,6 +1756,71 @@ namespace AtkTennisApp.Controllers
             return Json(model);
         }
 
+        [HttpGet("UpdateCabinetType", Name = "UpdateCabinetType")]
+        public JsonResult UpdateCabinetType(int id, string cabinetType, int cabinetPrice)
+        {
+
+            CabinetType model = new CabinetType();
+
+            try
+            {
+                model = db.cabinetTypes.Where(x => x.CabinetId == id).FirstOrDefault();
+
+
+                if (model != null)
+                {
+
+                    model.CabinetTypes = cabinetType;
+                    model.CabinetTypesPrice = cabinetPrice;
+
+                    db.Update(model);
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
+
+        [HttpGet("GetCabinetType", Name = "GetCabinetType")]
+        public JsonResult GetCabinetType(int id)
+        {
+
+            CabinetType model = new CabinetType();
+
+            try
+            {
+                model = db.cabinetTypes.Where(x => x.CabinetId == id).FirstOrDefault();
+
+
+                if (model != null)
+                {
+                    return Json(model);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model);
+        }
+
         //[HttpGet("MemberDuesSettings", Name = "MemberDuesSettings")]
         //public JsonResult MMemberDuesSettings(int id)
         //{
@@ -1866,6 +1931,85 @@ namespace AtkTennisApp.Controllers
             }
         }
 
+        [HttpGet("UpdCabinetSet", Name = "UpdCabinetSet")]
+        public JsonResult UpdCabinetSet(int id, string code, string cabType)
+        {
+            CabinetOperations model = new CabinetOperations();
+
+
+            if (id == null)
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.cabinetOperations.Where(x => x.CabinetOpId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        model.CabinetCode = code;
+                        model.CabinetOpTypes = cabType;
+
+                        db.Update(model);
+                        db.SaveChanges();
+
+                        return Json(model);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(true);
+            }
+        }
+
+        [HttpGet("GetCabinetSet", Name = "GetCabinetSet")]
+        public JsonResult GetCabinetSet(int id)
+        {
+            CabinetOperations model = new CabinetOperations();
+
+
+            if (id == null)
+            {
+                return Json(false);
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.cabinetOperations.Where(x => x.CabinetOpId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        return Json(model);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+
+                }
+                return Json(true);
+            }
+        }
 
         [HttpGet("AddDiscountType", Name = "AddDiscountType")]
         public MemberDuesType AddDiscountType(int age, int year, int discount , string compId)
@@ -1897,7 +2041,7 @@ namespace AtkTennisApp.Controllers
 
             return new MemberDuesType();
         }
-
+        
         [HttpGet("DeleteDiscountType", Name = "DeleteDiscountType")]
         public MemberDuesType DeleteDiscountType(int id)
         {
@@ -1939,6 +2083,84 @@ namespace AtkTennisApp.Controllers
             }
         }
 
+        [HttpGet("GetDiscountType", Name = "GetDiscountType")]
+        public MemberDuesType GetDiscountType(int id)
+        {
+            MemberDuesType model = new MemberDuesType();
+
+            if (id == null)
+            {
+                return new MemberDuesType();
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.memberDuesTypes.Where(x => x.MemberDuesTypeId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        return model;
+                    }
+                    else
+                    {
+                        return new MemberDuesType();
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+                }
+
+                return new MemberDuesType();
+            }
+        }
+
+        [HttpGet("UpdDiscountType", Name = "UpdDiscountType")]
+        public MemberDuesType UpdDiscountType(int id , int age , int year , int disc)
+        {
+            MemberDuesType model = new MemberDuesType();
+
+            if (id == null)
+            {
+                return new MemberDuesType();
+            }
+
+            else
+            {
+                try
+                {
+
+                    model = db.memberDuesTypes.Where(x => x.MemberDuesTypeId == id).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        model.Age = age;
+                        model.Year = year;
+                        model.Discount = disc;
+
+                        db.Update(model);
+                        db.SaveChanges();
+
+                        return model;
+                    }
+                    else
+                    {
+                        return new MemberDuesType();
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Mutuals.monitizer.AddException(ex);
+                }
+
+                return new MemberDuesType();
+            }
+        }
         #endregion
 
     }

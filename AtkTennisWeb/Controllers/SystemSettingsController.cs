@@ -1186,6 +1186,41 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult GetCabinetType(int id)
+        {
+            CabinetTypesDto model = new CabinetTypesDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetCabinetType?id=" + id));
+
+                if (model.CabinetTypes == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new CabinetTypesDto();
+            }
+
+            return Json(model);
+        }
+
+        public JsonResult UpdateCabinetType(int id, string cabinetType, int cabinetPrice)
+        {
+            CabinetTypesDto model = new CabinetTypesDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetTypesDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdateCabinetType?id=" + id + "&cabinetType=" + cabinetType + "&cabinetPrice=" + cabinetPrice));
+
+                if (model.CompanyId == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new CabinetTypesDto();
+            }
+
+            return Json(true);
+        }
         //public IActionResult MemberDuesSettings()
 
         //{
@@ -1248,6 +1283,40 @@ namespace AtkTennisWeb.Controllers
             return Json(true);
         }
 
+        public JsonResult GetCabinetSet(int id)
+        {
+            CabinetOperationsDto model = new CabinetOperationsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetOperationsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetCabinetSet?id=" + id));
+                if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new CabinetOperationsDto();
+            }
+
+            return Json(model);
+        }
+
+        public JsonResult UpdCabinetSet(int id , string code, string cabType)
+        {
+            CabinetOperationsDto model = new CabinetOperationsDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<CabinetOperationsDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdCabinetSet?code=" + code + "&cabType=" + cabType + "&id=" + id));
+                if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new CabinetOperationsDto();
+            }
+
+            return Json(true);
+        }
+
         public JsonResult ControlMemberDebtSettings(string isChecked , string compId)
         {
             MemberCanDebtDto model = new MemberCanDebtDto();
@@ -1295,6 +1364,42 @@ namespace AtkTennisWeb.Controllers
                 model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/DeleteDiscountType?id=" + id));
              
                 if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new MemberDuesTypeDto();
+            }
+
+            return Json(true);
+        }
+
+        public JsonResult GetDiscountType(int id)
+        {
+            MemberDuesTypeDto model = new MemberDuesTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/GetDiscountType?id=" + id));
+
+                if (model == null)
+                    return Json(false);
+            }
+            catch (Exception)
+            {
+                model = new MemberDuesTypeDto();
+            }
+
+            return Json(model);
+        }
+
+        public JsonResult UpdDiscountType(int id, int age, int year, int disc)
+        {
+            MemberDuesTypeDto model = new MemberDuesTypeDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberDuesTypeDto>(Helpers.Request.Get(Mutuals.AppUrl + "SystemSettings/UpdDiscountType?id=" + id + "&age=" + age + "&year=" + year + "&disc=" + disc));
+
+                if (model.CompanyId == null)
                     return Json(false);
             }
             catch (Exception)

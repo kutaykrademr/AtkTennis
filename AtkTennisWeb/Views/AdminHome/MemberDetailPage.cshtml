@@ -5,6 +5,9 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{ 
+    var crtRole = HttpContextAccessor.HttpContext.Session.GetString("Role");
+}
 <style>
     .tdHover:hover {
         background-color: #131da882;
@@ -146,7 +149,17 @@
 
                                         @for (int i = 0; i < Model.AppIdentityRoles.Count(); i++)
                                         {
-                                            <option value="@Model.AppIdentityRoles[i].Name">@Model.AppIdentityRoles[i].Name,</option>
+                                            if (crtRole == "Sekreterya")
+                                            {
+                                                if (Model.AppIdentityRoles[i].Name != "Üye")
+                                                {
+                                                    <option value="@Model.AppIdentityRoles[i].Name">@Model.AppIdentityRoles[i].Name,</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="@Model.AppIdentityRoles[i].Name">@Model.AppIdentityRoles[i].Name,</option>
+                                            }
                                         }
 
                                     </select>
@@ -220,7 +233,7 @@
 
                                 <hr>
 
-                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Kullanıcı Adı - Rumuz</strong>
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Kullanıcı Adı/Üye No - Rumuz</strong>
 
                                 <div class="row">
 
@@ -1337,7 +1350,7 @@
 
         $('#cabinetCode').on('change', function () {
 
-            debugger;
+            
 
             var code = $("#cabinetCode option:selected").val();
 
@@ -1374,7 +1387,6 @@
         var code = $("#cabinetCode option:selected").val();
         var who = $("#whoCabinet option:selected").val();
 
-        debugger;
 
         if (userId == "" && price == "" && type == "" && type == "" && code == "" && who == "") {
             swal("Başarısız!", "Lütfen Bilgileri Doldurunuz", "warning");
@@ -1517,7 +1529,7 @@
             detailAddress: null,
         };
 
-        debugger;
+       
 
         userObj.actPass = $("#actChecked input").prop('checked');
         userObj.detailAddress = $("#detailAddress").val();
