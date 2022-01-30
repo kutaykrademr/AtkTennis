@@ -1,41 +1,28 @@
 ﻿@model Helpers.Dto.PartialViewDtos.ReservationViewDto;
-
-@{
-    Layout = "_MemberLayout";
-}
-
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor;
-
-
 @{
-
+    Layout = "_MemberLayout";
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
     var RoleId = HttpContextAccessor.HttpContext.Session.GetString("RoleId");
     var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
-    var times = Model.resTimes.Where(x => x.Restimes60 == 0 && x.ResTimes30 == 0 && x.CompanyId == CompId).OrderBy(x=>x.ResTimes).ToList();
+    var times = Model.resTimes.Where(x => x.Restimes60 == 0 && x.ResTimes30 == 0 && x.CompanyId == CompId).OrderBy(x => x.ResTimes).ToList();
     var x = times.Count * 4;
-
     var start = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Başlangıç Saati" && x.CompanyId == CompId).FirstOrDefault();
     var finish = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Web Rezervasyon Bitiş Saati (Max = 23:59)" && x.CompanyId == CompId).FirstOrDefault();
     var resSettingsTime = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon Süresi (Dakika)" && x.CompanyId == CompId).FirstOrDefault();
     var resSettingsTime2 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Antrenör)" && x.CompanyId == CompId).FirstOrDefault();
     var resSettingsTime3 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Rezervasyon İleri Gün (Üye)" && x.CompanyId == CompId).FirstOrDefault();
     var resSettingsTime4 = Model.reservationSettings.Where(x => x.ReservationSettingsInf == "Gün içerisinde Üye için Max Rezervasyon Saati" && x.CompanyId == CompId).FirstOrDefault();
-
     var startTime = start.ReservationValue;
     var finishTime = finish.ReservationValue;
     var resSetTime = resSettingsTime.ReservationValue;
-
     var antNextDay = resSettingsTime2.ReservationValue;
     var memNextDay = resSettingsTime3.ReservationValue;
     var memMaxRes = resSettingsTime4.ReservationValue;
-
 }
-
-
 
 <style>
 
@@ -108,7 +95,7 @@
 
 @{
     var date = DateTime.Now;
-    var resCount = Model.reservations.Where(x => x.UserId == userId && x.ResDate == date.ToString("yyyy-MM-dd")).ToList().Count();
+    var resCount = Model.reservations.Where(x => x.UserId == userId && x.RoleName == Role && x.ResDate == date.ToString("yyyy-MM-dd") && x.RoleName == Role).ToList().Count();
     var totalDebtList = Model.res.Where(x => x.UserId == userId && x.PriceInf == false).ToList();
     var totalDebtCancelList = Model.resCan.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false).ToList();
     float totalFirstDebt;
@@ -209,8 +196,6 @@
                                             var date2 = date1.AddDays(1);
                                             var today = date1.ToString("yyyy-MM-dd");
                                             var tomorrow = date2.ToString("yyyy-MM-dd");
-
-
                                         }
 
                                         <li class="page-item"><a style="color:white;  background-color:#3fc9d5 !important" class="page-link" href="~/Public/Reservation?date=@today">Bugün</a></li>
@@ -262,156 +247,146 @@
                                                         {
 
 
-                                                        var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
+                                                            var res = Model.reservations.Where(x => x.ResStartTime == Model.resTimes[i].ResTimes && x.Court.CourtId == item.CourtId).FirstOrDefault();
 
 
-                                                        var period = (60 / Convert.ToInt32(item.CourtTimePeriod));
+                                                            var period = (60 / Convert.ToInt32(item.CourtTimePeriod));
 
 
-                                                        if (res != null)
-                                                        {
-
-                                                            double colspanVal = 0;
-
-                                                            if (res.ResFinishTime.Split(":")[0] == "24")
+                                                            if (res != null)
                                                             {
-                                                                var c = res.ResFinishTime.Split(":");
-                                                                var d = res.ResStartTime.Split(":");
-                                                                var fTimeS = Convert.ToInt32(c[0] + c[1]);
-                                                                var sTimeS = Convert.ToInt32(d[0] + d[1]);
-                                                                colspanVal = (fTimeS - sTimeS) * 4;
-                                                            }
 
-                                                            else
-                                                            {
-                                                                colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
-                                                            }
+                                                                double colspanVal = 0;
 
-                                                            var mem = Model.memberLists.FirstOrDefault(x => x.UserId == res.UserId);
-                                                            var scale = Model.courtScales.FirstOrDefault(x => x.Code == res.NickName);
-
-                                                            if (mem != null)
-                                                            {
-                                                                if (res.UserId == userId)
+                                                                if (res.ResFinishTime.Split(":")[0] == "24")
                                                                 {
-                                                                    DateTime startT = Convert.ToDateTime(startTime);
-                                                                    DateTime finishT = DateTime.Now;
-                                                                    var tHours = (startT - finishT).TotalHours;
+                                                                    var c = res.ResFinishTime.Split(":");
+                                                                    var d = res.ResStartTime.Split(":");
+                                                                    var fTimeS = Convert.ToInt32(c[0] + c[1]);
+                                                                    var sTimeS = Convert.ToInt32(d[0] + d[1]);
+                                                                    colspanVal = (fTimeS - sTimeS) * 4;
+                                                                }
 
-                                                                    if (res.PrivRes == true && tHours < 0)
+                                                                else
+                                                                {
+                                                                    colspanVal = (Convert.ToDateTime(res.ResFinishTime) - Convert.ToDateTime(res.ResStartTime)).TotalHours * 4;
+                                                                }
+
+                                                                var mem = Model.memberLists.FirstOrDefault(x => x.UserId == res.UserId);
+                                                                var scale = Model.courtScales.FirstOrDefault(x => x.Code == res.NickName);
+
+                                                                if (mem != null)
+                                                                {
+                                                                    if (res.UserId == userId)
                                                                     {
-                                                                        <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                                <a style="padding:0;color:#fff;">
-                                                                                    @res.NickName
-                                                                                </a>
+                                                                        DateTime startT = Convert.ToDateTime(startTime);
+                                                                        DateTime finishT = DateTime.Now;
+                                                                        var tHours = (startT - finishT).TotalHours;
 
-                                                                            </div>
-                                                                        </td>
+                                                                        if (res.PrivRes == true && tHours < 0)
+                                                                        {
+                                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                    <a style="padding:0;color:#fff;">
+                                                                                        @res.NickName
+                                                                                    </a>
+
+                                                                                </div>
+                                                                            </td>
+                                                                        }
+
+                                                                        else if (res.PrivRes == false)
+                                                                        {
+                                                                            <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                    <a style="padding:0;color:#fff;">
+                                                                                        @res.NickName
+                                                                                    </a>
+
+                                                                                </div>
+                                                                            </td>
+                                                                        }
+
                                                                     }
 
-                                                                    else if (res.PrivRes == false)
+                                                                    else
                                                                     {
-                                                                        <td borderRes="@res.ResStartTime , @period" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="top" data-container="body" data-original-title="@res.NickName | @mem.FullName" data-content="<span style='color:#e61a1a'></span><br />@res.ResStartTime-@res.ResFinishTime <br /> @res.Court.CourtName <br /> @res.ResDate @res.ResTime" onclick="openResInfModal(this.id)" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle; cursor:pointer; background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                                <a style="padding:0;color:#fff;">
-                                                                                    @res.NickName
-                                                                                </a>
+                                                                        DateTime startT = Convert.ToDateTime(startTime);
+                                                                        DateTime finishT = DateTime.Now;
+                                                                        var tHours = (startT - finishT).TotalHours;
 
-                                                                            </div>
-                                                                        </td>
+
+                                                                        if (res.PrivRes == true && tHours < 0)
+                                                                        {
+                                                                            <td borderRes="@res.ResStartTime , @period" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                    <a style="padding:0;color:#fff;">
+                                                                                        @res.NickName
+                                                                                    </a>
+
+                                                                                </div>
+                                                                            </td>
+                                                                        }
+
+                                                                        else if (res.PrivRes == false)
+                                                                        {
+                                                                            <td borderRes="@res.ResStartTime , @period" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                                <div style="background-color:#1bbc27!important;color:#ffffff!important;">
+                                                                                    <a style="padding:0;color:#fff;">
+                                                                                        @res.NickName
+                                                                                    </a>
+
+                                                                                </div>
+                                                                            </td>
+                                                                        }
                                                                     }
 
                                                                 }
 
                                                                 else
                                                                 {
-                                                                    DateTime startT = Convert.ToDateTime(startTime);
-                                                                    DateTime finishT = DateTime.Now;
-                                                                    var tHours = (startT - finishT).TotalHours;
 
+                                                                    <td borderRes="@res.ResStartTime , @period" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:@scale.Color!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
+                                                                        <div style="background-color:@scale.Color!important;color:#ffffff!important;">
+                                                                            <a style="padding:0;color:#fff;">
+                                                                                @res.NickName
+                                                                            </a>
 
-                                                                    if (res.PrivRes == true && tHours < 0)
-                                                                    {
-                                                                        <td borderRes="@res.ResStartTime , @period" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                                <a style="padding:0;color:#fff;">
-                                                                                    @res.NickName
-                                                                                </a>
-
-                                                                            </div>
-                                                                        </td>
-                                                                    }
-
-                                                                    else if (res.PrivRes == false)
-                                                                    {
-                                                                        <td borderRes="@res.ResStartTime , @period" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:#1bbc27!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                                            <div style="background-color:#1bbc27!important;color:#ffffff!important;">
-                                                                                <a style="padding:0;color:#fff;">
-                                                                                    @res.NickName
-                                                                                </a>
-
-                                                                            </div>
-                                                                        </td>
-                                                                    }
+                                                                        </div>
+                                                                    </td>
                                                                 }
-
+                                                                i = i + Convert.ToInt32(colspanVal) - 1;
                                                             }
 
                                                             else
+
                                                             {
-
-                                                                <td borderRes="@res.ResStartTime , @period" id="@res.ResId" colspan="@colspanVal" style="text-align:center; vertical-align:middle;  background-color:@scale.Color!important;color:#ffffff!important; border-right: 1px solid #dee2e6;">
-                                                                    <div style="background-color:@scale.Color!important;color:#ffffff!important;">
-                                                                        <a style="padding:0;color:#fff;">
-                                                                            @res.NickName
-                                                                        </a>
-
-                                                                    </div>
-                                                                </td>
-                                                            }
-
-
-                                                            i = i + Convert.ToInt32(colspanVal) - 1;
-                                                        }
-
-
-                                                        else
-
-                                                        {
-                                                            if (period == 4)
-                                                            {
-                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                            }
-
-                                                            else if (period == 2)
-                                                            {
-                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                i = i + 1;
-                                                            }
-                                                            else if (period == 1)
-                                                            {
-                                                                <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
-                                                                    i = i + 3;
+                                                                if (period == 4)
+                                                                {
+                                                                    <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
                                                                 }
 
+                                                                else if (period == 2)
+                                                                {
+                                                                    <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="2" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                    i = i + 1;
+                                                                }
+                                                                else if (period == 1)
+                                                                {
+                                                                    <td borderRes="@Model.resTimes[i].ResTimes , @period" class="tdHover droppable" data-toggle="popover" data-trigger="hover" data-placement="top" data-container="body" data-content="@item.CourtName - @Model.resTimes[i].ResTimes" onclick="openResModal(this.id)" colspan="4" style="cursor:pointer" id="@item.CourtId , @item.CourtName , @Model.resTimes[i].ResTimes" per="@period"></td>
+                                                                    i = i + 3;
+                                                                }
                                                             }
-
                                                         }
-
                                                     }
                                                 </tr>
                                             }
                                         }
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
-
                     </div>
-
                 </div>
 
                 <div class="col-3">
@@ -428,6 +403,7 @@
                         </div>
                     </div>
 
+
                     <div style="background-color:#337ab7 !important" class="small-box bg-info">
                         <div class="inner">
                             <h3>
@@ -440,64 +416,76 @@
                         </div>
                     </div>
 
-                    <div class="small-box bg-success">
-                        <div class="inner">
 
-                            @{
-                                var debtList = Model.memberDues.Where(x => x.MemberId == userId).ToList();
+                    @{
+                        if (Role != "Antrenör")
+                        {
+                            <div class="small-box bg-success">
+                                <div class="inner">
 
-                                var priceNum = 0;
+                                    @{
+                                        var debtList = Model.memberDues.Where(x => x.MemberId == userId).ToList();
 
-                                for (int i = 0; i < debtList.Count; i++)
-                                {
-                                    var xc = debtList[i].RemainingPrice;
+                                        var priceNum = 0;
 
-                                    priceNum = priceNum + xc;
-                                }
-                            }
+                                        for (int i = 0; i < debtList.Count; i++)
+                                        {
+                                            var xc = debtList[i].RemainingPrice;
 
-                            <h3>
-                                @priceNum ₺
-                            </h3>
+                                            priceNum = priceNum + xc;
+                                        }
+                                    }
 
-                            <p>Üyelik Aidat Borcum</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                    </div>
+                                    <h3>
+                                        @priceNum ₺
+                                    </h3>
 
-                    <div class="small-box bg-warning">
-                        <div class="inner">
+                                    <p>Üyelik Aidat Borcum</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                            </div>
+                        }
+                    }
 
-                            @{
-                                var debtList2 = Model.memberDues.Where(x => x.MemberId == userId && x.DuesInfType == true).ToList();
+                    @{
+                        if (Role != "Antrenör")
+                        {
+                            <div class="small-box bg-warning">
+                                <div class="inner">
 
-                                var priceNum2 = 0;
+                                    @{
+                                        var debtList2 = Model.memberDues.Where(x => x.MemberId == userId && x.DuesInfType == true).ToList();
 
-                                for (int i = 0; i < debtList2.Count; i++)
-                                {
-                                    var xc = debtList2[i].RemainingPrice;
+                                        var priceNum2 = 0;
 
-                                    priceNum2 = priceNum2 + xc;
-                                }
-                            }
+                                        for (int i = 0; i < debtList2.Count; i++)
+                                        {
+                                            var xc = debtList2[i].RemainingPrice;
 
-                            <h3>
-                                @priceNum2 ₺
-                            </h3>
+                                            priceNum2 = priceNum2 + xc;
+                                        }
+                                    }
 
-                            <p>Dolap Aidat Borcum</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                    </div>
+                                    <h3>
+                                        @priceNum2 ₺
+                                    </h3>
+
+                                    <p>Dolap Aidat Borcum</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                            </div>
+                        }
+                    }
+
 
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>
-                                @Model.resCan.Where(x => x.UserId == userId).ToList().Count()
+                                @Model.resCan.Where(x => x.UserId == userId && x.RoleName == Role).ToList().Count()
                             </h3>
 
                             <p>İptal Edilen Toplam Rezervasyon Sayısı</p>
@@ -853,7 +841,7 @@
         var sTime = b[0] + b[1];
         var fTime = c[0] + c[1];
 
-       
+
         $.ajax({
             type: "POST",
             url: '../Public/GetResList2',
@@ -865,7 +853,7 @@
 
 
                 if (res.length >= parseInt($("#memMaxRes").val())) {
-            
+
                     swal("Üye İçin Gün İçinde Max Rezervasyon Saatini Aştınız!", "Rezervasyonunuzun Tamamlanmasını Bekleyiniz", "warning", {
                         button: "Tamam",
                     });
@@ -876,12 +864,12 @@
                     getCourtTime(courtId, courtName, checkTime);
                 }
 
-                else 
+                else
 
                     swal("Rezervasyon Saatleri Dışındasınız !", "Rezervasyon Saatleri: " + '  ' + resStartTime + '  ' + "ile" + '  ' + resFinishTime + '  ' + "saatleri" + '  ' + "arasındadır.", "warning", {
                         button: "Tamam",
                     });
-                
+
             },
 
             error: function (textStatus, errorThrown) {

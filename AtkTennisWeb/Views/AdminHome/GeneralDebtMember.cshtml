@@ -193,7 +193,6 @@
                                     var count = Model.memberDuesInfTables.Where(x => x.DuesYear == date[i] && x.DuesType == type[a]).ToList().Count();
                                     var item = Model.memberDuesInfTables.Where(x => x.DuesYear == date[i] && x.DuesType == type[a]).FirstOrDefault();
 
-
                                     @if (item != null)
                                     {
                                         if (item.CompanyId == compId)
@@ -202,8 +201,6 @@
                                             {
                                                 @if (item.DuesType == type[a])
                                                 {
-
-
                                                     <tr style="text-align:center" id="">
                                                         <td>@date[i]</td>
                                                         <td>@type[a]</td>
@@ -218,15 +215,10 @@
                                                                 <td>@item.DuesPrice</td>
                                                             }
                                                         }
-
                                                         <td>@item.Date</td>
                                                         <td>@item.Explain</td>
                                                         <td>@count</td>
-
-                                                        <td>
-                                                            <button class="btn btn-outline-success" id="" onclick="openUpdateCourtModal(this.id)"><i class="fas fa-edit"></i></button>
-                                                            <button class="btn btn-outline-danger" id="" onclick="deleteCabinetType(this.id)"><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        <td><button class="btn btn-outline-danger"  onclick="deleteType('@item.DuesYear' ,'@item.DuesType')"><i class="fas fa-trash"></i></button></td>
                                                     </tr>
                                                 }
                                             }
@@ -256,7 +248,7 @@
         var explain = $("#explain").val();
 
 
-        if (duesType == "" || duesYear == "" || duesPrice == "" || explain == "") {
+        if (duesType == "" || duesYear == "" || duesPrice == "") {
 
             swal({
                 title: "Borçlandırma Onaylanmadı",
@@ -272,7 +264,6 @@
         else {
 
             $.ajax({
-
                 type: "GET",
                 url: '../AdminHome/AddDues',
                 cache: false,
@@ -321,8 +312,6 @@
             });
         }
     }
-
-
     function addCabinet() {
 
         var cabinetDuesYear = $("#cabinetDuesYear option:selected").val();
@@ -330,7 +319,7 @@
         var cabinetExplain = $("#cabinetExplain").val();
 
 
-        if (cabinetDuesYear == "" || cabinetType == "" || cabinetExplain == "") {
+        if (cabinetDuesYear == "" || cabinetType == "" ) {
 
             swal({
                 title: "Borçlandırma Onaylanmadı",
@@ -392,9 +381,64 @@
             });
         }
     }
-
-
     function Cancel() {
         location.reload();
+    }
+    function deleteType(year , type) {
+
+        swal({
+            title: "Silinme Onayı?",
+            text: year + " " + type + " " + "Silinecektir. Onaylıyor Musunuz ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    $.ajax({
+                        type: "GET",
+                        url: '../AdminHome/DeleteDuesAll',
+                        cache: false,
+                        data: { "year": year, "type": type },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+                            if (res == true) {
+
+                                swal({
+                                    title: "Aidatlar Silindi",
+                                    text: "Aidatlar  Başarılı Bir Şekilde Silindi !",
+                                    icon: "success",
+                                    button: "Tamam",
+                                }).then((value) => {
+                                    location.reload();
+                                });
+                            }
+
+                            else {
+
+                                $.confirm({
+                                    title: "Uyarı",
+                                    content: "Silinme Sırasında Hata Oluştu.",
+                                    buttons: {
+                                        TAMAM: function () {
+
+                                        }
+                                    }
+                                });
+                            }
+
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                }
+            });
+        debugger;
+
     }
 </script>

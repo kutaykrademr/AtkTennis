@@ -29,9 +29,9 @@
                                         </div>
                                     </div>
                                 </div>
-                      
+
                                 <div class="input-group mb-3 col-md-6">
-                                    <input type="text" class="form-control" id="nickname"  placeholder="Rumuz" autocomplete="new-password">
+                                    <input type="text" class="form-control" id="nickname" placeholder="Rumuz" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <a style="cursor:pointer" onclick="getNickName()" class="fas fa-sync-alt"></a>
@@ -42,7 +42,7 @@
 
                             <div class="row">
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-12">
                                     <select id="memType" class="form-control">
                                         <option disabled="disabled" selected>Üyelik Türü</option>
 
@@ -51,25 +51,6 @@
 
                                     </select>
                                 </div>
-
-                                <div class="input-group mb-3 col-md-4">
-                                    <input type="text" class="form-control" id="refmem1" placeholder="Referans Üye 1" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3 col-md-4">
-                                    <input type="text" class="form-control" id="refmem2" placeholder="Referans Üye 2" autocomplete="new-password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
                             <div class="row">
@@ -103,7 +84,7 @@
 
                                 <div class="form-group col-md-6">
                                     <select id="webReservation" class="form-control">
-                                        <option  selected>Web Rezervasyon</option>
+                                        <option selected>Web Rezervasyon</option>
                                         <option value="1">Yapabilir</option>
                                         <option value="2">Yapamaz</option>
 
@@ -113,7 +94,7 @@
                             </div>
 
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="password"  placeholder="Şifre" autocomplete="new-password">
+                                <input type="text" class="form-control" id="password" placeholder="Şifre" autocomplete="new-password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <a style="cursor:pointer" onclick="getPassword()" class="fas fa-lock"></a>
@@ -127,6 +108,25 @@
 
 
 
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="refmem1" placeholder="Referans Üye 1" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3 col-md-6">
+                            <input type="text" class="form-control" id="refmem2" placeholder="Referans Üye 2" autocomplete="new-password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="input-group mb-3 col-md-6">
@@ -311,7 +311,7 @@
                                     </div>
 
                                     <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="nickname2"  placeholder="Rumuz" autocomplete="new-password">
+                                        <input type="text" class="form-control" id="nickname2" placeholder="Rumuz" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <a style="cursor:pointer" onclick="getNickName2()" class="fas fa-sync-alt"></a>
@@ -337,7 +337,7 @@
 
                                 <div class="row">
                                     <div class="input-group mb-3 col-md-6">
-                                        <input type="text" class="form-control" id="memberNum2" disabled  placeholder="Üye Numarası" autocomplete="new-password">
+                                        <input type="text" class="form-control" id="memberNum2" disabled placeholder="Üye Numarası" autocomplete="new-password">
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <a style="cursor:pointer" onclick="getMemberNumber2()" class="fas fa-sync-alt"></a>
@@ -383,7 +383,7 @@
 
 
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" disabled id="password2"  placeholder="Şifre" autocomplete="new-password">
+                                    <input type="text" class="form-control" disabled id="password2" placeholder="Şifre" autocomplete="new-password">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <a style="cursor:pointer" onclick="getPassword2()" class="fas fa-lock"></a>
@@ -425,7 +425,7 @@
             async: true,
             success: function (res) {
 
-                
+
 
                 var mem = [];
 
@@ -503,7 +503,7 @@
         partnerBirthDate: null,
         password2: null,
         companyId: null,
-        memType:null,
+        memType: null,
 
     };
 
@@ -542,7 +542,7 @@
         userObj.detailAddress = $("#detailAddress").val();
 
 
-   
+
 
         if ($('#part').is(":checked")) {
 
@@ -560,7 +560,7 @@
         }
 
 
-        if ($("#refmem2").val() == "" || $("#refmem1").val() == "" || $("#name").val() == "" || $("#username").val() == "" || $("#nickname").val() == "" || $("#memberNum").val() == "" || $("#memType option:selected").val() == "" || $("#startDate").val() == "" || $("#password").val() == "" || $("#webReservation option:selected").val() == "") {
+        if ($("#name").val() == "" || $("#username").val() == "" || $("#nickname").val() == "" || $("#memberNum").val() == "" || $("#memType option:selected").val() == "" || $("#startDate").val() == "" || $("#password").val() == "" || $("#webReservation option:selected").val() == "") {
 
             alert("Üye Zorunlu Alanları Boş Bırakılmış, Lütfen Eksiksiz Doldurunuz !!!");
         }
@@ -631,12 +631,12 @@
 
                     else
                         $.confirm({
-                            title: "Uyarı",
-                            content: "Kullanıcı Kaydedilirken Hata Oluştu.",
+                            title: "Bilgilendirme",
+                            content: "Kullanıcı Başarıyla Kaydedildi.",
                             buttons: {
                                 TAMAM: function () {
 
-
+                                    window.location.href = "NewRegister"
                                 }
                             }
                         });

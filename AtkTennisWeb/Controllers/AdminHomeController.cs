@@ -472,7 +472,7 @@ namespace AtkTennisWeb.Controllers
                     "&startDate=" + startDate + "&finishDate=" + finishDate + "&condition=" + condition + "&compId=" + companyId + "&identificationNumber=" + identificationNumber + "&webReservation=" + webReservation +
                     "&phoneExp=" + phoneExp + "&phone2=" + phone2 + "&detailAddress=" + detailAddress + "&username2=" + username2 + "&refmem1=" + refmem1 + "&memType=" + memType + "&refmem2=" + refmem2 + "&phone2Exp=" + phone2Exp + "&emailExp=" + emailExp + "&birthPlace=" + birthPlace + "&motherName=" + motherName + "&fatherName=" + fatherName + "&city=" + city + "&district=" + district + "&job=" + job + "&note=" + note + "&nickName=" + nickName + "&memberNumber=" + memberNumber + "&partnerBirthdate=" + partnerBirthdate + "&partnerIdNumber=" + partnerIdNumber + "&partnerPhone=" + partnerPhone + "&partnerName=" + partnerName + "&isPartner=" + isPartner));
 
-                if (model == null)
+                if (model.Id == null)
                     model = new AppIdentityUserDto();
             }
             catch (Exception)
@@ -518,7 +518,7 @@ namespace AtkTennisWeb.Controllers
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewReservationAdmin?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&CompanyId=" + res.CompanyId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&UserName=" + res.UserName + "&PrivRes=" + res.PrivRes));
+                model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/NewReservationAdmin?UserId=" + res.UserId + "&CourtId=" + res.CourtId + "&CompanyId=" + res.CompanyId + "&ResDate=" + res.ResDate + "&ResTime=" + res.ResTime + "&ResStartTime=" + res.ResStartTime + "&ResFinishTime=" + res.ResFinishTime + "&ResEvent=" + res.ResEvent + "&ResNowDate=" + res.ResNowDate + "&Price=" + res.Price + "&PriceIds=" + res.PriceIds + "&UserName=" + res.UserName + "&PrivRes=" + res.PrivRes + "&privRole=" + res.privRole ));
 
             }
 
@@ -625,7 +625,7 @@ namespace AtkTennisWeb.Controllers
             {
                 model = Helpers.Serializers.DeserializeJson<ReservationDto>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/UpdateResAdmin?id=" + id + "&startTime=" + startTime + "&finishTime=" + finishTime + "&time=" + time + "&cId=" + cId + "&drg=" + drg));
 
-                if (model.UserId != null)
+                if (model.NickName != null || model.CompanyId != null)
                 {
                     return Json(true);
                 }
@@ -1024,6 +1024,27 @@ namespace AtkTennisWeb.Controllers
                 if (model.memberLists.Count != 0 )
 
                     return Json(model);
+            }
+
+            catch (Exception)
+            {
+                return Json(new ReservationDto());
+            }
+
+            return Json(false);
+
+        }
+
+        public JsonResult DeleteDuesAll(string year, string type)
+        {
+            List<MemberDuesInfTableDto> model = new List<MemberDuesInfTableDto>();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<MemberDuesInfTableDto>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/DeleteDuesAll?year=" + year + "&type=" + type ));
+
+                if (model.Count != 0)
+
+                    return Json(true);
             }
 
             catch (Exception)

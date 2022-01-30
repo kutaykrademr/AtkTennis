@@ -7,130 +7,135 @@
     var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 }
 
-    <style>
-        button {
-            border: none !important;
-        }
-    </style>
+<style>
+    button {
+        border: none !important;
+    }
+</style>
 
 
-    <div class="content-wrapper">
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card" style="margin-top:15px">
-                            <div class="card-header d-flex justify-content-between">
-                                <div class="card-title">
-                                    <h3>Dolap Aidat  Borçları</h3>
-                                </div>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" style="margin-top:15px">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="card-title">
+                                <h3>Dolap Aidat  Borçları</h3>
                             </div>
-                            <div class="card-body">
-                                <table id="example2" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr style="text-align:center">
+                        </div>
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
 
-                                            <th>Üye Numarası</th>
-                                            <th>Adı</th>
-                                            <th>Borçlandırma Tarihi</th>
-                                            <th>Ücreti</th>
-                                            <th>Aidat Türü</th>
-                                            <th>Aidat Yılı</th>
-                                            <th>Açıklama</th>
-                                            <th>Borç Durumu</th>
+                                        <th>Üye Numarası</th>
+                                        <th>Adı</th>
+                                        <th>Borçlandırma Tarihi</th>
+                                        <th>Ücreti</th>
+                                        <th>Ödenen Ücret</th>
+                                        <th>Kalan Ücreti</th>
+                                        <th>Aidat Türü</th>
+                                        <th>Aidat Yılı</th>
+                                        <th>Açıklama</th>
+                                        <th>Borç Durumu</th>
 
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                        @foreach (var item in Model.memberDuesInfTables)
+                                    @foreach (var item in Model.memberDuesInfTables)
+                                    {
+                                        if (item.CompanyId == CompId)
                                         {
-                                            if (item.CompanyId == CompId)
+                                            if (item.PriceCondition == false && item.DuesInfType == true)
                                             {
-                                                if (item.PriceCondition == false && item.DuesInfType == true)
-                                                {
-                                                    <tr style="text-align:center" id="">
+                                                <tr style="text-align:center" id="">
 
-                                                        @{
-                                                            var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.MemberId);
-                                                            if (t != null)
-                                                            {
-                                                                <td>@t.MemberNumber</td>
-
-                                                            }
-                                                            else
-                                                            {
-                                                                <td>-</td>
-                                                            }
-
-                                                        }
-
-
-                                                        <td>@item.MemberFullName</td>
-                                                        <td>@item.Date</td>
-                                                        <td>@item.DuesPrice</td>
-                                                        <td>@item.DuesType</td>
-                                                        <td>@item.DuesYear</td>
-                                                        <td>@item.Explain</td>
-
-                                                        @if (@item.PriceCondition)
+                                                    @{
+                                                        var t = Model.memberLists.FirstOrDefault(x => x.UserId == item.MemberId);
+                                                        if (t != null)
                                                         {
-                                                            <td>Ödendi</td>
+                                                            <td>@t.MemberNumber</td>
+
                                                         }
                                                         else
                                                         {
-                                                            <td>Ödenmedi</td>
+                                                            <td>-</td>
                                                         }
 
+                                                    }
 
-                                                    </tr>
-                                                }
+
+                                                    <td>@item.MemberFullName</td>
+                                                    <td>@item.Date</td>
+                                                    <td>@item.DuesPrice</td>
+                                                    <td>@item.PaidPrice</td>
+                                                    <td>@item.RemainingPrice</td>
+
+                                                    <td>@item.DuesType</td>
+                                                    <td>@item.DuesYear</td>
+                                                    <td>@item.Explain</td>
+
+                                                    @if (@item.PriceCondition)
+                                                    {
+                                                        <td>Ödendi</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Ödenmedi</td>
+                                                    }
+
+
+                                                </tr>
                                             }
-
-
                                         }
 
 
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-
                 </div>
+
+
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
-    <script>
+<script>
 
-        $('body').loading({
+    $('body').loading({
 
-            theme: 'dark',
-            stoppable: false,
-            message: 'Yükleniyor..'
-        });
-
-        
-
-        $(document).ready(function () {
-
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "pageLength": 15,
-                buttons: [{ extend: 'pdf', title: 'Dolap Aidat Borçlu Listesi' }, { extend: 'print', title: 'Dolap Aidat Borçlu Listesi' }]
-            })
-                .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+        theme: 'dark',
+        stoppable: false,
+        message: 'Yükleniyor..'
+    });
 
 
-            setTimeout(function () { $("body").loading('destroy'); });
-        });
-    </script>
+
+    $(document).ready(function () {
+
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 15,
+            buttons: [{ extend: 'pdf', title: 'Dolap Aidat Borçlu Listesi' }, { extend: 'print', title: 'Dolap Aidat Borçlu Listesi' }]
+        })
+            .buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+
+
+        setTimeout(function () { $("body").loading('destroy'); });
+    });
+</script>

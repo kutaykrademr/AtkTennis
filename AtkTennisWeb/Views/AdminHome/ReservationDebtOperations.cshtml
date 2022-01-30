@@ -308,7 +308,7 @@
         var explain = $("#explain").val();
         var compId = $("#compId").text();
 
-        if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || remainingPrice == "" || receiptNo == "" || receiptDate == "" || explain == "") {
+        if (userId == "" || currentUserId == "" || price == "" || paidPrice == "" || remainingPrice == "" || receiptNo == "" || receiptDate == "" ) {
             alert("Lütfen Tüm Bilgileri Eksiksiz Doldurunuz !");
             setTimeout(function () { $("body").loading('destroy'); });
         }

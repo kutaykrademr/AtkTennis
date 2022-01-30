@@ -23,6 +23,30 @@
                             <div class="card-title">
                                 <h3>Aidat  Borçları</h3>
                             </div>
+                            @{
+                                var price = 0;
+                            }
+                            <div class="card-title">
+                                @foreach (var item in Model.memberDuesInfTables)
+                                {
+                                    if (item.CompanyId == CompId)
+                                    {
+                                        if (item.PriceCondition == false && item.DuesInfType == false)
+                                        {
+                                            price = price + item.RemainingPrice;
+                                        }
+                                    }
+                                }
+
+                                @{
+                                    var neWprice = String.Format("{0:n}", price);
+                                }
+                                <h3>
+                                    @neWprice
+                                </h3>
+                            </div>
+
+
                         </div>
                         <div class="card-body">
                             <table id="example2" class="table table-bordered table-hover">
@@ -33,10 +57,12 @@
                                         <th>Adı</th>
                                         <th>Borçlandırma Tarihi</th>
                                         <th>Ücreti</th>
-                                        <th>Aidat Türü</th>
+                                        <th>Ödenen Ücret</th>
+                                        <th>Kalan Ücret</th>
                                         <th>Aidat Yılı</th>
+                                        <th>Aidat Türü</th>
                                         <th>Açıklama</th>
-                                        <th>Borç Durumu</th>
+                  
 
 
                                     </tr>
@@ -69,18 +95,13 @@
                                                     <td>@item.MemberFullName</td>
                                                     <td>@item.Date</td>
                                                     <td>@item.DuesPrice</td>
-                                                    <td>@item.DuesType</td>
+                                                    <td>@item.PaidPrice
+                                                    <td>@item.RemainingPrice</td>
                                                     <td>@item.DuesYear</td>
+                                                    <td>@item.DuesType</td>
                                                     <td>@item.Explain</td>
 
-                                                    @if (@item.PriceCondition)
-                                                    {
-                                                        <td>Ödendi</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>Ödenmedi</td>
-                                                    }
+                                              
 
                                                 </tr>
                                             }
@@ -111,7 +132,7 @@
         message: 'Yükleniyor..'
     });
 
-   
+
 
     $(document).ready(function () {
 

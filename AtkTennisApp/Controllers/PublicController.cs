@@ -37,28 +37,6 @@ namespace AtkTennisApp.Controllers
 
         Context db = new Context();
 
-
-
-        //[HttpGet("GetMySettings", Name = "GetMySettings")]
-        //public MutualsConstantsDto GetMySettings(string companyId)
-        //{
-        //    MutualsConstantsDto model = new MutualsConstantsDto();
-
-        //    model.M1 = MutualConstants.M1;
-        //    model.M2 = MutualConstants.M2;
-        //    model.M3 = MutualConstants.M3;
-        //    model.M4 = MutualConstants.M4;
-        //    model.M5 = MutualConstants.M5;
-        //    model.M6 = MutualConstants.M6;
-        //    model.PhotoUrl = MutualConstants.PhotoUrl;
-        //    model.SunucuIp = MutualConstants.SunucuIp;
-        //    model.CompanyName = MutualConstants.CompanyName;
-        //    model.ExpirationDate = MutualConstants.ExpirationDate;
-        //    model.UserSettingsList = Mapping.AutoMapperBase._mapper.Map<List<Helpers.Dto.ViewDtos.UserSettingsDto>>(db.userSettings.ToList());
-
-        //    return model;
-        //}
-
         [HttpGet("GetUsers", Name = "GetUsers")]
         public IdentityPartialClass GetUsers()
 
@@ -1025,7 +1003,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("CancelRes", Name = "CancelRes")]
-        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons , string compId)
+        public JsonResult CancelRes(int id, string userId, bool procedure, string cancelReasons , string compId )
 
         {
             Reservation model = new Reservation();
@@ -1071,6 +1049,7 @@ namespace AtkTennisApp.Controllers
                     model2.UserId = model.UserId;
                     model2.CancelReasons = cancelReasons;
                     model2.CompanyId = compId;
+                    model2.RoleName = model.RoleName;
 
 
 

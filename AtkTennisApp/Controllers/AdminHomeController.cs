@@ -743,7 +743,7 @@ namespace AtkTennisApp.Controllers
             {
                 model.AppIdentityUsers = (List<AppIdentityUser>)userManager.Users.ToList();
                 model.AppIdentityRoles = (List<AppIdentityRole>)roleManager.Roles.ToList();
-                model.memberLists = db.memberLists.Where(x => x.Role == "ÜYE").ToList();
+                model.memberLists = db.memberLists.Where(x => x.Role.Contains("Üye")).ToList();
 
             }
             catch (Exception ex)
@@ -758,7 +758,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("NewReservationAdmin", Name = "NewReservationAdmin")]
-        public JsonResult NewReservationAdmin(string ResDate, string CompanyId, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName, bool PrivRes)
+        public JsonResult NewReservationAdmin(string ResDate, string CompanyId, string ResTime, string ResStartTime, string ResFinishTime, string ResEvent, string UserId, int CourtId, string ResNowDate, int Price, string PriceIds, string UserName, bool PrivRes, string privRole)
         {
 
             var model = new Reservation();
@@ -917,8 +917,14 @@ namespace AtkTennisApp.Controllers
                             res.ResNowDate = ResNowDate;
                             res.Price = Price;
                             res.PriceIds = PriceIds;
-                            res.RoleName = "Üye";
-                            //res.RoleName = mem.Role.Trim();
+                            if (privRole != null)
+                            {
+                                res.RoleName = privRole;
+                            }
+                            else
+                            {
+                                res.RoleName = "Üye";
+                            }
                             res.CompanyId = CompanyId;
 
                             if (db.memberLists.Where(x => x.UserId == UserId && x.CompanyId == CompanyId).FirstOrDefault().Role == "Sekreterya")
@@ -963,21 +969,29 @@ namespace AtkTennisApp.Controllers
                                 res.ResNowDate = ResNowDate;
                                 res.Price = Price;
                                 res.PriceIds = PriceIds;
-                                res.RoleName = "Üye";
-                                //res.RoleName = mem.Role.Trim();
+                                if (privRole != null)
+                                {
+                                    res.RoleName = privRole;
+                                }
+                                else
+                                {
+                                    res.RoleName = "Üye";
+                                }
+
                                 res.CompanyId = CompanyId;
 
-                                if (db.memberLists.Where(x=>x.UserId == UserId && x.CompanyId == CompanyId).FirstOrDefault().Role == "Sekreterya")
+
+                                if (db.memberLists.Where(x => x.UserId == UserId && x.CompanyId == CompanyId).FirstOrDefault().Role == "Sekreterya")
                                 {
                                     SecretaryOp sop = new SecretaryOp();
 
                                     sop.AdminId = UserId;
                                     sop.CompId = CompanyId;
                                     sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
-                                    sop.Text = mem.MemberNumber + mem.NickName + mem.FullName + " " +"Rezervasyon Eklendi.";
+                                    sop.Text = mem.MemberNumber + mem.NickName + mem.FullName + " " + "Rezervasyon Eklendi.";
 
                                     db.Add(sop);
-                                    
+
                                 }
 
                                 db.reservations.Add(res);
@@ -1304,6 +1318,7 @@ namespace AtkTennisApp.Controllers
                     model2.ResTime = model.ResTime;
                     model2.UserId = model.UserId;
                     model2.CancelReasons = cancelReasons;
+                    model2.RoleName = model.RoleName;
 
                     if (db.memberLists.Where(x => x.UserId == userId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
                     {
@@ -1324,7 +1339,7 @@ namespace AtkTennisApp.Controllers
 
                     return Json(model);
                 }
-               
+
                 else
                 {
                     return Json(false);
@@ -1378,7 +1393,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateResAdmin", Name = "UpdateResAdmin")]
-        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId , string drg)
+        public JsonResult UpdateResAdmin(int id, string startTime, string finishTime, string time, int cId, string drg)
 
         {
             Reservation model = new Reservation();
@@ -1395,7 +1410,7 @@ namespace AtkTennisApp.Controllers
                 var h = Convert.ToInt32(x[0]);
                 var m = Convert.ToInt32(x[1]);
                 var per = Convert.ToInt16(court.CourtTimePeriod);
-               
+
                 if (drg != "drg")
                 {
                     if (per == 15)
@@ -1463,7 +1478,7 @@ namespace AtkTennisApp.Controllers
                 }
                 else
                 {
-              
+
                     h = h + 1;
 
                     if (h < 10)
@@ -1474,9 +1489,9 @@ namespace AtkTennisApp.Controllers
                         }
                         else
                         {
-                            finishTime = "0" + h + ":" + m ;
+                            finishTime = "0" + h + ":" + m;
                         }
-                        
+
                     }
                     else
                     {
@@ -1488,25 +1503,25 @@ namespace AtkTennisApp.Controllers
                         {
                             finishTime = h + ":" + m;
                         }
-                       
+
                     }
                 }
 
                 sop.Text = model.NickName + model.ResStartTime + model.ResFinishTime + " " + "Rezervasyon Güncellendi.";
-              
+
                 model.Court = court;
                 model.ResStartTime = startTime;
                 model.ResFinishTime = finishTime;
                 model.ResDate = time;
-             
+
                 if (db.memberLists.Where(x => x.UserId == model.doResUserId && x.CompanyId == model.CompanyId).FirstOrDefault().Role == "Sekreterya")
                 {
-                    
+
 
                     sop.AdminId = model.doResUserId;
                     sop.CompId = model.CompanyId;
                     sop.Date = DateTime.Now.ToString("dd/MM/yyyy");
-              
+
                     db.Add(sop);
 
                 }
@@ -1700,13 +1715,13 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddPrice", Name = "AddPrice")]
-        public JsonResult AddPrice(string id, int money ,string adminId , string compId)
+        public JsonResult AddPrice(string id, int money, string adminId, string compId)
         {
             MemberList model = new MemberList();
             BalanceOpModel model2 = new BalanceOpModel();
 
             model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
-            
+
             if (model != null)
             {
                 try
@@ -1731,7 +1746,7 @@ namespace AtkTennisApp.Controllers
                     }
                     else
                     {
-                        model2.Price = model2.Price +  Convert.ToString(money);
+                        model2.Price = model2.Price + Convert.ToString(money);
                     }
 
                     db.Add(model2);
@@ -1843,7 +1858,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("AddCabinet", Name = "AddCabinet")]
-        public JsonResult AddCabinet(int price, string code, string who, string type, string userId , string compId)
+        public JsonResult AddCabinet(int price, string code, string who, string type, string userId, string compId)
         {
             CabinetandDuesTable model = new CabinetandDuesTable();
 
@@ -2575,6 +2590,12 @@ namespace AtkTennisApp.Controllers
 
                     for (int i = 0; i < model.memberLists.Count; i++)
                     {
+                        //var x = model.memberLists[i].BirthDate.Split("/")[2];
+                        //var y = model.memberLists[i].StartDate.Split("/")[2];
+
+                        //var ageStatus = Convert.ToInt32(DateTime.Now.Year) - Convert.ToInt32(x);
+                        //var memberStatus = Convert.ToInt32(DateTime.Now.Year) - Convert.ToInt32(y);
+
                         if (duesType == "Yıllık Eş Aidat Ücreti")
                         {
                             if (model.memberLists[i].isPartner == true && model.memberLists[i].whoPartner == false && model.memberLists[i].ActPas == true)
@@ -2594,7 +2615,6 @@ namespace AtkTennisApp.Controllers
 
                             }
                         }
-
                         else if (duesType == "Yıllık Aidat Ücreti")
                         {
 
@@ -2609,8 +2629,21 @@ namespace AtkTennisApp.Controllers
                                 model.memberDuesInfTable.DuesType = duesType;
                                 model.memberDuesInfTable.DuesPrice = duesPrice;
                                 model.memberDuesInfTable.RemainingPrice = duesPrice;
+
+                                //var check = db.memberDuesTypes.Where(x => x.Age == ageStatus && x.Year == memberStatus && x.CompanyId == compId).FirstOrDefault();
+
+                                //if (check != null)
+                                //{
+                                //    var newPrc = duesPrice - (duesPrice * check.Discount) / 100;
+
+                                //    model.memberDuesInfTable.DuesPrice = newPrc;
+                                //    model.memberDuesInfTable.RemainingPrice = newPrc;
+                                //}
+
+
                                 model.memberDuesInfTable.DuesYear = duesYear;
                                 model.memberDuesInfTable.Explain = explain;
+
 
                                 db.Add(model.memberDuesInfTable);
 
@@ -2729,7 +2762,7 @@ namespace AtkTennisApp.Controllers
 
                 else if (duesType == "Geçici Üye Ücreti")
                 {
-                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true )
+                    if (model.memberLists[0].whoPartner == false && model.memberLists[0].ActPas == true)
                     {
 
                         model.memberDuesInfTable = new MemberDuesInfTable();
@@ -3118,7 +3151,7 @@ namespace AtkTennisApp.Controllers
                 {
                     if (db.memberLists.Where(x => x.UserId == doUserId && x.CompanyId == compId).FirstOrDefault().Role == "Sekreterya")
                     {
-                      
+
 
                         sop.AdminId = doUserId;
                         sop.CompId = compId;
@@ -3309,8 +3342,8 @@ namespace AtkTennisApp.Controllers
             {
 
                 var resList = idLists.Split(",");
-                
-                
+
+
 
                 for (int i = 0; i < resList.Count(); i++)
                 {
@@ -3345,7 +3378,42 @@ namespace AtkTennisApp.Controllers
 
 
         }
+        [HttpGet("DeleteDuesAll", Name = "DeleteDuesAll")]
+        public JsonResult DeleteDuesAll(string year, string type)
+        {
+            List<MemberDuesInfTable> model = new List<MemberDuesInfTable>();
 
+            model = db.memberDuesInfTables.Where(x => x.DuesYear == Convert.ToInt32(year) && x.DuesType == type).ToList();
+
+            try
+            {
+                if (model != null)
+                {
+                    for (int i = 0; i < model.Count; i++)
+                    {
+                        db.Remove(model[i]);
+                    }
+
+                    db.SaveChanges();
+
+                    return Json(model);
+                }
+
+                else
+                {
+                    return Json(false);
+                }
+             
+            }
+
+            catch (Exception ex)
+            {
+                Mutuals.monitizer.AddException(ex);
+
+            }
+
+            return Json(model);
+        }
 
         [HttpGet("GetPaidMultiOp", Name = "GetPaidMultiOp")]
         public AllGetPaidLogs GetPaidMultiOp(string doUserId, int paymentType, int receiptNo, string idLists, string idLists2, string receiptDate, string explain, string compId)

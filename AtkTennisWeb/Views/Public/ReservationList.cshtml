@@ -4,38 +4,22 @@
 @inject IHttpContextAccessor HttpContextAccessor;
 @{
     Layout = "_MemberLayout";
-}
 
-
-@{
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var nickname = HttpContextAccessor.HttpContext.Session.GetString("NickName");
     var username = HttpContextAccessor.HttpContext.Session.GetString("UserName");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
     var compId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
-}
-
-@{
+    var roleNm = HttpContextAccessor.HttpContext.Session.GetString("Role");
     var totalPrice = 0;
     var totPrice = 0;
-
-
-
     var newModel = Model.reservations.Where(x => x.UserId == userId && x.CompanyId == compId).OrderByDescending(x => x.ResId).ToList();
     var newResCancelModel = Model.reservationCancels.Where(x => x.UserId == userId && x.CompanyId == compId).OrderByDescending(x => x.ResId).ToList();
-
     var newCount = newModel.Count();
-
     var yx = Model.reservations.Where(x => x.UserId == userId && x.CompanyId == compId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
-
     var dateCancel = Model.reservationCancels.Where(x => x.UserId == userId && x.CompanyId == compId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
-
     yx.AddRange(dateCancel);
-
-
     var date = yx.Distinct().OrderByDescending(x => x).ToList();
-
-
     for (int i = 0; i < newResCancelModel.Count; i++)
     {
         if (newResCancelModel[i].PriceInf == false && newResCancelModel[i].Procedure == false)
@@ -44,7 +28,6 @@
             totPrice = firstPrice + totPrice;
         }
     }
-
     for (int i = 0; i < newModel.Count; i++)
     {
         if (newModel[i].PriceInf == false)
@@ -54,18 +37,16 @@
         }
 
     }
-
     var generalTotalPrice = totPrice + totalPrice;
-
-    var debtCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false && x.CompanyId == compId).Count());
-    var debtCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false && x.CompanyId == compId).Count());
-    var debtNotCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true && x.CompanyId == compId).Count());
-    var debtNotCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == true && x.Procedure == true && x.CompanyId == compId).Count());
+    var debtCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == false && x.CompanyId == compId && x.RoleName == roleNm).Count());
+    var debtNotCount = Convert.ToInt32(Model.reservations.Where(x => x.UserId == userId && x.PriceInf == true && x.CompanyId == compId && x.RoleName == roleNm).Count());
+    var debtCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == false && x.Procedure == false && x.CompanyId == compId && x.RoleName == roleNm).Count());
+    var debtNotCountCancel = Convert.ToInt32(Model.reservationCancels.Where(x => x.UserId == userId && x.PriceInf == true && x.Procedure == true && x.CompanyId == compId && x.RoleName == roleNm).Count());
     var totalDebt = debtCount + debtCountCancel;
     var totalDebtNotCount = debtNotCount + debtNotCountCancel;
     var cancelRes = Model.reservationCancels.Where(x => x.UserId == userId && x.CancelRes == true && x.CompanyId == compId).Count();
-
 }
+
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -211,7 +192,7 @@
                                 {
                                     @foreach (var item in newModel)
                                     {
-                                        if (item.ResDate.Split("-")[0] == date[i])
+                                        if (item.ResDate.Split("-")[0] == date[i] && item.RoleName == roleNm)
                                         {
                                             <tr style="text-align:center" id="">
                                                 <td>@item.ResDate</td>
@@ -246,14 +227,11 @@
                                             </tr>
                                         }
 
-
                                     }
-
-
 
                                     @foreach (var item2 in newResCancelModel)
                                     {
-                                        if (item2.ResDate.Split("-")[0] == date[i])
+                                        if (item2.ResDate.Split("-")[0] == date[i] && item2.RoleName == roleNm)
                                         {
                                             <tr style="text-align:center" id="">
                                                 <td>@item2.ResDate</td>
@@ -321,12 +299,11 @@
 
                                     }
                                 }
-
                                 else if (newCount > 0 && newResCancelModel.Count() <= 0)
                                 {
                                     @foreach (var item in newModel)
                                     {
-                                        if (item.ResDate.Split("-")[0] == date[i])
+                                        if (item.ResDate.Split("-")[0] == date[i] && item.RoleName == roleNm)
                                         {
                                             <tr style="text-align:center" id="">
                                                 <td>@item.ResDate</td>
@@ -359,12 +336,11 @@
                                         }
                                     }
                                 }
-
                                 else if (newCount <= 0 && newResCancelModel.Count() > 0)
                                 {
                                     @foreach (var item2 in newResCancelModel)
                                     {
-                                        if (item2.ResDate.Split("-")[0] == date[i])
+                                        if (item2.ResDate.Split("-")[0] == date[i] && item2.RoleName == roleNm)
                                         {
                                             <tr style="text-align:center" id="">
                                                 <td>@item2.ResDate</td>
@@ -436,7 +412,6 @@
                                 }
                                 else
                                 {
-
                                 }
 
                             </tbody>
@@ -447,7 +422,6 @@
 
         </div>
     </section>
-    <!-- /.content-wrapper -->
 </div>
 
 

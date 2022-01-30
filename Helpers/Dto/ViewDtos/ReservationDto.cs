@@ -28,6 +28,7 @@ namespace Helpers.Dto.ViewDtos
         public string RoleName { get; set; }
         public string RoleId { get; set; }
         public string CompanyId { get; set; }
+        public string privRole { get; set; }
 
 
 

@@ -5,20 +5,13 @@
 
 @{
     Layout = "_MemberLayout";
-}
-
-@{
     var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
     var nickname = HttpContextAccessor.HttpContext.Session.GetString("NickName");
     var username = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+    var Role = HttpContextAccessor.HttpContext.Session.GetString("Role");
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-}
-
-@{
     var totalPrice = 0;
-
-    var newModel = Model.reservations.Where(x => x.UserId == userId).OrderByDescending(x => x.ResId).ToList();
-
+    var newModel = Model.reservations.Where(x => x.UserId == userId && x.RoleName == Role).OrderByDescending(x => x.ResId).ToList();
     var date = Model.reservations.Where(x => x.UserId == userId).ToList().OrderByDescending(x => x.ResDate).Select(x => x.ResDate.Split("-")[0]).Distinct().ToList();
 
 
@@ -148,19 +141,14 @@
                                                     <td>Aktif</td>
                                                     <td>
 
-
-
                                                         @if (resDate >= currentToday)
                                                         {
                                                             <button id="@item.ResId" style="color:white; background-color:#17a2b8; border-color:#17a2b8" class="btn btn-warning" onclick="cancelRes(this.id)"><i style="margin-right:10px" class="fas fa-check"></i>İptal Et</button>
                                                         }
 
-
                                                     </td>
                                                 </tr>
                                             }
-
-
                                         }
                                     }
                                 }
@@ -234,7 +222,7 @@
                                     button: "Tamam",
                                 }).then((value) => {
 
-                                    window.location.href = "Reservation?date=" + $('#timeNow').val();
+                                    location.reload();
 
                                 });
 
