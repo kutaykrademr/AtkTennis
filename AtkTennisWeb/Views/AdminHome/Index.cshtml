@@ -1321,7 +1321,7 @@
                                 NewRow += '<li style="padding: 0.1rem 1.25rem;" class="list-group-item"><div class="d-flex">';
 
                                 if (res.reservations[a].userId != null) {
-                                  
+
 
                                     for (var x = 0; x < res.memberLists.length; x++) {
                                         if (res.reservations[a].userId == res.memberLists[x].userId) {
@@ -1331,7 +1331,7 @@
                                     }
                                 }
                                 else {
-                                  
+
 
                                     for (var c = 0; c < res.courtScales.length; c++) {
                                         if (res.reservations[a].nickName == res.courtScales[c].code && res.reservations[a].companyId == res.courtScales[c].companyId) {
@@ -2778,8 +2778,17 @@
                             row += '<td>' + res.courtPriceLists[i].courtPrice + "₺" + '</td>';
                             row += '<td>';
                             row += '<div class="custom-control custom-checkbox" id="checkPriceTables">';
-                            row += '<input class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()" value="' + res.courtPriceLists[i].courtPriceListId + '" type="checkbox" name="' + res.courtPriceLists[i].courtPrice + '" id="cb_' + res.courtPriceLists[i].courtPriceListId + '" checked="checked">';
-                            row += '<label for="cb_' + res.courtPriceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+
+                            if (res.courtPriceLists[i].priceType == "1") {
+                                row += '<input disabled class="custom-control-input custom-control-input-danger custom-control-input-outline" value="' + res.courtPriceLists[i].courtPriceListId + '" type="checkbox" name="' + res.courtPriceLists[i].courtPrice + '" id="cb_' + res.courtPriceLists[i].courtPriceListId + '" checked="checked">';
+                                row += '<label for="cb_' + res.courtPriceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+                            }
+
+                            else {
+                                row += '<input disabled class="custom-control-input custom-control-input-danger custom-control-input-outline" onclick="getPrice()" value="' + res.courtPriceLists[i].courtPriceListId + '" type="checkbox" name="' + res.courtPriceLists[i].courtPrice + '" id="cb_' + res.courtPriceLists[i].courtPriceListId + '" checked="checked">';
+                                row += '<label for="cb_' + res.courtPriceLists[i].courtPriceListId + '" class="custom-control-label"></label>';
+                            }
+
                             row += '</div>';
                             row += '</td>';
                             row += '</tr>';
@@ -2966,7 +2975,7 @@
 
             swal("Kullanıcının birden fazla rolü var ! Seçiniz !", {
                 buttons: {
-                   
+
                     catch: {
                         text: usrInfList[0],
                         value: usrInfList[0],
@@ -2977,7 +2986,7 @@
                         value: usrInfList[1],
                     },
 
-                 
+
 
                     cancel: "İptal",
                 },
@@ -2996,7 +3005,7 @@
                             xy();
                             break;
 
-                    
+
 
                         default:
                             swal("Seçim Yapılmadı");
@@ -3016,7 +3025,7 @@
 
                         if (res == true) {
 
-                          
+
                             $('#rsvModal').modal('toggle');
 
                             swal({
@@ -3030,7 +3039,7 @@
 
                                 getResTable($("#timeNow").val());
                                 $('#priceModal').modal('toggle');
-                               
+
 
                             });
                         }
@@ -3040,7 +3049,7 @@
 
                             $('#rsvModal').modal('toggle');
                             $('#priceModal').modal('toggle');
-                          
+
 
                             swal({
                                 title: "Rezervasyon Onaylanmadı",
@@ -3048,7 +3057,7 @@
                                 icon: "error",
                                 button: "Tamam",
                             }).then((value) => {
-                                
+
 
                             });
                         }
@@ -3078,7 +3087,7 @@
 
                         if (res == true) {
 
-                          
+
                             $('#rsvModal').modal('toggle');
 
                             swal({
