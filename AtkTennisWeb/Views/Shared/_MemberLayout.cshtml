@@ -31,13 +31,15 @@
     @{
         var fullname = HttpContextAccessor.HttpContext.Session.GetString("FullName");
         var userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-        var roleName = HttpContextAccessor.HttpContext.Session.GetString("Role");
+        var roleName = HttpContextAccessor.HttpContext.Session.GetString("Role");    
+        var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
 
         DateTime today = DateTime.Now;
         var date = today.ToString("yyyy-MM-dd");
     }
 
     <body class="hold-transition sidebar-mini layout-fixed">
+
 
         <style>
             .ui-autocomplete {
@@ -61,6 +63,10 @@
                 border-width: 1px !important;
             }
         </style>
+
+        <h2 style="display:none" id="compId">@CompId</h2>
+        <h2 style="display:none" id="userId">@userId</h2>
+        <h2 style="display:none" id="fullnm">@fullname</h2>
 
         <div class="wrapper">
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -323,7 +329,8 @@
                                     <div class="input-group mb-3">
                                         <input type="password" class="form-control" id="newPassword" placeholder="Yeni Şifre" autocomplete="new-password">
                                         <div class="input-group-append">
-                                            <div class="input-group-text">HttpContextAccessor.HttpContext.Session.GetString("UserId");
+                                            <div class="input-group-text">
+                                                HttpContextAccessor.HttpContext.Session.GetString("UserId");
                                                 <span class="fas fa-lock"></span>
                                             </div>
                                         </div>
@@ -351,16 +358,136 @@
                 </div>
             </div>
 
+
+            <div class="modal fade" id="privacy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-body register-card-body">
+                                    <p class="login-box-msg">Gizlilik Politikası</p>
+                                    <p class="login-box-msg">Lütfen Okuyup Onaylayınız...</p>
+                                    <p class="login-box-msg">Aşağı Kaydırınız.</p>
+
+                                    <p>
+
+                                        Yağmur yağıyordu. Adı yağmur ormanları zaten. Hamakta yatıp onu seyretmek keyifliydi, her gün olsa bile. Bunu yaparken kahve içmekse harika. Tek kötülüğü bitene kadar elinde tutmalıydın. Bittikten sonra yan yana yatılabiliyordu cam kavanozla. Kahve fincanı olarak kullandığım bir kavanozdu bu ama bazen çorba da koyuyordum içine ve bazen siyah fasulye. Hamakta yemek güzel oluyordu. Bitince, içinde ne varsa artık, kolunu dışarı uzatıp yağmurda yıkayabiliyordun. Deterjan kullanmadığım için temiz oluyordu. Sadece bazen biraz yağ kalıyordu galiba. Kahvenin üstünde sırt üstü yüzüyordu yağ… Bazen ama…
+
+                                        Yağmur bitince boa yılanı gölüne gidiyorduk yüzmek için. Göl filan değildi aslında. Sadece üç metreye dört metre, boyu aşmayan bir suydu. İsmini de ben koymuştum zaten. İki gün önce yüzmeye gittiğimizde bizden önce bir boa yılanı çıkmıştı içinden. Hayatımda gördüğüm en büyük yılandı. Çok iddialı değilim aslında çok yılan gördüğüm filan yok. Üç-beş defadır en fazla. Yavaşça süzüldü önce suda, sonra yaprakların arasında. Biraz bekleyip suyun yanına gittik. Su çok berraktı ve başka bir yılan yoktu. Dedim ya çok berrak oluyordu su, yanılmamıza imkan yoktu. Yüzdük yine, bir iki kulaç ama yağmurun içinde olmak bu, istersen içebiliyorsun da…
+
+                                        Bir kadın gerilla anlatmıştı. Brezilya’da değil başka bir ülkede. Bir yılan, gerillaya aşık olmuştu. Beline kadar inen saçları vardı kadın gerillanın. Bir gün suya gittiklerinde gördüler, yılan onları izliyordu. Sonra her gün gittiklerinde onu su başında bekliyor buluyorlardı. Hep onu seyrediyordu yılan. Belki saçları yüzündendi diyordu anlatan gerilla, beline kadar çok güzel saçları vardı. Sonra peşlerinden gelmeye başladı yılan. Durduklarında o da duruyordu, başını dikip ona bakıyordu. Güldüler gerillalar, aldırmadılar yılana. Pek de rahatsız olmadılar. Dağda pek yabancı gelmez doğa insana. Bir sabah anlatan gerilla gördü. Yılan aşığının yanında uzanmış yatıyordu. Saçlarına sarılmış gibiydi. Uzun saçlarından galiba dedim anlatan gerillaya. Güzel bir kadındı dedi. Fakat bu sefer ürktüler gerçekten, hele aşık olunan gerilla hiç hoşlanmadı bundan. Uzakta başka bir birliğe gitti. Sonra yılan her gün yine onları su başında bekliyordu. Onu göremeyince arkasını dönüp gidiyordu. Çok hüzünlü bakıyordu diye anlattı gerilla. Bir süre sonra hiç görünmedi. Belki peşinden aramaya gitmiştir dedim. Biz de öyle düşündük dedi gerilla, saçları çok uzun değildi…
+
+                                        Boa yılanı gölünden çıkınca, yani yağmurdan, bir kulübenin önünde toplanmış gençlerin yanına gidiyorduk. 15-20 kişi birlikte perküsyon çalıyorlardı. Yani ağaç gövdeleri, iki uzun tahta ağaç gövdelerine dayanmış, yan yana ve bambular biraz daha tok sesli onlar…
+
+                                        Sonra biri rom getiriyordu şeker kamışından. Kavanozu uzatıyordum romda kahve tadı oluyordu… Bazen ama…
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer" id="updateModels">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="checkPrivacy">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Okudum, Onaylıyorum.
+                                </label>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" onclick="savePrivacy()">Tamam</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <aside class="control-sidebar control-sidebar-dark">
             </aside>
 
         </div>
 
         <script>
+
+            $(document).ready(function () {
+
+                debugger;
+
+                var İd = $('#userId').text();
+
+                try {
+
+                    $.ajax({
+                        type: "Get",
+                        url: '../Public/GetMem',
+                        cache: false,
+                        data: { "id": $('#userId').text() },
+                        dataType: "json",
+                        async: true,
+                        success: function (res) {
+
+                            if (res.seenPrivacy == 0) {
+                                $('#privacy').modal({ backdrop: 'static', keyboard: false });
+                                $('#privacy').modal('toggle');
+                            }
+
+                        },
+                        error: function (textStatus, errorThrown) {
+                            console.log(JSON.stringify(textStatus));
+                            console.log(textStatus);
+                        }
+                    });
+                } catch (e) {
+                    console.log(e.message);
+                }
+
+            });
+
+            function savePrivacy() {
+
+                var priv = $('#checkPrivacy').is(':checked')
+
+                if (priv == false) {
+                    swal({
+                        text: "Lütfen Okudum Onaylıyorum Kutusunu İşaretleyin !",
+                        icon: "warning",
+                        button: "Tamam",
+                    })
+                }
+
+                else {
+                    try {
+                        $.ajax({
+                            type: "Get",
+                            url: '../Public/ChangeCurrentUserPass',
+                            cache: false,
+                            data: { "id": $('#userId').text(), "checkPrivacy": 1 },
+                            dataType: "json",
+                            async: true,
+                            success: function (res) {
+
+                                if (res) {
+                                    swal({
+                                        text: "Sn." + $('#fullnm').text() + "  " + "Hoşgeldiniz",
+                                        icon: "success",
+                                        button: "Tamam",
+                                    })
+                                    $('#privacy').modal('toggle');
+                                }
+
+                            },
+                            error: function (textStatus, errorThrown) {
+                                console.log(JSON.stringify(textStatus));
+                                console.log(textStatus);
+                            }
+                        });
+                    } catch (e) {
+                        console.log(e.message);
+                    }
+                }
+            }
+
+
+
             $.widget.bridge('uibutton', $.ui.button)
-
-
-
 
             function changeCurrentPassModal(id) {
 

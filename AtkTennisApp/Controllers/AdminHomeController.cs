@@ -173,6 +173,8 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
+      
+
         [HttpGet("GetUserSchoolList", Name = "GetUserSchoolList")]
         public JsonResult GetUserSchoolList()
         {
@@ -1552,96 +1554,100 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("UpdateMemberList", Name = "UpdateMemberList")]
-        public async Task<JsonResult> UpdateMemberList(string id, string detailAddress, string actPass, string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
+        public async Task<JsonResult> UpdateMemberList(string id, int checkPrivacy , string detailAddress, string actPass, string checkpass, string name, string username, string startDate, string finishDate, string condition, string identificationNumber, string webReservation, string phoneExp, string phone2, string phone2Exp, string email, string emailExp, string birthPlace, string motherName, string fatherName, string city, string district, string job, string note, string phone, string password, string birthdate, string gender, string role)
         {
             AppIdentityUser model = new AppIdentityUser();
             MemberList model2 = new MemberList();
 
-
             try
             {
-
-
                 model = await userManager.FindByIdAsync(id);
                 model2 = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
 
-
-                if (model != null)
+                if (checkPrivacy == 1 && model2 != null)
                 {
-
-                    model.UserName = username;
-                    model.Email = email;
-                    model.FullName = name;
-                    model.BirthDate = birthdate;
-                    model.PhoneNumber = phone;
-
+                    model2.SeenPrivacy = 1;
+                    db.Update(model2);
+                    db.SaveChanges();
                 }
-
-                if (model2 != null)
+                else
                 {
-                    model2.BirthDate = birthdate;
-                    model2.BirthPlace = birthPlace;
-                    model2.City = city;
-                    model2.Condition = condition;
-                    model2.District = district;
-                    model2.Email = email;
-                    model2.ActPas = false;
-                    if (actPass == "true")
+                   
+                    if (model != null)
                     {
-                        model2.ActPas = true;
-                    }
-                    model2.EmailExp = emailExp;
-                    model2.FatherName = fatherName;
-                    model2.FinishDate = finishDate;
-                    model2.FullName = name;
-                    model2.Gender = gender;
-                    model2.IdentityNumber = identificationNumber;
-                    model2.Job = job;
-                    model2.MotherName = motherName;
-                    model2.Note = note;
-                    model2.Password = password;
-                    model2.Phone = phone;
-                    model2.Phone2 = phone2;
-                    model2.Phone2Exp = phone2Exp;
-                    model2.PhoneExp = phoneExp;
-                    model2.StartDate = startDate;
-                    model2.UserName = username;
-                    model2.WebReservation = webReservation;
-                    model2.Role = role.Remove(role.Length - 1);
-                    model2.DetailAddress = detailAddress;
-                }
 
+                        model.UserName = username;
+                        model.Email = email;
+                        model.FullName = name;
+                        model.BirthDate = birthdate;
+                        model.PhoneNumber = phone;
 
-                //Ağlama 
-
-                var user = await userManager.FindByIdAsync(id);
-                var role_to_remove = await userManager.GetRolesAsync(user);
-                var result = await userManager.RemoveFromRoleAsync(user, role_to_remove[0]);
-                var newRoles = role.Split(",");
-                for (int i = 0; i < newRoles.Length; i++)
-                {
-                    if (newRoles[i] != "")
-                    {
-                        var newRole = await userManager.AddToRoleAsync(user, newRoles[i]);
                     }
 
-                }
-
-
-                if (model2.Password != checkpass)
-                {
-                    var res = await userManager.ChangePasswordAsync(user, checkpass, password);
-                    if (res.Succeeded == false)
+                    if (model2 != null)
                     {
-                        return Json(false);
+                        model2.BirthDate = birthdate;
+                        model2.BirthPlace = birthPlace;
+                        model2.City = city;
+                        model2.Condition = condition;
+                        model2.District = district;
+                        model2.Email = email;
+                        model2.ActPas = false;
+                        if (actPass == "true")
+                        {
+                            model2.ActPas = true;
+                        }
+                        model2.EmailExp = emailExp;
+                        model2.FatherName = fatherName;
+                        model2.FinishDate = finishDate;
+                        model2.FullName = name;
+                        model2.Gender = gender;
+                        model2.IdentityNumber = identificationNumber;
+                        model2.Job = job;
+                        model2.MotherName = motherName;
+                        model2.Note = note;
+                        model2.Password = password;
+                        model2.Phone = phone;
+                        model2.Phone2 = phone2;
+                        model2.Phone2Exp = phone2Exp;
+                        model2.PhoneExp = phoneExp;
+                        model2.StartDate = startDate;
+                        model2.UserName = username;
+                        model2.WebReservation = webReservation;
+                        model2.Role = role.Remove(role.Length - 1);
+                        model2.DetailAddress = detailAddress;
                     }
-                    await signInManager.RefreshSignInAsync(user);
+
+                    var user = await userManager.FindByIdAsync(id);
+                    var role_to_remove = await userManager.GetRolesAsync(user);
+                    var result = await userManager.RemoveFromRoleAsync(user, role_to_remove[0]);
+                    var newRoles = role.Split(",");
+
+                    for (int i = 0; i < newRoles.Length; i++)
+                    {
+                        if (newRoles[i] != "")
+                        {
+                            var newRole = await userManager.AddToRoleAsync(user, newRoles[i]);
+                        }
+
+                    }
+
+                    if (model2.Password != checkpass)
+                    {
+                        var res = await userManager.ChangePasswordAsync(user, checkpass, password);
+                        if (res.Succeeded == false)
+                        {
+                            return Json(false);
+                        }
+                        await signInManager.RefreshSignInAsync(user);
+                    }
+
+                    var result2 = userManager.UpdateAsync(model).Result;
+
+                    db.Update(model2);
+                    db.SaveChanges();
+
                 }
-
-                var result2 = userManager.UpdateAsync(model).Result;
-
-                db.Update(model2);
-                db.SaveChanges();
 
 
             }
@@ -1731,7 +1737,6 @@ namespace AtkTennisApp.Controllers
 
                     model.Price = newPrice;
 
-
                     db.Update(model);
 
                     model2.Date = Convert.ToString(DateTime.Now);
@@ -1750,7 +1755,6 @@ namespace AtkTennisApp.Controllers
                     }
 
                     db.Add(model2);
-
                     db.SaveChanges();
                 }
 

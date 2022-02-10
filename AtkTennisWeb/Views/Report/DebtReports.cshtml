@@ -187,8 +187,6 @@
                 row += '<th><i class="fas fa-search"></i></th>';
                 row += '</tr>';
                 row += '</thead>';
-
-
                 row += '<tbody>';
                 for (var i = 0; i < res.length; i++) {
 
@@ -354,7 +352,6 @@
                 row += '</thead>';
                 row += '<tbody>';
 
-
                 for (var i = 0; i < res.length; i++) {
 
                     if (res[i].duesInfType == true) {
@@ -392,11 +389,10 @@
                 row += '</div>';
                 row += '</div>';
 
-
                 $("#appendResInf").append(row);
 
-
                 row = "";
+
                 $("#appendResInf2").empty();
                 $("#appendResInf3").empty();
 
@@ -418,7 +414,6 @@
                 row += '</tr>';
                 row += '</thead>';
                 row += '<tbody>';
-
 
                 for (var i = 0; i < res.length; i++) {
 
@@ -443,27 +438,20 @@
                         row += '<td style="font-weight:bold">' + res[i].remainingPrice + "₺" + '</td>';
                         row += '<td >' + "Ödenmedi" + '</td>';
                         row += '<td>' + res[i].explain + '</td>';
-
-
-
                         row += '</tr>';
                     }
-
                 }
-                row += '</tbody>';
 
+                row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
                 row += '</div>';
-
 
                 $("#appendResInf2").append(row);
 
                 setTimeout(function () { $("body").loading('destroy'); });
 
-
                 myfunction();
-
             },
 
             error: function (textStatus, errorThrown) {
@@ -495,7 +483,6 @@
                 row = "";
                 $("#appendResInf").empty();
 
-
                 row += '<div i class="card-body">';
                 row += '<h4>Ödeme Alınanlar</h4>';
                 row += '<table id="resList" class="table table-bordered table-hover">';
@@ -504,6 +491,7 @@
                 row += '<th>#</th>';
                 row += '<th>Üye Numarası</th>';
                 row += '<th>Üye Adı</th>';
+                row += '<th>Üye Rolü</th>';
                 row += '<th>Türü</th>';
                 row += '<th>Rezervasyon Tarihi</th>';
                 row += '<th>Ücreti</th>';
@@ -539,9 +527,8 @@
                             row += '<td style="background-color:#EF5350">' + res.duesInf[i].paymentLog.refId + '</td>';
                         }
 
-                      
-
                         row += '<td>' + memberInf[0].memberNumber + '</td>';
+                        row += '<td>' + memberInf[0].fullName + '</td>';
                         row += '<td>' + memberInf[0].fullName + '</td>';
                         row += '<td>' + "Rezervasyon Ödemesi" + '</td>';
                         row += '<td>' + res.duesInf[i].res.resDate + '</td>';
@@ -607,6 +594,7 @@
                 row += '<th>#</th>';
                 row += '<th>Üye Numarası</th>';
                 row += '<th>Üye Adı</th>';
+                row += '<th>Üye Rolü</th>';
                 row += '<th>Kort Adı</th>';
                 row += '<th>Rezervasyon Tarihi</th>';
                 row += '<th>Rezervasyon Saati</th>';
@@ -615,9 +603,6 @@
                 row += '</tr>';
                 row += '</thead>';
                 row += '<tbody>';
-
-           
-
 
                 for (var i = 0; i < res.reservation.length; i++) {
 
@@ -634,6 +619,7 @@
                             row += '<td style="background-color:#EF5350">' + res.reservation[i].resId + '</td>';
                             row += '<td>' + memberInf[0].memberNumber + '</td>';
                             row += '<td>' + memberInf[0].fullName + '</td>';
+                            row += '<td>' + res.reservation[i].roleName + '</td>';
                             row += '<td>' + res.reservation[i].court.courtName + '</td>';
                             row += '<td>' + res.reservation[i].resDate + '</td>';
                             row += '<td>' + res.reservation[i].resStartTime + '</td>';
@@ -643,9 +629,8 @@
 
                         }
                     }
-
-
                 }
+
                 row += '</tbody>';
                 row += '</table>';
                 row += '</div>';
@@ -666,6 +651,7 @@
                 newRow += '<th>#</th>';
                 newRow += '<th>Üye Numarası</th>';
                 newRow += '<th>Üye Adı</th>';
+                newRow += '<th>Üye Rolü</th>';
                 newRow += '<th>Kort Adı</th>';
                 newRow += '<th>Rezervasyon Tarihi</th>';
                 newRow += '<th>Rezervasyon Saati</th>';
@@ -692,11 +678,14 @@
                             newRow += '<td style="background-color:#EF5350">' + res.reservationCancel[i].resId + '</td>';
                             newRow += '<td>' + memberInf[0].memberNumber + '</td>';
                             newRow += '<td>' + memberInf[0].fullName + '</td>';
+                            newRow += '<td>' + res.reservationCancel[i].roleName + '</td>';
+
                             for (var x = 0; x < res.courts.length; x++) {
                                 if (res.reservationCancel[i].courtId == res.courts[x].courtId) {
                                     newRow += '<td>' + res.courts[x].courtName + '</td>';
                                 }
                             }
+
                             newRow += '<td>' + res.reservationCancel[i].resDate + '</td>';
                             newRow += '<td>' + res.reservationCancel[i].resStartTime + '</td>';
                             newRow += '<td>' + res.reservationCancel[i].price + '</td>';

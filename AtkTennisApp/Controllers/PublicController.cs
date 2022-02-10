@@ -256,6 +256,29 @@ namespace AtkTennisApp.Controllers
 
         }
 
+        [HttpGet("GetMem", Name = "GetMem")]
+        public MemberList GetMem(string id)
+
+        {
+            MemberList model = new MemberList();
+
+
+            try
+            {
+                model = db.memberLists.Where(x=>x.UserId == id).FirstOrDefault();
+
+            }
+            catch (Exception ex)
+            {
+                model = new MemberList();
+
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return model;
+
+        }
+
         [HttpGet("GetMemberDebt", Name = "GetMemberDebt")]
         public List<MemberDuesInfTable> GetMemberDebt(string userId)
 
@@ -908,7 +931,7 @@ namespace AtkTennisApp.Controllers
         }
 
         [HttpGet("ChangeCurrentUserPass", Name = "ChangeCurrentUserPass")]
-        public async Task<JsonResult> ChangeCurrentUserPass(string id, string currentPass, string newPass)
+        public async Task<JsonResult> ChangeCurrentUserPass(string id, string currentPass, string newPass , int checkPrivacy)
 
         {
             AppIdentityUser model2 = new AppIdentityUser();
@@ -917,19 +940,33 @@ namespace AtkTennisApp.Controllers
             try
             {
                 model = db.memberLists.Where(x => x.UserId == id).FirstOrDefault();
-                var user = await userManager.FindByIdAsync(id);
-                var res = await userManager.ChangePasswordAsync(user, currentPass, newPass);
-                if (res.Succeeded == false)
+              
+                if (model != null)
                 {
-                    return Json(false);
+                    if (checkPrivacy == 1)
+                    {
+                        model.SeenPrivacy = 1;
+                        db.Update(model);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        var user = await userManager.FindByIdAsync(id);
+                        var res = await userManager.ChangePasswordAsync(user, currentPass, newPass);
+                        if (res.Succeeded == false)
+                        {
+                            return Json(false);
+                        }
+                        else
+                        {
+                            model.Password = newPass;
+                            db.Update(model);
+                            db.SaveChanges();
+                        }
+                    }
+                 
                 }
-                else
-                {
-                    model.Password = newPass;
-                    db.Update(model);
-                    db.SaveChanges();
-                }
-
+             
             }
             catch (Exception ex)
             {
@@ -938,7 +975,7 @@ namespace AtkTennisApp.Controllers
                 Mutuals.monitizer.AddException(ex);
             }
 
-            return Json(true);
+            return Json(model);
 
         }
 

@@ -69,32 +69,44 @@
                                     {
                                         if (item.CompanyId == CompId)
                                         {
-
-
                                             <tr style="text-align:center" id="">
                                                 @{
                                                     var mem = Model.memberLists.Where(x => x.UserId == item.MemberId).ToList();
                                                     var mem2 = Model.memberLists.Where(x => x.UserId == item.AdminId).ToList();
                                                 }
 
-                                                <td>@mem[0].MemberNumber</td>
-                                                <td>@mem[0].FullName</td>
-                                                <td>@item.Price</td>
-                                                <td>@mem[0].FullName</td>
-                                                <td>@mem[0].MemberNumber</td>
-
-                                                @if (mem[0] != mem2[0])
+                                                @if (mem.Count != 0 && mem2.Count != 0)
                                                 {
-                                                    <td>@mem2[0].Role</td>
+                                                    <td>@mem[0].MemberNumber</td>
+                                                    <td>@mem[0].FullName</td>
+                                                    <td>@item.Price</td>
+                                                    <td>@mem2[0].FullName</td>
+                                                    <td>@mem2[0].MemberNumber</td>
+
+                                                    @if (item.MemberId != item.AdminId)
+                                                    {
+                                                        <td>@mem2[0].Role</td>
+                                                    }
+
+                                                    else
+                                                    {
+                                                        <td>Üye Kendisi</td>
+                                                    }
+
+                                                    <td>@item.Date</td>
+
                                                 }
 
                                                 else
                                                 {
-                                                    <td>Üye Kendisi</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>@item.Price</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>@item.Date</td>
                                                 }
-
-                                                <td>@item.Date</td>
-
 
                                             </tr>
                                         }

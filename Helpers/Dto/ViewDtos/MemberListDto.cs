@@ -42,6 +42,7 @@ namespace Helpers.Dto.ViewDtos
         public string ReferenceMember2 { get; set; }
         public bool whoPartner { get; set; }
         public int memberType { get; set; }
+        public int seenPrivacy { get; set; }
 
 
 

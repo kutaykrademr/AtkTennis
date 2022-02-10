@@ -46,6 +46,7 @@ namespace AtkTennisApp.Models
         public bool whoPartner { get; set; }
         public int memberType { get; set; }
         public string RoleId { get; set; }
+        public int SeenPrivacy { get; set; }
 
 
         public bool isPartner { get; set; }

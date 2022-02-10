@@ -169,8 +169,27 @@ namespace AtkTennisWeb.Controllers
 
             return View(model);
         }
-      
-    
+
+        public JsonResult GetMem(string id)
+        {
+
+            MemberListDto model = new MemberListDto();
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/GetMem?id=" + id));
+
+                if (model == null)
+
+                    model = new MemberListDto();
+            }
+            catch (Exception)
+            {
+                model = new MemberListDto();
+            }
+
+            return Json(model);
+        }
+
 
         public IActionResult GetCabinetDebt(string userId)
         {
@@ -519,15 +538,19 @@ namespace AtkTennisWeb.Controllers
 
 
 
-        public JsonResult ChangeCurrentUserPass(string id, string currentPass, string newPass)
+        public JsonResult ChangeCurrentUserPass(string id, string currentPass, string newPass , int checkPrivacy)
         {
             MemberListDto model = new MemberListDto();
 
             try
 
             {
-                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass));
+                model = Helpers.Serializers.DeserializeJson<MemberListDto>(Helpers.Request.Get(Mutuals.AppUrl + "Public/ChangeCurrentUserPass?id=" + id + "&currentPass=" + currentPass + "&newPass=" + newPass + "&checkPrivacy=" + checkPrivacy));
 
+                if (model == null)
+                {
+                    return Json(false);
+                }
 
             }
             catch (Exception)

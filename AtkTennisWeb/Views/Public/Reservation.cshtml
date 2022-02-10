@@ -1139,7 +1139,7 @@
 
                     for (var i = 0; i < res.courtPriceLists.length; i++) {
 
-                        if (res.courtPriceLists[i].condition == "1") {
+                        if (res.courtPriceLists[i].condition == "1" && res.courtPriceLists[i].companyId == compId) {
 
                             row += '<tr>';
                             row += '<td>' + res.courtPriceLists[i].name + '</td>';
