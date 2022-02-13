@@ -39,6 +39,11 @@ namespace AtkTennisWeb.Controllers
             return View(model);
         }
 
+        public IActionResult GelirRaporu()
+        {
+            return View();
+        }
+
         public class DuesPaymentInfoDto
         {
             public AllGetPaidLogsDto paymentLog { get; set; }

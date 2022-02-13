@@ -1255,5 +1255,24 @@ namespace AtkTennisWeb.Controllers
 
         }
 
+        public JsonResult GetAllList(string first, string second)
+        {
+
+            List<AllGetPaidLogsDto> model = new List<AllGetPaidLogsDto>();
+
+            try
+            {
+                model = Helpers.Serializers.DeserializeJson<List<AllGetPaidLogsDto>>(Helpers.Request.Get(Mutuals.AppUrl + "AdminHome/GetAllList?first=" + first + "&second=" + second));
+            }
+
+            catch (Exception)
+            {
+                return Json(new List<AllGetPaidLogsDto>());
+            }
+
+            return Json(model);
+
+        }
+
     }
 }

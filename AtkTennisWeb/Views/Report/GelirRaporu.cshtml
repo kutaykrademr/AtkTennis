@@ -1,0 +1,196 @@
+﻿@model Helpers.Dto.PartialViewDtos.SecretaryOpViewDto;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var CompId = HttpContextAccessor.HttpContext.Session.GetString("CompId");
+}
+
+<style>
+    button {
+        border: none !important;
+    }
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card" style="border-radius:40px; margin-top:20px">
+                                    <div class="card-content">
+                                        <div class="card-body cleartfix">
+                                            <div class="media align-items-stretch">
+                                                <div style="margin-top:10px" class="media-body">
+                                                    <h3>Gelir Raporu</h3>
+                                                </div>
+
+                                            </div>
+                                            <div>
+
+                                                <select id="firstDate" class="form-control">
+
+                                                    <option selected value='01'>Ocak</option>
+                                                    <option value='02'>Şubat</option>
+                                                    <option value='03'>Mart</option>
+                                                    <option value='04'>Nisan</option>
+                                                    <option value='05'>Mayıs</option>
+                                                    <option value='06'>Haziran</option>
+                                                    <option value='07'>Temmuz</option>
+                                                    <option value='08'>Agustos</option>
+                                                    <option value='09'>Eylül</option>
+                                                    <option value='10'>Ekim</option>
+                                                    <option value='11'>Kasım</option>
+                                                    <option value='12'>Aralık</option>
+
+                                                </select>
+
+                                                <select id="secDate" class="form-control">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        <option>@DateTime.Today.AddYears(-i).ToString("yyyy")</option>
+                                                    }
+                                                </select>
+
+                                                <button onclick="getir()">Getir</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="text-align:center">
+                                        <th>Rezervasyon Gelir</th>
+                                        <th>Ay</th>
+                                        <th>Yıl</th>
+                                        <th>Gelir Miktarı</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                  <tr>
+                                      <td>
+
+                                      </td>
+                                  </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#example1').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 5,
+            "buttons": ["print"],
+
+        })
+            .buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    });
+
+    function getir() {
+
+        var firstDate = $('#firstDate option:selected').val();
+        var secDate = $('#secDate option:selected').text();
+
+        $.ajax({
+            type: "Get",
+            url: '../AdminHome/GetAllList',
+            cache: false,
+            data: { 'first': firstDate, 'second': secDate },
+            dataType: "json",
+            async: true,
+            success: function (res) {
+
+
+                $("#tableProgress").empty();
+
+                row = "";
+
+                for (var i = 0; i < res.court.length; i++) {
+
+                    if (res.court[i].companyId == compId) {
+
+                        var count = 0;
+
+                        row += '<tr>';
+                        row += '<td>' + res.court[i].courtName + '</td>';
+                        row += '<td>' + res.myAL.length + '</td>';
+                        row += '<td>';
+
+                        for (var c = 0; c < res.myAL.length; c++) {
+
+                            if (res.myAL[c].court.courtId == res.court[i].courtId) {
+
+                                count++;
+
+                            }
+                        }
+
+                        var percent = parseInt((count * 100) / res.myAL.length);
+
+                        row += '<div class="progress progress-xs">';
+                        row += '<div class="progress-bar progress-bar-danger" style="width:' + percent + '%' + '"></div>';
+                        row += '</div>';
+                        row += '</td>';
+                        row += '<td>' + count + '</td>';
+                        row += '<td><span class="badge bg-danger">' + percent + '%' + '</span></td>';
+                        row += '</tr>';
+
+                    }
+
+                }
+                $("#tableProgress").append(row);
+
+            },
+
+            error: function (textStatus, errorThrown) {
+
+                console.log(JSON.stringify(textStatus));
+                console.log(textStatus);
+
+            }
+        });
+    }
+  
+
+</script>

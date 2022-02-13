@@ -173,7 +173,6 @@ namespace AtkTennisApp.Controllers
             return model;
         }
 
-      
 
         [HttpGet("GetUserSchoolList", Name = "GetUserSchoolList")]
         public JsonResult GetUserSchoolList()
@@ -247,6 +246,34 @@ namespace AtkTennisApp.Controllers
             }
 
             return Json(true);
+        }
+
+        [HttpGet("GetAllList", Name = "GetAllList")]
+        public JsonResult GetAllList(string first , string second)
+        {
+
+            List<AllGetPaidLogs> model = new List<AllGetPaidLogs>();
+            List<AllGetPaidLogs> model2 = new List<AllGetPaidLogs>();
+
+            try
+            {
+                model = db.allGetPaidLogs.ToList();
+                for (int i = 0; i < model.Count; i++)
+                {
+                    if (model[i].Date.Split("-")[1] == first && model[i].Date.Split("-")[2] == second)
+                    {
+                        model2.Add(model[i]);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                model = new List<AllGetPaidLogs>();
+                Mutuals.monitizer.AddException(ex);
+            }
+
+            return Json(model2);
         }
 
         [HttpGet("GetCabinetListUser", Name = "GetCabinetListUser")]
