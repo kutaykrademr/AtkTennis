@@ -43,9 +43,9 @@
                                                 </div>
 
                                             </div>
-                                            <div>
+                                            <div class="row col-6">
 
-                                                <select id="firstDate" class="form-control">
+                                                <select id="firstDate" class="form-control col-md-4">
 
                                                     <option selected value='01'>Ocak</option>
                                                     <option value='02'>Şubat</option>
@@ -59,17 +59,19 @@
                                                     <option value='10'>Ekim</option>
                                                     <option value='11'>Kasım</option>
                                                     <option value='12'>Aralık</option>
+                                                    <option value='00'>Tüm Aylar</option>
 
                                                 </select>
 
-                                                <select id="secDate" class="form-control">
+                                                <select id="secDate" class="form-control col-md-4 ml-2">
                                                     @for (int i = 0; i < 5; i++)
                                                     {
                                                         <option>@DateTime.Today.AddYears(-i).ToString("yyyy")</option>
                                                     }
                                                 </select>
 
-                                                <button onclick="getir()">Getir</button>
+                                                <a style="color:white; cursor:pointer; background-color:#343a40 !important" class="page-link col-md-1 ml-2" onclick="getir()">Getir</a>
+
                                             </div>
                                         </div>
                                     </div>
@@ -77,28 +79,16 @@
                             </div>
                         </section>
 
+                        <section id="secTab" style="background-color:#343a40; text-align:center; border-radius:15px; color:white;" class="content d-none">
+                            <div class="container-fluid">
+                                <div style="margin-top:10px" class="media-body">
+                                    <h3 id="resTab"></h3>
+                                    <h3 id="debtTab"></h3>
+                                    <h3 id="cabTab"></h3>
+                                </div>
+                            </div>
+                        </section>
 
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Rezervasyon Gelir</th>
-                                        <th>Ay</th>
-                                        <th>Yıl</th>
-                                        <th>Gelir Miktarı</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                  <tr>
-                                      <td>
-
-                                      </td>
-                                  </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -141,46 +131,33 @@
             async: true,
             success: function (res) {
 
+                var resP = 0;
+                var cabP = 0;
+                var debtP = 0;
 
-                $("#tableProgress").empty();
-
-                row = "";
-
-                for (var i = 0; i < res.court.length; i++) {
-
-                    if (res.court[i].companyId == compId) {
-
-                        var count = 0;
-
-                        row += '<tr>';
-                        row += '<td>' + res.court[i].courtName + '</td>';
-                        row += '<td>' + res.myAL.length + '</td>';
-                        row += '<td>';
-
-                        for (var c = 0; c < res.myAL.length; c++) {
-
-                            if (res.myAL[c].court.courtId == res.court[i].courtId) {
-
-                                count++;
-
-                            }
-                        }
-
-                        var percent = parseInt((count * 100) / res.myAL.length);
-
-                        row += '<div class="progress progress-xs">';
-                        row += '<div class="progress-bar progress-bar-danger" style="width:' + percent + '%' + '"></div>';
-                        row += '</div>';
-                        row += '</td>';
-                        row += '<td>' + count + '</td>';
-                        row += '<td><span class="badge bg-danger">' + percent + '%' + '</span></td>';
-                        row += '</tr>';
-
+                for (var i = 0; i < res.length; i++) {
+                    if (res[i].refType == 1) {
+                        resP = resP + res[i].paidPrice;
                     }
-
                 }
-                $("#tableProgress").append(row);
 
+                for (var i = 0; i < res.length; i++) {
+                    if (res[i].refType == 2) {
+                        debtP = debtP + res[i].paidPrice;
+                    }
+                }
+
+                for (var i = 0; i < res.length; i++) {
+                    if (res[i].refType == 3) {
+                        cabP = cabP + res[i].paidPrice;
+                    }
+                }
+
+                $("#resTab").text("Rezervasyon Geliri :" + " " + resP + " " + "₺");
+                $("#cabTab").text("Aidat Geliri :" + " " + debtP + " " + "₺");
+                $("#debtTab").text("Dolap Geliri :" + " " + cabP + " " + "₺");
+                $("#secTab").removeClass("d-none");
+             
             },
 
             error: function (textStatus, errorThrown) {
