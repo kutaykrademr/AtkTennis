@@ -17,6 +17,7 @@ namespace Helpers.Dto.ViewDtos
         public int ReceiptNo { get; set; }
         public string ReceiptDate { get; set; }
         public string Explain { get; set; }
+        public string CompanyId { get; set; }
 
         public int RefType { get; set; }
         public int RefId { get; set; }

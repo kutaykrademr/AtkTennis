@@ -252,6 +252,7 @@ namespace AtkTennisApp.Controllers
         public JsonResult GetAllList(string first , string second)
         {
 
+
             List<AllGetPaidLogs> model = new List<AllGetPaidLogs>();
             List<AllGetPaidLogs> model2 = new List<AllGetPaidLogs>();
 

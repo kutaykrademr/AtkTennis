@@ -38,14 +38,15 @@
                                     <div class="card-content">
                                         <div class="card-body cleartfix">
                                             <div class="media align-items-stretch">
-                                                <div style="margin-top:10px" class="media-body">
+                                                <div style="margin-top:10px; justify-content:space-evenly !important;" class="media-body d-flex mb-4">
                                                     <h3>Gelir Raporu</h3>
+                                                    <h3 id="totalPrice"></h3>
                                                 </div>
 
                                             </div>
-                                            <div>
+                                            <div class="row d-flex" style="justify-content:space-evenly !important;">
 
-                                                <select id="firstDate" class="form-control">
+                                                <select id="firstDate" class="form-control col-md-4">
 
                                                     <option selected value='01'>Ocak</option>
                                                     <option value='02'>Şubat</option>
@@ -62,14 +63,14 @@
 
                                                 </select>
 
-                                                <select id="secDate" class="form-control">
+                                                <select id="secDate" class="form-control col-md-4">
                                                     @for (int i = 0; i < 5; i++)
                                                     {
                                                         <option>@DateTime.Today.AddYears(-i).ToString("yyyy")</option>
                                                     }
                                                 </select>
 
-                                                <button onclick="getir()">Getir</button>
+                                                <button class="btn btn-warning" onclick="getir()">Getir</button>
                                             </div>
                                         </div>
                                     </div>
@@ -77,27 +78,75 @@
                             </div>
                         </section>
 
+                        <div class="portlet-body">
+                            <div id="secimdetay" class="portlet light" style="padding: 15px;">
+                                <div class="alert alert-info" style="margin-bottom: 0;">
+                                    <strong>Ödeme Raporları Listesi!</strong> İlgili Alanları Seçerek İşleme Devam Ediniz.
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="text-align:center">
-                                        <th>Rezervasyon Gelir</th>
-                                        <th>Ay</th>
-                                        <th>Yıl</th>
-                                        <th>Gelir Miktarı</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <div id="tables" class="d-none">
 
-                                  <tr>
-                                      <td>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-hover">
 
-                                      </td>
-                                  </tr>
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Gelir Türü</th>
+                                            <th>Gelir Miktarı</th>
+                                        </tr>
+                                    </thead>
 
-                                </tbody>
-                            </table>
+                                    <tbody>
+                                        <tr style="text-align:center">
+                                            <th>Reservasyon</th>
+                                            <th id="resPrice"></th>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-hover">
+
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Gelir Türü</th>
+                                            <th>Gelir Miktarı</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr style="text-align:center">
+                                            <th>Aidat</th>
+                                            <th id="debtPrice"></th>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-hover">
+
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th>Gelir Türü</th>
+                                            <th>Gelir Miktarı</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr style="text-align:center">
+                                            <th>Dolap</th>
+                                            <th id="cabPrice"></th>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -109,28 +158,14 @@
 
 <script>
 
-    $(document).ready(function () {
-
-        $('#example1').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": false,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "pageLength": 5,
-            "buttons": ["print"],
-
-        })
-            .buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    });
 
     function getir() {
 
         var firstDate = $('#firstDate option:selected').val();
         var secDate = $('#secDate option:selected').text();
+
+        debugger;
+
 
         $.ajax({
             type: "Get",
@@ -141,46 +176,45 @@
             async: true,
             success: function (res) {
 
+                debugger;
 
-                $("#tableProgress").empty();
+                if (res.length != 0) {
 
-                row = "";
+                    var count = 0;
+                    var count2 = 0;
+                    var count3 = 0;
 
-                for (var i = 0; i < res.court.length; i++) {
+                    for (var i = 0; i < res.length; i++) {
 
-                    if (res.court[i].companyId == compId) {
+                        if (res[i].companyId == compId) {
 
-                        var count = 0;
+      
+                            if (res[i].refType == 1) {
 
-                        row += '<tr>';
-                        row += '<td>' + res.court[i].courtName + '</td>';
-                        row += '<td>' + res.myAL.length + '</td>';
-                        row += '<td>';
-
-                        for (var c = 0; c < res.myAL.length; c++) {
-
-                            if (res.myAL[c].court.courtId == res.court[i].courtId) {
-
-                                count++;
-
+                                count = count + res[i].paidPrice;
                             }
+                            else if (res[i].refType == 2) {
+                                count2 = count2 + res[i].paidPrice;
+                            }
+
+                            else {
+                                count3 = count3 + res[i].paidPrice;
+                            }         
                         }
-
-                        var percent = parseInt((count * 100) / res.myAL.length);
-
-                        row += '<div class="progress progress-xs">';
-                        row += '<div class="progress-bar progress-bar-danger" style="width:' + percent + '%' + '"></div>';
-                        row += '</div>';
-                        row += '</td>';
-                        row += '<td>' + count + '</td>';
-                        row += '<td><span class="badge bg-danger">' + percent + '%' + '</span></td>';
-                        row += '</tr>';
-
                     }
 
-                }
-                $("#tableProgress").append(row);
+                    $("#resPrice").text(count + "₺");
+                    $("#debtPrice").text(count2 + "₺");
+                    $("#cabPrice").text(count3 + "₺");
+                
+                  
+                    var total = count + count2 + count3;
 
+                    $("#totalPrice").text("Toplam Gelir :" + total + "₺");
+
+                    $("#tables").removeClass("d-none");
+
+                }
             },
 
             error: function (textStatus, errorThrown) {
@@ -191,6 +225,6 @@
             }
         });
     }
-  
+
 
 </script>
